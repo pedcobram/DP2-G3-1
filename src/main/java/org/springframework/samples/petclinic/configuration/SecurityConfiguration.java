@@ -35,8 +35,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	protected void configure(final HttpSecurity http) throws Exception {
 		http.authorizeRequests().antMatchers("/resources/**", "/webjars/**", "/h2-console/**").permitAll().antMatchers(HttpMethod.GET, "/", "/oups").permitAll().antMatchers("/users/new").permitAll().antMatchers("/authenticateds/new").permitAll()
 			.antMatchers("/admin/**").hasAnyAuthority("admin").antMatchers("/authenticateds/**").authenticated().antMatchers("/myProfile/**").authenticated().antMatchers("/myPresidentProfile/**").authenticated().antMatchers("/owners/**").authenticated()
-			.antMatchers("/vets/**").authenticated().antMatchers("/footballClubs/**").authenticated().antMatchers("/myfootballClubs/**").hasAnyAuthority("president").antMatchers("/footballClub/**").hasAnyAuthority("president")
-			.antMatchers("/footballClub/new").hasAnyAuthority("president").antMatchers("/presidents/**").authenticated().anyRequest().denyAll().and().formLogin()
+			.antMatchers("/vets/**").authenticated().antMatchers("/createPresident/**").authenticated().antMatchers("/deletePresident/**").authenticated().antMatchers("/footballClubs/**").authenticated().antMatchers("/myfootballClubs/**")
+			.hasAnyAuthority("president").antMatchers("/footballClub/**").hasAnyAuthority("president").antMatchers("/footballClub/new").hasAnyAuthority("president").antMatchers("/presidents/**").authenticated().anyRequest().denyAll().and().formLogin()
 			/* .loginPage("/login") */
 			.failureUrl("/login-error").and().logout().logoutSuccessUrl("/");
 		// Configuración para que funcione la consola de administración

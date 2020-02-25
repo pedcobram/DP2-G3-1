@@ -1,12 +1,11 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags"%>
-<%@ taglib prefix="sec"
-	uri="http://www.springframework.org/security/tags"%>
-	<%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
-	<%@taglib prefix="jstl" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%>
+<%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib prefix="jstl" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 	
-<!--  >%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags"%-->
 <%@ attribute name="name" required="true" rtexprvalue="true"
 	description="Name of the active menu: home, owners, vets or error"%>
 	
@@ -32,31 +31,31 @@
 				<petclinic:menuItem active="${name eq 'home'}" url="/"
 					title="home page">
 					<span class="glyphicon glyphicon-home" aria-hidden="true"></span>
-					<span>Home</span>
+					<span><fmt:message key="home"/></span>
 				</petclinic:menuItem>
 
 				<petclinic:menuItem active="${name eq 'owners'}" url="/owners/find"
 					title="tournaments">
 					<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-					<span>Tournaments</span>
+					<span><fmt:message key="tournaments"/></span>
 				</petclinic:menuItem>
 
 				<petclinic:menuItem active="${name eq 'footballClubs'}" url="/footballClubs"
 					title="registered teams">
 					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
-					<span>Teams</span>
+					<span><fmt:message key="teams"/></span>
 				</petclinic:menuItem>
 				
 				<petclinic:menuItem active="${name eq 'authenticateds'}" url="/authenticateds/find"
 					title="users">
 					<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-					<span>Users</span>
+					<span><fmt:message key="users"/></span>
 				</petclinic:menuItem>
 				
 				<petclinic:menuItem active="${name eq 'error'}" url="/oups"
 					title="trigger a RuntimeException to see how it is handled">
 					<span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span>
-					<span>Error</span>
+					<span><fmt:message key="error"/></span>
 				</petclinic:menuItem>
 						
 			</ul>
@@ -67,13 +66,13 @@
 					<petclinic:menuItem active="${name eq 'vets'}" url="/myfootballClubs/${principalUsername}"
 						title="club page">
 						<span class="glyphicon glyphicon-bookmark" aria-hidden="true"></span>
-						<span>My Club</span>
+						<span><fmt:message key="myClub"/></span>
 					</petclinic:menuItem>
 				</sec:authorize>				
 				
 				<sec:authorize access="!isAuthenticated()">				
-					<li><a href="<c:url value="/login" />">Login</a></li>
-					<li><a href="<c:url value="/authenticateds/new" />">Register</a></li>
+					<li><a href="<c:url value="/login" />"><fmt:message key="login"/></a></li>
+					<li><a href="<c:url value="/authenticateds/new" />"><fmt:message key="register"/></a></li>
 				</sec:authorize>
 				
 				<sec:authorize access="isAuthenticated()">
@@ -85,16 +84,16 @@
 						<ul class="dropdown-menu">
 						
 						<sec:authorize access="!hasAnyAuthority('president', 'director', 'inversor')">
-							<li><a href="<c:url value="/presidents/new" />">Become a President</a></li>
+							<li><a href="<c:url value="/createPresident" />"><fmt:message key="becPresident"/></a></li>
 						</sec:authorize>
 						
 						<sec:authorize access="!hasAnyAuthority('president', 'director', 'inversor')">
-							<li><a href="<c:url value="/presidents/new" />">Become a Director</a></li>
+							<li><a href="<c:url value="/presidents/new" />"><fmt:message key="becDirector"/></a></li>
 						</sec:authorize>
 						
 						<sec:authorize access="!hasAnyAuthority('president', 'director', 'inversor')">
 							
-							<li><a href="<c:url value="/presidents/new" />">Become a Inversor</a></li>
+							<li><a href="<c:url value="/presidents/new" />"><fmt:message key="becInversor"/></a></li>
 						</sec:authorize>
 						
 							<li>
@@ -104,31 +103,31 @@
 										<sec:authorize access="hasAuthority('authenticated')">	
 											<petclinic:menuItem active="${name eq 'authenticateds'}" url="/myProfile/${principalUsername}"
 												title="personal space">
-												<span>My Profile</span>
+												<span><fmt:message key="myProfile"/></span>
 											</petclinic:menuItem>
 										</sec:authorize>
 										
 										<sec:authorize access="hasAuthority('president')">	
 											<petclinic:menuItem active="${name eq 'authenticateds'}" url="/myPresidentProfile/${principalUsername}"
 												title="personal space">
-												<span>My Profile</span>
+												<span><fmt:message key="myProfile"/></span>
 											</petclinic:menuItem>
 										</sec:authorize>
 										
 										<div class="col-lg-4">
-											<p class="text-center">
-												<span class="glyphicon glyphicon-user icon-size"></span>
+											<p style="color:#C42D16" class="text-center">
+												<span  class="glyphicon glyphicon-user icon-size"></span>
 											</p>
 											
 										</div>
 										
-										<div class="col-lg-8">
-											<p class="text-left">
+										<div >
+											<p style="color:#C42D16" class="text-left">
 												<strong><sec:authentication property="name" /></strong>
 											</p>
 											<p class="text-left">
 												<a href="<c:url value="/logout" />"
-													class="btn btn-primary btn-block btn-sm">Logout</a>
+													class="btn btn-danger btn-block"><fmt:message key="logout"/></a>
 											</p>
 										</div>
 									</div>

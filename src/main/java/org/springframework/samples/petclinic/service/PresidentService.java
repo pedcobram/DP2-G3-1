@@ -32,9 +32,6 @@ public class PresidentService {
 	private PresidentRepository	presidentRepository;
 
 	@Autowired
-	private UserService			userService;
-
-	@Autowired
 	private AuthoritiesService	authoritiesService;
 
 
@@ -69,6 +66,13 @@ public class PresidentService {
 	@Transactional(readOnly = true)
 	public Authenticated findAuthenticatedByUsername(final String userName) throws DataAccessException {
 		return this.presidentRepository.findAuthenticatedByUsername(userName);
+	}
+
+	public void deletePresident(final President president) throws DataAccessException {
+		this.authoritiesService.deleteAuthorities(president.getUser().getUsername(), "president");
+		this.authoritiesService.saveAuthorities(president.getUser().getUsername(), "authenticated");
+		this.presidentRepository.delete(president);
+
 	}
 
 }

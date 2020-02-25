@@ -60,13 +60,11 @@
     	<a href="${fn:escapeXml(editUrl)}" class="btn btn-default">Edit Club</a>
     </c:if>  
     
-   
-    
     <security:authorize access="hasAnyAuthority('president')">
         <spring:url value="/footballClub/delete" var="addUrl"></spring:url>
-    	<a href="${fn:escapeXml(addUrl)}" class="btn btn-default">Delete Club</a>
+    	<a href="${fn:escapeXml(addUrl)}" onclick="return confirm('ARE YOU SURE?')" class="btn btn-default">Delete Club</a>
     </security:authorize>
-    
+
     <br/>
     <br/>
     <br/>

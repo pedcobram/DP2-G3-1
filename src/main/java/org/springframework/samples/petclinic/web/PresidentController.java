@@ -17,18 +17,24 @@
 package org.springframework.samples.petclinic.web;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.model.Authenticated;
+import org.springframework.samples.petclinic.model.FootballClub;
 import org.springframework.samples.petclinic.model.President;
-import org.springframework.samples.petclinic.service.AuthenticatedService;
 import org.springframework.samples.petclinic.service.AuthoritiesService;
+import org.springframework.samples.petclinic.service.FootballClubService;
 import org.springframework.samples.petclinic.service.PresidentService;
 import org.springframework.samples.petclinic.service.UserService;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -38,6 +44,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -47,13 +54,13 @@ public class PresidentController {
 
 	private final PresidentService		presidentService;
 
-	private final AuthenticatedService	authenticatedService;
+	private final FootballClubService	footballClubService;
 
 
 	@Autowired
-	public PresidentController(final PresidentService presidentService, final AuthenticatedService authenticatedService, final UserService userService, final AuthoritiesService authoritiesService) {
+	public PresidentController(final PresidentService presidentService, final FootballClubService footballClubService, final UserService userService, final AuthoritiesService authoritiesService) {
 		this.presidentService = presidentService;
-		this.authenticatedService = authenticatedService;
+		this.footballClubService = footballClubService;
 	}
 
 	@InitBinder
@@ -61,21 +68,48 @@ public class PresidentController {
 		dataBinder.setDisallowedFields("id");
 	}
 
-	@GetMapping(value = "/presidents/new")
-	public String initCreationForm(final Map<String, Object> model) {
+	/**
+	 * @GetMapping(value = "/presidents/new")
+	 *                   public String initCreationForm(final Map<String, Object> model) {
+	 *                   President president = new President();
+	 *
+	 *                   Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	 *                   String currentPrincipalName = authentication.getName();
+	 *
+	 *                   Authenticated thisUser = this.presidentService.findAuthenticatedByUsername(currentPrincipalName);
+	 *
+	 *                   model.put("firstName", thisUser.getFirstName());
+	 *                   model.put("lastName", thisUser.getLastName());
+	 *                   model.put("dni", thisUser.getDni());
+	 *                   model.put("email", thisUser.getEmail());
+	 *                   model.put("telephone", thisUser.getTelephone());
+	 *
+	 *                   president.setFirstName(thisUser.getFirstName());
+	 *                   president.setLastName(thisUser.getLastName());
+	 *                   president.setDni(thisUser.getDni());
+	 *                   president.setEmail(thisUser.getEmail());
+	 *                   president.setTelephone(thisUser.getTelephone());
+	 *                   president.setUser(thisUser.getUser());
+	 *
+	 *                   model.put("president", president);
+	 *
+	 *                   return PresidentController.VIEWS_PRESIDENT_CREATE_OR_UPDATE_FORM;
+	 *                   }
+	 **/
+	@RequestMapping(value = "/createPresident")
+	public String createPresident() {
+
+		//Obtenemos el username actual conectado
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
+
+		//Creamos el presidente
 		President president = new President();
 
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		String currentPrincipalName = authentication.getName();
-
+		//Obtenemos el authenticated actual conectado
 		Authenticated thisUser = this.presidentService.findAuthenticatedByUsername(currentPrincipalName);
 
-		model.put("firstName", thisUser.getFirstName());
-		model.put("lastName", thisUser.getLastName());
-		model.put("dni", thisUser.getDni());
-		model.put("email", thisUser.getEmail());
-		model.put("telephone", thisUser.getTelephone());
-
+		//Añadimos los datos del user al presidente
 		president.setFirstName(thisUser.getFirstName());
 		president.setLastName(thisUser.getLastName());
 		president.setDni(thisUser.getDni());
@@ -83,31 +117,50 @@ public class PresidentController {
 		president.setTelephone(thisUser.getTelephone());
 		president.setUser(thisUser.getUser());
 
-		model.put("president", president);
+		//Guardamos en la db el nuevo presidente
+		this.presidentService.savePresident(president);
 
-		return PresidentController.VIEWS_PRESIDENT_CREATE_OR_UPDATE_FORM;
+		//CON ESTO CONSEGUIMOS QUE NO HAGA FALTA RELOGUEAR PARA GANAR LOS PRIVILEGIOS DE PRESIDENTE
+		Set<GrantedAuthority> authorities2 = new HashSet<>();
+		authorities2.add(new SimpleGrantedAuthority("President"));
+		Authentication reAuth = new UsernamePasswordAuthenticationToken(currentPrincipalName, thisUser.getUser().getPassword());
+		SecurityContextHolder.getContext().setAuthentication(reAuth);
+
+		//Redirigimos a la vista del perfil del presidente
+		return "redirect:/myPresidentProfile/" + currentPrincipalName;
 	}
 
-	@PostMapping(value = "/presidents/new")
-	public String processCreationForm(@Valid final President president) {
+	//BORRAR PRESIDENTE
 
+	@RequestMapping(value = "/deletePresident")
+	public String deletePresident() {
+
+		//Obtenemos el username actual conectado
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String currentPrincipalName = authentication.getName();
 
-		Authenticated thisUser = this.presidentService.findAuthenticatedByUsername(currentPrincipalName);
+		//Obtenemos el presidente
+		President president = this.presidentService.findPresidentByUsername(currentPrincipalName);
+		Authenticated user = this.presidentService.findAuthenticatedByUsername(currentPrincipalName);
 
-		president.setFirstName(thisUser.getFirstName());
-		president.setLastName(thisUser.getLastName());
-		president.setDni(thisUser.getDni());
-		president.setEmail(thisUser.getEmail());
-		president.setTelephone(thisUser.getTelephone());
-		president.setUser(thisUser.getUser());
+		//Buscamos si tiene un Club
+		FootballClub footballClub = this.footballClubService.findFootballClubByPresident(currentPrincipalName);
 
-		//creating president, user and authorities
-		this.presidentService.savePresident(president);
-		//		this.authenticatedService.deleteAuthenticated(thisUser);
+		//Borramos el Club si existe
+		if (footballClub != null) {
+			this.footballClubService.deleteFootballClub(footballClub);
+		}
 
-		return "redirect:/logout";
+		//Guardamos en la db el nuevo presidente
+		this.presidentService.deletePresident(president);
+
+		//CON ESTO CONSEGUIMOS QUE NO HAGA FALTA RELOGUEAR PARA GANAR LOS PRIVILEGIOS DE PRESIDENTE
+
+		Authentication reAuth = new UsernamePasswordAuthenticationToken(currentPrincipalName, user.getUser().getPassword());
+		SecurityContextHolder.getContext().setAuthentication(reAuth);
+
+		//Redirigimos a la vista del perfil del presidente
+		return "redirect:/myProfile/" + currentPrincipalName;
 	}
 
 	@GetMapping(value = "/presidents/find")

@@ -150,6 +150,15 @@ public class FootballClubController {
 
 		FootballClub footballClub = this.footballClubService.findFootballClubByPresident(principalUsername);
 
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
+
+		//Solo el usuario actual puede ver su club detalladamente
+		if (!currentPrincipalName.equals(principalUsername)) {
+			ModelAndView mav = new ModelAndView("/exception");
+			return mav;
+		}
+
 		//Si no hay club se manda a la vista del perfil para que cree un club, o lo mando a la creacion?
 		if (footballClub == null) {
 			ModelAndView mav = new ModelAndView("footballClubs/myClubEmpty");

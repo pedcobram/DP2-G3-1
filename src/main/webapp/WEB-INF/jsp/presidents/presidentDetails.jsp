@@ -4,6 +4,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <petclinic:layout pageName="presidents">
 
@@ -42,12 +43,12 @@
         	<spring:param name="presidentId" value="${president.id}"/>
     	</spring:url>
     	<a href="${fn:escapeXml(editUrl)}" class="btn btn-default">Edit President</a>
+    	
+    	
+    	<spring:url value="/deletePresident" var="editUrl"></spring:url>
+    	<a href="${fn:escapeXml(editUrl)}" class="btn btn-default2" style="color:white"><b><fmt:message key="deletePresident"/></b></a>
+    	
     </c:if>  
-    
-    <security:authorize access="hasAnyAuthority('president')">
-        <spring:url value="/footballClub/new" var="addUrl"></spring:url>
-    	<a href="${fn:escapeXml(addUrl)}" class="btn btn-default">Add New FootballClub</a>
-    </security:authorize>
     
     <br/>
     <br/>

@@ -34,4 +34,6 @@ public interface PresidentRepository {
 
 	Authenticated findAuthenticatedByUsername(String username);
 
+	void delete(President president) throws DataAccessException;
+
 }
