@@ -20,16 +20,6 @@ import org.springframework.samples.petclinic.model.FootballClub;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
-/**
- * <code>Validator</code> for <code>Pet</code> forms.
- * <p>
- * We're not using Bean Validation annotations here because it is easier to define such
- * validation rule in Java.
- * </p>
- *
- * @author Ken Krebs
- * @author Juergen Hoeller
- */
 public class FootballClubValidator implements Validator {
 
 	private static final String REQUIRED = "required";
@@ -39,15 +29,11 @@ public class FootballClubValidator implements Validator {
 	public void validate(final Object obj, final Errors errors) {
 		FootballClub footballClub = (FootballClub) obj;
 
-		// birth date validation
 		if (footballClub.getFoundationDate() == null) {
 			errors.rejectValue("foundationDate", FootballClubValidator.REQUIRED, FootballClubValidator.REQUIRED);
 		}
 	}
 
-	/**
-	 * This Validator validates *just* Pet instances
-	 */
 	@Override
 	public boolean supports(final Class<?> clazz) {
 		return FootballClub.class.isAssignableFrom(clazz);

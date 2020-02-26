@@ -23,9 +23,10 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.FootballClub;
 import org.springframework.samples.petclinic.model.President;
 import org.springframework.samples.petclinic.repository.FootballClubRepository;
-import org.springframework.samples.petclinic.service.exceptions.DuplicatedPetNameException;
+import org.springframework.samples.petclinic.service.exceptions.DuplicatedNameException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 @Service
 public class FootballClubService {
@@ -49,11 +50,26 @@ public class FootballClubService {
 		return this.footRepository.findById(id);
 	}
 
-	@Transactional(rollbackFor = DuplicatedPetNameException.class)
-	public void saveFootballClub(final FootballClub footballClub) throws DataAccessException {
+	@Transactional(rollbackFor = DuplicatedNameException.class)
+	public void saveFootballClub(final FootballClub footballClub) throws DataAccessException, DuplicatedNameException {
 
-		this.footRepository.save(footballClub);
+		String name = footballClub.getName().toLowerCase();
+		FootballClub otherFootClub = null;
 
+		for (FootballClub o : this.footRepository.findAll()) {
+			String compName = o.getName();
+			compName = compName.toLowerCase();
+			if (compName.equals(name) && o.getId() != footballClub.getId()) {
+				otherFootClub = o;
+			}
+		}
+
+		if (StringUtils.hasLength(footballClub.getName()) && otherFootClub != null && otherFootClub.getId() != footballClub.getId()) {
+			throw new DuplicatedNameException();
+		} else {
+			this.footRepository.save(footballClub);
+
+		}
 	}
 
 	@Transactional(readOnly = true)

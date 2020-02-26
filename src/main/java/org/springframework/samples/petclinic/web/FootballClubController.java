@@ -22,10 +22,12 @@ import javax.validation.Valid;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.FootballClub;
 import org.springframework.samples.petclinic.model.FootballClubs;
 import org.springframework.samples.petclinic.model.President;
 import org.springframework.samples.petclinic.service.FootballClubService;
+import org.springframework.samples.petclinic.service.exceptions.DuplicatedNameException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -58,26 +60,16 @@ public class FootballClubController {
 		dataBinder.setDisallowedFields("id");
 	}
 
-	@GetMapping(value = {
-		"/footballClubs"
-	})
+	@GetMapping(value = "/footballClub")
 	public String showFootballClubList(final Map<String, Object> model) {
-		// Here we are returning an object of type 'Vets' rather than a collection of Vet
-		// objects
-		// so it is simpler for Object-Xml mapping
 		FootballClubs footballClubs = new FootballClubs();
 		footballClubs.getFootballClubList().addAll(this.footballClubService.findFootballClubs());
 		model.put("footballClubs", footballClubs);
 		return "footballClubs/footballClubList";
 	}
 
-	@GetMapping(value = {
-		"/footballClubs.xml"
-	})
+	@GetMapping(value = "/footballClub.xml")
 	public @ResponseBody FootballClubs showResourcesFootballClubList() {
-		// Here we are returning an object of type 'Vets' rather than a collection of Vet
-		// objects
-		// so it is simpler for JSon/Object mapping
 		FootballClubs footballClub = new FootballClubs();
 		footballClub.getFootballClubList().addAll(this.footballClubService.findFootballClubs());
 		return footballClub;
@@ -85,7 +77,7 @@ public class FootballClubController {
 
 	//CREAR CLUB
 
-	@GetMapping(value = "/footballClub/new")
+	@GetMapping(value = "/myfootballClub/new")
 	public String initCreationForm(final Map<String, Object> model) {
 		FootballClub footballClub = new FootballClub();
 
@@ -94,58 +86,78 @@ public class FootballClubController {
 		return FootballClubController.VIEWS_CLUB_CREATE_OR_UPDATE_FORM;
 	}
 
-	@PostMapping(value = "/footballClub/new")
-	public String processCreationForm(@Valid final FootballClub footballClub) {
+	@PostMapping(value = "/myfootballClub/new")
+	public String processCreationForm(@Valid final FootballClub footballClub, final BindingResult result) throws DataAccessException, DuplicatedNameException {
 
-		//creating footballClub, user and authorities
-		//Necesito un getPresident segun el username
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String currentPrincipalName = authentication.getName();
-
 		President thisUser = this.footballClubService.findPresidentByUsername(currentPrincipalName);
-		footballClub.setPresident(thisUser);
 
-		this.footballClubService.saveFootballClub(footballClub);
-
-		return "redirect:/myfootballClubs/" + currentPrincipalName;
+		if (result.hasErrors()) {
+			return FootballClubController.VIEWS_CLUB_CREATE_OR_UPDATE_FORM;
+		} else {
+			try {
+				footballClub.setPresident(thisUser);
+				footballClub.setFans(0);
+				this.footballClubService.saveFootballClub(footballClub);
+			} catch (DuplicatedNameException ex) {
+				result.rejectValue("name", "duplicate", "already exists");
+				return FootballClubController.VIEWS_CLUB_CREATE_OR_UPDATE_FORM;
+			}
+			return "redirect:/myfootballClub/" + currentPrincipalName;
+		}
 	}
 
 	//EDITAR CLUB
 
-	@GetMapping(value = "/myfootballClubs/{principalUsername}/edit")
+	@GetMapping(value = "/myfootballClub/{principalUsername}/edit")
 	public String initUpdateFootballClubForm(@PathVariable("principalUsername") final String principalUsername, final Model model) {
 		FootballClub footballClub = this.footballClubService.findFootballClubByPresident(principalUsername);
 		model.addAttribute(footballClub);
+
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
+
+		//Solo el usuario actual puede ver su club detalladamente
+		if (!currentPrincipalName.equals(principalUsername)) {
+			return "redirect:/oups";
+		}
+
 		return FootballClubController.VIEWS_CLUB_CREATE_OR_UPDATE_FORM;
 	}
 
-	@PostMapping(value = "/myfootballClubs/{principalUsername}/edit")
-	public String processUpdateFootballClubForm(@Valid final FootballClub footballClub, final BindingResult result, @PathVariable("principalUsername") final String principalUsername) {
+	@PostMapping(value = "/myfootballClub/{principalUsername}/edit")
+	public String processUpdateFootballClubForm(@Valid final FootballClub footballClub, final BindingResult result, @PathVariable("principalUsername") final String principalUsername) throws DataAccessException, DuplicatedNameException {
 		if (result.hasErrors()) {
 			return FootballClubController.VIEWS_CLUB_CREATE_OR_UPDATE_FORM;
 		} else {
 
 			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 			String currentPrincipalName = authentication.getName();
-
 			FootballClub footballClubToUpdate = this.footballClubService.findFootballClubByPresident(principalUsername);
 			BeanUtils.copyProperties(footballClub, footballClubToUpdate, "id", "president");
 
-			this.footballClubService.saveFootballClub(footballClubToUpdate);
-			return "redirect:/myfootballClubs/" + currentPrincipalName;
+			try {
+				this.footballClubService.saveFootballClub(footballClubToUpdate);
+			} catch (DuplicatedNameException ex) {
+				result.rejectValue("name", "duplicate", "already exists");
+				return FootballClubController.VIEWS_CLUB_CREATE_OR_UPDATE_FORM;
+			}
+
+			return "redirect:/myfootballClub/" + currentPrincipalName;
 		}
 	}
 
 	//VISTA CLUB
 
-	@GetMapping("/footballClubs/{footballClubId}")
+	@GetMapping("/footballClub/{footballClubId}")
 	public ModelAndView showFootballClub(@PathVariable("footballClubId") final int footballClubId) {
 		ModelAndView mav = new ModelAndView("footballClubs/footballClubDetails");
 		mav.addObject(this.footballClubService.findFootballClubById(footballClubId));
 		return mav;
 	}
 
-	@GetMapping("/myfootballClubs/{principalUsername}")
+	@GetMapping("/myfootballClub/{principalUsername}")
 	public ModelAndView showMyFootballClub(@PathVariable("principalUsername") final String principalUsername) {
 
 		FootballClub footballClub = this.footballClubService.findFootballClubByPresident(principalUsername);
@@ -173,7 +185,7 @@ public class FootballClubController {
 
 	//BORRAR CLUB
 
-	@RequestMapping(value = "/footballClub/delete")
+	@RequestMapping(value = "/myfootballClub/delete")
 	public String processDeleteForm() {
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -183,7 +195,7 @@ public class FootballClubController {
 
 		this.footballClubService.deleteFootballClub(thisFootballCLub);
 
-		return "redirect:/myfootballClubs/" + currentPrincipalName;
+		return "redirect:/myfootballClub/" + currentPrincipalName;
 	}
 
 }

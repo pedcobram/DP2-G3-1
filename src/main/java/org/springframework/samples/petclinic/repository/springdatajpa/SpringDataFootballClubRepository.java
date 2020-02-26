@@ -40,4 +40,12 @@ public interface SpringDataFootballClubRepository extends FootballClubRepository
 	@Query("SELECT a FROM FootballClub a WHERE a.president.user.username =:username")
 	FootballClub findFootballClubByPresident(@Param("username") String username);
 
+	@Override
+	@Query("select a from FootballClub a where a.name = ?1")
+	FootballClub findFootballClubByName(String name);
+
+	@Override
+	@Query("select a from FootballClub a where a.name = ?1 and a.id != ?2")
+	FootballClub findFootballClubByNameAndDifferentId(String name, Integer id);
+
 }

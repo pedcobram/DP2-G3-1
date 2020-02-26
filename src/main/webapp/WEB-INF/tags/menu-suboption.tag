@@ -21,7 +21,6 @@
 
 <security:authorize access="${access}">	
 	<a href="javascript: clearReturnUrl(); redirect('${url}')" class="dropdown-item">
-		<acme:message code="${code}"/> 
 	</a>
 </security:authorize>
 

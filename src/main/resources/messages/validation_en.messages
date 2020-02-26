@@ -1,0 +1,43 @@
+# validation_en.messages
+#
+# Copyright (c) 2019 Rafael Corchuelo.
+#
+# In keeping with the traditional purpose of furthering education and research, it is
+# the policy of the copyright owner to permit non-commercial use and redistribution of
+# this software. It has been tested carefully, but it is not guaranteed for any particular
+# purposes.  The copyright owner does not offer any warranties or representations, nor do
+# they accept any liabilities with respect to them.
+
+javax.validation.constraints.AssertFalse.message = Must be false
+javax.validation.constraints.AssertTrue.message = Must be true
+javax.validation.constraints.DecimalMax.message = Must be less than or equal to {value}
+javax.validation.constraints.DecimalMin.message = Must be greater than or equal to {value}
+javax.validation.constraints.Digits.message = Must have {integer} digits and {fraction} decimals
+javax.validation.constraints.Email.message = Not a well-formed email address
+javax.validation.constraints.Future.message = Must be in the future
+javax.validation.constraints.Max.message = Must be less than or equal to {value}
+javax.validation.constraints.Min.message = Must be greater than or equal to {value}
+javax.validation.constraints.NotBlank.message = Must not be blank
+javax.validation.constraints.NotEmpty.message = Must not be empty
+javax.validation.constraints.NotNull.message = May not be null
+javax.validation.constraints.Null.message = Must be null
+javax.validation.constraints.Past.message = Must be in the past
+javax.validation.constraints.Pattern.message = Must match pattern "{regexp}"
+javax.validation.constraints.Size.message = Must have between {min} and {max} items
+
+org.hibernate.validator.constraints.CreditCardNumber.message = Invalid credit card number
+org.hibernate.validator.constraints.Length.message = Length must be between {min} and {max}
+org.hibernate.validator.constraints.Range.message = Must be between {min} and {max}
+org.hibernate.validator.constraints.SafeHtml.message = The HTML contents may be unsafe
+org.hibernate.validator.constraints.ScriptAssert.message = Script expression "{script}" must return true
+org.hibernate.validator.constraints.URL.message = Not a well-formed URL
+
+acme.validation.decimal-max = Must be less than or equal to {0}
+acme.validation.decimal-min = Must be greater than or equal to {0}
+acme.validation.digits = Must have {0} digits and {1} decimals
+acme.validation.max = Must be less than or equal to {0}
+acme.validation.min = Must be greater than or equal to {0}
+acme.validation.pattern = Must match pattern "{0}"
+acme.validation.length = Length must be between {0} and {1}
+acme.validation.range = Must be between {0} and {1}
+acme.validation.script = Script expression "{0}" must return true

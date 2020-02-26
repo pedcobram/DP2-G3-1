@@ -16,62 +16,65 @@
 
 package org.springframework.samples.petclinic.model;
 
-import java.time.LocalDate;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
+import org.hibernate.validator.constraints.URL;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
 @Table(name = "football_Clubs")
 public class FootballClub extends BaseEntity {
 
-	@OneToOne
+	@Column(name = "foundation_date")
+	@Temporal(TemporalType.DATE)
+	@DateTimeFormat(pattern = "yyyy/MM/dd")
+	@NotNull
+	private Date		foundationDate;
+
+	@OneToOne(optional = false)
 	@JoinColumn(name = "president_id")
 	private President	president;
 
 	@Column(name = "crest")
+	@URL
 	private String		crest;
 
 	@Column(name = "name")
+	@NotEmpty
 	private String		name;
 
-	@Column(name = "foundation_date")
-	@DateTimeFormat(pattern = "yyyy/MM/dd")
-	private LocalDate	foundationDate;
-
 	@Column(name = "stadium")
+	@NotEmpty
 	private String		stadium;
 
 	@Column(name = "city")
+	@NotEmpty
 	private String		city;
 
 	@Column(name = "fans")
 	private Integer		fans;
 
-	//	private FootballCalendar		calendar;
-
-	//	private List<FootballPlayer>	footballPlayers;
-
 	@Column(name = "coach")
 	private String		coach;
 
-	//	@Column(name = "director")
-	//	@OneToOne(optional = true)
-	//	private Director	director;
-
-	//	@Column(name = "inversor")
-	//	@ManyToOne
-	//	private Inversor	inversor;
-
 	@Column(name = "money")
+	@NotNull
 	private Integer		money;
 
-	//	private List<Merchandise>		merchandise;
+	//	@OneToMany(cascade = CascadeType.ALL)
+	//	private Set<FootballPlayer>	players;
+
+	//	private FootballCalendar		calendar;
 
 
 	//GETTER AND SETTER
@@ -100,11 +103,11 @@ public class FootballClub extends BaseEntity {
 		this.name = Name;
 	}
 
-	public void setFoundationDate(final LocalDate foundationDate) {
+	public void setFoundationDate(final Date foundationDate) {
 		this.foundationDate = foundationDate;
 	}
 
-	public LocalDate getFoundationDate() {
+	public Date getFoundationDate() {
 		return this.foundationDate;
 	}
 
@@ -148,4 +151,32 @@ public class FootballClub extends BaseEntity {
 		this.money = Money;
 	}
 
+	//FootballPlayers Getter and Setter
+	/**
+	 * protected Set<FootballPlayer> getFootballPlayersInternal() {
+	 * if (this.players == null) {
+	 * this.players = new HashSet<>();
+	 * }
+	 * return this.players;
+	 * }
+	 *
+	 * protected void setFootballPlayersInternal(final Set<FootballPlayer> players) {
+	 * this.players = players;
+	 * }
+	 *
+	 * public List<FootballPlayer> getFootballPlayers() {
+	 * List<FootballPlayer> sortedFootballPlayers = new ArrayList<>(this.getFootballPlayersInternal());
+	 * PropertyComparator.sort(sortedFootballPlayers, new MutableSortDefinition("name", true, true));
+	 * return Collections.unmodifiableList(sortedFootballPlayers);
+	 * }
+	 *
+	 * public void addFootballPlayer(final FootballPlayer player) {
+	 * this.getFootballPlayersInternal().add(player);
+	 * player.setFootballClub(this);
+	 * }
+	 *
+	 * public boolean removeFootballPlayer(final FootballPlayer player) {
+	 * return this.getFootballPlayersInternal().remove(player);
+	 * }
+	 **/
 }

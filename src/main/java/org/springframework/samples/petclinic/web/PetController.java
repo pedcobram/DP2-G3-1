@@ -112,16 +112,6 @@ public class PetController {
 		return PetController.VIEWS_PETS_CREATE_OR_UPDATE_FORM;
 	}
 
-	/**
-	 *
-	 * @param pet
-	 * @param result
-	 * @param petId
-	 * @param model
-	 * @param owner
-	 * @param model
-	 * @return
-	 */
 	@PostMapping(value = "/pets/{petId}/edit")
 	public String processUpdateForm(@Valid final Pet pet, final BindingResult result, final Owner owner, @PathVariable("petId") final int petId, final ModelMap model) {
 		if (result.hasErrors()) {

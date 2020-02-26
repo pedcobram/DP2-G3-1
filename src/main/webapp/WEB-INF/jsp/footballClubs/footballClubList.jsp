@@ -23,7 +23,7 @@
             <tr>
                  		
                 <td>
-                <spring:url value="/footballClubs/{footballClubId}" var="footballClubUrl">
+                <spring:url value="/footballClub/{footballClubId}" var="footballClubUrl">
                         <spring:param name="footballClubId" value="${footballClub.id}"/>
                 </spring:url>
                 <img width=30px height= auto hspace="20"; src="${footballClub.crest}"/>
