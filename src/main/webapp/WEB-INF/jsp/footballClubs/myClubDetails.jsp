@@ -5,9 +5,22 @@
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ page contentType="text/html; charset=UTF-8" %> <!-- Para  tildes, ñ y caracteres especiales como el € %-->
 
 <petclinic:layout pageName="footballCLubs">
 
+	<jsp:attribute name="customScript">
+	
+	<!-- Script para mostrar mensajes mousehover %-->
+	
+		<script>
+			$(document).ready(function(){
+  				$('[data-toggle="tooltip"]').tooltip();   
+			});
+		</script>
+	</jsp:attribute>
+	
+<jsp:body>	
     <h2 class="th-center"><fmt:message key="myFootballClub"/></h2>
     
     <c:if test="${!footballClub.crest.isEmpty()}">
@@ -22,7 +35,7 @@
    		<security:authentication var="principalUsername" property="principal.username" /> 
 	</security:authorize>
 	
-	<!-- Creo variables para las "label" con los mensajes internacionalizados %-->
+	<!-- Creo variables para las "label" con los mensajes internacionalizados (NO ES NECESARIO) %-->
 	
 	<fmt:message key="nameLabel" var="Name"/>
     <fmt:message key="cityLabel" var="City"/>
@@ -64,26 +77,33 @@
         </tr>
          <tr>
             <th>${Money}</th>
-            <td><c:out value="${footballClub.money}"/></td>
+            <td><c:out value="${footballClub.money}"/> €</td>
         </tr>
     </table>
 	
-	<!-- Muestro el bot�n de editar si el usuario coincide con el usuario actual %--> 
+	<!-- Muestro el botón de editar si el usuario coincide con el usuario actual %--> 
+
+	<fmt:message key="publishClubMouseHover" var="mousehover"/>
 
 	<c:if test="${footballClub.president.user.username == principalUsername}">
     	<spring:url value="/myfootballClub/${principalUsername}/edit" var="editUrl">
 		   	<spring:param name="footballClubId" value="${footballClub.id}"/>
     	</spring:url>
-    	<a href="${fn:escapeXml(editUrl)}" class="btn btn-default">Edit Club</a>
+    	<a data-toggle="tooltip" title="${mousehover}" href="${fn:escapeXml(editUrl)}" class="btn btn-default"><fmt:message key="updateClub"/></a>  	
+    	
+    	<spring:url value="/footballClub/${footballClub.id}/footballPlayers" var="footballPlayersUrl">
+    		<spring:param name="presidentUsername" value="${footballClub.president.user.username}"/>
+    	</spring:url>
+    	<a   href="${fn:escapeXml(footballPlayersUrl)}" class="btn btn-default"><span class="glyphicon glyphicon-user"></span> <fmt:message key="playerList"/></a>
     </c:if>  
     
     <security:authorize access="hasAnyAuthority('president')">
         <spring:url value="/myfootballClub/delete" var="addUrl"></spring:url>
-    	<a href="${fn:escapeXml(addUrl)}" onclick="return confirm('ARE YOU SURE?')" class="btn btn-default">Delete Club</a>
+    	<a href="${fn:escapeXml(addUrl)}" onclick="return confirm('ARE YOU SURE?')" class="btn btn-default2"><fmt:message key="deleteClub"/></a>
     </security:authorize>
 
     <br/>
     <br/>
     <br/>
-    
+ </jsp:body>   
 </petclinic:layout>

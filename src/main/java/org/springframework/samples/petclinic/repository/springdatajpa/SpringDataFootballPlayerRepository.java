@@ -21,10 +21,9 @@ import java.util.Collection;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
-import org.springframework.data.repository.query.Param;
 import org.springframework.samples.petclinic.model.FootballClub;
-import org.springframework.samples.petclinic.model.President;
-import org.springframework.samples.petclinic.repository.FootballClubRepository;
+import org.springframework.samples.petclinic.model.FootballPlayer;
+import org.springframework.samples.petclinic.repository.FootballPlayerRepository;
 import org.springframework.samples.petclinic.repository.VetRepository;
 
 /**
@@ -33,21 +32,25 @@ import org.springframework.samples.petclinic.repository.VetRepository;
  * @author Michael Isvy
  * @since 15.1.2013
  */
-public interface SpringDataFootballClubRepository extends FootballClubRepository, Repository<FootballClub, Integer> {
+public interface SpringDataFootballPlayerRepository extends FootballPlayerRepository, Repository<FootballPlayer, Integer> {
 
 	@Override
-	@Query("SELECT a FROM President a WHERE a.user.username =:username")
-	President findPresidentByUsername(@Param("username") String username) throws DataAccessException;
+	@Query("select fp from FootballPlayer fp order by fp.club.name asc")
+	Collection<FootballPlayer> findAll() throws DataAccessException;
 
 	@Override
-	@Query("SELECT a FROM FootballClub a WHERE a.president.user.username =:username")
-	FootballClub findFootballClubByPresident(@Param("username") String username) throws DataAccessException;
+	@Query("select fp from FootballPlayer fp where fp.club = null")
+	Collection<FootballPlayer> findAllFreeAgents() throws DataAccessException;
 
 	@Override
-	@Query("SELECT a FROM FootballClub a WHERE a.id =:id")
-	FootballClub findById(int id) throws DataAccessException;
+	@Query("select fp from FootballPlayer fp where fp.club.id = ?1")
+	Collection<FootballPlayer> findPlayersByClubId(int id) throws DataAccessException;
 
 	@Override
-	@Query("select f from FootballClub f where f.status = true")
-	Collection<FootballClub> findAll() throws DataAccessException;
+	@Query("select fp from FootballPlayer fp where fp.id = ?1")
+	FootballPlayer findById(int id) throws DataAccessException;
+
+	@Override
+	@Query("select fc from FootballClub fc where fc.id = ?1")
+	FootballClub findClubByPlayerId(int id) throws DataAccessException;
 }

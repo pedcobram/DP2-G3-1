@@ -5,6 +5,7 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
+<%@ page contentType="text/html; charset=UTF-8" %> <!-- Para  tildes, ñ y caracteres especiales como el € %-->
 
 <petclinic:layout pageName="footballClubs">
 
@@ -39,7 +40,15 @@
             <petclinic:inputField label="${Stadium}" name="stadium"/>
             <petclinic:inputField label="${Money}" name="money"/>
             <petclinic:inputField label="${FoundationDate}" name="foundationDate"/>
+            
+             
+        <c:if test="${footballClub.status == false}"> 
+        	<div class="control-group">
+            	<petclinic:selectField name="status" label="Status" names="${status}" size="2"/>
+            </div>
+        </c:if> 
         </div>
+        
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
                 <c:choose>
@@ -54,7 +63,6 @@
         </div>
         
     </form:form>
-    <c:if test="${!footballClub['new']}">
-        </c:if>
+   
     </jsp:body>
 </petclinic:layout>

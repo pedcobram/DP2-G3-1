@@ -40,22 +40,26 @@ public class FootballClubService {
 
 	}
 
+	//Buscar todos los equipos
 	@Transactional(readOnly = true)
 	public Collection<FootballClub> findFootballClubs() throws DataAccessException {
 		return this.footRepository.findAll();
 	}
 
+	//Buscar equipo por id
 	@Transactional(readOnly = true)
 	public FootballClub findFootballClubById(final int id) throws DataAccessException {
 		return this.footRepository.findById(id);
 	}
 
+	//Guardar equipo con validación de nombre duplicado
 	@Transactional(rollbackFor = DuplicatedNameException.class)
 	public void saveFootballClub(final FootballClub footballClub) throws DataAccessException, DuplicatedNameException {
 
 		String name = footballClub.getName().toLowerCase();
 		FootballClub otherFootClub = null;
 
+		//Creamos un "otherFootClub" si existe uno en la db con el mismo nombre y diferente id
 		for (FootballClub o : this.footRepository.findAll()) {
 			String compName = o.getName();
 			compName = compName.toLowerCase();
@@ -64,6 +68,7 @@ public class FootballClubService {
 			}
 		}
 
+		//Si el campo de nombre tiene contenido y el "otherFootClub" existe y no coincide el id con el actual lanzamos excepción
 		if (StringUtils.hasLength(footballClub.getName()) && otherFootClub != null && otherFootClub.getId() != footballClub.getId()) {
 			throw new DuplicatedNameException();
 		} else {
@@ -72,16 +77,19 @@ public class FootballClubService {
 		}
 	}
 
+	//Buscar presidente por username
 	@Transactional(readOnly = true)
 	public President findPresidentByUsername(final String currentPrincipalName) throws DataAccessException {
 		return this.footRepository.findPresidentByUsername(currentPrincipalName);
 	}
 
+	//Buscar equipo por presidente
 	@Transactional(readOnly = true)
 	public FootballClub findFootballClubByPresident(final String principalUsername) throws DataAccessException {
 		return this.footRepository.findFootballClubByPresident(principalUsername);
 	}
 
+	//Borrar equipo
 	public void deleteFootballClub(final FootballClub footballClub) throws DataAccessException {
 		this.footRepository.delete(footballClub);
 	}

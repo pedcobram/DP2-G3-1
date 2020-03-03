@@ -46,10 +46,10 @@
 					<span><fmt:message key="teams"/></span>
 				</petclinic:menuItem>
 				
-				<petclinic:menuItem active="${name eq 'authenticateds'}" url="/authenticateds/find"
-					title="users">
-					<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
-					<span><fmt:message key="users"/></span>
+				<petclinic:menuItem active="${name eq 'footballPlayers'}" url="/footballPlayers"
+					title="registered players">
+					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+					<span><fmt:message key="players"/></span>
 				</petclinic:menuItem>
 				
 				<petclinic:menuItem active="${name eq 'error'}" url="/oups"

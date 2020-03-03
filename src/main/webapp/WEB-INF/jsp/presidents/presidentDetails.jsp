@@ -5,6 +5,7 @@
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ page contentType="text/html; charset=UTF-8" %> <!-- Para  tildes, ñ y caracteres especiales como el € %-->
 
 <petclinic:layout pageName="presidents">
 
@@ -36,7 +37,7 @@
    		<security:authentication var="principalUsername" property="principal.username" /> 
 	</security:authorize>
 	
-	<!-- Muestro el bot�n de editar si el usuario coincide con el usuario actual %-->  
+	<!-- Muestro el botón de editar si el usuario coincide con el usuario actual %-->  
 
 	<c:if test="${president.user.username == principalUsername}">
     	<spring:url value="{presidentId}/edit" var="editUrl">

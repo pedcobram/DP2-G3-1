@@ -4,6 +4,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
+<%@ page contentType="text/html; charset=UTF-8" %> <!-- Para  tildes, ñ y caracteres especiales como el € %-->
 
 <petclinic:layout pageName="authenticateds">
 
@@ -35,7 +36,7 @@
    		<security:authentication var="principalUsername" property="principal.username" /> 
 	</security:authorize>
 	
-	<!-- Muestro el bot�n de editar si el usuario coincide con el usuario actual %-->  
+	<!-- Muestro el botón de editar si el usuario coincide con el usuario actual %-->  
 
 	<c:if test="${authenticated.user.username == principalUsername}">
     	<spring:url value="{authenticatedId}/edit" var="editUrl">

@@ -23,20 +23,16 @@ import lombok.Setter;
 @Embeddable
 @Getter
 @Setter
-public class Money extends DomainDatatype {
-
-	// Serialisation identifier -----------------------------------------------
-
-	private static final long	serialVersionUID	= 1L;
+public class Money {
 
 	// Attributes -------------------------------------------------------------
 
 	@Digits(integer = 10, fraction = 2)
 	@Min(0)
-	private Double				amount;
+	private Double	amount;
 
 	@NotBlank
-	private String				currency;
+	private String	currency;
 
 
 	// Object interface -------------------------------------------------------

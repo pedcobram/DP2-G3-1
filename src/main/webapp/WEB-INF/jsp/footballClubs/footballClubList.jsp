@@ -4,18 +4,19 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ page contentType="text/html; charset=UTF-8" %> <!-- Para  tildes, ñ y caracteres especiales como el € %-->
 
 <petclinic:layout pageName="footballClubs">
 	
-	<h2 style="color:black">FOOTBALL TEAMS</h2>
+	<h2 style="color:black"><fmt:message key="footballTeams"/></h2>
  		<table id="vetsTable" class="table table-striped">
 			<thead>
        			<tr>
-            		<th class="th-center">TEAMS</th>
-           			<th>City</th>
-           			<th>Stadium</th>
-           			<th>Coach</th>
-           			<th>Foundation Date</th>
+            		<th class="th-center"><fmt:message key="teams"/></th>
+           			<th><fmt:message key="city"/></th>
+           			<th><fmt:message key="stadium"/></th>
+           			<th><fmt:message key="coach"/></th>
+           			<th><fmt:message key="foundationDate"/></th>
  				</tr>
         	</thead>
         	<tbody>

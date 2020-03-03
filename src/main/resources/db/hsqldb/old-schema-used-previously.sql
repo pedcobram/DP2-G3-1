@@ -12,6 +12,8 @@ DROP TABLE footballClubs IF EXISTS;
 DROP TABLE authenticateds IF EXISTS;
 DROP TABLE presidents IF EXISTS;
 
+CREATE TYPE position AS ENUM ('DL');
+
 CREATE TABLE football_Clubs (
   id         		INTEGER IDENTITY PRIMARY KEY,
   president_id		INTEGER NOT NULL, 		
@@ -28,6 +30,7 @@ CREATE TABLE football_Clubs (
 ALTER TABLE football_Clubs ADD CONSTRAINT fk_football_Clubs_presidents FOREIGN KEY (president_id) REFERENCES presidents (id);
 
 CREATE INDEX footballClubs_name ON footballClubs (name);
+
 
 CREATE TABLE authenticateds (
   id         INTEGER IDENTITY PRIMARY KEY,

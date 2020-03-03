@@ -22,17 +22,6 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.FootballClub;
 import org.springframework.samples.petclinic.model.President;
 
-/**
- * Repository class for <code>Vet</code> domain objects All method names are compliant
- * with Spring Data naming conventions so this interface can easily be extended for Spring
- * Data See here:
- * http://static.springsource.org/spring-data/jpa/docs/current/reference/html/jpa.repositories.html#jpa.query-methods.query-creation
- *
- * @author Ken Krebs
- * @author Juergen Hoeller
- * @author Sam Brannen
- * @author Michael Isvy
- */
 public interface FootballClubRepository {
 
 	Collection<FootballClub> findAll() throws DataAccessException;
@@ -46,9 +35,4 @@ public interface FootballClubRepository {
 	FootballClub findFootballClubByPresident(String principalUsername) throws DataAccessException;
 
 	void delete(FootballClub footballClub) throws DataAccessException;
-
-	FootballClub findFootballClubByName(String name);
-
-	FootballClub findFootballClubByNameAndDifferentId(String name, Integer id);
-
 }

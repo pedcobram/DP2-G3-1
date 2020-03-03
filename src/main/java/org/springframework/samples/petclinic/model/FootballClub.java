@@ -27,6 +27,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
 
 import org.hibernate.validator.constraints.URL;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -34,12 +35,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 @Entity
 @Table(name = "football_Clubs")
 public class FootballClub extends BaseEntity {
-
-	@Column(name = "foundation_date")
-	@Temporal(TemporalType.DATE)
-	@DateTimeFormat(pattern = "yyyy/MM/dd")
-	@NotNull
-	private Date		foundationDate;
 
 	@OneToOne(optional = false)
 	@JoinColumn(name = "president_id")
@@ -52,6 +47,13 @@ public class FootballClub extends BaseEntity {
 	@Column(name = "name")
 	@NotEmpty
 	private String		name;
+
+	@Column(name = "foundation_date")
+	@Temporal(TemporalType.DATE)
+	@DateTimeFormat(pattern = "yyyy/MM/dd")
+	@Past
+	@NotNull
+	private Date		foundationDate;
 
 	@Column(name = "stadium")
 	@NotEmpty
@@ -70,6 +72,9 @@ public class FootballClub extends BaseEntity {
 	@Column(name = "money")
 	@NotNull
 	private Integer		money;
+
+	@Column(name = "status") 		//True=Published, False=Drafted
+	private Boolean		status;
 
 	//	@OneToMany(cascade = CascadeType.ALL)
 	//	private Set<FootballPlayer>	players;
@@ -149,6 +154,14 @@ public class FootballClub extends BaseEntity {
 
 	public void setMoney(final Integer Money) {
 		this.money = Money;
+	}
+
+	public Boolean getStatus() {
+		return this.status;
+	}
+
+	public void setStatus(final Boolean status) {
+		this.status = status;
 	}
 
 	//FootballPlayers Getter and Setter
