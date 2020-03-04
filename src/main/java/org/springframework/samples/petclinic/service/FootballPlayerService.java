@@ -100,6 +100,14 @@ public class FootballPlayerService {
 		}
 	}
 
+	@Transactional
+	public void saveFootballPlayerClub(final FootballPlayer footballPlayer, final FootballClub footballClub) throws DataAccessException {
+
+		footballPlayer.setClub(footballClub);
+
+		this.footRepository.save(footballPlayer);
+	}
+
 	//TODO: Borrar jugador
 
 }

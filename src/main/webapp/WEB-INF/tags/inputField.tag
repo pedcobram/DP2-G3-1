@@ -6,6 +6,11 @@
 <%@ attribute name="label" required="true" rtexprvalue="true"
               description="Label appears in red color if input is considered as invalid after submission" %>
 <%@attribute name="placeholder" required="false" type="java.lang.String"%>
+<%@attribute name="readonly" required="false" type="java.lang.Boolean"%>
+
+<c:if test="${readonly == null}">
+	<c:set var="readonly" value="false"/>
+</c:if>
 
 <c:if test="${placeholder == null}">
 	<c:set var="placeholder" value=""/>	
@@ -18,7 +23,12 @@
         <label class="col-sm-2 control-label">${label}</label>
 
         <div class="col-sm-10">
-            <form:input class="form-control" path="${name}" placeholder="${placeholder}"/>
+            <form:input 
+            class="form-control" 
+            path="${name}" 
+            placeholder="${placeholder}" 
+           	readonly="${readonly}"
+       		/>
             
             <c:if test="${valid}">
                 <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>

@@ -7,18 +7,21 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 
 @Entity
 @Table(name = "contract")
 public class Contract extends BaseEntity {
-
-	/**
-	 * HACER CLASE PADRE MEJOR.
-	 * UN CONTRATO TIENE UNA DURACIÓN, UN CLUB, UN JUGADOR O INVERSIÓN(sin implementar de momento)
-	 * Y UN MONEY QUE SERÁ SUELDO EN CASO DE JUGADOR O FONDOS AÑADIDOS EN CASO DE INVERSIÓN
-	 **/
 
 	//Atributos
 
@@ -26,19 +29,19 @@ public class Contract extends BaseEntity {
 	@JoinColumn(name = "football_Clubs_id")
 	private FootballClub	club;
 
-	@OneToOne(optional = true)
-	@JoinColumn(name = "football_Players_id")
-	private FootballPlayer	player;
+	@Temporal(TemporalType.DATE)
+	@DateTimeFormat(pattern = "yyyy/MM/dd")
+	@Column(name = "start_date")
+	private Date			startDate;
 
-	//	@OneToOne(optional = true)
-	//	@JoinColumn(name = "investment_id")
-	//	private Investment	investment;
+	@Temporal(TemporalType.DATE)
+	@DateTimeFormat(pattern = "yyyy/MM/dd")
+	@Column(name = "end_date")
+	private Date			endDate;
 
-	@Column(name = "duration")
-	private Date			duration;
-
-	@Column(name = "money")
-	private Integer			money;
+	//Automático
+	@Column(name = "end_contract_clause")
+	private Integer			clause;
 
 
 	//Getters and Setters
@@ -51,27 +54,27 @@ public class Contract extends BaseEntity {
 		this.club = club;
 	}
 
-	public FootballPlayer getPlayer() {
-		return this.player;
+	public Date getStartDate() {
+		return this.startDate;
 	}
 
-	public void setPlayer(final FootballPlayer player) {
-		this.player = player;
+	public void setStartDate(final Date startDate) {
+		this.startDate = startDate;
 	}
 
-	public Date getDuration() {
-		return this.duration;
+	public Date getEndDate() {
+		return this.endDate;
 	}
 
-	public void setDuration(final Date duration) {
-		this.duration = duration;
+	public void setEndDate(final Date endDate) {
+		this.endDate = endDate;
 	}
 
-	public Integer getMoney() {
-		return this.money;
+	public Integer getClause() {
+		return this.clause;
 	}
 
-	public void setMoney(final Integer money) {
-		this.money = money;
+	public void setClause(final Integer clause) {
+		this.clause = clause;
 	}
 }

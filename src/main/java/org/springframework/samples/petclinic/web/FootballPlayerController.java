@@ -149,7 +149,7 @@ public class FootballPlayerController {
 	//Crear Jugador - Get
 
 	@GetMapping(value = "/footballPlayer/new")
-	public String initCreationForm(final FootballClub club, final Map<String, Object> model) {
+	public String initCreationForm(final Map<String, Object> model) {
 
 		FootballPlayer footballPlayer = new FootballPlayer();
 		List<FootballPlayerPosition> positions = new ArrayList<FootballPlayerPosition>();
@@ -190,7 +190,7 @@ public class FootballPlayerController {
 		Collection<FootballPlayer> cp = this.footballPlayerService.findAllClubFootballPlayers(thisClub.getId());
 
 		if (cp.size() >= 7) {
-			result.rejectValue("position", "max7players", "already exists");
+			result.rejectValue("position", "max7players");
 			return FootballPlayerController.VIEWS_PLAYER_CREATE_OR_UPDATE_FORM;
 		}
 

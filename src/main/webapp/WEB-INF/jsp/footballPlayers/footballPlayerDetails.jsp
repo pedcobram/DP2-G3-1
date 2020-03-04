@@ -66,7 +66,9 @@
     <fmt:message key="signMouseHover" var="mousehover"/>
     
     <c:if test="${footballPlayer.club == null}">
-    		<spring:url value="/contract/new" var="newContractUrl"></spring:url>
+    		<spring:url value="/footballPlayers/{footballPlayerId}/contractPlayer/new" var="newContractUrl">
+    			<spring:param name="footballPlayerId" value="${footballPlayer.id}"/>
+    		</spring:url>	
     		<a data-toggle="tooltip" title="${mousehover}" href="${fn:escapeXml(newContractUrl)}" class="btn btn-default">Fichar</a>
     </c:if> 
     

@@ -18,20 +18,25 @@ package org.springframework.samples.petclinic.repository.springdatajpa;
 
 import java.util.Collection;
 
+import org.springframework.dao.DataAccessException;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
-import org.springframework.data.repository.query.Param;
-import org.springframework.samples.petclinic.model.Authenticated;
-import org.springframework.samples.petclinic.repository.AuthenticatedRepository;
+import org.springframework.samples.petclinic.model.Contract;
+import org.springframework.samples.petclinic.model.ContractPlayer;
+import org.springframework.samples.petclinic.repository.ContractRepository;
 
-public interface SpringDataAuthenticatedRepository extends AuthenticatedRepository, Repository<Authenticated, Integer> {
-
-	@Override
-	@Query("SELECT DISTINCT a FROM Authenticated a WHERE a.lastName LIKE :lastName%")
-	Collection<Authenticated> findByLastName(@Param("lastName") String lastName);
+public interface SpringDataContractRepository extends ContractRepository, Repository<Contract, Integer> {
 
 	@Override
-	@Query("SELECT a FROM Authenticated a WHERE a.user.username =:username")
-	Authenticated findByUsername(@Param("username") String username);
+	@Query("Select c from ContractPlayer c")
+	Collection<ContractPlayer> findAllPlayerContracts() throws DataAccessException;
+
+	@Override
+	@Query("Select c from ContractPlayer c where c.id = ?1")
+	ContractPlayer findContractPlayerById(int id) throws DataAccessException;
+
+	@Override
+	@Query("Select c from ContractPlayer c where c.player.id = ?1")
+	ContractPlayer findContractPlayerByPlayerId(int playerId) throws DataAccessException;
 
 }
