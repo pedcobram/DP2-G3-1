@@ -45,7 +45,7 @@ public class CompetitionAdminService {
 		//creating president
 		this.competitionAdminRepository.save(competitionAdmin);
 		//creating authorities
-		this.authoritiesService.saveAuthorities(competitionAdmin.getUser().getUsername(), "CompetitionAdmin");
+		this.authoritiesService.saveAuthorities(competitionAdmin.getUser().getUsername(), "competitionAdmin");
 	}
 
 	@Transactional(readOnly = true)
@@ -54,7 +54,7 @@ public class CompetitionAdminService {
 	}
 
 	public void deleteCompetitionAdmin(final CompetitionAdmin competitionAdmin) throws DataAccessException {
-		this.authoritiesService.deleteAuthorities(competitionAdmin.getUser().getUsername(), "CompetitionAdmin");
+		this.authoritiesService.deleteAuthorities(competitionAdmin.getUser().getUsername(), "competitionAdmin");
 		this.authoritiesService.saveAuthorities(competitionAdmin.getUser().getUsername(), "authenticated");
 		this.competitionAdminRepository.delete(competitionAdmin);
 

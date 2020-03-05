@@ -9,6 +9,7 @@ import java.util.Set;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.samples.petclinic.model.Authenticated;
 import org.springframework.samples.petclinic.model.CompetitionAdmin;
 import org.springframework.samples.petclinic.model.President;
 import org.springframework.samples.petclinic.service.AuthoritiesService;
@@ -59,7 +60,7 @@ public class CompetitionAdminController {
 		CompetitionAdmin competitionAdmin = new CompetitionAdmin();
 
 		//Obtenemos el authenticated actual conectado
-		CompetitionAdmin thisUser = this.competitionAdminService.findCompetitionAdminByUsername(currentPrincipalName);
+		Authenticated thisUser = this.competitionAdminService.findAuthenticatedByUsername(currentPrincipalName);
 
 		//Añadimos los datos del user al Competition Admin
 		competitionAdmin.setFirstName(thisUser.getFirstName());
@@ -93,7 +94,7 @@ public class CompetitionAdminController {
 
 		//Obtenemos el Competition Admin
 		CompetitionAdmin competitionAdmin = this.competitionAdminService.findCompetitionAdminByUsername(currentPrincipalName);
-		CompetitionAdmin user = this.competitionAdminService.findCompetitionAdminByUsername(currentPrincipalName);
+		Authenticated user = this.competitionAdminService.findAuthenticatedByUsername(currentPrincipalName);
 
 		//Guardamos en la db el nuevo presidente
 		this.competitionAdminService.deleteCompetitionAdmin(competitionAdmin);

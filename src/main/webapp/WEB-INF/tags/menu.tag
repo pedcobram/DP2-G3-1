@@ -118,6 +118,13 @@
 											</petclinic:menuItem>
 										</sec:authorize>
 										
+										<sec:authorize access="hasAuthority('competitionAdmin')">	
+											<petclinic:menuItem active="${name eq 'authenticateds'}" url="/myCompetitionAdminProfile/${principalUsername}"
+												title="personal space">
+												<span><fmt:message key="myProfile"/></span>
+											</petclinic:menuItem>
+										</sec:authorize>
+										
 										<div class="col-lg-4">
 											<p style="color:#C42D16" class="text-center">
 												<span  class="glyphicon glyphicon-user icon-size"></span>
