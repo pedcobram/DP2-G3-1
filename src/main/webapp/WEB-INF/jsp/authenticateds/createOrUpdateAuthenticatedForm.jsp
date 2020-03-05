@@ -9,12 +9,12 @@
 
 <petclinic:layout pageName="authenticateds">
     <h2>
-        <c:if test="${authenticated['new']}">New </c:if> Authenticated
+        <c:if test="${authenticated['new']}"><fmt:message key="new"/> </c:if> <fmt:message key="user"/>
     </h2>
     <form:form modelAttribute="authenticated" class="form-horizontal" id="add-authenticated-form">
         <div class="form-group has-feedback">
-            <petclinic:inputField label="First Name" name="firstName"/>
-            <petclinic:inputField label="Last Name" name="lastName"/>
+            <petclinic:inputField label="FisrtName" name="firstName"/>
+            <petclinic:inputField label="LastName" name="lastName"/>
             <petclinic:inputField label="Dni" name="dni"/>
             <petclinic:inputField label="Email" name="email"/>
             <petclinic:inputField label="Telephone" name="telephone"/>
@@ -25,10 +25,10 @@
             <div class="col-sm-offset-2 col-sm-10">
                 <c:choose>
                     <c:when test="${authenticated['new']}">
-                        <button class="btn btn-default" type="submit">Add Authenticated</button>
+                        <button class="btn btn-default" type="submit"><fmt:message key="addUser"/></button>
                     </c:when>
                     <c:otherwise>
-                        <button class="btn btn-default" type="submit">Update Authenticated</button>
+                        <button class="btn btn-default" type="submit"><fmt:message key="UpUser"/></button>
                     </c:otherwise>
                 </c:choose>
             </div>
