@@ -1,4 +1,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="acme" tagdir="/WEB-INF/tags"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 <%-- Placed at the end of the document so the pages load faster --%>
 <spring:url value="/webjars/jquery/2.2.4/jquery.min.js" var="jQuery"/>
@@ -11,4 +14,11 @@
 <%-- Bootstrap --%>
 <spring:url value="/webjars/bootstrap/3.3.6/js/bootstrap.min.js" var="bootstrapJs"/>
 <script src="${bootstrapJs}"></script>
+
+
+<div>
+<i class="fa fa-language" style="font-size:36px"></i>
+<a href="?lang=es"><fmt:message key="spanish"/></a>
+<a href="?lang=en"><fmt:message key="english"/></a>
+</div>
 
