@@ -5,6 +5,7 @@ import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.samples.petclinic.model.Authenticated;
 import org.springframework.samples.petclinic.model.CompetitionAdmin;
 import org.springframework.samples.petclinic.repository.CompetitionAdminRepository;
 import org.springframework.stereotype.Service;
@@ -14,9 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class CompetitionAdminService {
 
 	private CompetitionAdminRepository	competitionAdminRepository;
-
-	@Autowired
-	private UserService					userService;
 
 	@Autowired
 	private AuthoritiesService			authoritiesService;
@@ -44,20 +42,21 @@ public class CompetitionAdminService {
 
 	@Transactional
 	public void saveCompetitionAdmin(final CompetitionAdmin competitionAdmin) throws DataAccessException {
-		//creating Competition Admin
+		//creating president
 		this.competitionAdminRepository.save(competitionAdmin);
-		//creating user
-		this.userService.saveUser(competitionAdmin.getUser());
 		//creating authorities
-		this.authoritiesService.saveAuthorities(competitionAdmin.getUser().getUsername(), "competitionAdmin");
+		this.authoritiesService.saveAuthorities(competitionAdmin.getUser().getUsername(), "CompetitionAdmin");
 	}
 
-	@Transactional
+	@Transactional(readOnly = true)
+	public Authenticated findAuthenticatedByUsername(final String userName) throws DataAccessException {
+		return this.competitionAdminRepository.findAuthenticatedByUsername(userName);
+	}
+
 	public void deleteCompetitionAdmin(final CompetitionAdmin competitionAdmin) throws DataAccessException {
-
-		this.authoritiesService.deleteAuthorities(competitionAdmin.getUser().getUsername(), "competitionAdmin");
-
+		this.authoritiesService.deleteAuthorities(competitionAdmin.getUser().getUsername(), "CompetitionAdmin");
+		this.authoritiesService.saveAuthorities(competitionAdmin.getUser().getUsername(), "authenticated");
 		this.competitionAdminRepository.delete(competitionAdmin);
-	}
 
+	}
 }

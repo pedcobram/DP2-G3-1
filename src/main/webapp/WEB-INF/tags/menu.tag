@@ -83,15 +83,19 @@
 					</a>
 						<ul class="dropdown-menu">
 						
-						<sec:authorize access="!hasAnyAuthority('president', 'director', 'inversor')">
+						<sec:authorize access="!hasAnyAuthority('president', 'director', 'inversor', 'competitionAdmin')">
 							<li><a href="<c:url value="/createPresident" />"><fmt:message key="becPresident"/></a></li>
 						</sec:authorize>
 						
-						<sec:authorize access="!hasAnyAuthority('president', 'director', 'inversor')">
+						<sec:authorize access="!hasAnyAuthority('president', 'director', 'inversor', 'competitionAdmin')">
+							<li><a href="<c:url value="/createCompetitionAdmin" />"><fmt:message key="becCompetitionAdmin"/></a></li>
+						</sec:authorize>
+						
+						<sec:authorize access="!hasAnyAuthority('president', 'director', 'inversor', 'competitionAdmin')">
 							<li><a href="<c:url value="/presidents/new" />"><fmt:message key="becDirector"/></a></li>
 						</sec:authorize>
 						
-						<sec:authorize access="!hasAnyAuthority('president', 'director', 'inversor')">
+						<sec:authorize access="!hasAnyAuthority('president', 'director', 'inversor', 'competitionAdmin')">
 							
 							<li><a href="<c:url value="/presidents/new" />"><fmt:message key="becInversor"/></a></li>
 						</sec:authorize>
