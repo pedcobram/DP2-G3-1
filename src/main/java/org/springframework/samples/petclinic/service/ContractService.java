@@ -20,6 +20,7 @@ import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.samples.petclinic.model.ContractCommercial;
 import org.springframework.samples.petclinic.model.ContractPlayer;
 import org.springframework.samples.petclinic.repository.ContractRepository;
 import org.springframework.stereotype.Service;
@@ -28,35 +29,52 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class ContractService {
 
-	private ContractRepository contractRepository;
+	private ContractRepository ContractRepository;
 
 
 	@Autowired
-	public ContractService(final ContractRepository contractRepository) {
-		this.contractRepository = contractRepository;
+	public ContractService(final ContractRepository ContractRepository) {
+		this.ContractRepository = ContractRepository;
 
 	}
 
 	//Buscar todos los contratos de jugadores
 	@Transactional(readOnly = true)
 	public Collection<ContractPlayer> findAllPlayerContracts() throws DataAccessException {
-		return this.contractRepository.findAllPlayerContracts();
+		return this.ContractRepository.findAllPlayerContracts();
 	}
 
 	//Buscar contrato de jugador por id
 	@Transactional(readOnly = true)
 	public ContractPlayer findContractPlayerById(final int id) throws DataAccessException {
-		return this.contractRepository.findContractPlayerById(id);
+		return this.ContractRepository.findContractPlayerById(id);
 	}
 
 	//Buscar contrato de jugador por id del jugador
 	@Transactional(readOnly = true)
 	public ContractPlayer findContractPlayerByPlayerId(final int playerId) throws DataAccessException {
-		return this.contractRepository.findContractPlayerByPlayerId(playerId);
+		return this.ContractRepository.findContractPlayerByPlayerId(playerId);
 	}
 
 	@Transactional
 	public void saveContractPlayer(final ContractPlayer contractPlayer) {
-		this.contractRepository.save(contractPlayer);
+		this.ContractRepository.save(contractPlayer);
+	}
+
+	//Buscar todos los contratos de comerciales
+	@Transactional(readOnly = true)
+	public Collection<ContractCommercial> findAllCommercialContracts() throws DataAccessException {
+		return this.ContractRepository.findAllCommercialContracts();
+	}
+
+	//Buscar contrato de comercial por id
+	@Transactional(readOnly = true)
+	public ContractCommercial findContractCommercialById(final int id) throws DataAccessException {
+		return this.ContractRepository.findContractCommercialById(id);
+	}
+
+	@Transactional
+	public void saveContractCommercial(final ContractCommercial contractCommercial) {
+		this.ContractRepository.save(contractCommercial);
 	}
 }

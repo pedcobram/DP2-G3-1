@@ -32,7 +32,6 @@ import org.springframework.web.servlet.ModelAndView;
 public class ContractController {
 
 	private static final String			VIEWS_CONTRACT_PLAYER_CREATE_OR_UPDATE_FORM	= "contracts/createOrUpdateContractPlayerForm";
-
 	private final ContractService		contractService;
 	private final FootballPlayerService	footballPlayerService;
 	private final FootballClubService	footballClubService;

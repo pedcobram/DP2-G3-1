@@ -11,7 +11,7 @@ import javax.persistence.Table;
 @Table(name = "contract_player")
 public class ContractPlayer extends Contract {
 
-	@OneToOne(optional = false)
+	@OneToOne(optional = true) //Ponerlo no opcional provoca que todos los contratos, INCLUSO los comerciales necesiten footballPlayerId, lo que no tiene sentido.
 	@JoinColumn(name = "football_Players_id")
 	private FootballPlayer	player;
 

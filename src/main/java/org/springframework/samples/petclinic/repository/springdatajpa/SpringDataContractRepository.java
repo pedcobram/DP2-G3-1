@@ -21,11 +21,19 @@ import java.util.Collection;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
-import org.springframework.samples.petclinic.model.Contract;
+import org.springframework.samples.petclinic.model.ContractCommercial;
 import org.springframework.samples.petclinic.model.ContractPlayer;
 import org.springframework.samples.petclinic.repository.ContractRepository;
 
-public interface SpringDataContractRepository extends ContractRepository, Repository<Contract, Integer> {
+public interface SpringDataContractRepository extends ContractRepository, Repository<ContractCommercial, Integer> {
+
+	@Override
+	@Query("Select c from ContractCommercial c")
+	Collection<ContractCommercial> findAllCommercialContracts() throws DataAccessException;
+
+	@Override
+	@Query("Select c from ContractCommercial c where c.id = ?1")
+	ContractCommercial findContractCommercialById(int id) throws DataAccessException;
 
 	@Override
 	@Query("Select c from ContractPlayer c")
