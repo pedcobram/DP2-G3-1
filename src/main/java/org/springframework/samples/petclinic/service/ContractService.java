@@ -29,52 +29,52 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class ContractService {
 
-	private ContractRepository ContractRepository;
+	private ContractRepository contractRepository;
 
 
 	@Autowired
-	public ContractService(final ContractRepository ContractRepository) {
-		this.ContractRepository = ContractRepository;
+	public ContractService(final ContractRepository contractRepository) {
+		this.contractRepository = contractRepository;
 
 	}
 
 	//Buscar todos los contratos de jugadores
 	@Transactional(readOnly = true)
 	public Collection<ContractPlayer> findAllPlayerContracts() throws DataAccessException {
-		return this.ContractRepository.findAllPlayerContracts();
+		return this.contractRepository.findAllPlayerContracts();
 	}
 
 	//Buscar contrato de jugador por id
 	@Transactional(readOnly = true)
 	public ContractPlayer findContractPlayerById(final int id) throws DataAccessException {
-		return this.ContractRepository.findContractPlayerById(id);
+		return this.contractRepository.findContractPlayerById(id);
 	}
 
 	//Buscar contrato de jugador por id del jugador
 	@Transactional(readOnly = true)
 	public ContractPlayer findContractPlayerByPlayerId(final int playerId) throws DataAccessException {
-		return this.ContractRepository.findContractPlayerByPlayerId(playerId);
+		return this.contractRepository.findContractPlayerByPlayerId(playerId);
 	}
 
 	@Transactional
 	public void saveContractPlayer(final ContractPlayer contractPlayer) {
-		this.ContractRepository.save(contractPlayer);
+		this.contractRepository.save(contractPlayer);
 	}
 
 	//Buscar todos los contratos de comerciales
 	@Transactional(readOnly = true)
 	public Collection<ContractCommercial> findAllCommercialContracts() throws DataAccessException {
-		return this.ContractRepository.findAllCommercialContracts();
+		return this.contractRepository.findAllCommercialContracts();
 	}
 
 	//Buscar contrato de comercial por id
 	@Transactional(readOnly = true)
 	public ContractCommercial findContractCommercialById(final int id) throws DataAccessException {
-		return this.ContractRepository.findContractCommercialById(id);
+		return this.contractRepository.findContractCommercialById(id);
 	}
 
 	@Transactional
 	public void saveContractCommercial(final ContractCommercial contractCommercial) {
-		this.ContractRepository.save(contractCommercial);
+		this.contractRepository.save(contractCommercial);
 	}
 }
