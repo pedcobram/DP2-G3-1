@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-public class ContractController {
+public class ContractPlayerController {
 
 	private static final String			VIEWS_CONTRACT_PLAYER_CREATE_OR_UPDATE_FORM	= "contracts/createOrUpdateContractPlayerForm";
 	private final ContractService		contractService;
@@ -38,7 +38,7 @@ public class ContractController {
 
 
 	@Autowired
-	public ContractController(final ContractService contractService, final FootballPlayerService footballPlayerService, final FootballClubService footballClubService) {
+	public ContractPlayerController(final ContractService contractService, final FootballPlayerService footballPlayerService, final FootballClubService footballClubService) {
 		this.contractService = contractService;
 		this.footballPlayerService = footballPlayerService;
 		this.footballClubService = footballClubService;
@@ -90,7 +90,7 @@ public class ContractController {
 
 		model.addAttribute("startDate", date);
 
-		return ContractController.VIEWS_CONTRACT_PLAYER_CREATE_OR_UPDATE_FORM;
+		return ContractPlayerController.VIEWS_CONTRACT_PLAYER_CREATE_OR_UPDATE_FORM;
 	}
 
 	//Crear Contrato de Jugador - Post
@@ -99,7 +99,7 @@ public class ContractController {
 
 		if (result.hasErrors()) {
 			model.addAttribute("contractPlayer", contractPlayer);
-			return ContractController.VIEWS_CONTRACT_PLAYER_CREATE_OR_UPDATE_FORM;
+			return ContractPlayerController.VIEWS_CONTRACT_PLAYER_CREATE_OR_UPDATE_FORM;
 		} else {
 
 			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

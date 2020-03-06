@@ -104,7 +104,7 @@ public class ContractCommercialController {
 			this.contractService.saveContractCommercial(contractCommercial);
 
 			//Si todo sale bien vamos a la vista de mi club
-			return "redirect:/myfootballClub/" + contractCommercial.getId();
+			return "redirect:/myfootballClub/" + currentPrincipalName;
 		}
 	}
 
