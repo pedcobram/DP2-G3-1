@@ -88,7 +88,7 @@
 						</sec:authorize>
 						
 						<sec:authorize access="!hasAnyAuthority('president', 'director', 'inversor', 'competitionAdmin')">
-							<li><a href="<c:url value="/createCompetitionAdmin" />"><fmt:message key="becCompetitionAdmin"/></a></li>
+							<li><a href="<c:url value="/competitionAdminRequest/new" />"><fmt:message key="becCompetitionAdmin"/></a></li>
 						</sec:authorize>
 						
 						<sec:authorize access="!hasAnyAuthority('president', 'director', 'inversor', 'competitionAdmin')">

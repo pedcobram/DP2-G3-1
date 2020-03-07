@@ -83,8 +83,6 @@ public class CompetitionAdminController {
 		return "redirect:/myCompetitionAdminProfile/" + currentPrincipalName;
 	}
 
-	//BORRAR PRESIDENTE
-
 	@RequestMapping(value = "/deleteCompetitionAdmin")
 	public String deleteCompetitionAdmin() {
 
@@ -156,6 +154,8 @@ public class CompetitionAdminController {
 			String currentPrincipalName = authentication.getName();
 
 			competitionAdmin.setId(competitionAdminId);
+			competitionAdmin.getUser().setEnabled(true);
+
 			this.competitionAdminService.saveCompetitionAdmin(competitionAdmin);
 			return "redirect:/myCompetitionAdminProfile/" + currentPrincipalName;
 		}

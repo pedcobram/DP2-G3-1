@@ -123,6 +123,7 @@ public class AuthenticatedController {
 
 			authenticated.setId(authenticatedId);
 			authenticated.getUser().setEnabled(true);
+
 			this.authenticatedService.saveAuthenticated(authenticated);
 			return "redirect:/myProfile/" + currentPrincipalName;
 		}

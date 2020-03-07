@@ -13,9 +13,6 @@ INSERT INTO authorities VALUES ('rafa','authenticated');
 -- User Pedro
 INSERT INTO users(username,password,enabled) VALUES ('pedro','pedro',TRUE);
 INSERT INTO authorities VALUES ('pedro','authenticated');
-
-INSERT INTO users(username,password,enabled) VALUES ('pedroCA','pedroCA',TRUE);
-INSERT INTO authorities VALUES ('pedroCA','competitionAdmin');
 -- User Ignacio
 INSERT INTO users(username,password,enabled) VALUES ('ignacio','ignacio',TRUE);
 INSERT INTO authorities VALUES ('ignacio','authenticated');
@@ -26,12 +23,17 @@ INSERT INTO authorities VALUES ('gonzalo','authenticated');
 INSERT INTO users(username,password,enabled) VALUES ('manuel','manuel',TRUE);
 INSERT INTO authorities VALUES ('manuel','authenticated');
 
+-- Competition Admins
+INSERT INTO comp_Admin_Requests(id, title, description, status, username) VALUES (1, 'Test title 01', 'Test description 01', false, 'pedro');
+
+-- Authenticated users
 INSERT INTO authenticateds VALUES (1, 'Rafael', 'Liébana Fuentes', '11111111A', 'rafliefue@alum.us.es', '600111222', 'rafa');
 INSERT INTO authenticateds VALUES (2, 'Pedro Manuel', 'Cobos Ramos', '22222222A', 'pedcobram@alum.us.es', '600222333', 'pedro');
 INSERT INTO authenticateds VALUES (3, 'Ignacio José', 'Rodríguez Flores', '33333333A', 'ignrodflo@alum.us.es', '600333444', 'ignacio');
 INSERT INTO authenticateds VALUES (4, 'Gonzalo', 'Fernandez Jiménez', '44444444A', 'gonferjim@alum.us.es', '600444555', 'gonzalo');
 INSERT INTO authenticateds VALUES (5, 'Manuel', 'Sánchez Rodríguez', '55555555A', 'mansanrod@alum.us.es', '600555666', 'manuel');
 
+-- President users
 INSERT INTO presidents VALUES (1, 'President1', 'Surname1', '11111111A', 'email@gmail.com', '100111222', 'owner1');
 INSERT INTO presidents VALUES (2, 'President2', 'Surname2', '21111111A', 'email@gmail.com', '200111222', 'owner1');
 INSERT INTO presidents VALUES (3, 'President3', 'Surname3', '31111111A', 'email@gmail.com', '300111222', 'owner1');
