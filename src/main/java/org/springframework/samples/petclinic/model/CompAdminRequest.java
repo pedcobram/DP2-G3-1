@@ -9,6 +9,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 
+import org.springframework.samples.petclinic.model.Enum.CompAdminRequestStatus;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -20,18 +22,18 @@ public class CompAdminRequest extends BaseEntity {
 
 	@NotEmpty
 	@Column(name = "title")
-	private String	title;
+	private String					title;
 
 	@NotEmpty
 	@Column(name = "description")
-	private String	description;
+	private String					description;
 
 	@Column(name = "status")
-	private Boolean	status;
+	private CompAdminRequestStatus	status;
 
 	//
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "username", referencedColumnName = "username")
-	private User	user;
+	private User					user;
 	//
 }

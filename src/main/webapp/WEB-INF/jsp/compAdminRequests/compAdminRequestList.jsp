@@ -8,15 +8,15 @@
 
 <petclinic:layout pageName="compAdminRequests">
 	
-	<h2 style="color:black"><fmt:message key="compAdminRequests"/></h2>
+	<h2 style="color:black"><fmt:message key="compAdminRequestList"/></h2>
  		<table id="vetsTable" class="table table-striped">
 			<thead>
        			<tr>
-           			<th><fmt:message key="title"/></th>
-           			<th><fmt:message key="description"/></th>
-           			<th><fmt:message key="status"/></th>
-           			<th><fmt:message key="username"/></th>
-           			<th><fmt:message key="actions"/></th>
+           			<th><fmt:message key="titleCompAdminRequestList"/></th>
+           			<th><fmt:message key="descriptionCompAdminRequestList"/></th>
+           			<th><fmt:message key="statusCompAdminRequestList"/></th>
+           			<th><fmt:message key="usernameCompAdminRequestList"/></th>
+           			<th><fmt:message key="actionsCompAdminRequestList"/></th>
  				</tr>
         	</thead>
         	<tbody>
@@ -36,10 +36,10 @@
                 </td>
                 <td>
                 	<spring:url value="accept/${compAdminRequest.user.username}" var='acceptCompAdminRequest'></spring:url>
-                	<a href="${fn:escapeXml(acceptCompAdminRequest)}" class="btn btn-default">Accept</a>
+                	<a href="${fn:escapeXml(acceptCompAdminRequest)}" class="btn btn-default"><fmt:message key="acceptRequestCompAdminRequestList"/></a>
                 	
                 	<spring:url value="reject/${compAdminRequest.user.username}" var='rejectCompAdminRequest'></spring:url>
-                	<a href="${fn:escapeXml(rejectCompAdminRequest)}" class="btn btn-default">Reject</a>
+                	<a href="${fn:escapeXml(rejectCompAdminRequest)}" class="btn btn-default"><fmt:message key="rejectRequestCompAdminRequestList"/></a>
                 </td>
             </tr>
         </c:forEach>

@@ -68,12 +68,12 @@
 						<span style="color:#ffc800" class="glyphicon glyphicon-bookmark" aria-hidden="true"></span>
 						<span><fmt:message key="myClub"/></span>
 					</petclinic:menuItem>
-				</sec:authorize>				
+				</sec:authorize>
 				
 				<sec:authorize access="!isAuthenticated()">				
 					<li><a href="<c:url value="/login" />"><fmt:message key="login"/></a></li>
 					<li><a href="<c:url value="/authenticateds/new" />"><fmt:message key="register"/></a></li>
-				</sec:authorize>
+				</sec:authorize>				
 				
 				<sec:authorize access="isAuthenticated()">
 					<li class="dropdown"><a href="#" class="dropdown-toggle"
@@ -83,23 +83,23 @@
 					</a>
 						<ul class="dropdown-menu">
 						
-						<sec:authorize access="!hasAnyAuthority('president', 'director', 'inversor', 'competitionAdmin')">
+						<sec:authorize access="!hasAnyAuthority('president', 'director', 'inversor', 'competitionAdmin', 'admin')">
 							<li><a href="<c:url value="/createPresident" />"><fmt:message key="becPresident"/></a></li>
 						</sec:authorize>
 						
-						<sec:authorize access="!hasAnyAuthority('president', 'director', 'inversor', 'competitionAdmin')">
+						<sec:authorize access="!hasAnyAuthority('president', 'director', 'inversor', 'competitionAdmin', 'admin')">
 							<li><a href="<c:url value="/competitionAdminRequest/new" />"><fmt:message key="becCompetitionAdmin"/></a></li>
 						</sec:authorize>
 						
-						<sec:authorize access="!hasAnyAuthority('president', 'director', 'inversor', 'competitionAdmin')">
+						<sec:authorize access="!hasAnyAuthority('president', 'director', 'inversor', 'competitionAdmin', 'admin')">
 							<li><a href="<c:url value="/presidents/new" />"><fmt:message key="becDirector"/></a></li>
 						</sec:authorize>
 						
-						<sec:authorize access="!hasAnyAuthority('president', 'director', 'inversor', 'competitionAdmin')">
-							
+						<sec:authorize access="!hasAnyAuthority('president', 'director', 'inversor', 'competitionAdmin', 'admin')">
 							<li><a href="<c:url value="/presidents/new" />"><fmt:message key="becInversor"/></a></li>
 						</sec:authorize>
 						
+					
 							<li>
 								<div class="navbar-login">
 									<div class="row">
@@ -112,14 +112,22 @@
 										</sec:authorize>
 										
 										<sec:authorize access="hasAuthority('president')">	
-											<petclinic:menuItem active="${name eq 'authenticateds'}" url="/myPresidentProfile/${principalUsername}"
+											<petclinic:menuItem active="${name eq 'presidents'}" url="/myPresidentProfile/${principalUsername}"
 												title="personal space">
 												<span><fmt:message key="myProfile"/></span>
 											</petclinic:menuItem>
 										</sec:authorize>
 										
+										<sec:authorize access="hasAnyAuthority('admin')">	
+											<petclinic:menuItem active="${username eq 'competitionAdmin'}" url="/competitionAdminRequest/list"
+												title="club page">
+												<span style="color:#ffc800" class="glyphicon glyphicon-bookmark" aria-hidden="true"></span>
+												<span><fmt:message key="compAdminRequestList"/></span>
+											</petclinic:menuItem>
+										</sec:authorize>
+										
 										<sec:authorize access="hasAuthority('competitionAdmin')">	
-											<petclinic:menuItem active="${name eq 'authenticateds'}" url="/myCompetitionAdminProfile/${principalUsername}"
+											<petclinic:menuItem active="${name eq 'competitionAdmins'}" url="/myCompetitionAdminProfile/${principalUsername}"
 												title="personal space">
 												<span><fmt:message key="myProfile"/></span>
 											</petclinic:menuItem>

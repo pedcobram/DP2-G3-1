@@ -44,6 +44,10 @@ public class CompAdminRequestService {
 		return this.compAdminRequestRepository.countByUsername(username);
 	}
 
+	public int count() throws DataAccessException {
+		return this.compAdminRequestRepository.count();
+	}
+
 	//Buscar todos los equipos
 	@Transactional(readOnly = true)
 	public Collection<CompAdminRequest> findCompAdminRequests() throws DataAccessException {

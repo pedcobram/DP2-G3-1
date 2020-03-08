@@ -10,8 +10,10 @@
 
 <petclinic:layout pageName="competitionAdmins">
     <h2>
-        <c:if test="${competitionAdmin['new']}">New </c:if> Competition Admin
+        <c:if test="${competitionAdmin['new']}"><fmt:message key="newCompAdminForm"/> </c:if>
+        <c:if test="${!competitionAdmin['new']}"><fmt:message key="notNewCompAdminForm"/> </c:if>
     </h2>
+
     
     <form:form modelAttribute="competitionAdmin" class="form-horizontal" id="add-competition-admin-form">
       
@@ -28,10 +30,10 @@
             <div class="col-sm-offset-2 col-sm-10">
                 <c:choose>
                     <c:when test="${competitionAdmin['new']}">
-                        <button class="btn btn-default" type="submit">Become a Competition Admin</button>
+                        <button class="btn btn-default" type="submit"><fmt:message key="submitCompAdminForm"/></button>
                     </c:when>
                     <c:otherwise>
-                        <button class="btn btn-default" type="submit">Update Competition Admin</button>
+                        <button class="btn btn-default" type="submit"><fmt:message key="updateCompAdminForm"/></button>
                     </c:otherwise>
                 </c:choose>
             </div>

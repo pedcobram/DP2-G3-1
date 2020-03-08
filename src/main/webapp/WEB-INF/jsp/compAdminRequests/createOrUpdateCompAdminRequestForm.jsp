@@ -9,8 +9,9 @@
 <%@ page contentType="text/html; charset=UTF-8" %> <!-- Para  tildes, ñ y caracteres especiales como el € %-->
 
 <petclinic:layout pageName="compAdminRequests">
-    <h2>
-        <c:if test="${compAdminRequests['new']}">New </c:if> Competition Admin Request
+   	<h2>
+        <c:if test="${compAdminRequests['new']}"><fmt:message key="newCompAdminRequestForm"/> </c:if>
+        <c:if test="${!compAdminRequests['new']}"><fmt:message key="notNewCompAdminRequestForm"/> </c:if>
     </h2>
     
     <form:form modelAttribute="compAdminRequest" class="form-horizontal" id="add-competition-admin-request-form">
@@ -23,10 +24,10 @@
             <div class="col-sm-offset-2 col-sm-10">
                 <c:choose>
                     <c:when test="${compAdminRequests['new']}">
-                        <button class="btn btn-default" type="submit">Request to be a Competition Admin</button>
+                        <button class="btn btn-default" type="submit"><fmt:message key="submitCompAdminRequestForm"/></button>
                     </c:when>
                     <c:otherwise>
-                        <button class="btn btn-default" type="submit">Update Competition Admin Request</button>
+                        <button class="btn btn-default" type="submit"><fmt:message key="updateCompAdminRequestForm"/></button>
                     </c:otherwise>
                 </c:choose>
             </div>

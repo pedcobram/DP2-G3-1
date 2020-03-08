@@ -24,7 +24,7 @@ INSERT INTO users(username,password,enabled) VALUES ('manuel','manuel',TRUE);
 INSERT INTO authorities VALUES ('manuel','authenticated');
 
 -- Competition Admins
-INSERT INTO comp_Admin_Requests(id, title, description, status, username) VALUES (1, 'Test title 01', 'Test description 01', false, 'pedro');
+INSERT INTO comp_Admin_Requests(id, title, description, status, username) VALUES (1, 'Test title 01', 'Test description 01', 0, 'pedro');
 
 -- Authenticated users
 INSERT INTO authenticateds VALUES (1, 'Rafael', 'Liébana Fuentes', '11111111A', 'rafliefue@alum.us.es', '600111222', 'rafa');

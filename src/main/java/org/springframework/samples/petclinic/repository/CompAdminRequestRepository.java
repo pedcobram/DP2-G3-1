@@ -20,4 +20,5 @@ public interface CompAdminRequestRepository {
 
 	int countByUsername(String username) throws DataAccessException;
 
+	int count() throws DataAccessException;
 }

@@ -1,7 +1,9 @@
 
 package org.springframework.samples.petclinic.web;
 
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import javax.validation.Valid;
 
@@ -11,28 +13,32 @@ import org.springframework.samples.petclinic.model.Authenticated;
 import org.springframework.samples.petclinic.model.CompAdminRequest;
 import org.springframework.samples.petclinic.model.CompAdminRequests;
 import org.springframework.samples.petclinic.model.CompetitionAdmin;
+import org.springframework.samples.petclinic.model.Enum.CompAdminRequestStatus;
 import org.springframework.samples.petclinic.service.AuthenticatedService;
 import org.springframework.samples.petclinic.service.AuthoritiesService;
 import org.springframework.samples.petclinic.service.CompAdminRequestService;
 import org.springframework.samples.petclinic.service.CompetitionAdminService;
 import org.springframework.samples.petclinic.service.UserService;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class CompAdminRequestController {
 
 	private static final String				VIEWS_COMP_ADMIN_REQUEST_CREATE_OR_UPDATE_FORM	= "compAdminRequests/createOrUpdateCompAdminRequestForm";
-
-	//private static final String				VIEWS_COMP_ADMIN_REQUEST_DETAIL_FORM			= "compAdminRequests/compAdminRequestDetails";
 
 	private final CompAdminRequestService	compAdminRequestService;
 
@@ -104,7 +110,7 @@ public class CompAdminRequestController {
 			return CompAdminRequestController.VIEWS_COMP_ADMIN_REQUEST_CREATE_OR_UPDATE_FORM;
 		} else {
 			compAdminRequest.setUser(thisUser.getUser());
-			compAdminRequest.setStatus(false);
+			compAdminRequest.setStatus(CompAdminRequestStatus.ON_HOLD);
 
 			this.compAdminRequestService.saveCompAdminRequest(compAdminRequest);
 
@@ -113,9 +119,54 @@ public class CompAdminRequestController {
 		}
 	}
 
+	@GetMapping(value = "/competitionAdminRequest/{compAdminRequestId}/edit")
+	public String initUpdatePresidentForm(@PathVariable("compAdminRequestId") final int compAdminRequestId, final Model model) {
+		CompAdminRequest compAdminRequest = this.compAdminRequestService.findCompAdminRequestById(compAdminRequestId);
+		model.addAttribute(compAdminRequest);
+		return CompAdminRequestController.VIEWS_COMP_ADMIN_REQUEST_CREATE_OR_UPDATE_FORM;
+	}
+
+	@PostMapping(value = "/competitionAdminRequest/{compAdminRequestId}/edit")
+	public String processUpdateCompetitionAdminForm(@Valid final CompAdminRequest compAdminRequest, final BindingResult result, @PathVariable("compAdminRequestId") final int compAdminRequestId) {
+		if (result.hasErrors()) {
+			return CompAdminRequestController.VIEWS_COMP_ADMIN_REQUEST_CREATE_OR_UPDATE_FORM;
+		} else {
+
+			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+			String currentPrincipalName = authentication.getName();
+			Authenticated auth = this.authenticatedService.findAuthenticatedByUsername(currentPrincipalName);
+			CompAdminRequest last_id = this.compAdminRequestService.findCompAdminRequestByUsername(currentPrincipalName);
+
+			compAdminRequest.setId(last_id.getId());
+			compAdminRequest.setStatus(CompAdminRequestStatus.ON_HOLD);
+			compAdminRequest.setUser(auth.getUser());
+
+			this.compAdminRequestService.saveCompAdminRequest(compAdminRequest);
+			return "redirect:/myCompetitionAdminRequest/" + currentPrincipalName;
+		}
+	}
+
+	@RequestMapping(value = "/deleteCompAdminRequest/{id}")
+	public String deleteCompAdminRequest(@PathVariable("id") final Integer id) {
+
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
+
+		Authenticated thisUser = this.authenticatedService.findAuthenticatedByUsername(currentPrincipalName);
+
+		CompAdminRequest tbdeleted = this.compAdminRequestService.findCompAdminRequestById(id);
+		tbdeleted.setUser(null); //Si no es null da error referencial
+		this.compAdminRequestService.deleteCompAdminRequest(tbdeleted);
+
+		Authentication reAuth = new UsernamePasswordAuthenticationToken(currentPrincipalName, thisUser.getUser().getPassword());
+		SecurityContextHolder.getContext().setAuthentication(reAuth);
+
+		return "redirect:/myProfile/" + currentPrincipalName;
+	}
+
 	//Vista de Competition Admin Request por Id - Authenticateds
 	@GetMapping("/myCompetitionAdminRequest/{username}")
-	public ModelAndView showFootballClub(@PathVariable("username") final String username) {
+	public ModelAndView showCompAdminRequest(@PathVariable("username") final String username) {
 		ModelAndView mav = new ModelAndView("compAdminRequests/compAdminRequestDetails");
 		mav.addObject(this.compAdminRequestService.findCompAdminRequestByUsername(username));
 		return mav;
@@ -124,10 +175,11 @@ public class CompAdminRequestController {
 	@GetMapping(value = "/competitionAdminRequest/accept/{username}")
 	public String acceptCompetitionAdminRequest(@Valid final CompAdminRequest compAdminRequest, final BindingResult result, @PathVariable("username") final String username) throws DataAccessException {
 
-		//Obtenemos el username del usuario actual conectado
+		//
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String currentPrincipalName = authentication.getName();
 
+		//
 		CompAdminRequest preCompAdminRequest = this.compAdminRequestService.findCompAdminRequestByUsername(username);
 		Authenticated thisUser = this.authenticatedService.findAuthenticatedByUsername(username);
 		CompetitionAdmin newCA = new CompetitionAdmin();
@@ -136,7 +188,7 @@ public class CompAdminRequestController {
 		compAdminRequest.setId(preCompAdminRequest.getId());
 		compAdminRequest.setTitle(preCompAdminRequest.getTitle());
 		compAdminRequest.setDescription(preCompAdminRequest.getDescription());
-		compAdminRequest.setStatus(true);
+		compAdminRequest.setStatus(CompAdminRequestStatus.ACCEPT);
 		compAdminRequest.setUser(preCompAdminRequest.getUser());
 
 		// Guardamos la request actualizada
@@ -152,13 +204,39 @@ public class CompAdminRequestController {
 		thisUser.getUser().setEnabled(true);
 
 		//
+		this.authenticatedService.deleteAuthenticated(thisUser);
 		this.authoritiesService.deleteAuthorities(username, "authenticated");
 		this.authoritiesService.saveAuthorities(username, "competitionAdmin");
-
 		this.competitionAdminService.saveCompetitionAdmin(newCA);
 
-		//Si todo sale bien vamos a la vista de mi club
-		return "redirect:/myCompetitionAdminProfile/" + currentPrincipalName;
+		//CON ESTO CONSEGUIMOS QUE NO HAGA FALTA RELOGUEAR PARA GANAR LOS PRIVILEGIOS DE PRESIDENTE
+		Set<GrantedAuthority> authorities2 = new HashSet<>();
+		authorities2.add(new SimpleGrantedAuthority("President"));
+		Authentication reAuth = new UsernamePasswordAuthenticationToken(currentPrincipalName, thisUser.getUser().getPassword());
+		SecurityContextHolder.getContext().setAuthentication(reAuth);
+
+		//
+		return "redirect:/competitionAdminRequest/list";
+
+	}
+
+	@GetMapping(value = "/competitionAdminRequest/reject/{username}")
+	public String rejectCompetitionAdminRequest(@Valid final CompAdminRequest compAdminRequest, final BindingResult result, @PathVariable("username") final String username) throws DataAccessException {
+
+		CompAdminRequest preCompAdminRequest = this.compAdminRequestService.findCompAdminRequestByUsername(username);
+		Authenticated thisUser = this.authenticatedService.findAuthenticatedByUsername(username);
+
+		//
+		compAdminRequest.setId(preCompAdminRequest.getId());
+		compAdminRequest.setTitle(preCompAdminRequest.getTitle());
+		compAdminRequest.setDescription(preCompAdminRequest.getDescription());
+		compAdminRequest.setStatus(CompAdminRequestStatus.REFUSE);
+		compAdminRequest.setUser(thisUser.getUser());
+
+		this.compAdminRequestService.saveCompAdminRequest(compAdminRequest);
+
+		//
+		return "redirect:/competitionAdminRequest/list";
 
 	}
 

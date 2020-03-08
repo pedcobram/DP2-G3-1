@@ -9,24 +9,24 @@
 
 <petclinic:layout pageName="competitionAdmins">
 
-    <h2>Competition Admin Information</h2>
+    <h2><fmt:message key="compAdminDetails"/></h2>
 
 
     <table class="table table-striped">
         <tr>
-            <th>Name</th>
+            <th><fmt:message key="nameCompAdminDetails"/></th>
             <td><b><c:out value="${competitionAdmin.firstName} ${competitionAdmin.lastName}"/></b></td>
         </tr>
         <tr>
-            <th>Email</th>
+            <th><fmt:message key="emailCompAdminDetails"/></th>
             <td><c:out value="${competitionAdmin.email}"/></td>
         </tr>
         <tr>
-            <th>DNI</th>
+            <th><fmt:message key="dniCompAdminDetails"/></th>
             <td><c:out value="${competitionAdmin.dni}"/></td>
         </tr>
         <tr>
-            <th>Telephone</th>
+            <th><fmt:message key="tlfnCompAdminDetails"/></th>
             <td><c:out value="${competitionAdmin.telephone}"/></td>
         </tr>
     </table>
@@ -43,11 +43,11 @@
     	<spring:url value="{competitionAdminId}/edit" var="editUrl">
         	<spring:param name="competitionAdminId" value="${competitionAdmin.id}"/>
     	</spring:url>
-    	<a href="${fn:escapeXml(editUrl)}" class="btn btn-default">Edit Competition Admin</a>
+    	<a href="${fn:escapeXml(editUrl)}" class="btn btn-default"><fmt:message key="editCompAdminDetails"/></a>
     	
     	
-    	<spring:url value="/deleteCompetitionAdmin" var="editUrl"></spring:url>
-    	<a href="${fn:escapeXml(editUrl)}" class="btn btn-default2" style="color:white"><b><fmt:message key="deleteCompetitionAdmin"/></b></a>
+    	<spring:url value="/deleteCompetitionAdmin/${competitionAdmin.user.username}" var="editUrl"></spring:url>
+    	<a href="${fn:escapeXml(editUrl)}" class="btn btn-default2" style="color:white"><b><fmt:message key="deleteCompAdminDetails"/></b></a>
     	
     </c:if>  
     

@@ -1,9 +1,7 @@
 
 package org.springframework.samples.petclinic.web;
 
-import java.util.Collection;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 import javax.validation.Valid;
@@ -11,7 +9,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.model.Authenticated;
 import org.springframework.samples.petclinic.model.CompetitionAdmin;
-import org.springframework.samples.petclinic.model.President;
+import org.springframework.samples.petclinic.service.AuthenticatedService;
 import org.springframework.samples.petclinic.service.AuthoritiesService;
 import org.springframework.samples.petclinic.service.CompetitionAdminService;
 import org.springframework.samples.petclinic.service.UserService;
@@ -38,10 +36,13 @@ public class CompetitionAdminController {
 
 	private final CompetitionAdminService	competitionAdminService;
 
+	private final AuthenticatedService		authenticatedService;
+
 
 	@Autowired
-	public CompetitionAdminController(final CompetitionAdminService competitionAdminService, final UserService userService, final AuthoritiesService authoritiesService) {
+	public CompetitionAdminController(final CompetitionAdminService competitionAdminService, final AuthenticatedService authenticatedService, final UserService userService, final AuthoritiesService authoritiesService) {
 		this.competitionAdminService = competitionAdminService;
+		this.authenticatedService = authenticatedService;
 	}
 
 	@InitBinder
@@ -49,42 +50,8 @@ public class CompetitionAdminController {
 		dataBinder.setDisallowedFields("id");
 	}
 
-	@RequestMapping(value = "/createCompetitionAdmin")
-	public String createCompetitionAdmin() {
-
-		//Obtenemos el username actual conectado
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		String currentPrincipalName = authentication.getName();
-
-		//Creamos el Competition Admin
-		CompetitionAdmin competitionAdmin = new CompetitionAdmin();
-
-		//Obtenemos el authenticated actual conectado
-		Authenticated thisUser = this.competitionAdminService.findAuthenticatedByUsername(currentPrincipalName);
-
-		//Añadimos los datos del user al Competition Admin
-		competitionAdmin.setFirstName(thisUser.getFirstName());
-		competitionAdmin.setLastName(thisUser.getLastName());
-		competitionAdmin.setDni(thisUser.getDni());
-		competitionAdmin.setEmail(thisUser.getEmail());
-		competitionAdmin.setTelephone(thisUser.getTelephone());
-		competitionAdmin.setUser(thisUser.getUser());
-
-		//Guardamos en la db el nuevo Competition Admin
-		this.competitionAdminService.saveCompetitionAdmin(competitionAdmin);
-
-		//CON ESTO CONSEGUIMOS QUE NO HAGA FALTA RELOGUEAR PARA GANAR LOS PRIVILEGIOS DE COMPETITION ADMIN
-		Set<GrantedAuthority> authorities2 = new HashSet<>();
-		authorities2.add(new SimpleGrantedAuthority("CompetitionAdmin"));
-		Authentication reAuth = new UsernamePasswordAuthenticationToken(currentPrincipalName, thisUser.getUser().getPassword());
-		SecurityContextHolder.getContext().setAuthentication(reAuth);
-
-		//Redirigimos a la vista del perfil del Competition Admin
-		return "redirect:/myCompetitionAdminProfile/" + currentPrincipalName;
-	}
-
-	@RequestMapping(value = "/deleteCompetitionAdmin")
-	public String deleteCompetitionAdmin() {
+	@RequestMapping(value = "/deleteCompetitionAdmin/{username}")
+	public String deleteCompetitionAdmin(@PathVariable("username") final String username) {
 
 		//Obtenemos el username actual conectado
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -92,49 +59,30 @@ public class CompetitionAdminController {
 
 		//Obtenemos el Competition Admin
 		CompetitionAdmin competitionAdmin = this.competitionAdminService.findCompetitionAdminByUsername(currentPrincipalName);
-		Authenticated user = this.competitionAdminService.findAuthenticatedByUsername(currentPrincipalName);
+		Authenticated newAuth = new Authenticated();
+
+		newAuth.setId(competitionAdmin.getId());
+		newAuth.setFirstName(competitionAdmin.getFirstName());
+		newAuth.setLastName(competitionAdmin.getLastName());
+		newAuth.setDni(competitionAdmin.getDni());
+		newAuth.setTelephone(competitionAdmin.getTelephone());
+		newAuth.setUser(competitionAdmin.getUser());
+		newAuth.setEmail(competitionAdmin.getEmail());
 
 		//Guardamos en la db el nuevo presidente
+		this.authenticatedService.saveAuthenticated(newAuth);
 		this.competitionAdminService.deleteCompetitionAdmin(competitionAdmin);
 
-		//CON ESTO CONSEGUIMOS QUE NO HAGA FALTA RELOGUEAR PARA GANAR LOS PRIVILEGIOS DE PRESIDENTE
+		Authenticated thisUser = this.authenticatedService.findAuthenticatedByUsername(username);
 
-		Authentication reAuth = new UsernamePasswordAuthenticationToken(currentPrincipalName, user.getUser().getPassword());
+		//CON ESTO CONSEGUIMOS QUE NO HAGA FALTA RELOGUEAR PARA GANAR LOS PRIVILEGIOS
+		Set<GrantedAuthority> authorities2 = new HashSet<>();
+		authorities2.add(new SimpleGrantedAuthority("authenticated"));
+		Authentication reAuth = new UsernamePasswordAuthenticationToken(currentPrincipalName, thisUser.getUser().getPassword());
 		SecurityContextHolder.getContext().setAuthentication(reAuth);
 
 		//Redirigimos a la vista del perfil del Competition Admin
 		return "redirect:/myProfile/" + currentPrincipalName;
-	}
-
-	@GetMapping(value = "/competitionAdmins/find")
-	public String initFindForm(final Map<String, Object> model) {
-		model.put("president", new President());
-		return "presidents/findPresidents";
-	}
-
-	@GetMapping(value = "/competitionAdmins")
-	public String processFindForm(CompetitionAdmin competitionAdmin, final BindingResult result, final Map<String, Object> model) {
-
-		// allow parameterless GET request for /presidents to return all records
-		if (competitionAdmin.getLastName() == null) {
-			competitionAdmin.setLastName(""); // empty string signifies broadest possible search
-		}
-
-		// find Competition Admins by last name
-		Collection<CompetitionAdmin> results = this.competitionAdminService.findCompetitionAdminByLastName(competitionAdmin.getLastName());
-		if (results.isEmpty()) {
-			// no Competition Admin found
-			result.rejectValue("lastName", "notFound", "not found");
-			return "competitionAdmins/findCompetitionAdmins";
-		} else if (results.size() == 1) {
-			// 1 president found
-			competitionAdmin = results.iterator().next();
-			return "redirect:/competitionAdmins/" + competitionAdmin.getId();
-		} else {
-			// multiple presidents found
-			model.put("selections", results);
-			return "competitionAdmins/competitionAdminsList";
-		}
 	}
 
 	@GetMapping(value = "/myCompetitionAdminProfile/{competitionAdminId}/edit")
@@ -146,6 +94,7 @@ public class CompetitionAdminController {
 
 	@PostMapping(value = "/myCompetitionAdminProfile/{competitionAdminId}/edit")
 	public String processUpdateCompetitionAdminForm(@Valid final CompetitionAdmin competitionAdmin, final BindingResult result, @PathVariable("competitionAdminId") final int competitionAdminId) {
+
 		if (result.hasErrors()) {
 			return CompetitionAdminController.VIEWS_COMPETITION_ADMIN_CREATE_OR_UPDATE_FORM;
 		} else {
@@ -159,21 +108,6 @@ public class CompetitionAdminController {
 			this.competitionAdminService.saveCompetitionAdmin(competitionAdmin);
 			return "redirect:/myCompetitionAdminProfile/" + currentPrincipalName;
 		}
-	}
-
-	/**
-	 * Custom handler for displaying an authenticated.
-	 *
-	 * @param authenticatedId
-	 *            the ID of the owner to display
-	 * @return a ModelMap with the model attributes for the view
-	 */
-
-	@GetMapping("/competitionAdmins/{competitionAdminId}")
-	public ModelAndView showCompetitionAdmin(@PathVariable("competitionAdminId") final int competitionAdminId) {
-		ModelAndView mav = new ModelAndView("competitionAdmins/competitionAdminDetails");
-		mav.addObject(this.competitionAdminService.findCompetitionAdminById(competitionAdminId));
-		return mav;
 	}
 
 	//Añadir restricción de que solo el Principal actual puede ver su vista de edición

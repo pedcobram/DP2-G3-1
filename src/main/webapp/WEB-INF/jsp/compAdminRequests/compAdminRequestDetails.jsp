@@ -7,22 +7,22 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page contentType="text/html; charset=UTF-8" %> <!-- Para  tildes, ñ y caracteres especiales como el € %-->
 
-<petclinic:layout pageName="compAdminRequests">
+<petclinic:layout pageName="compAdminRequestDetails">
 
-    <h2>Competition Admin Request Information</h2>
+    <h2><fmt:message key="compAdminRequestDetails"/></h2>
 
 
     <table class="table table-striped">
         <tr>
-            <th>Title</th>
+            <th><fmt:message key="titleCompAdminRequestDetails"/></th>
             <td><b><c:out value="${compAdminRequest.title}"/></b></td>
         </tr>
         <tr>
-            <th>Description</th>
+            <th><fmt:message key="descriptionCompAdminRequestDetails"/></th>
             <td><c:out value="${compAdminRequest.description}"/></td>
         </tr>
         <tr>
-            <th>Status</th>
+            <th><fmt:message key="statusCompAdminRequestDetails"/></th>
             <td><c:out value="${compAdminRequest.status}"/></td>
         </tr>
     </table>
@@ -37,21 +37,19 @@
 	
 	<!-- Muestro el botón de editar si el usuario coincide con el usuario actual %-->  
 	
-
-	
 	<c:if test="${compAdminRequest.user.username == principalUsername}">
-    	<spring:url value="{compAdminRequestId}/edit" var="editUrl">
+    	<spring:url value="/competitionAdminRequest/{compAdminRequestId}/edit" var="editUrl">
         	<spring:param name="compAdminRequestId" value="${compAdminRequest.id}"/>
     	</spring:url>
-    	<a href="${fn:escapeXml(editUrl)}" class="btn btn-default">Edit Competition Admin Request</a>
+    	<a href="${fn:escapeXml(editUrl)}" class="btn btn-default"><fmt:message key="editCompAdminRequestDetails"/></a>
     	
     	
-    	<spring:url value="/deleteCompAdminRequest" var="editUrl"></spring:url>
-    	<a href="${fn:escapeXml(editUrl)}" class="btn btn-default2" style="color:white"><b><fmt:message key="deleteCompAdminRequest"/></b></a>
+    	<spring:url value="/deleteCompAdminRequest/{compAdminRequestId}" var="editUrl">
+    		<spring:param name="compAdminRequestId" value="${compAdminRequest.id}"/>
+    	</spring:url>
+    	<a href="${fn:escapeXml(editUrl)}" class="btn btn-default2" style="color:white"><b><fmt:message key="deleteCompAdminRequestDetails"/></b></a>
     	
     </c:if>  
-    
-     -->
      
     <br/>
     <br/>

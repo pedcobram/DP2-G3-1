@@ -1,8 +1,6 @@
 
 package org.springframework.samples.petclinic.service;
 
-import java.util.Collection;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Authenticated;
@@ -35,17 +33,16 @@ public class CompetitionAdminService {
 		return this.competitionAdminRepository.findByUsername(userName);
 	}
 
-	@Transactional(readOnly = true)
-	public Collection<CompetitionAdmin> findCompetitionAdminByLastName(final String lastName) throws DataAccessException {
-		return this.competitionAdminRepository.findByLastName(lastName);
-	}
-
 	@Transactional
 	public void saveCompetitionAdmin(final CompetitionAdmin competitionAdmin) throws DataAccessException {
 		//creating president
 		this.competitionAdminRepository.save(competitionAdmin);
 		//creating authorities
 		this.authoritiesService.saveAuthorities(competitionAdmin.getUser().getUsername(), "competitionAdmin");
+	}
+
+	public int count() throws DataAccessException {
+		return this.competitionAdminRepository.count();
 	}
 
 	@Transactional(readOnly = true)

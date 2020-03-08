@@ -17,15 +17,18 @@ public interface SpringDataCompAdminRequestRepository extends CompAdminRequestRe
 	CompAdminRequest findById(@Param("id") int id);
 
 	@Override
-	@Query("SELECT a FROM CompAdminRequest a WHERE a.user.username =:username AND a.status = false")
+	@Query("SELECT a FROM CompAdminRequest a WHERE a.user.username =:username AND a.status = 0")
 	CompAdminRequest findByUsername(@Param("username") String username);
 
 	@Override
-	@Query("SELECT COUNT(a) FROM CompAdminRequest a WHERE a.user.username =:username AND a.status = false")
+	@Query("SELECT COUNT(a) FROM CompAdminRequest a WHERE a.user.username =:username AND a.status = 0")
 	int countByUsername(@Param("username") String username);
 
 	@Override
-	@Query("select f from CompAdminRequest f")
+	@Query("select f from CompAdminRequest f WHERE f.status = 0")
 	Collection<CompAdminRequest> findAll() throws DataAccessException;
 
+	@Override
+	@Query("SELECT COUNT(a) FROM CompAdminRequest a")
+	int count() throws DataAccessException;
 }
