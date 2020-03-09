@@ -42,7 +42,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -50,12 +49,18 @@ public class FootballClubController {
 
 	private static final String			VIEWS_CLUB_CREATE_OR_UPDATE_FORM	= "footballClubs/createOrUpdateFootballClubForm";
 
+	@Autowired
 	private final FootballClubService	footballClubService;
 
 
 	@Autowired
 	public FootballClubController(final FootballClubService footballClubService) {
 		this.footballClubService = footballClubService;
+	}
+
+	@InitBinder("footballClub")
+	public void initFootballClubBinder(final WebDataBinder dataBinder) {
+		dataBinder.setValidator(new FootballClubValidator());
 	}
 
 	@InitBinder
@@ -91,19 +96,11 @@ public class FootballClubController {
 		return "footballClubs/footballClubList";
 	}
 
-	//Esto es para generar el xml de la lista de equipos
-	@GetMapping(value = "/footballClub.xml")
-	public @ResponseBody FootballClubs showResourcesFootballClubList() {
-		FootballClubs footballClub = new FootballClubs();
-		footballClub.getFootballClubList().addAll(this.footballClubService.findFootballClubs());
-		return footballClub;
-	}
-
 	//Crear Club - Get
 	@GetMapping(value = "/myfootballClub/new")
 	public String initCreationForm(final Map<String, Object> model) {
 		FootballClub footballClub = new FootballClub();
-
+		model.put("news", true);
 		model.put("footballClub", footballClub);
 
 		return FootballClubController.VIEWS_CLUB_CREATE_OR_UPDATE_FORM;
@@ -111,7 +108,7 @@ public class FootballClubController {
 
 	//Crear Club - Post
 	@PostMapping(value = "/myfootballClub/new")
-	public String processCreationForm(@Valid final FootballClub footballClub, final BindingResult result) throws DataAccessException, DuplicatedNameException {
+	public String processCreationForm(@Valid final FootballClub footballClub, final BindingResult result, final Map<String, Object> model) throws DataAccessException, DuplicatedNameException {
 
 		//Obtenemos el username del usuario actual conectado
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -122,6 +119,7 @@ public class FootballClubController {
 
 		//Si hay errores seguimos en la vista de creación
 		if (result.hasErrors()) {
+			model.put("news", true);
 			return FootballClubController.VIEWS_CLUB_CREATE_OR_UPDATE_FORM;
 		} else {
 			try {
@@ -149,6 +147,8 @@ public class FootballClubController {
 	@GetMapping(value = "/myfootballClub/{principalUsername}/edit")
 	public String initUpdateFootballClubForm(@PathVariable("principalUsername") final String principalUsername, final Model model) {
 
+		model.addAttribute("news", false);
+
 		//Buscamos el equipo en la base de datos
 		FootballClub footballClub = this.footballClubService.findFootballClubByPresident(principalUsername);
 		//Añadimos al modelo los atributos del equipo a editar
@@ -170,10 +170,11 @@ public class FootballClubController {
 
 	//Editar Club - Post
 	@PostMapping(value = "/myfootballClub/{principalUsername}/edit")
-	public String processUpdateFootballClubForm(@Valid final FootballClub footballClub, final BindingResult result, @PathVariable("principalUsername") final String principalUsername) throws DataAccessException, DuplicatedNameException {
+	public String processUpdateFootballClubForm(@Valid final FootballClub footballClub, final BindingResult result, @PathVariable("principalUsername") final String principalUsername, final Model model) throws DataAccessException, DuplicatedNameException {
 
 		//Si hay errores en la vista seguimos en la pantalla de edición
 		if (result.hasErrors()) {
+			model.addAttribute("news", false);
 			return FootballClubController.VIEWS_CLUB_CREATE_OR_UPDATE_FORM;
 		} else {
 

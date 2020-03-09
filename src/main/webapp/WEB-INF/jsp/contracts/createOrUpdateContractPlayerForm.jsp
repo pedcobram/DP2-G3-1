@@ -21,7 +21,7 @@
 
   <h2 class="th-center">New Contract</h2>
   <h2 class="th-center" style="color:#d20000; padding-bottom:10px" >${playerName} PARA: ${clubName}</h2>
-    		
+    		<c:out value="${sid}"></c:out>
     <form:form modelAttribute="contractPlayer" class="form-horizontal" id="add-contractPlayer-form">
         <div class="form-group has-feedback">
             <petclinic:inputField label="Salario:" name="salary"/>

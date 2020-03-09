@@ -38,25 +38,28 @@
             <petclinic:inputField label="${Logo}" name="crest" placeholder="https://www.example.com"/>
             <petclinic:inputField label="${City}" name="city"/>
             <petclinic:inputField label="${Stadium}" name="stadium"/>
-            <petclinic:inputField label="${Money}" name="money"/>
-            <petclinic:inputField label="${FoundationDate}" name="foundationDate"/>
+            <petclinic:inputField label="${FoundationDate}" name="foundationDate" placeholder="yyyy/MM/dd"/>
             
-             
+           <h2> PRESUPUESTO:</h2> <form:input class="form-control"  value ="100000000" path="money" readonly="true"/>
+           <c:if test="${news}">
+           *El presupuesto inicial al crear un equipo es de 100 millones de €.                    
+           </c:if>   
         <c:if test="${footballClub.status == false}"> 
-        	<div class="control-group">
-            	<petclinic:selectField name="status" label="Status" names="${status}" size="2"/>
+        	<div class="control-group" style="padding: 10px">
+            	<petclinic:selectField name="status" label="Status:" names="${status}" size="2"/>
             </div>
         </c:if> 
+        
         </div>
         
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
                 <c:choose>
-                    <c:when test="${!footballClub['new']}">
-                        <button class="btn btn-default" type="submit"><fmt:message key="updateClub"/></button>
+                    <c:when test="${news}">
+                        <button class="btn btn-default" type="submit"><fmt:message key="createClub"/></button>
                     </c:when>
                     <c:otherwise>
-                        <button class="btn btn-default" type="submit"><fmt:message key="createClub"/></button>
+                        <button class="btn btn-default" type="submit"><fmt:message key="updateClub"/></button>
                     </c:otherwise>
                 </c:choose>
             </div>

@@ -84,22 +84,25 @@
 	<!-- Muestro el botón de editar si el usuario coincide con el usuario actual %--> 
 
 	<fmt:message key="publishClubMouseHover" var="mousehover"/>
-
-	<c:if test="${footballClub.president.user.username == principalUsername}">
-    	<spring:url value="/myfootballClub/${principalUsername}/edit" var="editUrl">
-		   	<spring:param name="footballClubId" value="${footballClub.id}"/>
-    	</spring:url>
-    	<a data-toggle="tooltip" title="${mousehover}" href="${fn:escapeXml(editUrl)}" class="btn btn-default"><fmt:message key="updateClub"/></a>  	
+	
+	<security:authorize access="hasAnyAuthority('president')">
+		<c:if test="${footballClub.president.user.username == principalUsername}">
+    		<spring:url value="/myfootballClub/${principalUsername}/edit" var="editUrl">
+		   		<spring:param name="footballClubId" value="${footballClub.id}"/>
+    		</spring:url>
+    		<a data-toggle="tooltip" title="${mousehover}" href="${fn:escapeXml(editUrl)}" class="btn btn-default"><fmt:message key="updateClub"/></a>  	
     	
-    	<spring:url value="/footballClub/${footballClub.id}/footballPlayers" var="footballPlayersUrl">
-    		<spring:param name="presidentUsername" value="${footballClub.president.user.username}"/>
-    	</spring:url>
-    	<a   href="${fn:escapeXml(footballPlayersUrl)}" class="btn btn-default"><span class="glyphicon glyphicon-user"></span> <fmt:message key="playerList"/></a>
-    </c:if>  
+    		<spring:url value="/footballClub/${footballClub.id}/footballPlayers" var="footballPlayersUrl">
+    			<spring:param name="presidentUsername" value="${footballClub.president.user.username}"/>
+    		</spring:url>
+    		<a   href="${fn:escapeXml(footballPlayersUrl)}" class="btn btn-default"><span class="glyphicon glyphicon-user"></span> <fmt:message key="playerList"/></a>
     
-    <security:authorize access="hasAnyAuthority('president')">
-        <spring:url value="/myfootballClub/delete" var="addUrl"></spring:url>
-    	<a href="${fn:escapeXml(addUrl)}" onclick="return confirm('ARE YOU SURE?')" class="btn btn-default2"><fmt:message key="deleteClub"/></a>
+    		<spring:url value="/contractPlayer/list" var="contractPlayersUrl"></spring:url>
+    		<a   href="${fn:escapeXml(contractPlayersUrl)}" class="btn btn-default"><span class="glyphicon glyphicon-inbox"></span> Contratos</a>
+    
+    		<spring:url value="/myfootballClub/delete" var="addUrl"></spring:url>
+    		<a href="${fn:escapeXml(addUrl)}" onclick="return confirm('ARE YOU SURE?')" class="btn btn-default2"><span class="glyphicon glyphicon-trash"></span> <fmt:message key="deleteClub"/></a>
+    	</c:if>      
     </security:authorize>
 
     <br/>

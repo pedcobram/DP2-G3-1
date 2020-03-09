@@ -24,7 +24,7 @@
         <div class="form-group has-feedback">
             <petclinic:inputField label="Nombre" name="firstName"/>
             <petclinic:inputField label="Apellido" name="lastName"/>
-            <petclinic:inputField label="Edad" name="birthDate"/>
+            <petclinic:inputField label="Edad" name="birthDate" placeholder="yyyy/MM/dd"/>
             <div class="control-group">
                     <petclinic:selectField label="Posición" name="position" names="${positions}" size="4"/>
                 </div>
