@@ -3,7 +3,7 @@ package org.springframework.samples.petclinic.web;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -23,7 +23,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -55,6 +54,11 @@ public class ContractController {
 
 	}
 
+	@InitBinder("contractPlayer")
+	public void initContractPlayerBinder(final WebDataBinder dataBinder) {
+		dataBinder.setValidator(new ContractPlayerValidator());
+	}
+
 	@InitBinder
 	public void setAllowedFields(final WebDataBinder dataBinder) {
 		dataBinder.setDisallowedFields("id");
@@ -81,10 +85,8 @@ public class ContractController {
 	@GetMapping("/contractPlayer/{footballPlayerId}")
 	public ModelAndView showContractPlayer(@PathVariable("footballPlayerId") final int footballPlayerId) {
 
-		//Creamos la vista de equipo con la url del archivo.jsp de la vista
 		ModelAndView mav = new ModelAndView("contracts/contractPlayerDetails");
 
-		//Añadimos los datos del contrato según la id del jugador
 		mav.addObject(this.contractService.findContractPlayerByPlayerId(footballPlayerId));
 
 		return mav;
@@ -94,13 +96,20 @@ public class ContractController {
 	@GetMapping(value = "/footballPlayers/{footballPlayerId}/contractPlayer/new")
 	public String initCreationForm(final Model model, @PathVariable("footballPlayerId") final int footballPlayerId) throws DataAccessException, DuplicatedNameException {
 
-		FootballPlayer footballPlayer = this.footballPlayerService.findFootballPlayerById(footballPlayerId);
-
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String currentPrincipalName = authentication.getName();
 
+		FootballPlayer footballPlayer = this.footballPlayerService.findFootballPlayerById(footballPlayerId);
 		FootballClub footballClub = this.footballClubService.findFootballClubByPresident(currentPrincipalName);
 		ContractPlayer contractPlayer = new ContractPlayer();
+
+		Integer valor = footballPlayer.getValue();
+		Integer salario = valor / 10;
+		Integer clausula = valor / 2;
+
+		model.addAttribute("salario", salario);
+		model.addAttribute("valor", valor);
+		model.addAttribute("clausula", clausula);
 
 		model.addAttribute("contractPlayer", contractPlayer);
 		model.addAttribute("playerName", footballPlayer.getFirstName().toUpperCase() + " " + footballPlayer.getLastName().toUpperCase());
@@ -116,40 +125,59 @@ public class ContractController {
 	}
 
 	//Crear Contrato de Jugador - Post
-	@SuppressWarnings("deprecation")
 	@PostMapping(value = "/footballPlayers/{footballPlayerId}/contractPlayer/new")
-	public String processCreationForm(@Valid final ContractPlayer contractPlayer, @PathVariable("footballPlayerId") final int footballPlayerId, final BindingResult result, final ModelMap model) throws DataAccessException, DuplicatedNameException {
+	public String processCreationForm(@Valid final ContractPlayer contractPlayer, final BindingResult result, @PathVariable("footballPlayerId") final int footballPlayerId, final Model model) throws DataAccessException, DuplicatedNameException {
+
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
+
+		FootballClub thisClub = this.footballClubService.findFootballClubByPresident(currentPrincipalName);
+
+		FootballPlayer footballPlayer = this.footballPlayerService.findFootballPlayerById(footballPlayerId);
+		Integer valor = footballPlayer.getValue();
+		Integer salario = valor / 10;
+		Integer clausula = valor / 2;
+
+		Date moment3 = new Date(System.currentTimeMillis() - 1);
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd");
+		String date = simpleDateFormat.format(moment3);
+
+		model.addAttribute("clausula", clausula);
+		model.addAttribute("startDate", date);
+		model.addAttribute("salario", salario);
+		model.addAttribute("valor", valor);
+		model.addAttribute("playerName", footballPlayer.getFirstName().toUpperCase() + " " + footballPlayer.getLastName().toUpperCase());
+		model.addAttribute("clubName", thisClub.getName().toUpperCase());
+
+		//Validación número de jugadores
+
+		Collection<FootballPlayer> cp = this.footballPlayerService.findAllClubFootballPlayers(thisClub.getId());
+
+		if (cp.size() >= 7) {
+			result.rejectValue("position", "max7players");
+			return ContractController.VIEWS_CONTRACT_PLAYER_CREATE_OR_UPDATE_FORM;
+		}
 
 		if (result.hasErrors()) {
 			model.addAttribute("contractPlayer", contractPlayer);
 			return ContractController.VIEWS_CONTRACT_PLAYER_CREATE_OR_UPDATE_FORM;
 		} else {
 
-			Date now = new Date(System.currentTimeMillis() - 1);
-
-			Calendar cal = Calendar.getInstance();
-			cal.setTime(now);
-			cal.add(Calendar.YEAR, +1);
-
-			now = cal.getTime();
-
-			//Validación EndDate: Me saltaba error haciendolas con un ContractValidator
-			if (contractPlayer.getEndDate() == null || contractPlayer.getEndDate().before(now)) {
-				result.rejectValue("endDate", "code.error.validator.requiredAnd1YearContract", "required");
+			//Validación de salario del jugador
+			if (contractPlayer.getSalary() < salario) {
+				result.rejectValue("salary", "code.error.validator.salaryMin", "required");
+				model.addAttribute("contractPlayer", contractPlayer);
 				return ContractController.VIEWS_CONTRACT_PLAYER_CREATE_OR_UPDATE_FORM;
 			}
 
-			//TODO: //Validación de salario del jugador
-
-			FootballPlayer footballPlayer = this.footballPlayerService.findFootballPlayerById(footballPlayerId);
-			//	Integer valor = footballPlayer.getValue();
-			//	Integer salario = valor / 10;
+			//Validación de salario del jugador
+			if (contractPlayer.getSalary() > valor) {
+				result.rejectValue("salary", "code.error.validator.salaryMax", "required");
+				model.addAttribute("contractPlayer", contractPlayer);
+				return ContractController.VIEWS_CONTRACT_PLAYER_CREATE_OR_UPDATE_FORM;
+			}
 
 			FootballPlayer v2 = new FootballPlayer();
-			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-			String currentPrincipalName = authentication.getName();
-
-			FootballClub thisClub = this.footballClubService.findFootballClubByPresident(currentPrincipalName);
 
 			v2.setClub(thisClub);
 			v2.setFirstName(footballPlayer.getFirstName());
@@ -168,7 +196,7 @@ public class ContractController {
 			contractPlayer.setClub(thisClub);
 			contractPlayer.setPlayer(v2);
 			contractPlayer.setStartDate(moment);
-			contractPlayer.setClause(10000000);
+			contractPlayer.setClause(clausula);
 
 			this.contractService.saveContractPlayer(contractPlayer);
 

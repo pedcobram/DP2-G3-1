@@ -179,4 +179,5 @@ INSERT INTO football_Players(id, first_name, last_name, position, football_Clubs
 INSERT INTO football_Players(id, first_name, last_name, position, football_Clubs_id, value, birth_date) VALUES (63, 'Tammy', 'Abraham', 2, 9, '50000000', '1997-10-02');
 
 INSERT INTO football_Players(id, first_name, last_name, position, value, birth_date) VALUES (64, 'Jorge', 'Salcedo', 0, '10000000', '1994-10-03');
+INSERT INTO football_Players(id, first_name, last_name, position, value, birth_date) VALUES (65, 'Albert', 'Martin', 3, '60000000', '1992-11-06');
 

@@ -9,6 +9,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -25,54 +26,23 @@ public class Contract extends BaseEntity {
 
 	@ManyToOne(optional = true)
 	@JoinColumn(name = "football_Clubs_id")
+	@NotNull
 	private FootballClub	club;
 
 	@Temporal(TemporalType.DATE)
 	@DateTimeFormat(pattern = "yyyy/MM/dd")
 	@Column(name = "start_date")
+	@NotNull
 	private Date			startDate;
 
 	@Temporal(TemporalType.DATE)
 	@DateTimeFormat(pattern = "yyyy/MM/dd")
 	@Column(name = "end_date")
+	@NotNull
 	private Date			endDate;
 
 	//Automático
 	@Column(name = "end_contract_clause")
+	@NotNull
 	private Integer			clause;
-
-
-	//Getters and Setters
-
-	public FootballClub getClub() {
-		return this.club;
-	}
-
-	public void setClub(final FootballClub club) {
-		this.club = club;
-	}
-
-	public Date getStartDate() {
-		return this.startDate;
-	}
-
-	public void setStartDate(final Date startDate) {
-		this.startDate = startDate;
-	}
-
-	public Date getEndDate() {
-		return this.endDate;
-	}
-
-	public void setEndDate(final Date endDate) {
-		this.endDate = endDate;
-	}
-
-	public Integer getClause() {
-		return this.clause;
-	}
-
-	public void setClause(final Integer clause) {
-		this.clause = clause;
-	}
 }

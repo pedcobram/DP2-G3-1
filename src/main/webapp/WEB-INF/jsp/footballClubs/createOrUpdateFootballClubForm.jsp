@@ -44,7 +44,7 @@
            <c:if test="${news}">
            *El presupuesto inicial al crear un equipo es de 100 millones de €.                    
            </c:if>   
-        <c:if test="${footballClub.status == false}"> 
+        <c:if test="${footballClub.status == false || publish}"> 
         	<div class="control-group" style="padding: 10px">
             	<petclinic:selectField name="status" label="Status:" names="${status}" size="2"/>
             </div>

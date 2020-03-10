@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -19,10 +20,12 @@ public class ContractPlayer extends Contract {
 
 	@OneToOne(optional = false)
 	@JoinColumn(name = "football_Players_id")
+	@NotNull
 	private FootballPlayer	player;
 
 	//Mínimo y Máximo
 	@Column(name = "salary")
+	@NotNull
 	private Integer			salary;
 
 }

@@ -22,7 +22,7 @@
 
 <jsp:body>	
 
-    <h2 style="color:black">Contrato</h2>
+    <h2 style="color:black">Contrato de: <c:out value="${contractPlayer.player.firstName} ${contractPlayer.player.lastName}"/></h2>
 
     <table class="table table-striped">
         <tr>
@@ -35,7 +35,7 @@
         </tr>
         <tr>
             <th>Salario:</th>
-            <td><c:out value="${contractPlayer.salary}"/></td>
+            <td><c:out value="${contractPlayer.salary} €"/></td>
         </tr>
         <tr>
             <th>Inicio del Contrato:</th>
@@ -47,7 +47,7 @@
         </tr>  
         <tr>
             <th>Cláusula de fin del Contrato:</th>
-            <td><c:out value="${contractPlayer.clause}"/></td>
+            <td><c:out value="${contractPlayer.clause} €"/></td>
         </tr>    
     </table>
     

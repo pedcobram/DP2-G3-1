@@ -43,7 +43,15 @@
         </div>
         
     </form:form>
-   
+    
+    <h2 class="th-center">Información del contrato</h2>
+    <p class="th-center" style="margin-bottom: 2%">(El contrato se genera de forma automática al realizar un registro de jugador)</p>
+    
+    <label class="col-sm-2 control-label" style="text-align: right; margin:0.5%">Salario:</label> <div class="form-control" style="width:70%; margin-left:18%; margin-bottom:10px; background-color: #f1f1f1"> ${salary}</div>
+   	<label class="col-sm-2 control-label" style="text-align: right; margin:0.5%">Inicio de Contrato:</label> <div class="form-control" style="width:70%; margin-left:18%; margin-bottom:10px; background-color: #f1f1f1">${startDate}</div>
+   	<label class="col-sm-2 control-label" style="text-align: right; margin:0.5%">Fin de Contrato:</label><div class="form-control" style="width:70%; margin-left:18%; margin-bottom:10px; background-color: #f1f1f1"> ${endDate}</div>
+   	<label class="col-sm-2 control-label" style="text-align: right; margin:0.5%">Cláusula de rescisión:</label><div class="form-control" style="width:70%; margin-left:18%; margin-bottom:10px; background-color: #f1f1f1"> ${clause}</div>
+    
     </jsp:body>
     
     

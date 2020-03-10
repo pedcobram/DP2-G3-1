@@ -17,7 +17,7 @@ PetClinic :: a Spring Framework demonstration
     <title>Football Manager - For sports lovers</title>
 
     <%-- CSS generated from LESS --%>
-    <spring:url value="/resources/css/petclinic.css?2.43" var="petclinicCss"/>
+    <spring:url value="/resources/css/petclinic.css?2.44" var="petclinicCss"/>
     <link href="${petclinicCss}" rel="stylesheet"/>
 
 

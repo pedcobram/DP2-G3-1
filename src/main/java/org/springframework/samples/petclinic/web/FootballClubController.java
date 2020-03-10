@@ -17,6 +17,7 @@
 package org.springframework.samples.petclinic.web;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -27,8 +28,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.FootballClub;
 import org.springframework.samples.petclinic.model.FootballClubs;
+import org.springframework.samples.petclinic.model.FootballPlayer;
 import org.springframework.samples.petclinic.model.President;
 import org.springframework.samples.petclinic.service.FootballClubService;
+import org.springframework.samples.petclinic.service.FootballPlayerService;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedNameException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -52,10 +55,14 @@ public class FootballClubController {
 	@Autowired
 	private final FootballClubService	footballClubService;
 
+	@Autowired
+	private final FootballPlayerService	footballPlayerService;
+
 
 	@Autowired
-	public FootballClubController(final FootballClubService footballClubService) {
+	public FootballClubController(final FootballClubService footballClubService, final FootballPlayerService footballPlayerService) {
 		this.footballClubService = footballClubService;
+		this.footballPlayerService = footballPlayerService;
 	}
 
 	@InitBinder("footballClub")
@@ -189,6 +196,14 @@ public class FootballClubController {
 			BeanUtils.copyProperties(footballClub, footballClubToUpdate, "id", "president");
 
 			try {
+
+				//Validación mínimo 5 jugadores
+				Collection<FootballPlayer> cp = this.footballPlayerService.findAllClubFootballPlayers(footballClubToUpdate.getId());
+				if (cp.size() < 5 && footballClubToUpdate.getStatus() == true) {
+					model.addAttribute("publish", true);
+					result.rejectValue("status", "min5players");
+					return FootballClubController.VIEWS_CLUB_CREATE_OR_UPDATE_FORM;
+				}
 
 				//Si todo va bien guardamos los cambios en la db
 				this.footballClubService.saveFootballClub(footballClubToUpdate);
