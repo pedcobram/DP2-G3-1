@@ -98,7 +98,7 @@ public class MatchRequestController {
 		return MatchRequestController.VIEWS_MATCH_REQUEST_CREATE_OR_UPDATE_FORM;
 	}
 
-	//TODO: Controlar error de la fecha
+	//TODO: Controlar error de la fecha y limitar fecha a 1 mes más mínimo
 	@PostMapping(value = "/matchRequests/{presidentName}/new")
 	public String createMatchRequest(@Valid final MatchRequest matchRequest, final BindingResult result, @PathVariable("presidentName") final String presidentName, final ModelMap model) throws DataAccessException {
 
