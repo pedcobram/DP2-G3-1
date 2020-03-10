@@ -10,6 +10,8 @@ public interface MatchRequestRepository {
 
 	Collection<MatchRequest> findAll() throws DataAccessException;
 
+	Collection<MatchRequest> findAllMatchRequestsReceived(String footballClubName) throws DataAccessException;
+
 	Collection<MatchRequest> findAllMatchRequestsSent(String footballClubName) throws DataAccessException;
 
 	MatchRequest findMatchRequestByFootballClubName(String footballClubName) throws DataAccessException;

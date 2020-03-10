@@ -27,6 +27,11 @@ public class MatchRequestService {
 		return this.matchRequestRepository.findAll();
 	}
 
+	@Transactional
+	public Collection<MatchRequest> findAllMatchRequestsReceived(final String footballClubName) throws DataAccessException {
+		return this.matchRequestRepository.findAllMatchRequestsReceived(footballClubName);
+	}
+
 	@Transactional(readOnly = true)
 	public Collection<MatchRequest> findAllMatchRequestsSent(final String footballClubName) throws DataAccessException {
 		return this.matchRequestRepository.findAllMatchRequestsSent(footballClubName);

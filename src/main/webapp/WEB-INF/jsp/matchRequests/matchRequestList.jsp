@@ -13,7 +13,12 @@
    		<security:authentication var="principalUsername" property="principal.username" /> 
 	</security:authorize>
 	
-	<h2 style="color:black"><fmt:message key="sentMatchRequests"/></h2>
+	<c:if test="${receivedRequests == true}">
+		<h2 style="color:black"><fmt:message key="receivedMatchRequests"/></h2>
+	</c:if>
+	<c:if test="${receivedRequests == false}">
+		<h2 style="color:black"><fmt:message key="sentMatchRequests"/></h2>
+	</c:if>
  		<table id="matchRequestsTable" class="table table-striped">
 			<thead>
        			<tr>
@@ -45,8 +50,16 @@
                 </td>
                 <td>
                	<c:if test="${matchRequest.footballClub1.president.user.username == principalUsername}">
-                	<spring:url value="delete/${matchRequest.id}" var='viewMatchRequest'></spring:url>
-                	<a href="${fn:escapeXml(viewMatchRequest)}" class="btn btn-default"><fmt:message key="deleteMatchRequestList"/></a>
+                	<spring:url value="delete/${matchRequest.id}" var='deleteMatchRequest'></spring:url>
+                	<a href="${fn:escapeXml(deleteMatchRequest)}" class="btn btn-default"><fmt:message key="deleteMatchRequestList"/></a>
+                </c:if>   
+                <c:if test="${receivedRequests == false}">
+                	<spring:url value="accept/${matchRequest.id}" var='acceptMatchRequest'></spring:url>
+                	<a href="${fn:escapeXml(acceptMatchRequest)}" class="btn btn-default"><fmt:message key="acceptMatchRequestList"/></a>
+                </c:if>   
+                <c:if test="${receivedRequests == false}">
+                	<spring:url value="reject/${matchRequest.id}" var='rejectMatchRequest'></spring:url>
+                	<a href="${fn:escapeXml(rejectMatchRequest)}" class="btn btn-default"><fmt:message key="rejectMatchRequestList"/></a>
                 </c:if>        
                 </td>
                 

@@ -17,6 +17,10 @@ public interface SpringDataMatchRequestRepository extends MatchRequestRepository
 	Collection<MatchRequest> findAll() throws DataAccessException;
 
 	@Override
+	@Query("SELECT a FROM MatchRequest a WHERE a.footballClub2.name =:footballClub")
+	Collection<MatchRequest> findAllMatchRequestsReceived(@Param("footballClub") String footballClubName) throws DataAccessException;
+
+	@Override
 	@Query("SELECT f FROM MatchRequest f WHERE f.footballClub1.name =:footballClub")
 	Collection<MatchRequest> findAllMatchRequestsSent(@Param("footballClub") String footballClub) throws DataAccessException;
 

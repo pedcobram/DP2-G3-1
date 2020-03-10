@@ -4,6 +4,7 @@ package org.springframework.samples.petclinic.web;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -56,7 +57,7 @@ public class MatchRequestController {
 	}
 
 	@GetMapping(value = "/matchRequests/sent/{presidentName}")
-	public String showMatchRequestSentList(final Map<String, Object> model, @PathVariable("presidentName") final String presidentName) {
+	public String showSentMatchRequestList(final Map<String, Object> model, @PathVariable("presidentName") final String presidentName) {
 
 		String footballClub1 = this.footballClubService.findFootballClubByPresident(presidentName).getName();
 
@@ -65,6 +66,22 @@ public class MatchRequestController {
 		matchRequests.getMatchRequestList().addAll(this.matchRequestService.findAllMatchRequestsSent(footballClub1));
 
 		model.put("matchRequests", matchRequests);
+		model.put("receivedRequests", true);
+
+		return MatchRequestController.VIEWS_MATCH_REQUEST_LIST;
+	}
+
+	@GetMapping(value = "/matchRequests/received/{presidentName}")
+	public String showReceivedMatchRequestList(final Map<String, Object> model, @PathVariable("presidentName") final String presidentName) {
+
+		String footballClub1 = this.footballClubService.findFootballClubByPresident(presidentName).getName();
+
+		MatchRequests matchRequests = new MatchRequests();
+
+		matchRequests.getMatchRequestList().addAll(this.matchRequestService.findAllMatchRequestsReceived(footballClub1));
+
+		model.put("matchRequests", matchRequests);
+		model.put("receivedRequests", false);
 
 		return MatchRequestController.VIEWS_MATCH_REQUEST_LIST;
 	}
@@ -98,7 +115,6 @@ public class MatchRequestController {
 		return MatchRequestController.VIEWS_MATCH_REQUEST_CREATE_OR_UPDATE_FORM;
 	}
 
-	//TODO: Controlar error de la fecha y limitar fecha a 1 mes más mínimo
 	@PostMapping(value = "/matchRequests/{presidentName}/new")
 	public String createMatchRequest(@Valid final MatchRequest matchRequest, final BindingResult result, @PathVariable("presidentName") final String presidentName, final ModelMap model) throws DataAccessException {
 
@@ -118,6 +134,12 @@ public class MatchRequestController {
 
 		model.put("stadiums", stadiums);
 
+		Date now = new Date(System.currentTimeMillis() - 1);
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(now);
+		cal.add(Calendar.DAY_OF_MONTH, 29);
+		now = cal.getTime();
+
 		if (result.hasErrors()) {
 			return MatchRequestController.VIEWS_MATCH_REQUEST_CREATE_OR_UPDATE_FORM;
 		}
@@ -127,6 +149,9 @@ public class MatchRequestController {
 			result.rejectValue("matchDate", "errorMatchDate");
 			return MatchRequestController.VIEWS_MATCH_REQUEST_CREATE_OR_UPDATE_FORM;
 
+		} else if (date.before(now)) {
+			result.rejectValue("matchDate", "code.error.validator.requiredAtLeast1MonthMatchDate", "required");
+			return MatchRequestController.VIEWS_MATCH_REQUEST_CREATE_OR_UPDATE_FORM;
 		} else {
 
 			matchRequest.setId(matchRequest.getId());
