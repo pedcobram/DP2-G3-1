@@ -1,9 +1,7 @@
 
 package org.springframework.samples.petclinic.web;
 
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 import javax.validation.Valid;
 
@@ -21,8 +19,6 @@ import org.springframework.samples.petclinic.service.CompetitionAdminService;
 import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -176,10 +172,6 @@ public class CompAdminRequestController {
 	public String acceptCompetitionAdminRequest(@Valid final CompAdminRequest compAdminRequest, final BindingResult result, @PathVariable("username") final String username) throws DataAccessException {
 
 		//
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		String currentPrincipalName = authentication.getName();
-
-		//
 		CompAdminRequest preCompAdminRequest = this.compAdminRequestService.findCompAdminRequestByUsername(username);
 		Authenticated thisUser = this.authenticatedService.findAuthenticatedByUsername(username);
 		CompetitionAdmin newCA = new CompetitionAdmin();
@@ -208,12 +200,6 @@ public class CompAdminRequestController {
 		this.authoritiesService.deleteAuthorities(username, "authenticated");
 		this.authoritiesService.saveAuthorities(username, "competitionAdmin");
 		this.competitionAdminService.saveCompetitionAdmin(newCA);
-
-		//CON ESTO CONSEGUIMOS QUE NO HAGA FALTA RELOGUEAR PARA GANAR LOS PRIVILEGIOS DE PRESIDENTE
-		Set<GrantedAuthority> authorities2 = new HashSet<>();
-		authorities2.add(new SimpleGrantedAuthority("President"));
-		Authentication reAuth = new UsernamePasswordAuthenticationToken(currentPrincipalName, thisUser.getUser().getPassword());
-		SecurityContextHolder.getContext().setAuthentication(reAuth);
 
 		//
 		return "redirect:/competitionAdminRequest/list";

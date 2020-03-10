@@ -9,6 +9,8 @@
 <%@ page contentType="text/html; charset=UTF-8" %> <!-- Para  tildes, ñ y caracteres especiales como el € %-->
 
 <petclinic:layout pageName="matchRequests">
+   		
+   	<jsp:body>
    	<h2>
         <c:if test="${matchRequest['new']}"><fmt:message key="newMatchRequestForm"/> </c:if>
         <c:if test="${!matchRequest['new']}"><fmt:message key="notNewMatchRequestForm"/> </c:if>
@@ -38,4 +40,5 @@
             </div>
         </div>
     </form:form>
+    </jsp:body>
 </petclinic:layout>

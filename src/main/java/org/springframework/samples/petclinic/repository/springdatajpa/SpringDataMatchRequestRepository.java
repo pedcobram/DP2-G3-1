@@ -28,4 +28,7 @@ public interface SpringDataMatchRequestRepository extends MatchRequestRepository
 	@Query("SELECT a FROM MatchRequest a WHERE a.footballClub1.name =:footballClub OR a.footballClub2.name =:footballClub")
 	MatchRequest findMatchRequestByFootballClubName(@Param("footballClub") String footballClub) throws DataAccessException;
 
+	@Override
+	@Query("SELECT a FROM MatchRequest a WHERE a.id =:matchRequestId")
+	MatchRequest findMatchRequestById(int matchRequestId) throws DataAccessException;
 }

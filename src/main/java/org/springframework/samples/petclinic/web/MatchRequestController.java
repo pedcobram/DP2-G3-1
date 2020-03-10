@@ -30,6 +30,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class MatchRequestController {
@@ -145,10 +146,8 @@ public class MatchRequestController {
 		}
 
 		if (date.toString().isEmpty() || date == null) {
-
 			result.rejectValue("matchDate", "errorMatchDate");
 			return MatchRequestController.VIEWS_MATCH_REQUEST_CREATE_OR_UPDATE_FORM;
-
 		} else if (date.before(now)) {
 			result.rejectValue("matchDate", "code.error.validator.requiredAtLeast1MonthMatchDate", "required");
 			return MatchRequestController.VIEWS_MATCH_REQUEST_CREATE_OR_UPDATE_FORM;
@@ -166,8 +165,69 @@ public class MatchRequestController {
 
 			this.matchRequestService.saveMatchRequest(matchRequest);
 
-			return "redirect:/";
+			return MatchRequestController.VIEWS_MATCH_REQUEST_LIST;
 		}
+	}
+
+	@RequestMapping(value = "/matchRequests/delete/{id}/{presidentName}")
+	public String processDeleteMatchRequest(@PathVariable("id") final int matchRequestId, @PathVariable("presidentName") final String presidentName, final ModelMap model) {
+
+		MatchRequests matchRequests = new MatchRequests();
+
+		MatchRequest matchRequest = this.matchRequestService.findMatchRequestById(matchRequestId);
+
+		matchRequest.setFootballClub1(null);
+		matchRequest.setFootballClub2(null);
+
+		this.matchRequestService.deleteMatchRequest(matchRequest);
+
+		String footballClub1 = this.footballClubService.findFootballClubByPresident(presidentName).getName();
+
+		matchRequests.getMatchRequestList().addAll(this.matchRequestService.findAllMatchRequestsSent(footballClub1));
+		model.put("matchRequests", matchRequests);
+		model.put("receivedRequests", true);
+
+		return MatchRequestController.VIEWS_MATCH_REQUEST_LIST;
+	}
+
+	@RequestMapping(value = "/matchRequests/accept/{id}/{presidentName}")
+	public String processAcceptMatchRequest(@PathVariable("id") final int matchRequestId, @PathVariable("presidentName") final String presidentName, final ModelMap model) {
+
+		MatchRequests matchRequests = new MatchRequests();
+
+		MatchRequest matchRequest = this.matchRequestService.findMatchRequestById(matchRequestId);
+
+		matchRequest.setStatus(RequestStatus.ACCEPT);
+
+		this.matchRequestService.saveMatchRequest(matchRequest);
+
+		String footballClub1 = this.footballClubService.findFootballClubByPresident(presidentName).getName();
+
+		matchRequests.getMatchRequestList().addAll(this.matchRequestService.findAllMatchRequestsReceived(footballClub1));
+		model.put("matchRequests", matchRequests);
+		model.put("receivedRequests", false);
+
+		return MatchRequestController.VIEWS_MATCH_REQUEST_LIST;
+	}
+
+	@RequestMapping(value = "/matchRequests/reject/{id}/{presidentName}")
+	public String processRejectMatchRequest(@PathVariable("id") final int matchRequestId, @PathVariable("presidentName") final String presidentName, final ModelMap model) {
+
+		MatchRequests matchRequests = new MatchRequests();
+
+		MatchRequest matchRequest = this.matchRequestService.findMatchRequestById(matchRequestId);
+
+		matchRequest.setStatus(RequestStatus.REFUSE);
+
+		this.matchRequestService.saveMatchRequest(matchRequest);
+
+		String footballClub1 = this.footballClubService.findFootballClubByPresident(presidentName).getName();
+
+		matchRequests.getMatchRequestList().addAll(this.matchRequestService.findAllMatchRequestsReceived(footballClub1));
+		model.put("matchRequests", matchRequests);
+		model.put("receivedRequests", false);
+
+		return MatchRequestController.VIEWS_MATCH_REQUEST_LIST;
 	}
 
 }

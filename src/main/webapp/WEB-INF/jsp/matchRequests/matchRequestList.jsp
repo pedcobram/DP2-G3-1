@@ -50,15 +50,15 @@
                 </td>
                 <td>
                	<c:if test="${matchRequest.footballClub1.president.user.username == principalUsername}">
-                	<spring:url value="delete/${matchRequest.id}" var='deleteMatchRequest'></spring:url>
+                	<spring:url value="/matchRequests/delete/${matchRequest.id}/${principalUsername}" var='deleteMatchRequest'></spring:url>
                 	<a href="${fn:escapeXml(deleteMatchRequest)}" class="btn btn-default"><fmt:message key="deleteMatchRequestList"/></a>
                 </c:if>   
                 <c:if test="${receivedRequests == false}">
-                	<spring:url value="accept/${matchRequest.id}" var='acceptMatchRequest'></spring:url>
+                	<spring:url value="/matchRequests/accept/${matchRequest.id}/${principalUsername}" var='acceptMatchRequest'></spring:url>
                 	<a href="${fn:escapeXml(acceptMatchRequest)}" class="btn btn-default"><fmt:message key="acceptMatchRequestList"/></a>
                 </c:if>   
                 <c:if test="${receivedRequests == false}">
-                	<spring:url value="reject/${matchRequest.id}" var='rejectMatchRequest'></spring:url>
+                	<spring:url value="/matchRequests/reject/${matchRequest.id}/${principalUsername}" var='rejectMatchRequest'></spring:url>
                 	<a href="${fn:escapeXml(rejectMatchRequest)}" class="btn btn-default"><fmt:message key="rejectMatchRequestList"/></a>
                 </c:if>        
                 </td>

@@ -42,13 +42,17 @@ public class MatchRequestService {
 		return this.matchRequestRepository.findMatchRequestByFootballClubName(footballClubName);
 	}
 
+	public MatchRequest findMatchRequestById(final int matchRequestId) {
+		return this.matchRequestRepository.findMatchRequestById(matchRequestId);
+	}
+
 	@Transactional
 	public void saveMatchRequest(final MatchRequest matchRequest) throws DataAccessException {
 		this.matchRequestRepository.save(matchRequest);
 	}
 
 	@Transactional()
-	public void deleteCompetitionAdmin(final MatchRequest matchRequest) throws DataAccessException {
+	public void deleteMatchRequest(final MatchRequest matchRequest) throws DataAccessException {
 		this.matchRequestRepository.delete(matchRequest);
 	}
 

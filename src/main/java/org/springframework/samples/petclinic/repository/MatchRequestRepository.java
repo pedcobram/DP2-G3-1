@@ -16,6 +16,8 @@ public interface MatchRequestRepository {
 
 	MatchRequest findMatchRequestByFootballClubName(String footballClubName) throws DataAccessException;
 
+	MatchRequest findMatchRequestById(int matchRequestId) throws DataAccessException;
+
 	void save(MatchRequest matchRequest) throws DataAccessException;
 
 	void delete(MatchRequest matchRequest) throws DataAccessException;

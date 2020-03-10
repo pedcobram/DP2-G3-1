@@ -119,6 +119,9 @@ INSERT INTO football_Clubs(id,status,name,crest,foundation_date,stadium,city,fan
 
 -- Match Requests
 INSERT INTO match_requests(id, title, match_date, stadium, status, football_Club1, football_Club2) VALUES(1, 'Partido amistoso 1', '2020-05-11 20:30', 'Estadio', 0, 'Sevilla Fútbol Club', 'Real Betis Balompié');
+INSERT INTO match_requests(id, title, match_date, stadium, status, football_Club1, football_Club2) VALUES(2, 'Partido amistoso 2', '2021-05-11 20:30', 'Estadio', 0, 'Sevilla Fútbol Club', 'Fútbol Club Barcelona');
+INSERT INTO match_requests(id, title, match_date, stadium, status, football_Club1, football_Club2) VALUES(3, 'Partido amistoso 3', '2020-05-11 20:30', 'Estadio', 0, 'Real Betis Balompié', 'Sevilla Fútbol Club' );
+INSERT INTO match_requests(id, title, match_date, stadium, status, football_Club1, football_Club2) VALUES(4, 'Partido amistoso 4', '2021-05-11 20:30', 'Estadio', 0, 'Fútbol Club Barcelona', 'Sevilla Fútbol Club');
 
 -- Football Players
 INSERT INTO football_Players(id, first_name, last_name, position, football_Clubs_id, value, birth_date) VALUES (1, 'Tomas', 'Vaclik', 0, 1, '18000000', '1989-03-29');
