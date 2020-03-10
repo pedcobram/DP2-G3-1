@@ -44,6 +44,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 			.antMatchers("/deleteCompAdminRequest/**").authenticated()
 			.antMatchers("/deleteCompetitionAdmin/**").hasAnyAuthority("competitionAdmin")
 			.antMatchers("/myCompetitionAdminProfile/**").hasAnyAuthority("competitionAdmin")
+			.antMatchers("/matchRequests/**").authenticated()
 			.antMatchers("/admin/**").hasAnyAuthority("admin")
 			.antMatchers("/authenticateds/**").authenticated()
 			.antMatchers("/myProfile/**").authenticated()

@@ -112,6 +112,20 @@
 										</sec:authorize>
 										
 										<sec:authorize access="hasAuthority('president')">	
+											<petclinic:menuItem active="${name eq 'presidents'}" url="/matchRequests/sent/${principalUsername}"
+												title="sent match requests">
+												<span><fmt:message key="sentMatchRequests"/></span>
+											</petclinic:menuItem>
+										</sec:authorize>
+										
+										<sec:authorize access="hasAuthority('president')">	
+											<petclinic:menuItem active="${name eq 'presidents'}" url="/matchRequests/received/${principalUsername}"
+												title="received match requests">
+												<span><fmt:message key="receivedMatchRequests"/></span>
+											</petclinic:menuItem>
+										</sec:authorize>
+										
+										<sec:authorize access="hasAuthority('president')">	
 											<petclinic:menuItem active="${name eq 'presidents'}" url="/myPresidentProfile/${principalUsername}"
 												title="personal space">
 												<span><fmt:message key="myProfile"/></span>

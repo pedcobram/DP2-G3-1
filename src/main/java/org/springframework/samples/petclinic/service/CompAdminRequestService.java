@@ -22,6 +22,11 @@ public class CompAdminRequestService {
 	}
 
 	@Transactional(readOnly = true)
+	public Collection<CompAdminRequest> findCompAdminRequests() throws DataAccessException {
+		return this.compAdminRequestRepository.findAll();
+	}
+
+	@Transactional(readOnly = true)
 	public CompAdminRequest findCompAdminRequestById(final int id) throws DataAccessException {
 		return this.compAdminRequestRepository.findById(id);
 	}
@@ -46,12 +51,6 @@ public class CompAdminRequestService {
 
 	public int count() throws DataAccessException {
 		return this.compAdminRequestRepository.count();
-	}
-
-	//Buscar todos los equipos
-	@Transactional(readOnly = true)
-	public Collection<CompAdminRequest> findCompAdminRequests() throws DataAccessException {
-		return this.compAdminRequestRepository.findAll();
 	}
 
 }

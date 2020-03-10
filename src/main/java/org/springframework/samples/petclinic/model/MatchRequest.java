@@ -9,9 +9,13 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.samples.petclinic.model.Enum.RequestStatus;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -27,13 +31,16 @@ public class MatchRequest extends BaseEntity {
 	private String			title;
 
 	@Column(name = "match_date")
-	@NotEmpty
+	@Temporal(TemporalType.TIMESTAMP)
 	@DateTimeFormat(pattern = "yyyy/MM/dd HH:mm")
+	@NotNull
 	private Date			matchDate;
 
 	@Column(name = "stadium")
 	@NotEmpty
 	private String			stadium;
+
+	private RequestStatus	status;
 
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "footballClub1", referencedColumnName = "name")

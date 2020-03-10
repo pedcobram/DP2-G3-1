@@ -13,7 +13,7 @@ import org.springframework.samples.petclinic.model.Authenticated;
 import org.springframework.samples.petclinic.model.CompAdminRequest;
 import org.springframework.samples.petclinic.model.CompAdminRequests;
 import org.springframework.samples.petclinic.model.CompetitionAdmin;
-import org.springframework.samples.petclinic.model.Enum.CompAdminRequestStatus;
+import org.springframework.samples.petclinic.model.Enum.RequestStatus;
 import org.springframework.samples.petclinic.service.AuthenticatedService;
 import org.springframework.samples.petclinic.service.AuthoritiesService;
 import org.springframework.samples.petclinic.service.CompAdminRequestService;
@@ -110,7 +110,7 @@ public class CompAdminRequestController {
 			return CompAdminRequestController.VIEWS_COMP_ADMIN_REQUEST_CREATE_OR_UPDATE_FORM;
 		} else {
 			compAdminRequest.setUser(thisUser.getUser());
-			compAdminRequest.setStatus(CompAdminRequestStatus.ON_HOLD);
+			compAdminRequest.setStatus(RequestStatus.ON_HOLD);
 
 			this.compAdminRequestService.saveCompAdminRequest(compAdminRequest);
 
@@ -138,7 +138,7 @@ public class CompAdminRequestController {
 			CompAdminRequest last_id = this.compAdminRequestService.findCompAdminRequestByUsername(currentPrincipalName);
 
 			compAdminRequest.setId(last_id.getId());
-			compAdminRequest.setStatus(CompAdminRequestStatus.ON_HOLD);
+			compAdminRequest.setStatus(RequestStatus.ON_HOLD);
 			compAdminRequest.setUser(auth.getUser());
 
 			this.compAdminRequestService.saveCompAdminRequest(compAdminRequest);
@@ -188,7 +188,7 @@ public class CompAdminRequestController {
 		compAdminRequest.setId(preCompAdminRequest.getId());
 		compAdminRequest.setTitle(preCompAdminRequest.getTitle());
 		compAdminRequest.setDescription(preCompAdminRequest.getDescription());
-		compAdminRequest.setStatus(CompAdminRequestStatus.ACCEPT);
+		compAdminRequest.setStatus(RequestStatus.ACCEPT);
 		compAdminRequest.setUser(preCompAdminRequest.getUser());
 
 		// Guardamos la request actualizada
@@ -230,7 +230,7 @@ public class CompAdminRequestController {
 		compAdminRequest.setId(preCompAdminRequest.getId());
 		compAdminRequest.setTitle(preCompAdminRequest.getTitle());
 		compAdminRequest.setDescription(preCompAdminRequest.getDescription());
-		compAdminRequest.setStatus(CompAdminRequestStatus.REFUSE);
+		compAdminRequest.setStatus(RequestStatus.REFUSE);
 		compAdminRequest.setUser(thisUser.getUser());
 
 		this.compAdminRequestService.saveCompAdminRequest(compAdminRequest);

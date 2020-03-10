@@ -33,27 +33,27 @@ public class CompetitionAdminService {
 		return this.competitionAdminRepository.findByUsername(userName);
 	}
 
-	@Transactional
-	public void saveCompetitionAdmin(final CompetitionAdmin competitionAdmin) throws DataAccessException {
-		//creating president
-		this.competitionAdminRepository.save(competitionAdmin);
-		//creating authorities
-		this.authoritiesService.saveAuthorities(competitionAdmin.getUser().getUsername(), "competitionAdmin");
-	}
-
-	public int count() throws DataAccessException {
-		return this.competitionAdminRepository.count();
-	}
-
 	@Transactional(readOnly = true)
 	public Authenticated findAuthenticatedByUsername(final String userName) throws DataAccessException {
 		return this.competitionAdminRepository.findAuthenticatedByUsername(userName);
 	}
 
+	@Transactional(readOnly = true)
+	public int count() throws DataAccessException {
+		return this.competitionAdminRepository.count();
+	}
+
+	@Transactional
+	public void saveCompetitionAdmin(final CompetitionAdmin competitionAdmin) throws DataAccessException {
+		this.competitionAdminRepository.save(competitionAdmin);
+		this.authoritiesService.saveAuthorities(competitionAdmin.getUser().getUsername(), "competitionAdmin");
+	}
+
+	@Transactional()
 	public void deleteCompetitionAdmin(final CompetitionAdmin competitionAdmin) throws DataAccessException {
 		this.authoritiesService.deleteAuthorities(competitionAdmin.getUser().getUsername(), "competitionAdmin");
 		this.authoritiesService.saveAuthorities(competitionAdmin.getUser().getUsername(), "authenticated");
 		this.competitionAdminRepository.delete(competitionAdmin);
-
 	}
+
 }

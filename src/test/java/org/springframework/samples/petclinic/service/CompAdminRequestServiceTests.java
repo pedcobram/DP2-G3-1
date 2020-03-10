@@ -10,7 +10,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.samples.petclinic.model.CompAdminRequest;
 import org.springframework.samples.petclinic.model.User;
-import org.springframework.samples.petclinic.model.Enum.CompAdminRequestStatus;
+import org.springframework.samples.petclinic.model.Enum.RequestStatus;
 import org.springframework.stereotype.Service;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
@@ -75,7 +75,7 @@ public class CompAdminRequestServiceTests {
 		newComp.setId(1000);
 		newComp.setTitle("JUnit testing title");
 		newComp.setDescription("JUnit testing description");
-		newComp.setStatus(CompAdminRequestStatus.ON_HOLD);
+		newComp.setStatus(RequestStatus.ON_HOLD);
 		newComp.setUser(rafa);
 
 		//Lo guardamos y contamos cuantas peticiones de Competition Admin hay

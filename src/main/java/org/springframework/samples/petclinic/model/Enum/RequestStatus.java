@@ -1,6 +1,6 @@
 
 package org.springframework.samples.petclinic.model.Enum;
 
-public enum CompAdminRequestStatus {
+public enum RequestStatus {
 	ON_HOLD, ACCEPT, REFUSE
 }

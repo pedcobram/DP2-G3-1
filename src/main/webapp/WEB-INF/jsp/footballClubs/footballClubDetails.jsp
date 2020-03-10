@@ -53,6 +53,13 @@
     	<a href="${fn:escapeXml(footballPlayersUrl)}" class="btn btn-default">
     				<span class="glyphicon glyphicon-user"></span> 
     								 <fmt:message key="playerList"/></a>
+    								 
+	<c:if test="${footballClub.president.user.username != principalUsername}">
+     	<security:authorize access="hasAnyAuthority('president')">
+      	  <spring:url value="/matchRequest/${footballClub.president.user.username}/new" var="newMatchRequest"></spring:url>
+    		<a href="${fn:escapeXml(newMatchRequest)}" class="btn btn-default2"><fmt:message key="newMatchRequest"/></a>
+    	</security:authorize>
+    </c:if>    								 
     
     <br/>
     <br/>
