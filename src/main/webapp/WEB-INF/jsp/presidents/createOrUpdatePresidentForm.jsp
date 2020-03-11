@@ -8,32 +8,34 @@
 <%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 <%@ page contentType="text/html; charset=UTF-8" %> <!-- Para  tildes, ñ y caracteres especiales como el € %-->
 
+		<fmt:message key="code.crud.new" var="New"/>
+		<fmt:message key="code.label.firstName" var="firstName"/>
+		<fmt:message key="code.label.lastName" var="lastName"/>
+    	<fmt:message key="code.label.email" var="Email"/>
+    	<fmt:message key="code.label.dni" var="Dni"/>
+    	<fmt:message key="code.label.telephone" var="Telephone"/>
+    	<fmt:message key="code.title.President" var="President"/>
+    	<fmt:message key="code.crud.update" var="Update"/>
+
 <petclinic:layout pageName="presidents">
     <h2>
-        <c:if test="${president['new']}">New </c:if> President
+        <c:if test="${president['new']}">${New} </c:if> ${President}
     </h2>
     
     <form:form modelAttribute="president" class="form-horizontal" id="add-president-form">
       
        		<div class="form-group has-feedback">
-            <petclinic:inputField label="First Name" name="firstName"/>
-            <petclinic:inputField label="Last Name" name="lastName"/>
-            <petclinic:inputField label="Dni" name="dni"/>
-            <petclinic:inputField label="Email" name="email"/>
-            <petclinic:inputField label="Telephone" name="telephone"/>
-            <petclinic:inputField label="Username" name="user.username"/>
-            <petclinic:inputField label="Password" name="user.password"/>
+            	<petclinic:inputField label="${firstName}" name="firstName"/>
+            	<petclinic:inputField label="${lastName}" name="lastName"/>
+            	<petclinic:inputField label="${Dni}" name="dni"/>
+            	<petclinic:inputField label="${Email}" name="email"/>
+            	<petclinic:inputField label="${Telephone}" name="telephone"/>
+            	<petclinic:inputField label="Username" name="user.username" readonly="true"/>
+            	<petclinic:inputField label="Password" name="user.password" readonly="true"/>
         	</div>
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
-                <c:choose>
-                    <c:when test="${president['new']}">
-                        <button class="btn btn-default" type="submit">Become a President</button>
-                    </c:when>
-                    <c:otherwise>
-                        <button class="btn btn-default" type="submit">Update President</button>
-                    </c:otherwise>
-                </c:choose>
+                <button class="btn btn-default" type="submit">${Update}</button>                
             </div>
         </div>
     </form:form>

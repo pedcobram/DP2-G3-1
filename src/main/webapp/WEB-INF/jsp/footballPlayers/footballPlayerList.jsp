@@ -7,17 +7,27 @@
 <%@ page contentType="text/html; charset=UTF-8" %> <!-- Para  tildes, ñ y caracteres especiales como el € %-->
 <%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 
+	<fmt:message key="code.title.footballPlayers" var="Players"/>  
+	<fmt:message key="code.title.freeAgent" var="FreeAgent"/> 
+	<fmt:message key="code.column.name" var="Name"/>  
+	<fmt:message key="code.column.club" var="Club"/> 
+	<fmt:message key="code.column.position" var="Position"/> 
+	<fmt:message key="code.column.value" var="Value"/> 
+	<fmt:message key="code.column.birthDate" var="BirthDate"/> 
+	<fmt:message key="code.crud.registerPlayer" var="RegisterPlayer"/> 
+	<fmt:message key="code.crud.signFreeAgent" var="SignPlayer"/> 
+
 <petclinic:layout pageName="footballPlayers">
 	
-	<h2 style="color:black"><fmt:message key="footballPlayers"/></h2>
+	<h2 style="color:black">${Players}</h2>
  		<table id="vetsTable" class="table table-striped">
 			<thead>
        			<tr>
-            		<th><fmt:message key="name"/></th>
-           			<th><fmt:message key="club"/></th>
-           			<th><fmt:message key="position"/></th>
-           			<th><fmt:message key="value"/></th>
-           			<th><fmt:message key="birthDate"/></th>
+            		<th>${Name}</th>
+           			<th>${Club}</th>
+           			<th>${Position}</th>
+           			<th>${Value}</th>
+           			<th>${BirthDate}</th>
  				</tr>
         	</thead>
         	<tbody>
@@ -30,8 +40,15 @@
                 </spring:url>
 					<b><a href="${fn:escapeXml(footballPlayerUrl)}"><c:out value="${footballPlayer.firstName} ${footballPlayer.lastName}"/></a></b>
                 </td>
-                <td>
-                    <c:out value="${footballPlayer.club.name}"/>
+                <td>              
+                	<c:choose>
+                    	<c:when test="${footballPlayer.club == null}">
+                        	<c:out value="${FreeAgent}"/>
+                    	</c:when>
+                    	<c:otherwise>
+                        	<c:out value="${footballPlayer.club.name}"/>
+                    	</c:otherwise>
+                	</c:choose>       
                 </td>
                 <td>
                     <c:out value="${footballPlayer.position}"/>
@@ -57,12 +74,12 @@
     
     	<c:if test="${param.presidentUsername == principalUsername}">
     		<spring:url value="/footballPlayer/new" var="footballPlayersNewUrl"></spring:url>
-    		<a href="${fn:escapeXml(footballPlayersNewUrl)}" class="btn btn-default"><fmt:message key="createPlayer"/></a>
+    		<a href="${fn:escapeXml(footballPlayersNewUrl)}" class="btn btn-default">${RegisterPlayer}</a>
     	or
     	</c:if> 
     	
     	<c:if test="${param.presidentUsername == principalUsername}">
     		<spring:url value="/footballPlayers/freeAgent" var="footballPlayersNewUrl"></spring:url>
-    		<a href="${fn:escapeXml(footballPlayersNewUrl)}" class="btn btn-default">Sign a Free Agent</a>
+    		<a href="${fn:escapeXml(footballPlayersNewUrl)}" class="btn btn-default">${SignPlayer}</a>
     	</c:if> 
 </petclinic:layout>

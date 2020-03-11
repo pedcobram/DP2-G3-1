@@ -1,6 +1,9 @@
 
 package org.springframework.samples.petclinic.web;
 
+import java.util.Calendar;
+import java.util.Date;
+
 import org.springframework.samples.petclinic.model.FootballPlayer;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
@@ -15,26 +18,34 @@ public class FootballPlayerValidator implements Validator {
 	public void validate(final Object obj, final Errors errors) {
 		FootballPlayer footballPlayer = (FootballPlayer) obj;
 		String firstName = footballPlayer.getFirstName();
-
 		String lastName = footballPlayer.getLastName();
-		// firstname validation
+
+		Date now = new Date(System.currentTimeMillis() - 1);
+
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(now);
+		cal.add(Calendar.YEAR, -16);
+
+		now = cal.getTime();
+
+		// First Name Validation
 		if (!StringUtils.hasLength(firstName) || firstName.length() > 50 || firstName.length() < 2) {
-			errors.rejectValue("firstName", FootballPlayerValidator.REQUIRED + " and between 2 and 50 characters", FootballPlayerValidator.REQUIRED + " and between 2 and 50 character");
+			errors.rejectValue("firstName", "code.error.validator.requiredAndLength250", FootballPlayerValidator.REQUIRED + " and between 2 and 50 character");
 		}
 
-		// lastname validation
+		// Last Name Validation
 		if (!StringUtils.hasLength(lastName) || lastName.length() > 50 || lastName.length() < 2) {
-			errors.rejectValue("lastName", FootballPlayerValidator.REQUIRED + " and between 2 and 50 characters", FootballPlayerValidator.REQUIRED + " and between 2 and 50 character");
+			errors.rejectValue("lastName", "code.error.validator.requiredAndLength250", FootballPlayerValidator.REQUIRED + " and between 2 and 50 character");
 		}
 
-		// position validation
+		// Position Validation
 		if (footballPlayer.isNew() && footballPlayer.getPosition() == null) {
-			errors.rejectValue("position", FootballPlayerValidator.REQUIRED, FootballPlayerValidator.REQUIRED);
+			errors.rejectValue("position", "code.error.validator.required", FootballPlayerValidator.REQUIRED);
 		}
 
-		// birth date validation
-		if (footballPlayer.getBirthDate() == null) {
-			errors.rejectValue("birthDate", FootballPlayerValidator.REQUIRED, FootballPlayerValidator.REQUIRED);
+		// Birth Date Validation
+		if (footballPlayer.getBirthDate() == null || footballPlayer.getBirthDate().after(now)) {
+			errors.rejectValue("birthDate", "code.error.validator.requiredAnd16Years", FootballPlayerValidator.REQUIRED);
 		}
 
 	}

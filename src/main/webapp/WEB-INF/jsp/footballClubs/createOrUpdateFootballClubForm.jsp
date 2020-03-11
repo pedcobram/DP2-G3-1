@@ -7,6 +7,18 @@
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
 <%@ page contentType="text/html; charset=UTF-8" %> <!-- Para  tildes, ñ y caracteres especiales como el € %-->
 
+
+		<fmt:message key="code.title.newClub" var="newClub"/>
+		<fmt:message key="code.label.name" var="Name"/>
+    	<fmt:message key="code.label.logo" var="Logo"/>
+    	<fmt:message key="code.label.city" var="City"/>
+    	<fmt:message key="code.label.stadium" var="Stadium"/>
+    	<fmt:message key="code.label.money" var="Money"/>
+    	<fmt:message key="code.label.foundationDate" var="FoundationDate"/>
+    	<fmt:message key="code.information.money" var="MoneyInfo"/>
+		<fmt:message key="code.crud.newClub" var="createClub"/>
+		<fmt:message key="code.crud.updateClub" var="updateClub"/>
+
 <petclinic:layout pageName="footballClubs">
 
 	<jsp:attribute name="customScript">
@@ -16,21 +28,17 @@
             });
         </script>
     </jsp:attribute>
+    
 <jsp:body>
 
-  <h2 class="th-center"><fmt:message key="myFootballClub"/></h2>
+  <h2 class="th-center">${newClub}</h2>
     	<c:if test="${fn:startsWith(footballClub.crest, 'https://')}">
     		<div style="margin:2%" class="col-12 text-center">
     			<img width=144px  height=144px src="<spring:url value="${footballClub.crest}" htmlEscape="true" />"/>
 			</div>
     	</c:if>
     	
-    	<fmt:message key="nameLabel" var="Name"/>
-    	<fmt:message key="logoLabel" var="Logo"/>
-    	<fmt:message key="cityLabel" var="City"/>
-    	<fmt:message key="stadiumLabel" var="Stadium"/>
-    	<fmt:message key="moneyLabel" var="Money"/>
-    	<fmt:message key="foundationDateLabel" var="FoundationDate"/>
+    	
     	
     <form:form modelAttribute="footballClub" class="form-horizontal" id="add-footballClub-form">
         <div class="form-group has-feedback">
@@ -38,25 +46,28 @@
             <petclinic:inputField label="${Logo}" name="crest" placeholder="https://www.example.com"/>
             <petclinic:inputField label="${City}" name="city"/>
             <petclinic:inputField label="${Stadium}" name="stadium"/>
-            <petclinic:inputField label="${Money}" name="money"/>
-            <petclinic:inputField label="${FoundationDate}" name="foundationDate"/>
+            <petclinic:inputField label="${FoundationDate}" name="foundationDate" placeholder="yyyy/MM/dd"/>
             
-             
-        <c:if test="${footballClub.status == false}"> 
-        	<div class="control-group">
-            	<petclinic:selectField name="status" label="Status" names="${status}" size="2"/>
+           <h2> ${Money}</h2> <form:input class="form-control"  value ="100000000" path="money" readonly="true"/>
+           <c:if test="${news}">
+           ${MoneyInfo}                        
+           </c:if>   
+        <c:if test="${footballClub.status == false || publish}"> 
+        	<div class="control-group" style="padding: 10px">
+            	<petclinic:selectField name="status" label="Status:" names="${status}" size="2"/>
             </div>
         </c:if> 
+        
         </div>
         
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
                 <c:choose>
-                    <c:when test="${!footballClub['new']}">
-                        <button class="btn btn-default" type="submit"><fmt:message key="updateClub"/></button>
+                    <c:when test="${news}">
+                        <button class="btn btn-default" type="submit">${createClub}</button>
                     </c:when>
                     <c:otherwise>
-                        <button class="btn btn-default" type="submit"><fmt:message key="createClub"/></button>
+                        <button class="btn btn-default" type="submit">${updateClub}</button>
                     </c:otherwise>
                 </c:choose>
             </div>

@@ -59,4 +59,10 @@ public class ContractService {
 	public void saveContractPlayer(final ContractPlayer contractPlayer) {
 		this.contractRepository.save(contractPlayer);
 	}
+
+	//Buscar contratos por club
+	@Transactional(readOnly = true)
+	public Collection<ContractPlayer> findAllPlayerContractsByClubId(final int clubId) throws DataAccessException {
+		return this.contractRepository.findAllPlayerContractsByClubId(clubId);
+	}
 }
