@@ -7,6 +7,22 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page contentType="text/html; charset=UTF-8" %> <!-- Para  tildes, ñ y caracteres especiales como el € %-->
 
+		<fmt:message key="code.title.myFootballClub" var="myFootballClub"/>
+		<fmt:message key="code.title.contractsPlayers" var="contracts"/>
+		<fmt:message key="code.label.name" var="Name"/>
+    	<fmt:message key="code.label.logo" var="Logo"/>
+    	<fmt:message key="code.label.city" var="City"/>
+    	<fmt:message key="code.label.stadium" var="Stadium"/>
+    	<fmt:message key="code.label.money" var="Money"/>
+    	<fmt:message key="code.label.foundationDate" var="FoundationDate"/>
+    	<fmt:message key="code.label.fans" var="Fans"/>
+    	<fmt:message key="code.label.coach" var="Coach"/>
+    	<fmt:message key="code.label.president" var="President"/>
+    	<fmt:message key="code.crud.updateClub" var="updateClub"/>
+    	<fmt:message key="code.crud.deleteClub" var="deleteClub"/>   	
+    	<fmt:message key="code.list.playerList" var="playerList"/>
+    	
+    	
 <petclinic:layout pageName="footballCLubs">
 
 	<jsp:attribute name="customScript">
@@ -21,7 +37,7 @@
 	</jsp:attribute>
 	
 <jsp:body>	
-    <h2 class="th-center"><fmt:message key="myFootballClub"/></h2>
+    <h2 class="th-center">${myFootballClub}</h2>
     
     <c:if test="${!footballClub.crest.isEmpty()}">
     		<div style="margin:2%" class="col-12 text-center">
@@ -37,14 +53,8 @@
 	
 	<!-- Creo variables para las "label" con los mensajes internacionalizados (NO ES NECESARIO) %-->
 	
-	<fmt:message key="nameLabel" var="Name"/>
-    <fmt:message key="cityLabel" var="City"/>
-    <fmt:message key="stadiumLabel" var="Stadium"/>
-    <fmt:message key="moneyLabel" var="Money"/>
-    <fmt:message key="foundationDateLabel" var="FoundationDate"/>
-    <fmt:message key="fansLabel" var="Fans"/>
-    <fmt:message key="coachLabel" var="Coach"/>
-    <fmt:message key="presidentLabel" var="President"/>
+ 
+    
 
     <table class="table table-striped">
         <tr>
@@ -90,18 +100,18 @@
     		<spring:url value="/myfootballClub/${principalUsername}/edit" var="editUrl">
 		   		<spring:param name="footballClubId" value="${footballClub.id}"/>
     		</spring:url>
-    		<a data-toggle="tooltip" title="${mousehover}" href="${fn:escapeXml(editUrl)}" class="btn btn-default"><fmt:message key="updateClub"/></a>  	
+    		<a data-toggle="tooltip" title="${mousehover}" href="${fn:escapeXml(editUrl)}" class="btn btn-default">${updateClub}</a>  	
     	
     		<spring:url value="/footballClub/${footballClub.id}/footballPlayers" var="footballPlayersUrl">
     			<spring:param name="presidentUsername" value="${footballClub.president.user.username}"/>
     		</spring:url>
-    		<a   href="${fn:escapeXml(footballPlayersUrl)}" class="btn btn-default"><span class="glyphicon glyphicon-user"></span> <fmt:message key="playerList"/></a>
+    		<a   href="${fn:escapeXml(footballPlayersUrl)}" class="btn btn-default"><span class="glyphicon glyphicon-user"></span> ${playerList}</a>
     
     		<spring:url value="/contractPlayer/list" var="contractPlayersUrl"></spring:url>
-    		<a   href="${fn:escapeXml(contractPlayersUrl)}" class="btn btn-default"><span class="glyphicon glyphicon-inbox"></span> Contratos</a>
+    		<a   href="${fn:escapeXml(contractPlayersUrl)}" class="btn btn-default"><span class="glyphicon glyphicon-inbox"></span> ${contracts}</a>
     
     		<spring:url value="/myfootballClub/delete" var="addUrl"></spring:url>
-    		<a href="${fn:escapeXml(addUrl)}" onclick="return confirm('ARE YOU SURE?')" class="btn btn-default2"><span class="glyphicon glyphicon-trash"></span> <fmt:message key="deleteClub"/></a>
+    		<a href="${fn:escapeXml(addUrl)}" onclick="return confirm('ARE YOU SURE?')" class="btn btn-default2"><span class="glyphicon glyphicon-trash"></span> ${deleteClub}</a>
     	</c:if>      
     </security:authorize>
 

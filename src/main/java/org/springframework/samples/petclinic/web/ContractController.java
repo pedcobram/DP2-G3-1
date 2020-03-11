@@ -134,6 +134,7 @@ public class ContractController {
 		FootballClub thisClub = this.footballClubService.findFootballClubByPresident(currentPrincipalName);
 
 		FootballPlayer footballPlayer = this.footballPlayerService.findFootballPlayerById(footballPlayerId);
+
 		Integer valor = footballPlayer.getValue();
 		Integer salario = valor / 10;
 		Integer clausula = valor / 2;
@@ -177,31 +178,19 @@ public class ContractController {
 				return ContractController.VIEWS_CONTRACT_PLAYER_CREATE_OR_UPDATE_FORM;
 			}
 
-			FootballPlayer v2 = new FootballPlayer();
-
-			v2.setClub(thisClub);
-			v2.setFirstName(footballPlayer.getFirstName());
-			v2.setLastName(footballPlayer.getLastName());
-			v2.setPosition(footballPlayer.getPosition());
-			v2.setValue(footballPlayer.getValue());
-			Date a = footballPlayer.getBirthDate();
-			Date moment2 = new Date(a.getTime());
-			v2.setBirthDate(moment2);
-
-			this.footballPlayerService.delete(footballPlayer);
-
-			this.footballPlayerService.saveFootballPlayer(v2);
+			footballPlayer.setClub(thisClub);
+			//			thisClub.setMoney(thisClub.getMoney() - contractPlayer.getSalary());
 
 			Date moment = new Date(System.currentTimeMillis() - 1);
 			contractPlayer.setClub(thisClub);
-			contractPlayer.setPlayer(v2);
+			contractPlayer.setPlayer(footballPlayer);
 			contractPlayer.setStartDate(moment);
 			contractPlayer.setClause(clausula);
 
 			this.contractService.saveContractPlayer(contractPlayer);
 
 			//Si todo sale bien vamos a la vista de mi club
-			return "redirect:/contractPlayer/" + v2.getId();
+			return "redirect:/contractPlayer/" + footballPlayer.getId();
 		}
 	}
 

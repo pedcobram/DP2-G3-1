@@ -40,7 +40,7 @@ import org.springframework.samples.petclinic.service.exceptions.DuplicatedNameEx
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -198,7 +198,7 @@ public class FootballPlayerController {
 
 	//Crear Jugador - Post
 	@PostMapping(value = "/footballPlayer/new")
-	public String processCreationForm(@Valid final FootballPlayer footballPlayer, final BindingResult result, final ModelMap model) throws DataAccessException, DuplicatedNameException {
+	public String processCreationForm(@Valid final FootballPlayer footballPlayer, final BindingResult result, final Model model) throws DataAccessException, DuplicatedNameException {
 
 		//Contract Fields
 
@@ -213,10 +213,10 @@ public class FootballPlayerController {
 		date2 = cal.getTime();
 		String date3 = simpleDateFormat.format(date2);
 
-		model.put("salary", "1.000.000,00 €");
-		model.put("clause", "5.000.000,00 €");
-		model.put("startDate", date);
-		model.put("endDate", date3);
+		model.addAttribute("salary", "1.000.000,00 €");
+		model.addAttribute("clause", "5.000.000,00 €");
+		model.addAttribute("startDate", date);
+		model.addAttribute("endDate", date3);
 
 		//Obtenemos el username del usuario actual conectado
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -230,7 +230,7 @@ public class FootballPlayerController {
 		positions.add(FootballPlayerPosition.GOALKEEPER);
 		positions.add(FootballPlayerPosition.MIDFIELDER);
 		positions.add(FootballPlayerPosition.STRIKER);
-		model.put("positions", positions);
+		model.addAttribute("positions", positions);
 
 		//Validación número de jugadores
 
@@ -246,6 +246,7 @@ public class FootballPlayerController {
 			return FootballPlayerController.VIEWS_PLAYER_CREATE_OR_UPDATE_FORM;
 		} else {
 			try {
+
 				//Añadimos como club el del user actual
 				footballPlayer.setClub(thisClub);
 				//Ponemos el de valor a 10 millones (el valor inicial siempre será de 10mill)

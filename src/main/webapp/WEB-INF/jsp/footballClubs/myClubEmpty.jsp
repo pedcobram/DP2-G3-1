@@ -7,14 +7,17 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page contentType="text/html; charset=UTF-8" %> <!-- Para  tildes, ñ y caracteres especiales como el € %-->
 
+<fmt:message key="code.title.noClub" var="noClubYet"/>
+<fmt:message key="code.crud.createClub" var="create"/>
+
 <petclinic:layout pageName="footballCLubs">
 
-    <h2 class="th-center" style="color:black"><fmt:message key="noClubYet"/></h2>
+    <h2 class="th-center" style="color:black"> ${noClubYet}</h2>
     <div class="th-center">
-  	 <security:authorize access="hasAnyAuthority('president')">
-        <spring:url value="/myfootballClub/new" var="addUrl"></spring:url>
-    	<a href="${fn:escapeXml(addUrl)}" class="btn btn-default2" style="color:white"><b><fmt:message key="createAClub"/></b></a>
-    </security:authorize>
+  	 	<security:authorize access="hasAnyAuthority('president')">
+        	<spring:url value="/myfootballClub/new" var="addUrl"></spring:url>
+    		<a href="${fn:escapeXml(addUrl)}" class="btn btn-default2" style="color:white"><b>${create}</b></a>
+     	</security:authorize>
     </div>
     
 </petclinic:layout>

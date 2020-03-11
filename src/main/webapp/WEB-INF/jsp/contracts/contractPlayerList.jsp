@@ -7,15 +7,20 @@
 <%@ page contentType="text/html; charset=UTF-8" %> <!-- Para  tildes, ñ y caracteres especiales como el € %-->
 <%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 
+	<fmt:message key="code.column.player" var="jugador"/>  
+	<fmt:message key="code.column.salary" var="salario"/>  
+	<fmt:message key="code.column.endDate" var="endfecha"/> 
+	<fmt:message key="code.title.contract" var="contracts"/> 
+
 <petclinic:layout pageName="contractPlayers">
 	
-	<h2 style="color:black">CONTRATOS</h2>
+	<h2 style="color:black">${contracts}</h2>
  		<table id="vetsTable" class="table table-striped">
 			<thead>
        			<tr>
-            		<th>Jugador</th>
-           			<th>Salario</th>
-           			<th>Vencimiento</th>
+            		<th>${jugador}</th>
+           			<th>${salario}</th>
+           			<th>${endfecha}</th>
  				</tr>
         	</thead>
         	<tbody>

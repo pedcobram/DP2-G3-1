@@ -26,22 +26,22 @@ public class FootballClubValidator implements Validator {
 
 		// Name Validation
 		if (!StringUtils.hasLength(Name) || Name.length() > 50 || Name.length() < 3) {
-			errors.rejectValue("name", "code.error.validator.requiredAndLength", "required" + " and between 3 and 50 character");
+			errors.rejectValue("name", "code.error.validator.requiredAndLength350");
 		}
 
 		// City not Empty Validation
 		if (!StringUtils.hasLength(City) || City.length() > 50 || City.length() < 3) {
-			errors.rejectValue("city", "code.error.validator.requiredAndLength", "required" + " and between 3 and 50 character");
+			errors.rejectValue("city", "code.error.validator.requiredAndLength350");
 		}
 
 		// Stadium not Empty Validation
 		if (!StringUtils.hasLength(Stadium) || Stadium.length() > 50 || Stadium.length() < 3) {
-			errors.rejectValue("stadium", "code.error.validator.requiredAndLength", "required" + " and between 3 and 50 character");
+			errors.rejectValue("stadium", "code.error.validator.requiredAndLength350");
 		}
 
 		// Foundation Date Validation
 		if (footballClub.getFoundationDate() == null || footballClub.getFoundationDate().after(now)) {
-			errors.rejectValue("foundationDate", "code.error.validator.requiredAndPast", FootballClubValidator.REQUIRED);
+			errors.rejectValue("foundationDate", "code.error.validator.requiredAndPast");
 		}
 
 		Pattern p1 = Pattern.compile("(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]");
