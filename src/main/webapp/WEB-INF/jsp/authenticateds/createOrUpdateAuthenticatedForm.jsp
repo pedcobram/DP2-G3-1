@@ -31,6 +31,7 @@
             <petclinic:inputField label="${Telephone}" name="telephone"/>
             <petclinic:inputField label="Username" name="user.username" readonly="true"/>
             <petclinic:inputField label="Password" name="user.password" readonly="true"/>
+          
         </div>
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
