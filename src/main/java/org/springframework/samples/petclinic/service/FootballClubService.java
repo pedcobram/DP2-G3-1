@@ -31,6 +31,7 @@ import org.springframework.util.StringUtils;
 @Service
 public class FootballClubService {
 
+	@Autowired
 	private FootballClubRepository footRepository;
 
 
@@ -41,13 +42,13 @@ public class FootballClubService {
 	}
 
 	//Buscar todos los equipos
-	@Transactional(readOnly = true)
+
 	public Collection<FootballClub> findFootballClubs() throws DataAccessException {
 		return this.footRepository.findAll();
 	}
 
 	//Buscar equipo por id
-	@Transactional(readOnly = true)
+
 	public FootballClub findFootballClubById(final int id) throws DataAccessException {
 		return this.footRepository.findById(id);
 	}
@@ -78,13 +79,13 @@ public class FootballClubService {
 	}
 
 	//Buscar presidente por username
-	@Transactional(readOnly = true)
+
 	public President findPresidentByUsername(final String currentPrincipalName) throws DataAccessException {
 		return this.footRepository.findPresidentByUsername(currentPrincipalName);
 	}
 
 	//Buscar equipo por presidente
-	@Transactional(readOnly = true)
+
 	public FootballClub findFootballClubByPresident(final String principalUsername) throws DataAccessException {
 		return this.footRepository.findFootballClubByPresident(principalUsername);
 	}
