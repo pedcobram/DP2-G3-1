@@ -9,11 +9,6 @@
 <%@ page contentType="text/html; charset=UTF-8" %> <!-- Para  tildes, ñ y caracteres especiales como el € %-->
 
 		<fmt:message key="code.crud.new" var="New"/>
-		<fmt:message key="code.label.firstName" var="firstName"/>
-		<fmt:message key="code.label.lastName" var="lastName"/>
-    	<fmt:message key="code.label.email" var="Email"/>
-    	<fmt:message key="code.label.dni" var="Dni"/>
-    	<fmt:message key="code.label.telephone" var="Telephone"/>
     	<fmt:message key="code.title.President" var="President"/>
     	<fmt:message key="code.crud.update" var="Update"/>
 
@@ -25,11 +20,11 @@
     <form:form modelAttribute="president" class="form-horizontal" id="add-president-form">
       
        		<div class="form-group has-feedback">
-            	<petclinic:inputField label="${firstName}" name="firstName"/>
-            	<petclinic:inputField label="${lastName}" name="lastName"/>
-            	<petclinic:inputField label="${Dni}" name="dni"/>
-            	<petclinic:inputField label="${Email}" name="email"/>
-            	<petclinic:inputField label="${Telephone}" name="telephone"/>
+            	<petclinic:inputField label="code.label.firstName" name="firstName"/>
+            	<petclinic:inputField label="code.label.lastName" name="lastName"/>
+            	<petclinic:inputField label="code.label.dni" name="dni"/>
+            	<petclinic:inputField label="code.label.email" name="email"/>
+            	<petclinic:inputField label="code.label.telephone" name="telephone"/>
             	<petclinic:inputField label="Username" name="user.username" readonly="true"/>
             	<petclinic:inputField label="Password" name="user.password" readonly="true"/>
         	</div>

@@ -28,8 +28,6 @@ public interface ContractRepository {
 
 	Contract findById(int id) throws DataAccessException;
 
-	void save(ContractPlayer contractPlayer) throws DataAccessException;
-
 	Collection<ContractPlayer> findAllPlayerContracts() throws DataAccessException;
 
 	ContractPlayer findContractPlayerById(int id) throws DataAccessException;
@@ -37,4 +35,8 @@ public interface ContractRepository {
 	ContractPlayer findContractPlayerByPlayerId(int playerId) throws DataAccessException;
 
 	Collection<ContractPlayer> findAllPlayerContractsByClubId(int clubId) throws DataAccessException;
+
+	void delete(Contract contractPlayer) throws DataAccessException;
+
+	void save(ContractPlayer contractPlayer) throws DataAccessException;
 }

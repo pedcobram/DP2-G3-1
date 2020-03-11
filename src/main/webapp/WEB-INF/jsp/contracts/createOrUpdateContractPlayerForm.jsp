@@ -10,10 +10,6 @@
 	<fmt:message key="code.title.newContract" var="newContract"/> 
 	<fmt:message key="code.title.signingFor" var="firmaPor"/>  
 	<fmt:message key="code.title.playerValue" var="playerValue"/>  
-	<fmt:message key="code.label.salary" var="salario1"/> 
-	<fmt:message key="code.label.startDate" var="startfecha"/> 
-	<fmt:message key="code.label.endDate" var="endfecha"/> 
-	<fmt:message key="code.label.clause" var="clausula1"/>
 	<fmt:message key="code.crud.sign" var="contratar"/>  	
 	<fmt:message key="code.information.salary" var="salaryInfo"/>
 	<fmt:message key="code.information.clause" var="clauseInfo"/>	
@@ -38,11 +34,11 @@
         <div class="form-group has-feedback">     
         	<h2> ${playerValue}</h2>        	
         		<div class="form-control" style="margin:10px; background-color: #f1f1f1"> ${valor} € </div>       
-            <petclinic:inputField label="${salario1}" name="salary"/>
+            <petclinic:inputField label="code.label.salary" name="salary"/>
 				<div style="margin-bottom:12px; padding-left: 18%">${salaryInfo} ${salario} €.  </div>
-            <petclinic:inputField label="${startfecha}" name="startDate" readonly="true" placeholder="${startDate}"/>
-            <petclinic:inputField label="${endfecha}" name="endDate"/>
-            <petclinic:inputField label="${clausula1}" name="clause" readonly="true" placeholder="${clausula} €"/>         
+            <petclinic:inputField label="code.label.startDate" name="startDate" readonly="true" placeholder="${startDate}"/>
+            <petclinic:inputField label="code.label.endDate" name="endDate"/>
+            <petclinic:inputField label="code.label.clause" name="clause" readonly="true" placeholder="${clausula} €"/>         
 				<div style="padding-left: 18%">${clauseInfo}  </div>     
         </div>
                 

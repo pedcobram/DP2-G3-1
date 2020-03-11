@@ -7,10 +7,6 @@
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
 <%@ page contentType="text/html; charset=UTF-8" %> <!-- Para  tildes, ñ y caracteres especiales como el € %-->
 
-	<fmt:message key="code.label.firstName" var="Name"/>  
-	<fmt:message key="code.label.lastName" var="Apellido"/>  
-	<fmt:message key="code.label.birthDate" var="Age"/> 
-	<fmt:message key="code.label.position" var="Position"/> 
 	<fmt:message key="code.title.playerInformation" var="dataPlayer"/> 
 	<fmt:message key="code.crud.register" var="register"/> 
 	<fmt:message key="code.crud.update" var="update"/> 	
@@ -36,11 +32,11 @@
     		
     <form:form modelAttribute="footballPlayer" class="form-horizontal" id="add-footballPlayer-form">
         <div class="form-group has-feedback">
-            <petclinic:inputField label="${Name}" name="firstName"/>
-            <petclinic:inputField label="${Apellido}" name="lastName"/>
-            <petclinic:inputField label="${Age}" name="birthDate" placeholder="yyyy/MM/dd"/>
+            <petclinic:inputField label="code.label.firstName" name="firstName"/>
+            <petclinic:inputField label="code.label.lastName" name="lastName"/>
+            <petclinic:inputField label="code.label.birthDate" name="birthDate" placeholder="yyyy/MM/dd"/>
             <div class="control-group">
-                    <petclinic:selectField label="${Position}" name="position" names="${positions}" size="4"/>
+                    <petclinic:selectField label="code.label.position" name="position" names="${positions}" size="4"/>
                 </div>
         </div>
         <div class="form-group">
