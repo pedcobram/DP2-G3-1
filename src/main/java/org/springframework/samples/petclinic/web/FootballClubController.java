@@ -26,10 +26,12 @@ import javax.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.samples.petclinic.model.ContractPlayer;
 import org.springframework.samples.petclinic.model.FootballClub;
 import org.springframework.samples.petclinic.model.FootballClubs;
 import org.springframework.samples.petclinic.model.FootballPlayer;
 import org.springframework.samples.petclinic.model.President;
+import org.springframework.samples.petclinic.service.ContractService;
 import org.springframework.samples.petclinic.service.FootballClubService;
 import org.springframework.samples.petclinic.service.FootballPlayerService;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedNameException;
@@ -58,11 +60,15 @@ public class FootballClubController {
 	@Autowired
 	private final FootballPlayerService	footballPlayerService;
 
+	@Autowired
+	private final ContractService		contractService;
+
 
 	@Autowired
-	public FootballClubController(final FootballClubService footballClubService, final FootballPlayerService footballPlayerService) {
+	public FootballClubController(final FootballClubService footballClubService, final FootballPlayerService footballPlayerService, final ContractService contractService) {
 		this.footballClubService = footballClubService;
 		this.footballPlayerService = footballPlayerService;
+		this.contractService = contractService;
 	}
 
 	@InitBinder("footballClub")
@@ -271,6 +277,20 @@ public class FootballClubController {
 
 		//Buscamos el equipo del presidente
 		FootballClub thisFootballCLub = this.footballClubService.findFootballClubByPresident(currentPrincipalName);
+
+		//Borramos los contratos del equipo
+		Collection<ContractPlayer> contracts = this.contractService.findAllPlayerContractsByClubId(thisFootballCLub.getId());
+
+		for (ContractPlayer a : contracts) {
+			this.contractService.deleteContract(a);
+		}
+
+		//Pasamos a los jugadores a free agents
+		Collection<FootballPlayer> players = this.footballPlayerService.findAllClubFootballPlayers(thisFootballCLub.getId());
+
+		for (FootballPlayer a : players) {
+			a.setClub(null);
+		}
 
 		//Borramos el equipo en cuestión
 		this.footballClubService.deleteFootballClub(thisFootballCLub);

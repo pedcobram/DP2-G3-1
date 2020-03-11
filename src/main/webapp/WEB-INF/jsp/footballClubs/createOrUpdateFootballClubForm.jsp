@@ -9,12 +9,7 @@
 
 
 		<fmt:message key="code.title.newClub" var="newClub"/>
-		<fmt:message key="code.label.name" var="Name"/>
-    	<fmt:message key="code.label.logo" var="Logo"/>
-    	<fmt:message key="code.label.city" var="City"/>
-    	<fmt:message key="code.label.stadium" var="Stadium"/>
     	<fmt:message key="code.label.money" var="Money"/>
-    	<fmt:message key="code.label.foundationDate" var="FoundationDate"/>
     	<fmt:message key="code.information.money" var="MoneyInfo"/>
 		<fmt:message key="code.crud.newClub" var="createClub"/>
 		<fmt:message key="code.crud.updateClub" var="updateClub"/>
@@ -37,16 +32,14 @@
     			<img width=144px  height=144px src="<spring:url value="${footballClub.crest}" htmlEscape="true" />"/>
 			</div>
     	</c:if>
-    	
-    	
-    	
+    	  	
     <form:form modelAttribute="footballClub" class="form-horizontal" id="add-footballClub-form">
         <div class="form-group has-feedback">
-            <petclinic:inputField label="${Name}" name="name"/>
-            <petclinic:inputField label="${Logo}" name="crest" placeholder="https://www.example.com"/>
-            <petclinic:inputField label="${City}" name="city"/>
-            <petclinic:inputField label="${Stadium}" name="stadium"/>
-            <petclinic:inputField label="${FoundationDate}" name="foundationDate" placeholder="yyyy/MM/dd"/>
+            <petclinic:inputField label="code.label.name" name="name"/>
+            <petclinic:inputField label="code.label.logo" name="crest" placeholder="https://www.example.com"/>
+            <petclinic:inputField label="code.label.city" name="city"/>
+            <petclinic:inputField label="code.label.stadium" name="stadium"/>
+            <petclinic:inputField label="code.label.foundationDate" name="foundationDate" placeholder="yyyy/MM/dd"/>
             
            <h2> ${Money}</h2> <form:input class="form-control"  value ="100000000" path="money" readonly="true"/>
            <c:if test="${news}">
@@ -54,7 +47,7 @@
            </c:if>   
         <c:if test="${footballClub.status == false || publish}"> 
         	<div class="control-group" style="padding: 10px">
-            	<petclinic:selectField name="status" label="Status:" names="${status}" size="2"/>
+            	<petclinic:selectField name="status" label="code.label.status" names="${status}" size="2"/>
             </div>
         </c:if> 
         
