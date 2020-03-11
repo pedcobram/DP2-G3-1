@@ -22,7 +22,7 @@ public class FanService {
 
 	//Buscar todos los contratos de jugadores
 	@Transactional(readOnly = true)
-	public void save(final Fan f) throws DataAccessException {
+	public void saveFan(final Fan f) throws DataAccessException {
 		this.fanRepository.save(f);
 	}
 
