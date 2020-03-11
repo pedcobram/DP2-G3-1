@@ -16,13 +16,15 @@ public class Fan extends BaseEntity {
 	@OneToOne
 	@JoinColumn(name = "club_id", referencedColumnName = "id")
 	@Valid
-	private FootballClub	club;
+	private FootballClub												club;
 
 	@OneToOne
 	@JoinColumn(name = "user_id", referencedColumnName = "id")
-	private Authenticated	user;
+	private Authenticated												user;
 
 	@NotNull
-	private boolean			status;
+	private boolean														vip;
+
+	private org.springframework.samples.petclinic.datatypes.CreditCard	CreditCard;
 
 }
