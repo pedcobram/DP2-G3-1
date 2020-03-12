@@ -24,15 +24,13 @@
        			<tr>
             		<th class="th-center">${Teams}</th>
            			<th>${City}</th>
-           			<th>${Stadium}</th>
-           			<th>${Coach}</th>
+           			<th>${Stadium}</th>          		
            			<th>${FoundationDate}</th>
  				</tr>
         	</thead>
         	<tbody>
         <c:forEach items="${footballClubs.footballClubList}" var="footballClub">
-            <tr>
-                 		
+            <tr>              		
                 <td>
                 <spring:url value="/footballClub/{footballClubId}" var="footballClubUrl">
                         <spring:param name="footballClubId" value="${footballClub.id}"/>
@@ -45,10 +43,7 @@
                 </td>
                 <td>
                     <c:out value="${footballClub.stadium}"/>
-                </td>
-                <td>
-                    <c:out value="${footballClub.coach}"/>
-                </td>
+                </td>        
                 <td>
                     <c:out value="${footballClub.foundationDate}"/>
                 </td>

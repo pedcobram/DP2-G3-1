@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -47,7 +46,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -97,16 +95,6 @@ public class FootballPlayerController {
 
 		//Mandamos a la vista de listado de equipos
 		return "footballPlayers/footballPlayerList";
-	}
-
-	//Esto es para generar el xml de la lista de equipos
-	@GetMapping(value = "/footballPlayers.xml")
-	public @ResponseBody Collection<FootballPlayer> showResourcesFootballPlayerList() {
-
-		Collection<FootballPlayer> players = new HashSet<FootballPlayer>();
-		players.addAll(this.footballPlayerService.findAllFootballPlayers());
-
-		return players;
 	}
 
 	//Vista de la lista de jugadores FA

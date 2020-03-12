@@ -4,6 +4,7 @@ package org.springframework.samples.petclinic.repository;
 import java.util.Collection;
 
 import org.springframework.dao.DataAccessException;
+import org.springframework.samples.petclinic.model.Coach;
 import org.springframework.samples.petclinic.model.FootballClub;
 import org.springframework.samples.petclinic.model.President;
 
@@ -20,4 +21,6 @@ public interface FootballClubRepository {
 	FootballClub findFootballClubByPresident(String principalUsername) throws DataAccessException;
 
 	void delete(FootballClub footballClub) throws DataAccessException;
+
+	Coach findCoachByClubId(int clubId) throws DataAccessException;
 }

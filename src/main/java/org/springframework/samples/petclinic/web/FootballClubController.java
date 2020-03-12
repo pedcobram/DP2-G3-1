@@ -26,6 +26,7 @@ import javax.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.samples.petclinic.model.Coach;
 import org.springframework.samples.petclinic.model.ContractPlayer;
 import org.springframework.samples.petclinic.model.FootballClub;
 import org.springframework.samples.petclinic.model.FootballClubs;
@@ -83,12 +84,9 @@ public class FootballClubController {
 
 	@ModelAttribute("status")
 	public List<Boolean> populateStatus() {
-
 		List<Boolean> status = new ArrayList<>();
-
 		status.add(true);
 		status.add(false);
-
 		return status;
 	}
 
@@ -107,6 +105,55 @@ public class FootballClubController {
 
 		//Mandamos a la vista de listado de equipos
 		return "footballClubs/footballClubList";
+	}
+
+	//Vista de Club por Id - Authenticateds
+	@GetMapping("/footballClub/{footballClubId}")
+	public ModelAndView showFootballClub(@PathVariable("footballClubId") final int footballClubId) {
+		//Creamos la vista de equipo con la url del archivo.jsp de la vista
+		ModelAndView mav = new ModelAndView("footballClubs/footballClubDetails");
+		//Añadimos los datos del equipo según la id de la url
+		mav.addObject(this.footballClubService.findFootballClubById(footballClubId));
+		mav.addObject(this.footballClubService.findCoachByClubId(footballClubId));
+		//devolvemos la vista con los datos del equipo en cuestión
+		return mav;
+	}
+
+	//Vista de Club por Id - Presidentes
+	@GetMapping("/myfootballClub/{principalUsername}")
+	public ModelAndView showMyFootballClub(@PathVariable("principalUsername") final String principalUsername) {
+
+		//Buscamos el equipo del presidente
+		FootballClub footballClub = this.footballClubService.findFootballClubByPresident(principalUsername);
+
+		//Obtenemos el username del usuario actual conectado
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
+
+		//Si no coincide el usuario actual conectado con el de la url mandamos a vista de error
+		if (!currentPrincipalName.equals(principalUsername)) {
+			ModelAndView mav = new ModelAndView("/exception");
+			return mav;
+		}
+
+		//Si no hay club se manda a la vista para que cree un club
+		if (footballClub == null) {
+			ModelAndView mav = new ModelAndView("footballClubs/myClubEmpty");
+			return mav;
+		} else {
+
+			//Si todo va bien mandamos a la vista normal de vista de club del presidente
+			ModelAndView mav = new ModelAndView("footballClubs/myClubDetails");
+
+			FootballClub club = this.footballClubService.findFootballClubByPresident(principalUsername);
+			mav.addObject(club);
+
+			Coach clubCoach = this.footballClubService.findCoachByClubId(club.getId());
+			if (clubCoach != null) {
+				mav.addObject(clubCoach);
+			}
+			return mav;
+		}
 	}
 
 	//Crear Club - Get
@@ -223,47 +270,6 @@ public class FootballClubController {
 
 			//Si todo sale bien vamos a la vista de mi club
 			return "redirect:/myfootballClub/" + currentPrincipalName;
-		}
-	}
-
-	//Vista de Club por Id - Authenticateds
-	@GetMapping("/footballClub/{footballClubId}")
-	public ModelAndView showFootballClub(@PathVariable("footballClubId") final int footballClubId) {
-		//Creamos la vista de equipo con la url del archivo.jsp de la vista
-		ModelAndView mav = new ModelAndView("footballClubs/footballClubDetails");
-		//Añadimos los datos del equipo según la id de la url
-		mav.addObject(this.footballClubService.findFootballClubById(footballClubId));
-		//devolvemos la vista con los datos del equipo en cuestión
-		return mav;
-	}
-
-	//Vista de Club por Id - Presidentes
-	@GetMapping("/myfootballClub/{principalUsername}")
-	public ModelAndView showMyFootballClub(@PathVariable("principalUsername") final String principalUsername) {
-
-		//Buscamos el equipo del presidente
-		FootballClub footballClub = this.footballClubService.findFootballClubByPresident(principalUsername);
-
-		//Obtenemos el username del usuario actual conectado
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		String currentPrincipalName = authentication.getName();
-
-		//Si no coincide el usuario actual conectado con el de la url mandamos a vista de error
-		if (!currentPrincipalName.equals(principalUsername)) {
-			ModelAndView mav = new ModelAndView("/exception");
-			return mav;
-		}
-
-		//Si no hay club se manda a la vista para que cree un club
-		if (footballClub == null) {
-			ModelAndView mav = new ModelAndView("footballClubs/myClubEmpty");
-			return mav;
-		} else {
-
-			//Si todo va bien mandamos a la vista normal de vista de club del presidente
-			ModelAndView mav = new ModelAndView("footballClubs/myClubDetails");
-			mav.addObject(this.footballClubService.findFootballClubByPresident(principalUsername));
-			return mav;
 		}
 	}
 
