@@ -75,7 +75,6 @@
     	<c:if test="${param.presidentUsername == principalUsername}">
     		<spring:url value="/footballPlayer/new" var="footballPlayersNewUrl"></spring:url>
     		<a href="${fn:escapeXml(footballPlayersNewUrl)}" class="btn btn-default">${RegisterPlayer}</a>
-    	or
     	</c:if> 
     	
     	<c:if test="${param.presidentUsername == principalUsername}">

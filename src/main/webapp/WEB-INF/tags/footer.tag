@@ -16,7 +16,7 @@
 <script src="${bootstrapJs}"></script>
 
 
-<div class="th-center">
+<div class="th-center" style="margin-bottom: 5%">
 <i class="fa fa-language" style="font-size:36px"></i>
 <a href="?lang=es"><fmt:message key="spanish"/></a>
 <a href="?lang=en"><fmt:message key="english"/></a>

@@ -21,6 +21,8 @@
     	<fmt:message key="code.crud.updateClub" var="updateClub"/>
     	<fmt:message key="code.crud.deleteClub" var="deleteClub"/>   	
     	<fmt:message key="code.list.playerList" var="playerList"/>
+    	<fmt:message key="code.security.deleteClub" var="areYouSure"/>
+    	
     	
     	
 <petclinic:layout pageName="footballCLubs">
@@ -111,7 +113,7 @@
     		<a   href="${fn:escapeXml(contractPlayersUrl)}" class="btn btn-default"><span class="glyphicon glyphicon-inbox"></span> ${contracts}</a>
     
     		<spring:url value="/myfootballClub/delete" var="addUrl"></spring:url>
-    		<a href="${fn:escapeXml(addUrl)}" onclick="return confirm('ARE YOU SURE?')" class="btn btn-default2"><span class="glyphicon glyphicon-trash"></span> ${deleteClub}</a>
+    		<a href="${fn:escapeXml(addUrl)}" onclick="return confirm('${areYouSure}')" class="btn btn-default2"><span class="glyphicon glyphicon-trash"></span> ${deleteClub}</a>
     	</c:if>      
     </security:authorize>
 
