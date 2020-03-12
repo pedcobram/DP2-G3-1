@@ -15,7 +15,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.samples.petclinic.model.Enum.RequestStatus;
+import org.springframework.samples.petclinic.model.Enum.MatchStatus;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -23,8 +23,8 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Entity
-@Table(name = "match_requests")
-public class MatchRequest extends BaseEntity {
+@Table(name = "Matches")
+public class Match extends BaseEntity {
 
 	@Column(name = "title")
 	@NotEmpty
@@ -36,11 +36,12 @@ public class MatchRequest extends BaseEntity {
 	@NotNull
 	private Date			matchDate;
 
+	@Column(name = "match_status")
+	private MatchStatus		matchStatus;
+
 	@Column(name = "stadium")
 	@NotEmpty
 	private String			stadium;
-
-	private RequestStatus	status;
 
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "footballClub1", referencedColumnName = "name")
@@ -53,5 +54,10 @@ public class MatchRequest extends BaseEntity {
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "referee", referencedColumnName = "username")
 	private Referee			referee;
+
+	// Match Records TBD
+	//	@OneToOne()
+	//	@JoinColumn(name = "matchRecord", referencedColumnName = "id")
+	//	private MatchRecord matchRecord
 
 }

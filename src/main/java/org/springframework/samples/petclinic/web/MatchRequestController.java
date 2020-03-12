@@ -14,11 +14,15 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.FootballClub;
+import org.springframework.samples.petclinic.model.Match;
 import org.springframework.samples.petclinic.model.MatchRequest;
 import org.springframework.samples.petclinic.model.MatchRequests;
+import org.springframework.samples.petclinic.model.Enum.MatchStatus;
 import org.springframework.samples.petclinic.model.Enum.RequestStatus;
 import org.springframework.samples.petclinic.service.FootballClubService;
 import org.springframework.samples.petclinic.service.MatchRequestService;
+import org.springframework.samples.petclinic.service.MatchService;
+import org.springframework.samples.petclinic.service.RefereeService;
 import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -45,11 +49,17 @@ public class MatchRequestController {
 
 	private final FootballClubService	footballClubService;
 
+	private final MatchService			matchService;
+
+	//private final RefereeService		refereeService;
+
 
 	@Autowired
-	public MatchRequestController(final MatchRequestService matchRequestService, final FootballClubService footballClubService, final UserService userService) {
+	public MatchRequestController(final MatchRequestService matchRequestService, final FootballClubService footballClubService, final RefereeService refereeService, final MatchService matchService, final UserService userService) {
 		this.matchRequestService = matchRequestService;
 		this.footballClubService = footballClubService;
+		this.matchService = matchService;
+		//this.refereeService = refereeService;
 	}
 
 	@InitBinder
@@ -206,6 +216,17 @@ public class MatchRequestController {
 		matchRequests.getMatchRequestList().addAll(this.matchRequestService.findAllMatchRequestsReceived(footballClub1));
 		model.put("matchRequests", matchRequests);
 		model.put("receivedRequests", false);
+
+		Match match = new Match();
+
+		match.setTitle(matchRequest.getTitle());
+		match.setMatchDate(matchRequest.getMatchDate());
+		match.setMatchStatus(MatchStatus.TO_BE_PLAYED);
+		match.setStadium(matchRequest.getStadium());
+		match.setFootballClub1(matchRequest.getFootballClub1());
+		match.setFootballClub2(matchRequest.getFootballClub2());
+
+		this.matchService.saveMatch(match);
 
 		return MatchRequestController.VIEWS_MATCH_REQUEST_LIST;
 	}

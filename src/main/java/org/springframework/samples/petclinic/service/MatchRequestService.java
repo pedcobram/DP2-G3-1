@@ -42,6 +42,7 @@ public class MatchRequestService {
 		return this.matchRequestRepository.findMatchRequestByFootballClubName(footballClubName);
 	}
 
+	@Transactional(readOnly = true)
 	public MatchRequest findMatchRequestById(final int matchRequestId) {
 		return this.matchRequestRepository.findMatchRequestById(matchRequestId);
 	}

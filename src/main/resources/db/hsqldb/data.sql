@@ -28,6 +28,12 @@ INSERT INTO authorities VALUES ('presidente1','president');
 -- User Presidente2
 INSERT INTO users(username,password,enabled) VALUES ('presidente2','presidente2',TRUE);
 INSERT INTO authorities VALUES ('presidente2','president');
+-- User Referee1
+INSERT INTO users(username,password,enabled) VALUES ('referee1','referee1',TRUE);
+INSERT INTO authorities VALUES ('referee1','referee'); 
+-- User Referee2
+INSERT INTO users(username,password,enabled) VALUES ('referee2','referee2',TRUE);
+INSERT INTO authorities VALUES ('referee2','referee'); 
 
 -- Competition Admin Requests 
 INSERT INTO comp_Admin_Requests(id, title, description, status, username) VALUES (1, 'Test title 01', 'Test description 01', 0, 'rafa');
@@ -51,6 +57,10 @@ INSERT INTO presidents VALUES (6, 'President6', 'Surname6', '61111111A', 'email@
 INSERT INTO presidents VALUES (7, 'President7', 'Surname7', '71111111A', 'email@gmail.com', '600151222', 'owner1');
 INSERT INTO presidents VALUES (8, 'President8', 'Surname8', '81111111A', 'email@gmail.com', '700111222', 'owner1');
 INSERT INTO presidents VALUES (9, 'President9', 'Surname9', '91111111A', 'email@gmail.com', '800111222', 'owner1');
+
+-- Referee users
+INSERT INTO referees VALUES (1, 'referee1', 'Surname1', '11111111A', 'email1@gmail.com', '600111222', 'referee1');
+INSERT INTO referees VALUES (2, 'referee2', 'Surname2', '22222222A', 'email2@gmail.com', '711222333', 'referee2');
 
 INSERT INTO vets VALUES (1, 'James', 'Carter');
 INSERT INTO vets VALUES (2, 'Helen', 'Leary');
@@ -118,10 +128,18 @@ INSERT INTO football_Clubs(id,status,name,crest,foundation_date,stadium,city,fan
 INSERT INTO football_Clubs(id,status,name,crest,foundation_date,stadium,city,fans,coach,money,president_id) VALUES (9, true, 'Chelsea Football Club','https://upload.wikimedia.org/wikipedia/sco/thumb/c/cc/Chelsea_FC.svg/1200px-Chelsea_FC.svg.png', '1905-02-19', 'Stamford Bridge', 'London', '41000', 'Frank Lampard', '500000000',9);
 
 -- Match Requests
-INSERT INTO match_requests(id, title, match_date, stadium, status, football_Club1, football_Club2) VALUES(1, 'Partido amistoso 1', '2020-05-11 20:30', 'Estadio', 0, 'Sevilla Fútbol Club', 'Real Betis Balompié');
-INSERT INTO match_requests(id, title, match_date, stadium, status, football_Club1, football_Club2) VALUES(2, 'Partido amistoso 2', '2021-05-11 20:30', 'Estadio', 0, 'Sevilla Fútbol Club', 'Fútbol Club Barcelona');
-INSERT INTO match_requests(id, title, match_date, stadium, status, football_Club1, football_Club2) VALUES(3, 'Partido amistoso 3', '2020-05-11 20:30', 'Estadio', 0, 'Real Betis Balompié', 'Sevilla Fútbol Club' );
-INSERT INTO match_requests(id, title, match_date, stadium, status, football_Club1, football_Club2) VALUES(4, 'Partido amistoso 4', '2021-05-11 20:30', 'Estadio', 0, 'Fútbol Club Barcelona', 'Sevilla Fútbol Club');
+INSERT INTO match_requests(id, title, match_date, stadium, status, football_Club1, football_Club2) VALUES(1, 'Partido amistoso 1', '2020-05-11 20:30', 'Ramón Sánchez-Pizjuan', 0, 'Sevilla Fútbol Club', 'Real Betis Balompié');
+INSERT INTO match_requests(id, title, match_date, stadium, status, football_Club1, football_Club2) VALUES(2, 'Partido amistoso 2', '2021-05-11 20:30', 'Ramón Sánchez-Pizjuan', 0, 'Sevilla Fútbol Club', 'Fútbol Club Barcelona');
+INSERT INTO match_requests(id, title, match_date, stadium, status, football_Club1, football_Club2) VALUES(3, 'Partido amistoso 3', '2020-05-11 20:30', 'Benito Villamarín', 0, 'Real Betis Balompié', 'Sevilla Fútbol Club' );
+INSERT INTO match_requests(id, title, match_date, stadium, status, football_Club1, football_Club2) VALUES(4, 'Partido amistoso 4', '2021-05-11 20:30', 'Santiago Bernabeu', 0, 'Fútbol Club Barcelona', 'Sevilla Fútbol Club');
+
+-- Matches
+INSERT INTO matches(id, title, match_date, match_status, stadium, football_Club1, football_Club2) VALUES(1, 'Match title 1', '2020-05-11 20:30', 0, 'Sevilla Fútbol Club', 'Sevilla Fútbol Club', 'Real Betis Balompié');
+INSERT INTO matches(id, title, match_date, match_status, stadium, football_Club1, football_Club2) VALUES(2, 'Match title 2', '2020-03-11 20:30', 2, 'Santiago Bernabeu', 'Fútbol Club Barcelona', 'Sevilla Fútbol Club');
+
+-- Match Referee Requests
+INSERT INTO match_referee_request(id, title, status, username, match_id) VALUES(1, 'Test title', 0, 'referee1', 1);
+INSERT INTO match_referee_request(id, title, status, username, match_id) VALUES(2, 'Test title', 0, 'referee2', 1);
 
 -- Football Players
 INSERT INTO football_Players(id, first_name, last_name, position, football_Clubs_id, value, birth_date) VALUES (1, 'Tomas', 'Vaclik', 0, 1, '18000000', '1989-03-29');

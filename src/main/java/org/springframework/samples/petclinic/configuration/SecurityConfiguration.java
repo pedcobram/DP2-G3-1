@@ -20,7 +20,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
  * and open the template in the editor.
  */
 
-@SuppressWarnings("deprecation")
+
 /**
  * @author japarejo
  */
@@ -37,6 +37,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests().antMatchers("/resources/**", "/webjars/**", "/h2-console/**").permitAll()
 		.antMatchers(HttpMethod.GET, "/", "/oups").permitAll().antMatchers("/users/new").permitAll()
 		.antMatchers("/authenticateds/new").permitAll()
+			.antMatchers("/matchRefereeRequest/**").hasAnyAuthority("referee")
+			.antMatchers("/matches/edit/**").hasAnyAuthority("president")
+			.antMatchers("/matches/refereeRequest/**").hasAnyAuthority("president")
+			.antMatchers("/matches/**").authenticated()
+			.antMatchers("/createReferee").authenticated()
+			.antMatchers("/myRefereeProfile/**").hasAnyAuthority("referee")
+			.antMatchers("/deleteReferee/**").hasAnyAuthority("referee")
 			.antMatchers("/competitionAdmin/**").hasAnyAuthority("competitionAdmin")
 			.antMatchers("/myCompetitionAdminRequest/**").authenticated()
 			.antMatchers("/competitionAdminRequest/list/**").hasAnyAuthority("admin")
