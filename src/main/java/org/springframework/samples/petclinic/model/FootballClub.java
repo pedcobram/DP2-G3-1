@@ -81,5 +81,4 @@ public class FootballClub extends BaseEntity {
 
 	@Column(name = "status") 		//True=Published, False=Drafted
 	private Boolean		status;
-
 }

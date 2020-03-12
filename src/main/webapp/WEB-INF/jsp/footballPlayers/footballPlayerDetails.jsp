@@ -15,6 +15,7 @@
 	<fmt:message key="code.label.position" var="Position"/> 
 	<fmt:message key="code.label.value" var="Value"/> 
 	<fmt:message key="code.crud.sign" var="Fichar"/> 
+	<fmt:message key="code.crud.contract" var="Contrato"/> 
 
 <petclinic:layout pageName="footballPlayers">
 
@@ -31,7 +32,7 @@
 
 <jsp:body>	
     <h2 style="color:black">${Player}</h2>
-    
+
     <!-- Tomo el valor del nombre de usuario actual %-->
     
     <security:authorize access="isAuthenticated()">
@@ -75,11 +76,23 @@
     <fmt:message key="signMouseHover" var="mousehover"/>
     
     <c:if test="${footballPlayer.club == null}">
-    		<spring:url value="/footballPlayers/{footballPlayerId}/contractPlayer/new" var="newContractUrl">
+    		<spring:url value="/contractPlayer/{footballPlayerId}/new" var="newContractUrl">
     			<spring:param name="footballPlayerId" value="${footballPlayer.id}"/>
     		</spring:url>	
     		<a data-toggle="tooltip" title="${mousehover}" href="${fn:escapeXml(newContractUrl)}" class="btn btn-default">${Fichar}</a>
     </c:if> 
+    
+    <!-- Tomo el valor del nombre de usuario actual %-->
+    
+    	<security:authorize access="isAuthenticated()">
+   			<security:authentication var="principalUsername" property="principal.username" /> 
+		</security:authorize>
+		
+		<c:if test="${footballPlayer.club.president.user.username == principalUsername}">
+    		<spring:url value="/contractPlayer/{footballPlayerId}" var="contractPlayerUrl">
+    			<spring:param name="footballPlayerId" value="${footballPlayer.id}"/></spring:url>
+    		<a href="${fn:escapeXml(contractPlayerUrl)}" class="btn btn-default">${Contrato}</a>
+    	</c:if> 
     
     <br/>
     <br/>

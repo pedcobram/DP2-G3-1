@@ -14,6 +14,8 @@
 	<fmt:message key="code.label.player" var="player"/>
 	<fmt:message key="code.label.contract" var="contractWith"/> 
 	<fmt:message key="code.title.contractPlayer" var="contractPl"/> 
+	<fmt:message key="code.security.firePlayer" var="areYouSure"/>
+	<fmt:message key="code.crud.fire" var="fire"/>
 
 <petclinic:layout pageName="contractPlayer">
 
@@ -58,6 +60,12 @@
             <td><c:out value="${contractPlayer.clause} €"/></td>
         </tr>    
     </table>
+    
+    <c:if test="${footballPlayer.club.president.user.username == principalUsername}">
+    		<spring:url value="/contractPlayer/{footballPlayerId}/delete" var="contractPlayerUrl">
+    			<spring:param name="footballPlayerId" value="${contractPlayer.player.id}"/></spring:url>
+    		<a href="${fn:escapeXml(contractPlayerUrl)}" onclick="return confirm('${areYouSure}')" class="btn btn-default2">${fire}</a>
+    	</c:if> 
     
     <br/>
     <br/>

@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -93,7 +94,7 @@ public class ContractController {
 	}
 
 	//Crear Contrato de Jugador - Get
-	@GetMapping(value = "/footballPlayers/{footballPlayerId}/contractPlayer/new")
+	@GetMapping(value = "/contractPlayer/{footballPlayerId}/new")
 	public String initCreationForm(final Model model, @PathVariable("footballPlayerId") final int footballPlayerId) throws DataAccessException, DuplicatedNameException {
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -125,14 +126,13 @@ public class ContractController {
 	}
 
 	//Crear Contrato de Jugador - Post
-	@PostMapping(value = "/footballPlayers/{footballPlayerId}/contractPlayer/new")
+	@PostMapping(value = "/contractPlayer/{footballPlayerId}/new")
 	public String processCreationForm(@Valid final ContractPlayer contractPlayer, final BindingResult result, @PathVariable("footballPlayerId") final int footballPlayerId, final Model model) throws DataAccessException, DuplicatedNameException {
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String currentPrincipalName = authentication.getName();
 
 		FootballClub thisClub = this.footballClubService.findFootballClubByPresident(currentPrincipalName);
-
 		FootballPlayer footballPlayer = this.footballPlayerService.findFootballPlayerById(footballPlayerId);
 
 		Integer valor = footballPlayer.getValue();
@@ -179,7 +179,6 @@ public class ContractController {
 			}
 
 			footballPlayer.setClub(thisClub);
-			//			thisClub.setMoney(thisClub.getMoney() - contractPlayer.getSalary());
 
 			Date moment = new Date(System.currentTimeMillis() - 1);
 			contractPlayer.setClub(thisClub);
@@ -192,6 +191,26 @@ public class ContractController {
 			//Si todo sale bien vamos a la vista de mi club
 			return "redirect:/contractPlayer/" + footballPlayer.getId();
 		}
+	}
+
+	//DESPEDIR JUGADOR (BORRAR CONTRATO)
+	@RequestMapping(value = "/contractPlayer/{footballPlayerId}/delete")
+	public String processDeleteForm(@PathVariable("footballPlayerId") final int footballPlayerId) {
+
+		//Obtenemos el username del usuario actual conectado
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
+
+		FootballPlayer thisPlayer = this.footballPlayerService.findFootballPlayerById(footballPlayerId);
+
+		thisPlayer.setClub(null);
+
+		ContractPlayer thisContract = this.contractService.findContractPlayerByPlayerId(footballPlayerId);
+
+		this.contractService.deleteContract(thisContract);
+
+		//Volvemos a la vista de mi club, en este caso sería la de "club empty"
+		return "redirect:/myfootballClub/" + currentPrincipalName;
 	}
 
 }

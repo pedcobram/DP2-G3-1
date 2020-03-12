@@ -25,14 +25,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.samples.petclinic.model.FootballClub;
 import org.springframework.samples.petclinic.model.President;
 import org.springframework.samples.petclinic.repository.FootballClubRepository;
-import org.springframework.samples.petclinic.repository.VetRepository;
 
-/**
- * Spring Data JPA specialization of the {@link VetRepository} interface
- *
- * @author Michael Isvy
- * @since 15.1.2013
- */
 public interface SpringDataFootballClubRepository extends FootballClubRepository, Repository<FootballClub, Integer> {
 
 	@Override
