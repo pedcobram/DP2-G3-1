@@ -28,13 +28,13 @@ public class MatchService {
 	}
 
 	@Transactional(readOnly = true)
-	public Match findMatchById(final int id) throws DataAccessException {
-		return this.matchRepository.findMatchById(id);
+	public Collection<Match> findAllMatchRequestsByReferee(final String currentPrincipalName) throws DataAccessException {
+		return this.matchRepository.findAllMatchRequestsByReferee(currentPrincipalName);
 	}
 
 	@Transactional(readOnly = true)
-	public Collection<Match> findAllMatchRequestsByReferee(final String currentPrincipalName) throws DataAccessException {
-		return this.matchRepository.findAllMatchRequestsByReferee(currentPrincipalName);
+	public Match findMatchById(final int id) throws DataAccessException {
+		return this.matchRepository.findMatchById(id);
 	}
 
 	@Transactional(readOnly = true)
@@ -47,7 +47,7 @@ public class MatchService {
 		return this.matchRepository.findMatchByFootballClubName2(footballClubName2);
 	}
 
-	@Transactional
+	@Transactional()
 	public void saveMatch(final Match match) throws DataAccessException {
 		this.matchRepository.save(match);
 	}
@@ -55,6 +55,10 @@ public class MatchService {
 	@Transactional()
 	public void deleteMatch(final Match match) throws DataAccessException {
 		this.matchRepository.delete(match);
+	}
+
+	public int count() throws DataAccessException {
+		return this.matchRepository.count();
 	}
 
 }

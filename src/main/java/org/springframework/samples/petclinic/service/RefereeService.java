@@ -5,7 +5,6 @@ import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
-import org.springframework.samples.petclinic.model.Authenticated;
 import org.springframework.samples.petclinic.model.Referee;
 import org.springframework.samples.petclinic.repository.RefereeRepository;
 import org.springframework.stereotype.Service;
@@ -26,7 +25,7 @@ public class RefereeService {
 	}
 
 	@Transactional(readOnly = true)
-	public Referee findRefereetById(final int id) throws DataAccessException {
+	public Referee findRefereeById(final int id) throws DataAccessException {
 		return this.refereeRepository.findRefereeById(id);
 	}
 
@@ -36,30 +35,26 @@ public class RefereeService {
 	}
 
 	@Transactional(readOnly = true)
-	public Collection<Referee> findRefereeByLastName(final String lastName) throws DataAccessException {
-		return this.refereeRepository.findRefereeByLastName(lastName);
-	}
-
-	@Transactional(readOnly = true)
 	public Collection<Referee> findAllReferees() throws DataAccessException {
 		return this.refereeRepository.findAllReferees();
 	}
 
-	@Transactional(readOnly = true)
-	public Authenticated findAuthenticatedByUsername(final String userName) throws DataAccessException {
-		return this.refereeRepository.findAuthenticatedByUsername(userName);
-	}
-
-	@Transactional
+	@Transactional()
 	public void saveReferee(final Referee referee) throws DataAccessException {
 		this.refereeRepository.save(referee);
 		this.authoritiesService.saveAuthorities(referee.getUser().getUsername(), "referee");
 	}
 
+	@Transactional()
 	public void deleteReferee(final Referee referee) throws DataAccessException {
 		this.authoritiesService.deleteAuthorities(referee.getUser().getUsername(), "referee");
 		this.authoritiesService.saveAuthorities(referee.getUser().getUsername(), "authenticated");
 		this.refereeRepository.delete(referee);
 
+	}
+
+	@Transactional()
+	public int count() {
+		return this.refereeRepository.count();
 	}
 }

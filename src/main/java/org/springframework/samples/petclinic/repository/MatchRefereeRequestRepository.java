@@ -24,5 +24,4 @@ public interface MatchRefereeRequestRepository {
 	void delete(MatchRefereeRequest matchRefereeRequest) throws DataAccessException;
 
 	int count() throws DataAccessException;
-
 }

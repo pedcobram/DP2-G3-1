@@ -72,8 +72,8 @@ public class CompetitionAdminServiceTests {
 		Assertions.assertTrue(pre_delete == 1);
 
 		this.competitionAdminService.deleteCompetitionAdmin(compAdmin);
-		int post_delete = this.competitionAdminService.count();
 
+		int post_delete = this.competitionAdminService.count();
 		Assertions.assertTrue(post_delete == 0);
 
 	}

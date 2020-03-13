@@ -9,8 +9,6 @@ import org.springframework.samples.petclinic.model.Referee;
 
 public interface RefereeRepository {
 
-	Collection<Referee> findRefereeByLastName(String lastName) throws DataAccessException;
-
 	Collection<Referee> findAllReferees();
 
 	Referee findRefereeById(int id) throws DataAccessException;
@@ -22,5 +20,7 @@ public interface RefereeRepository {
 	void save(Referee referee) throws DataAccessException;
 
 	void delete(Referee referee) throws DataAccessException;
+
+	int count() throws DataAccessException;
 
 }

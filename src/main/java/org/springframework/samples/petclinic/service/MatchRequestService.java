@@ -37,7 +37,6 @@ public class MatchRequestService {
 		return this.matchRequestRepository.findAllMatchRequestsSent(footballClubName);
 	}
 
-	@Transactional(readOnly = true)
 	public MatchRequest findMatchRequestByFootballClubName(final String footballClubName) throws DataAccessException {
 		return this.matchRequestRepository.findMatchRequestByFootballClubName(footballClubName);
 	}
@@ -47,7 +46,7 @@ public class MatchRequestService {
 		return this.matchRequestRepository.findMatchRequestById(matchRequestId);
 	}
 
-	@Transactional
+	@Transactional()
 	public void saveMatchRequest(final MatchRequest matchRequest) throws DataAccessException {
 		this.matchRequestRepository.save(matchRequest);
 	}
@@ -55,6 +54,11 @@ public class MatchRequestService {
 	@Transactional()
 	public void deleteMatchRequest(final MatchRequest matchRequest) throws DataAccessException {
 		this.matchRequestRepository.delete(matchRequest);
+	}
+
+	@Transactional()
+	public int count() throws DataAccessException {
+		return this.matchRequestRepository.count();
 	}
 
 }

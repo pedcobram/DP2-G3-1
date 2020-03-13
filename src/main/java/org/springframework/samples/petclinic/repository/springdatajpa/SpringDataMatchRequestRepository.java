@@ -31,4 +31,8 @@ public interface SpringDataMatchRequestRepository extends MatchRequestRepository
 	@Override
 	@Query("SELECT a FROM MatchRequest a WHERE a.id =:matchRequestId")
 	MatchRequest findMatchRequestById(int matchRequestId) throws DataAccessException;
+
+	@Override
+	@Query("SELECT COUNT(a) FROM MatchRequest a")
+	int count() throws DataAccessException;
 }

@@ -44,11 +44,13 @@ public class MatchRefereeRequestService {
 		this.matchRefereeRequestRepository.save(matchRefereeRequest);
 	}
 
+	@Transactional
 	public void deleteMatchRefereeRequest(final MatchRefereeRequest matchRefereeRequest) throws DataAccessException {
 		this.matchRefereeRequestRepository.delete(matchRefereeRequest);
 	}
 
-	public int count() throws DataAccessException {
+	@Transactional(readOnly = true)
+	public int count() {
 		return this.matchRefereeRequestRepository.count();
 	}
 

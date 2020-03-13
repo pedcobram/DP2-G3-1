@@ -32,4 +32,8 @@ public interface SpringDataMatchRepository extends MatchRepository, Repository<M
 	@Query("SELECT a FROM Match a WHERE a.footballClub1.name =:footballClubName2")
 	Match findMatchByFootballClubName2(@Param("footballClubName2") String footballClubName2) throws DataAccessException;
 
+	@Override
+	@Query("SELECT COUNT(a) FROM Match a")
+	int count() throws DataAccessException;
+
 }

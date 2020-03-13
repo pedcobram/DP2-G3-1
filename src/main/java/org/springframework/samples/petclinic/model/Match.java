@@ -51,7 +51,7 @@ public class Match extends BaseEntity {
 	@JoinColumn(name = "footballClub2", referencedColumnName = "name")
 	private FootballClub	footballClub2;
 
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "referee", referencedColumnName = "username")
 	private Referee			referee;
 

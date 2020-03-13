@@ -13,10 +13,6 @@ import org.springframework.samples.petclinic.repository.RefereeRepository;
 public interface SpringDataRefereeRepository extends RefereeRepository, Repository<Referee, Integer> {
 
 	@Override
-	@Query("SELECT DISTINCT a FROM Referee a WHERE a.lastName LIKE :lastName%")
-	Collection<Referee> findRefereeByLastName(@Param("lastName") String lastName);
-
-	@Override
 	@Query("SELECT a FROM Referee a")
 	Collection<Referee> findAllReferees();
 
@@ -32,4 +28,7 @@ public interface SpringDataRefereeRepository extends RefereeRepository, Reposito
 	@Query("SELECT a FROM Authenticated a WHERE a.user.username =:username")
 	Authenticated findAuthenticatedByUsername(@Param("username") String username);
 
+	@Override
+	@Query("SELECT COUNT(a) FROM Referee a")
+	int count();
 }

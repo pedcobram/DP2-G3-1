@@ -62,7 +62,7 @@ public class RefereeController {
 		Referee referee = new Referee();
 
 		//Obtenemos el authenticated actual conectado
-		Authenticated thisUser = this.refereeService.findAuthenticatedByUsername(currentPrincipalName);
+		Authenticated thisUser = this.authenticatedService.findAuthenticatedByUsername(currentPrincipalName);
 
 		//Añadimos los datos del user al presidente
 		referee.setFirstName(thisUser.getFirstName());
@@ -123,7 +123,7 @@ public class RefereeController {
 
 	@GetMapping(value = "/myRefereeProfile/{refereeId}/edit")
 	public String initUpdateRefereeForm(@PathVariable("refereeId") final int refereeId, final Model model) {
-		Referee referee = this.refereeService.findRefereetById(refereeId);
+		Referee referee = this.refereeService.findRefereeById(refereeId);
 		model.addAttribute(referee);
 		return RefereeController.VIEWS_REFEREE_CREATE_OR_UPDATE_FORM;
 	}

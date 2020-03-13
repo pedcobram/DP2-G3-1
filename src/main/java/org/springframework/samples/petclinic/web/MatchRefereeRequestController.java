@@ -90,7 +90,7 @@ public class MatchRefereeRequestController {
 
 		MatchRefereeRequest matchRefereeRequest = new MatchRefereeRequest();
 
-		Referee referee = this.refereeService.findRefereetById(refereeId);
+		Referee referee = this.refereeService.findRefereeById(refereeId);
 		Match match = this.matchService.findMatchById(matchId);
 
 		matchRefereeRequest.setStatus(RequestStatus.ON_HOLD);
@@ -110,7 +110,7 @@ public class MatchRefereeRequestController {
 			return MatchRefereeRequestController.VIEWS_MATCH_REFEREE_REQUEST_CREATE_OR_UPDATE_FORM;
 		}
 
-		Referee referee = this.refereeService.findRefereetById(refereeId);
+		Referee referee = this.refereeService.findRefereeById(refereeId);
 		Match match = this.matchService.findMatchById(matchId);
 
 		matchRefereeRequest.setStatus(RequestStatus.ON_HOLD);

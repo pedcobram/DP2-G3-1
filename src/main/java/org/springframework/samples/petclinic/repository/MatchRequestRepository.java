@@ -22,4 +22,6 @@ public interface MatchRequestRepository {
 
 	void delete(MatchRequest matchRequest) throws DataAccessException;
 
+	int count() throws DataAccessException;
+
 }
