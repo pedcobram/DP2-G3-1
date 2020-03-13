@@ -26,6 +26,11 @@ public class CoachService {
 		this.coachRepository = coachRepository;
 	}
 
+	//Buscar entrenador por id
+	public Coach findCoachById(final int id) throws DataAccessException {
+		return this.coachRepository.findById(id);
+	}
+
 	//Buscar todos los entrenadores
 	public Collection<Coach> findAllCoachs() throws DataAccessException {
 		return this.coachRepository.findAll();
@@ -36,14 +41,9 @@ public class CoachService {
 		return this.coachRepository.findAllFreeAgents();
 	}
 
-	//Buscar entrenador por id
-	public Coach findCoachById(final int id) throws DataAccessException {
-		return this.findCoachById(id);
-	}
-
 	//Buscar entrenador por id de club
 	public Coach findCoachByClubId(final int id) throws DataAccessException {
-		return this.findCoachByClubId(id);
+		return this.coachRepository.findCoachByClubId(id);
 	}
 
 	//Guardar entrenador con validación de nombre duplicado

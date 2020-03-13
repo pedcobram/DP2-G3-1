@@ -12,7 +12,7 @@ import org.springframework.samples.petclinic.repository.CoachRepository;
 public interface SpringDataCoachRepository extends CoachRepository, Repository<Coach, Integer> {
 
 	@Override
-	@Query("select c from Coach c where c.club != null")
+	@Query("select c from Coach c")
 	Collection<Coach> findAll() throws DataAccessException;
 
 	@Override

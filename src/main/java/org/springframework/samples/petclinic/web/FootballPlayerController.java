@@ -36,6 +36,7 @@ import org.springframework.samples.petclinic.service.ContractService;
 import org.springframework.samples.petclinic.service.FootballClubService;
 import org.springframework.samples.petclinic.service.FootballPlayerService;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedNameException;
+import org.springframework.samples.petclinic.web.validators.FootballPlayerValidator;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -126,6 +127,32 @@ public class FootballPlayerController {
 
 		//Ponemos en el modelo la colección de equipos
 		model.put("footballPlayers", players);
+
+		//Mandamos a la vista de listado de equipos
+		return "footballPlayers/footballPlayerList";
+	}
+
+	//Vista de la lista de jugadores por equipos
+	@GetMapping(value = "/myfootballClub/footballPlayers")
+	public String showPlayerListMyClub(final Map<String, Object> model) {
+
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
+		FootballClub footballClub = this.footballClubService.findFootballClubByPresident(currentPrincipalName);
+
+		if (footballClub == null) {
+			return "footballClubs/myClubEmpty";
+		}
+
+		List<FootballPlayer> players = new ArrayList<>();
+
+		//La llenamos con todos los equipos de la db
+		players.addAll(this.footballPlayerService.findAllClubFootballPlayers(footballClub.getId()));
+
+		//Ponemos en el modelo la colección de equipos
+		model.put("footballPlayers", players);
+		model.put("thisClubPresidentUsername", footballClub.getPresident().getUser().getUsername());
+		model.put("thisClubStatus", footballClub.getStatus());
 
 		//Mandamos a la vista de listado de equipos
 		return "footballPlayers/footballPlayerList";

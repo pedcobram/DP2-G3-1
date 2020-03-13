@@ -1,5 +1,5 @@
 
-package org.springframework.samples.petclinic.web;
+package org.springframework.samples.petclinic.web.validators;
 
 import java.util.Calendar;
 import java.util.Date;

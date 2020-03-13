@@ -71,8 +71,4 @@
     				<span class="glyphicon glyphicon-user"></span> 
     								${playerList}</a>
     
-    <br/>
-    <br/>
-    <br/>
-    
 </petclinic:layout>
