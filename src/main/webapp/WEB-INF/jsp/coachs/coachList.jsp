@@ -14,6 +14,7 @@
 	<fmt:message key="code.column.birthDate" var="BirthDate"/> 
 	<fmt:message key="code.crud.registerCoach" var="RegisterCoach"/> 
 	<fmt:message key="code.crud.signFreeAgent" var="SignCoach"/> 
+	<fmt:message key="code.information.registerCoach" var="RegisterCoachInfo"/>
 
 <petclinic:layout pageName="coachs">
 
@@ -64,8 +65,8 @@
 		</security:authorize>
     
     	<c:if test="${thisClubPresidentUsername == principalUsername && thisClubStatus == false}">
-    		<spring:url value="/footballPlayer/new" var="footballPlayersNewUrl"></spring:url>
-    		<a href="${fn:escapeXml(footballPlayersNewUrl)}" class="btn btn-default">${RegisterCoach}</a>
-    		<p style="margin-top:0.5%; margin-left: 1%">*Tienes la posibilidad de registrar un entrenador o bien fichar a un agente libre.</p>
+    		<spring:url value="/coachs/new" var="coachsNewUrl"></spring:url>
+    		<a href="${fn:escapeXml(coachsNewUrl)}" class="btn btn-default">${RegisterCoach}</a>
+    		<p style="margin-top:0.5%; margin-left: 1%">${RegisterCoachInfo}</p>
     	</c:if> 
 </petclinic:layout>

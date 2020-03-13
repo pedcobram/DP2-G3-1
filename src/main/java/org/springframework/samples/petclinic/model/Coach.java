@@ -44,7 +44,6 @@ public class Coach extends Person {
 	private Integer			salary;
 
 	@Column(name = "clause")
-	@NotNull
 	private Integer			clause;
 
 
