@@ -289,7 +289,7 @@ public class FootballPlayerController {
 				return FootballPlayerController.VIEWS_PLAYER_CREATE_OR_UPDATE_FORM;
 			}
 			//Si todo sale bien vamos a la vista de mi club
-			return "redirect:/footballClub/" + thisClub.getId() + "/footballPlayers?presidentUsername=" + currentPrincipalName;
+			return "redirect:/myfootballClub/footballPlayers";
 		}
 	}
 }

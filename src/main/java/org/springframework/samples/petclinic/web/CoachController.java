@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.validation.Valid;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Coach;
@@ -89,6 +90,13 @@ public class CoachController {
 		mav.addObject(this.coachService.findCoachById(coachId));
 		mav.addObject("coachAge", this.coachService.findCoachById(coachId).getAge());
 
+		//Le paso al modelo si el id del club del user
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
+		FootballClub myClub = this.footballClubService.findFootballClubByPresident(currentPrincipalName);
+
+		mav.addObject("clubId", myClub.getId());
+
 		return mav;
 	}
 
@@ -97,48 +105,96 @@ public class CoachController {
 
 		Coach coach = new Coach();
 		model.put("coach", coach);
-		coach.setClause(0);
 
 		return CoachController.VIEWS_COACH_CREATE_OR_UPDATE_FORM;
 	}
 
-	//Crear Jugador - Post
-	@PostMapping(value = "/coachs/new")
+	@PostMapping(value = "/coachs/new") //REGISTRAR ENTRENADOR - POST
 	public String processCreationForm(@Valid final Coach coach, final BindingResult result, final Model model) throws DataAccessException, DuplicatedNameException {
 
-		//Obtenemos el username del usuario actual conectado
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String currentPrincipalName = authentication.getName();
-
-		//Obtenemos el Club del user actual
 		FootballClub thisClub = this.footballClubService.findFootballClubByPresident(currentPrincipalName);
-
-		//Validación si el club ya tiene un entrenador
 		Coach thereIsACoach = this.coachService.findCoachByClubId(thisClub.getId());
 
-		if (thereIsACoach != null) {
+		if (thereIsACoach != null) { //Validación Solo se puede tener un Coach
 			result.rejectValue("firstName", "code.error.validator.justOneCoach", "just one coach");
 			return CoachController.VIEWS_COACH_CREATE_OR_UPDATE_FORM;
 		}
 
-		//Si hay errores seguimos en la vista de creación
 		if (result.hasErrors()) {
 			return CoachController.VIEWS_COACH_CREATE_OR_UPDATE_FORM;
 		} else {
 			try {
-
 				coach.setClub(thisClub);
-
-				coach.setClause(coach.getSalary() * 5);
-
+				coach.setClause(coach.getSalary() * 3);
 				this.coachService.saveCoach(coach);
-
-				//Si capturamos excepción de nombre duplicado seguimos en la vista de creación
 			} catch (DuplicatedNameException ex) {
-				//Mostramos el mensaje de error en el atributo name
 				result.rejectValue("firstName", "duplicate", "already exists");
 				return CoachController.VIEWS_COACH_CREATE_OR_UPDATE_FORM;
 			}
+			return "redirect:/coachs/" + coach.getId();
+		}
+	}
+
+	//Editar Club - Get
+	@GetMapping(value = "/coachs/{coachId}/sign")
+	public String initSignCoachForm(@PathVariable("coachId") final int coachId, final Model model) {
+
+		Coach coach = this.coachService.findCoachById(coachId);
+		model.addAttribute(coach);
+		model.addAttribute("readonly", true);
+		return CoachController.VIEWS_COACH_CREATE_OR_UPDATE_FORM;
+
+	}
+
+	//Editar Club - Post
+	@PostMapping(value = "/coachs/{coachId}/sign")
+	public String processUpdateFootballClubForm(@Valid final Coach coach, final BindingResult result, @PathVariable("coachId") final int coachId, final Model model) throws DataAccessException, DuplicatedNameException {
+
+		if (result.hasErrors()) {
+			model.addAttribute(coach);
+			model.addAttribute("readonly", true);
+			return CoachController.VIEWS_COACH_CREATE_OR_UPDATE_FORM;
+
+		} else {
+
+			//Obtenemos el username del usuario actual conectado
+			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+			String currentPrincipalName = authentication.getName();
+			FootballClub myClub = this.footballClubService.findFootballClubByPresident(currentPrincipalName);
+
+			//ENTRENADOR QUE QUEREMOS FICHAR
+			Coach coachToUpdate = this.coachService.findCoachById(coachId);
+
+			//Copiamos los datos del equipo actual(vista del modelo) al equipo a actualizar excepto el presidente y la id(para que siga siendo el mismo)
+			BeanUtils.copyProperties(coach, coachToUpdate, "id", "club");
+
+			try {
+
+				//Entrenador de MI EQUIPO
+				Coach clubCoach = this.coachService.findCoachByClubId(myClub.getId());
+
+				if (clubCoach != null) { //Si tengo entrenador
+					if (coachToUpdate.getClub() != null) { //Y al que quiero fichar tiene otro club
+						clubCoach.setClub(coachToUpdate.getClub()); //Mi entrenador se va al suyo
+					} else { //Si al que quiero fichar no tiene club
+						clubCoach.setClub(null); //Mi entrenador pasa a agente libre
+						clubCoach.setSalary(0);
+						clubCoach.setClause(0);
+					}
+				}
+
+				coachToUpdate.setClub(myClub);
+				coachToUpdate.setClause(coachToUpdate.getSalary() * 3);
+				this.coachService.saveCoach(coachToUpdate);
+
+			} catch (DuplicatedNameException ex) {
+
+				result.rejectValue("firstName", "duplicate", "already exists");
+				return CoachController.VIEWS_COACH_CREATE_OR_UPDATE_FORM;
+			}
+
 			//Si todo sale bien vamos a la vista de mi club
 			return "redirect:/myfootballClub/" + currentPrincipalName;
 		}

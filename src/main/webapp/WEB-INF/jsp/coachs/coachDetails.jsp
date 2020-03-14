@@ -20,6 +20,7 @@
 	<fmt:message key="code.label.team" var="Team"/>
 	<fmt:message key="code.label.clause" var="Clausula"/>
 	<fmt:message key="code.label.salary" var="Salario"/> 
+	<fmt:message key="code.crud.sign" var="Fichar"/> 
 
 <petclinic:layout pageName="coachs">
 
@@ -62,6 +63,20 @@
         	</tr>    
          </c:if>
          
+         
+         
     </table>
- </jsp:body> 
+    
+    <c:if test="${coach.club.id != clubId}">
+    		<spring:url value="/coachs/{coachId}/sign" var="newCoachUrl">
+    			<spring:param name="coachId" value="${coach.id}"/>
+    		</spring:url>	
+    		<a data-toggle="tooltip" title="${mousehover}" href="${fn:escapeXml(newCoachUrl)}" class="btn btn-default">${Fichar}</a>
+    </c:if>
+  
+ </jsp:body>
+ 
+   
 </petclinic:layout>
+
+  

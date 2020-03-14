@@ -16,9 +16,9 @@ public class CoachValidator implements Validator {
 
 	@Override
 	public void validate(final Object obj, final Errors errors) {
-		Coach footballPlayer = (Coach) obj;
-		String firstName = footballPlayer.getFirstName();
-		String lastName = footballPlayer.getLastName();
+		Coach coach = (Coach) obj;
+		String firstName = coach.getFirstName();
+		String lastName = coach.getLastName();
 
 		Date now = new Date(System.currentTimeMillis() - 1);
 
@@ -39,17 +39,17 @@ public class CoachValidator implements Validator {
 		}
 
 		// Salary Validation
-		if (footballPlayer.getSalary() == null) {
+		if (coach.getSalary() == null) {
 			errors.rejectValue("salary", "code.error.validator.required", CoachValidator.REQUIRED);
 		}
 
 		// Salary Validation 2
-		if (footballPlayer.getSalary() != null && footballPlayer.getSalary() < 1000000) {
+		if (coach.getSalary() != null && coach.getSalary() < 1000000) {
 			errors.rejectValue("salary", "code.error.validator.OneMillionAtLeast", CoachValidator.REQUIRED);
 		}
 
 		// Birth Date Validation
-		if (footballPlayer.getBirthDate() == null || footballPlayer.getBirthDate().after(now)) {
+		if (coach.getBirthDate() == null || coach.getBirthDate().after(now)) {
 			errors.rejectValue("birthDate", "code.error.validator.requiredAnd18Years", CoachValidator.REQUIRED);
 		}
 

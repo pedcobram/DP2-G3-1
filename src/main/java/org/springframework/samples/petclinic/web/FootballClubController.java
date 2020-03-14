@@ -32,6 +32,7 @@ import org.springframework.samples.petclinic.model.FootballClub;
 import org.springframework.samples.petclinic.model.FootballClubs;
 import org.springframework.samples.petclinic.model.FootballPlayer;
 import org.springframework.samples.petclinic.model.President;
+import org.springframework.samples.petclinic.service.CoachService;
 import org.springframework.samples.petclinic.service.ContractService;
 import org.springframework.samples.petclinic.service.FootballClubService;
 import org.springframework.samples.petclinic.service.FootballPlayerService;
@@ -65,12 +66,16 @@ public class FootballClubController {
 	@Autowired
 	private final ContractService		contractService;
 
+	@Autowired
+	private final CoachService			coachService;
+
 
 	@Autowired
-	public FootballClubController(final FootballClubService footballClubService, final FootballPlayerService footballPlayerService, final ContractService contractService) {
+	public FootballClubController(final FootballClubService footballClubService, final FootballPlayerService footballPlayerService, final ContractService contractService, final CoachService coachService) {
 		this.footballClubService = footballClubService;
 		this.footballPlayerService = footballPlayerService;
 		this.contractService = contractService;
+		this.coachService = coachService;
 	}
 
 	@InitBinder("footballClub")
@@ -251,9 +256,10 @@ public class FootballClubController {
 
 			try {
 
-				//Validación mínimo 5 jugadores
+				//Validación mínimo 5 jugadores y 1 entrenador
 				Collection<FootballPlayer> cp = this.footballPlayerService.findAllClubFootballPlayers(footballClubToUpdate.getId());
-				if (cp.size() < 5 && footballClubToUpdate.getStatus() == true) {
+				Coach coach = this.coachService.findCoachByClubId(footballClubToUpdate.getId());
+				if (cp.size() < 5 && footballClubToUpdate.getStatus() == true || coach == null && footballClubToUpdate.getStatus() == true) {
 					model.addAttribute("publish", true);
 					result.rejectValue("status", "min5players");
 					return FootballClubController.VIEWS_CLUB_CREATE_OR_UPDATE_FORM;

@@ -11,16 +11,17 @@
 	<fmt:message key="code.crud.register" var="register"/> 
 	<fmt:message key="code.label.salary" var="salario"/> 
 	<fmt:message key="code.label.clause" var="clausula"/> 
+		
+		<c:set var = "read" value = "false"/>
+		<c:if test="${readonly}">
+		<c:set var = "read" value = "true"/>
+			  
+	</c:if>
+	
 
 <petclinic:layout pageName="coachs">
 
-	<jsp:attribute name="customScript">
-        <script>
-            $(function () {
-                $("#birthDate").datepicker({dateFormat: 'yy/mm/dd'});
-            });
-        </script>
-        
+	<jsp:attribute name="customScript">   
         <script>		
 			function sumar (valor) {
 			    var total = 0;	
@@ -32,12 +33,20 @@
 			    total = (total == null || total == undefined || total == "") ? 0 : total;
 				
 			    /* Esta es la suma. */
-			    total = (parseInt(valor)*5);
+			    total = (parseInt(valor)*3);
 				
 			    // Colocar el resultado de la suma en el control "span".
 			    document.getElementById('spTotal').innerHTML = total;			    
 			}
 		</script> 
+		
+			<script>
+			if(${read} == false){ //ejecutamos solo si lo estamos registrando
+            	$(function () {
+                	$("#birthDate").datepicker({dateFormat: 'yy/mm/dd'});
+            	});}
+        	</script>
+		
     </jsp:attribute>
 <jsp:body>
 
@@ -45,9 +54,9 @@
     		
     <form:form modelAttribute="coach" class="form-horizontal" id="add-coach-form">
         <div class="form-group has-feedback">
-            <petclinic:inputField label="code.label.firstName" name="firstName"/>
-            <petclinic:inputField label="code.label.lastName" name="lastName"/>
-            <petclinic:inputField label="code.label.birthDate" name="birthDate" placeholder="yyyy/MM/dd"/>
+            <petclinic:inputField label="code.label.firstName" name="firstName" readonly="${read}"/>
+            <petclinic:inputField label="code.label.lastName" name="lastName" readonly="${read}"/>
+            <petclinic:inputField label="code.label.birthDate" name="birthDate" placeholder="yyyy/MM/dd" readonly="${read}"/>
             <div class="form-group">         		
             	<label class="col-sm-2 control-label" >${salario}</label>
             	<div class="col-sm-10"> 
@@ -59,7 +68,7 @@
 				<label class="col-sm-2 control-label">${clausula}</label>
 				<div class="col-sm-10">
 					<div class="form-control" style="background-color: #f1f1f1"> 
-						<span id="spTotal"></span> €
+						<span id="spTotal" ></span> €
 					</div>
 				</div>	
 			</div>       
