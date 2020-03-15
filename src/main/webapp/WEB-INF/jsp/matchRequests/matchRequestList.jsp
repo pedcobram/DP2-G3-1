@@ -13,10 +13,10 @@
    		<security:authentication var="principalUsername" property="principal.username" /> 
 	</security:authorize>
 	
-	<c:if test="${receivedRequests == true}">
+	<c:if test="${receivedRequests == false}">
 		<h2 style="color:black"><fmt:message key="receivedMatchRequests"/></h2>
 	</c:if>
-	<c:if test="${receivedRequests == false}">
+	<c:if test="${receivedRequests == true}">
 		<h2 style="color:black"><fmt:message key="sentMatchRequests"/></h2>
 	</c:if>
  		<table id="matchRequestsTable" class="table table-striped">

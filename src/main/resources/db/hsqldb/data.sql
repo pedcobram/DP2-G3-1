@@ -3,10 +3,19 @@ INSERT INTO users(username,password,enabled) VALUES ('admin1','4dm1n',TRUE);
 INSERT INTO authorities VALUES ('admin1','admin');
 -- One owner user, named owner1 with passwor 0wn3r
 INSERT INTO users(username,password,enabled) VALUES ('owner1','0wn3r',TRUE);
-INSERT INTO authorities VALUES ('owner1','owner');
--- One vet user, named vet1 with passwor v3t
-INSERT INTO users(username,password,enabled) VALUES ('vet1','v3t',TRUE);
-INSERT INTO authorities VALUES ('vet1','veterinarian');
+INSERT INTO authorities VALUES ('owner1','president');
+INSERT INTO users(username,password,enabled) VALUES ('owner2','0wn3r',TRUE);
+INSERT INTO authorities VALUES ('owner2','president');
+INSERT INTO users(username,password,enabled) VALUES ('owner3','0wn3r',TRUE);
+INSERT INTO authorities VALUES ('owner3','president');
+INSERT INTO users(username,password,enabled) VALUES ('owner4','0wn3r',TRUE);
+INSERT INTO authorities VALUES ('owner4','president');
+INSERT INTO users(username,password,enabled) VALUES ('owner5','0wn3r',TRUE);
+INSERT INTO authorities VALUES ('owner5','president');
+INSERT INTO users(username,password,enabled) VALUES ('owner6','0wn3r',TRUE);
+INSERT INTO authorities VALUES ('owner6','president');
+INSERT INTO users(username,password,enabled) VALUES ('owner7','0wn3r',TRUE);
+INSERT INTO authorities VALUES ('owner7','president');
 -- User Rafa
 INSERT INTO users(username,password,enabled) VALUES ('rafa','rafa',TRUE);
 INSERT INTO authorities VALUES ('rafa','president');
@@ -52,12 +61,12 @@ INSERT INTO authenticateds VALUES (5, 'Manuel', 'Sánchez Rodríguez', '55555555
 INSERT INTO presidents VALUES (1, 'President1', 'Surname1', '11111111A', 'email@gmail.com', '100111222', 'presidente1');
 INSERT INTO presidents VALUES (2, 'President2', 'Surname2', '21111111A', 'email@gmail.com', '200111222', 'presidente2');
 INSERT INTO presidents VALUES (3, 'President3', 'Surname3', '31111111A', 'email@gmail.com', '300111222', 'owner1');
-INSERT INTO presidents VALUES (4, 'President4', 'Surname4', '41111111A', 'email@gmail.com', '400111222', 'owner1');
-INSERT INTO presidents VALUES (5, 'President5', 'Surname5', '51111111A', 'email@gmail.com', '500111222', 'owner1');
-INSERT INTO presidents VALUES (6, 'President6', 'Surname6', '61111111A', 'email@gmail.com', '600111222', 'owner1');
-INSERT INTO presidents VALUES (7, 'President7', 'Surname7', '71111111A', 'email@gmail.com', '600151222', 'owner1');
-INSERT INTO presidents VALUES (8, 'President8', 'Surname8', '81111111A', 'email@gmail.com', '700111222', 'owner1');
-INSERT INTO presidents VALUES (9, 'President9', 'Surname9', '91111111A', 'email@gmail.com', '800111222', 'owner1');
+INSERT INTO presidents VALUES (4, 'President4', 'Surname4', '41111111A', 'email@gmail.com', '400111222', 'owner2');
+INSERT INTO presidents VALUES (5, 'President5', 'Surname5', '51111111A', 'email@gmail.com', '500111222', 'owner3');
+INSERT INTO presidents VALUES (6, 'President6', 'Surname6', '61111111A', 'email@gmail.com', '600111222', 'owner4');
+INSERT INTO presidents VALUES (7, 'President7', 'Surname7', '71111111A', 'email@gmail.com', '600151222', 'owner5');
+INSERT INTO presidents VALUES (8, 'President8', 'Surname8', '81111111A', 'email@gmail.com', '700111222', 'owner6');
+INSERT INTO presidents VALUES (9, 'President9', 'Surname9', '91111111A', 'email@gmail.com', '800111222', 'owner7');
 INSERT INTO presidents VALUES (10, 'Rafael', 'Liébana Fuentes', '11111111A', 'rafliefue@alum.us.es', '600111222', 'rafa');
 
 -- Referee users
@@ -79,11 +88,11 @@ INSERT INTO football_Clubs(id,status,name,crest,foundation_date,stadium,city,fan
 INSERT INTO match_requests(id, title, match_date, stadium, status, football_Club1, football_Club2) VALUES(1, 'Partido amistoso 1', '2020-05-11 20:30', 'Ramón Sánchez-Pizjuan', 0, 'Sevilla Fútbol Club', 'Real Betis Balompié');
 INSERT INTO match_requests(id, title, match_date, stadium, status, football_Club1, football_Club2) VALUES(2, 'Partido amistoso 2', '2021-05-11 20:30', 'Ramón Sánchez-Pizjuan', 0, 'Sevilla Fútbol Club', 'Fútbol Club Barcelona');
 INSERT INTO match_requests(id, title, match_date, stadium, status, football_Club1, football_Club2) VALUES(3, 'Partido amistoso 3', '2020-05-11 20:30', 'Benito Villamarín', 0, 'Real Betis Balompié', 'Sevilla Fútbol Club' );
-INSERT INTO match_requests(id, title, match_date, stadium, status, football_Club1, football_Club2) VALUES(4, 'Partido amistoso 4', '2021-05-11 20:30', 'Santiago Bernabeu', 0, 'Fútbol Club Barcelona', 'Sevilla Fútbol Club');
+INSERT INTO match_requests(id, title, match_date, stadium, status, football_Club1, football_Club2) VALUES(4, 'Partido amistoso 4', '2021-05-11 20:30', 'Camp Nou', 0, 'Fútbol Club Barcelona', 'Sevilla Fútbol Club');
 
 -- Matches
-INSERT INTO matches(id, title, match_date, match_status, stadium, football_Club1, football_Club2) VALUES(1, 'Match title 1', '2020-05-11 20:30', 0, 'Sevilla Fútbol Club', 'Sevilla Fútbol Club', 'Real Betis Balompié');
-INSERT INTO matches(id, title, match_date, match_status, stadium, football_Club1, football_Club2) VALUES(2, 'Match title 2', '2020-03-11 20:30', 2, 'Santiago Bernabeu', 'Fútbol Club Barcelona', 'Sevilla Fútbol Club');
+INSERT INTO matches(id, title, match_date, match_status, stadium, football_Club1, football_Club2) VALUES(1, 'Match title 1', '2020-05-11 20:30', 0, 'Ramón Sánchez-Pizjuan', 'Sevilla Fútbol Club', 'Real Betis Balompié');
+INSERT INTO matches(id, title, match_date, match_status, stadium, football_Club1, football_Club2) VALUES(2, 'Match title 2', '2020-03-11 20:30', 2, 'Camp Nou', 'Fútbol Club Barcelona', 'Sevilla Fútbol Club');
 
 -- Match Referee Requests
 INSERT INTO match_referee_request(id, title, status, username, match_id) VALUES(1, 'Test title', 0, 'referee1', 1);
