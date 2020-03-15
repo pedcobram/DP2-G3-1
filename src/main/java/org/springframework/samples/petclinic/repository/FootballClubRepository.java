@@ -12,6 +12,8 @@ public interface FootballClubRepository {
 
 	Collection<FootballClub> findAll() throws DataAccessException;
 
+	Collection<FootballClub> findAllPublished() throws DataAccessException;
+
 	FootballClub findById(int id) throws DataAccessException;
 
 	void save(FootballClub footballClub) throws DataAccessException;

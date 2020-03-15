@@ -43,14 +43,14 @@ public interface SpringDataFootballClubRepository extends FootballClubRepository
 
 	@Override
 	@Query("SELECT f FROM FootballClub f WHERE f.status = true")
-	Collection<FootballClub> findAll() throws DataAccessException;
+	Collection<FootballClub> findAllPublished() throws DataAccessException;
 
 	@Override
 	@Query("SELECT f FROM FootballClub f WHERE f.name = name")
 	FootballClub findFootballClubByName(@Param("name") String name);
 
-  @Override
-  @Query("select c from Coach c where c.club.id = ?1")
+	@Override
+	@Query("select c from Coach c where c.club.id = ?1")
 	Coach findCoachByClubId(int clubId) throws DataAccessException;
 
 }

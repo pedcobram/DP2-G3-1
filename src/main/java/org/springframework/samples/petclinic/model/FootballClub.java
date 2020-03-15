@@ -43,9 +43,6 @@ import lombok.Setter;
 @Table(name = "football_Clubs")
 public class FootballClub extends BaseEntity implements Serializable {
 
-	/**
-	 *
-	 */
 	private static final long	serialVersionUID	= 1L;
 
 	@OneToOne(optional = false)
@@ -77,11 +74,11 @@ public class FootballClub extends BaseEntity implements Serializable {
 
 	@Column(name = "fans")
 	private Integer				fans;
-  
+
 	@Column(name = "money")
 	@NotNull
 	private Integer				money;
 
 	@Column(name = "status") 		//True=Published, False=Drafted
-	private Boolean		status;
+	private Boolean				status;
 }

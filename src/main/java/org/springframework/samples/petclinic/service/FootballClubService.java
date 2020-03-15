@@ -47,7 +47,7 @@ public class FootballClubService {
 	//Buscar todos los equipos
 
 	public Collection<FootballClub> findFootballClubs() throws DataAccessException {
-		return this.footRepository.findAll();
+		return this.footRepository.findAllPublished();
 	}
 
 	//Buscar equipo por id
