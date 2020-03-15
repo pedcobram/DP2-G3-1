@@ -51,16 +51,29 @@
                        
             </td>
         </tr>
+        	<tr>
+        		<th>${Clausula}</th>
+        		<td>
+        		<c:choose>
+                    <c:when test="${coach.club == null}">
+                        <c:out value="0 €"/>
+                    </c:when>
+                    <c:otherwise>
+                        <c:out value="${coach.clause} €"/>
+                    </c:otherwise>
+                </c:choose>
+                
+            	
+            	
+            	</td>
+        	</tr> 
         
         <c:if test="${coach.club.president.user.username == principalUsername}">  
         	<tr>
             	<th>${Salario}</th>
             	<td><c:out value="${coach.salary} €"/></td>
         	</tr>     
-        	<tr>
-            	<th>${Clausula}</th>
-            	<td><c:out value="${coach.clause} €"/></td>
-        	</tr>    
+        	   
          </c:if>
          
          

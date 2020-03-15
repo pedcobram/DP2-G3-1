@@ -305,6 +305,9 @@ public class FootballClubController {
 			a.setClub(null);
 		}
 
+		Coach coach = this.coachService.findCoachByClubId(thisFootballCLub.getId());
+		coach.setClub(null);
+
 		//Borramos el equipo en cuestión
 		this.footballClubService.deleteFootballClub(thisFootballCLub);
 

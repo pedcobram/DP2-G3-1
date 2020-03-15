@@ -137,12 +137,31 @@ public class CoachController {
 		}
 	}
 
-	//Editar Club - Get
+	//Fichar Coach
 	@GetMapping(value = "/coachs/{coachId}/sign")
 	public String initSignCoachForm(@PathVariable("coachId") final int coachId, final Model model) {
 
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
+		FootballClub myClub = this.footballClubService.findFootballClubByPresident(currentPrincipalName);
+		Coach myCoach = this.coachService.findCoachByClubId(myClub.getId());
 		Coach coach = this.coachService.findCoachById(coachId);
+
+		if (coach.getClub() == null) {
+			model.addAttribute("freeAgent", true);
+		} else {
+			model.addAttribute("freeAgent", false);
+			model.addAttribute("clubCoach", coach.getClub().getName());
+			model.addAttribute("toPayValue", coach.getClause() + " €");
+		}
+
+		if (myCoach != null) {
+			model.addAttribute("myCoachFirstName", myCoach.getFirstName());
+			model.addAttribute("myCoachLastName", myCoach.getLastName());
+		}
+
 		model.addAttribute(coach);
+		model.addAttribute("clubName", myClub.getName());
 		model.addAttribute("readonly", true);
 		return CoachController.VIEWS_COACH_CREATE_OR_UPDATE_FORM;
 
@@ -152,6 +171,20 @@ public class CoachController {
 	@PostMapping(value = "/coachs/{coachId}/sign")
 	public String processUpdateFootballClubForm(@Valid final Coach coach, final BindingResult result, @PathVariable("coachId") final int coachId, final Model model) throws DataAccessException, DuplicatedNameException {
 
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
+		FootballClub myClub = this.footballClubService.findFootballClubByPresident(currentPrincipalName);
+		Coach coach1 = this.coachService.findCoachById(coachId);
+
+		if (coach1.getClub() == null) {
+			model.addAttribute("freeAgent", true);
+		} else {
+			model.addAttribute("freeAgent", false);
+			model.addAttribute("clubCoach", coach1.getClub().getName());
+			model.addAttribute("toPayValue", coach1.getClause() + " €");
+		}
+		model.addAttribute("clubName", myClub.getName());
+
 		if (result.hasErrors()) {
 			model.addAttribute(coach);
 			model.addAttribute("readonly", true);
@@ -159,20 +192,15 @@ public class CoachController {
 
 		} else {
 
-			//Obtenemos el username del usuario actual conectado
-			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-			String currentPrincipalName = authentication.getName();
-			FootballClub myClub = this.footballClubService.findFootballClubByPresident(currentPrincipalName);
-
-			//ENTRENADOR QUE QUEREMOS FICHAR
+			/** ENTRENADOR QUE QUEREMOS FICHAR **/
 			Coach coachToUpdate = this.coachService.findCoachById(coachId);
 
-			//Copiamos los datos del equipo actual(vista del modelo) al equipo a actualizar excepto el presidente y la id(para que siga siendo el mismo)
+			//Copiamos los datos del coach actual(vista del modelo) al equipo a actualizar excepto el club
 			BeanUtils.copyProperties(coach, coachToUpdate, "id", "club");
 
 			try {
 
-				//Entrenador de MI EQUIPO
+				/** Entrenador de MI EQUIPO **/
 				Coach clubCoach = this.coachService.findCoachByClubId(myClub.getId());
 
 				if (clubCoach != null) { //Si tengo entrenador
