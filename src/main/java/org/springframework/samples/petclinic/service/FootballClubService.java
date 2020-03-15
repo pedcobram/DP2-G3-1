@@ -18,6 +18,8 @@ package org.springframework.samples.petclinic.service;
 
 import java.util.Collection;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Coach;
@@ -56,7 +58,7 @@ public class FootballClubService {
 
 	//Guardar equipo con validación de nombre duplicado
 	@Transactional(rollbackFor = DuplicatedNameException.class)
-	public void saveFootballClub(final FootballClub footballClub) throws DataAccessException, DuplicatedNameException {
+	public void saveFootballClub(@Valid final FootballClub footballClub) throws DataAccessException, DuplicatedNameException {
 
 		String name = footballClub.getName().toLowerCase();
 		FootballClub otherFootClub = null;
