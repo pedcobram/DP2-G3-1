@@ -20,6 +20,7 @@ import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.samples.petclinic.model.Contract;
 import org.springframework.samples.petclinic.model.ContractPlayer;
 import org.springframework.samples.petclinic.repository.ContractRepository;
 import org.springframework.stereotype.Service;
@@ -56,7 +57,17 @@ public class ContractService {
 	}
 
 	@Transactional
-	public void saveContractPlayer(final ContractPlayer contractPlayer) {
+	public void saveContractPlayer(final ContractPlayer contractPlayer) throws DataAccessException {
 		this.contractRepository.save(contractPlayer);
+	}
+
+	//Buscar contratos por club
+	@Transactional(readOnly = true)
+	public Collection<ContractPlayer> findAllPlayerContractsByClubId(final int clubId) throws DataAccessException {
+		return this.contractRepository.findAllPlayerContractsByClubId(clubId);
+	}
+
+	public void deleteContract(final Contract contract) throws DataAccessException {
+		this.contractRepository.delete(contract);
 	}
 }

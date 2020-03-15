@@ -25,10 +25,14 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.model.Authenticated;
+import org.springframework.samples.petclinic.model.ContractPlayer;
 import org.springframework.samples.petclinic.model.FootballClub;
+import org.springframework.samples.petclinic.model.FootballPlayer;
 import org.springframework.samples.petclinic.model.President;
 import org.springframework.samples.petclinic.service.AuthoritiesService;
+import org.springframework.samples.petclinic.service.ContractService;
 import org.springframework.samples.petclinic.service.FootballClubService;
+import org.springframework.samples.petclinic.service.FootballPlayerService;
 import org.springframework.samples.petclinic.service.PresidentService;
 import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -52,15 +56,26 @@ public class PresidentController {
 
 	private static final String			VIEWS_PRESIDENT_CREATE_OR_UPDATE_FORM	= "presidents/createOrUpdatePresidentForm";
 
+	@Autowired
 	private final PresidentService		presidentService;
 
+	@Autowired
 	private final FootballClubService	footballClubService;
+
+	@Autowired
+	private final FootballPlayerService	footballPlayerService;
+
+	@Autowired
+	private final ContractService		contractService;
 
 
 	@Autowired
-	public PresidentController(final PresidentService presidentService, final FootballClubService footballClubService, final UserService userService, final AuthoritiesService authoritiesService) {
+	public PresidentController(final PresidentService presidentService, final FootballClubService footballClubService, final UserService userService, final AuthoritiesService authoritiesService, final FootballPlayerService footballPlayerService,
+		final ContractService contractService) {
 		this.presidentService = presidentService;
 		this.footballClubService = footballClubService;
+		this.footballPlayerService = footballPlayerService;
+		this.contractService = contractService;
 	}
 
 	@InitBinder
@@ -148,6 +163,21 @@ public class PresidentController {
 
 		//Borramos el Club si existe
 		if (footballClub != null) {
+
+			//Borramos los contratos del equipo
+			Collection<ContractPlayer> contracts = this.contractService.findAllPlayerContractsByClubId(footballClub.getId());
+
+			for (ContractPlayer a : contracts) {
+				this.contractService.deleteContract(a);
+			}
+
+			//Pasamos a los jugadores a free agents
+			Collection<FootballPlayer> players = this.footballPlayerService.findAllClubFootballPlayers(footballClub.getId());
+
+			for (FootballPlayer a : players) {
+				a.setClub(null);
+			}
+
 			this.footballClubService.deleteFootballClub(footballClub);
 		}
 

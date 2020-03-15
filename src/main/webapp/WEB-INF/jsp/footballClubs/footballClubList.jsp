@@ -6,23 +6,31 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ page contentType="text/html; charset=UTF-8" %> <!-- Para  tildes, ñ y caracteres especiales como el € %-->
 
+
+		<fmt:message key="code.title.footballTeams" var="footballTeams"/>
+    	<fmt:message key="code.column.city" var="City"/>
+    	<fmt:message key="code.column.stadium" var="Stadium"/>
+    	<fmt:message key="code.column.coach" var="Coach"/>
+    	<fmt:message key="code.column.teams" var="Teams"/>
+    	<fmt:message key="code.column.foundationDate" var="FoundationDate"/>
+
+
 <petclinic:layout pageName="footballClubs">
 	
-	<h2 style="color:black"><fmt:message key="footballTeams"/></h2>
+	<h2 style="color:black">${footballTeams}</h2>
+	
  		<table id="vetsTable" class="table table-striped">
 			<thead>
        			<tr>
-            		<th class="th-center"><fmt:message key="teams"/></th>
-           			<th><fmt:message key="city"/></th>
-           			<th><fmt:message key="stadium"/></th>
-           			<th><fmt:message key="coach"/></th>
-           			<th><fmt:message key="foundationDate"/></th>
+            		<th class="th-center">${Teams}</th>
+           			<th>${City}</th>
+           			<th>${Stadium}</th>          		
+           			<th>${FoundationDate}</th>
  				</tr>
         	</thead>
         	<tbody>
         <c:forEach items="${footballClubs.footballClubList}" var="footballClub">
-            <tr>
-                 		
+            <tr>              		
                 <td>
                 <spring:url value="/footballClub/{footballClubId}" var="footballClubUrl">
                         <spring:param name="footballClubId" value="${footballClub.id}"/>
@@ -35,10 +43,7 @@
                 </td>
                 <td>
                     <c:out value="${footballClub.stadium}"/>
-                </td>
-                <td>
-                    <c:out value="${footballClub.coach}"/>
-                </td>
+                </td>        
                 <td>
                     <c:out value="${footballClub.foundationDate}"/>
                 </td>

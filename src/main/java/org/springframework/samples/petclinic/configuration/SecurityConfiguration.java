@@ -31,13 +31,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Autowired
 	DataSource dataSource;
 
-
 	@Override
 	protected void configure(final HttpSecurity http) throws Exception {
 		http.authorizeRequests().antMatchers("/resources/**", "/webjars/**", "/h2-console/**").permitAll()
-		.antMatchers(HttpMethod.GET, "/", "/oups").permitAll().antMatchers("/users/new").permitAll()
-		.antMatchers("/authenticateds/new").permitAll()
-			.antMatchers("/matchRefereeRequest/**").hasAnyAuthority("referee")
+  .antMatchers(HttpMethod.GET, "/", "/oups").permitAll()
+  .antMatchers("/users/new").permitAll()
+  .antMatchers("/authenticateds/new").permitAll()
+	.antMatchers("/presidents/**").authenticated()
+  .antMatchers("/matchRefereeRequest/**").hasAnyAuthority("referee")
 			.antMatchers("/matches/edit/**").hasAnyAuthority("president")
 			.antMatchers("/matches/refereeRequest/**").hasAnyAuthority("president")
 			.antMatchers("/matches/**").authenticated()
@@ -52,21 +53,19 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 			.antMatchers("/deleteCompetitionAdmin/**").hasAnyAuthority("competitionAdmin")
 			.antMatchers("/myCompetitionAdminProfile/**").hasAnyAuthority("competitionAdmin")
 			.antMatchers("/matchRequests/**").authenticated()
-			.antMatchers("/admin/**").hasAnyAuthority("admin")
-			.antMatchers("/authenticateds/**").authenticated()
-			.antMatchers("/myProfile/**").authenticated()
-			.antMatchers("/contractPlayer/**").hasAnyAuthority("president")
-			.antMatchers("/owners/**").authenticated()
-			.antMatchers("/vets/**").authenticated()
-			.antMatchers("/footballPlayers/**").authenticated()
-			.antMatchers("/myPresidentProfile/**").authenticated()
-			.antMatchers("/createPresident/**").authenticated()
-			.antMatchers("/deletePresident/**").authenticated()
-			.antMatchers("/footballClub/**").authenticated()
-			.antMatchers("/myfootballClub/**").hasAnyAuthority("president")
-			.antMatchers("/footballPlayer/new").hasAnyAuthority("president")
-			.antMatchers("/presidents/**").authenticated()
-			.anyRequest().denyAll().and().formLogin()
+  .antMatchers("/admin/**").hasAnyAuthority("admin")
+  .antMatchers("/authenticateds/**").authenticated()
+  .antMatchers("/myProfile/**").authenticated()
+  .antMatchers("/myPresidentProfile/**").authenticated()
+  .antMatchers("/footballPlayers/**").authenticated()
+  .antMatchers("/createPresident/**").authenticated()
+	.antMatchers("/deletePresident/**").authenticated()
+  .antMatchers("/footballClub/**").authenticated()
+  .antMatchers("/coachs/**").hasAnyAuthority("president")
+  .antMatchers("/myfootballClub/**").hasAnyAuthority("president")
+  .antMatchers("/footballPlayer/new").hasAnyAuthority("president")
+	.antMatchers("/contractPlayer/**").hasAnyAuthority("president")
+  .anyRequest().denyAll().and().formLogin()
 
 			/* .loginPage("/login") */
 			.failureUrl("/login-error").and().logout().logoutSuccessUrl("/");

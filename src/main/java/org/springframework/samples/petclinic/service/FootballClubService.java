@@ -20,6 +20,7 @@ import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.samples.petclinic.model.Coach;
 import org.springframework.samples.petclinic.model.FootballClub;
 import org.springframework.samples.petclinic.model.President;
 import org.springframework.samples.petclinic.repository.FootballClubRepository;
@@ -31,6 +32,7 @@ import org.springframework.util.StringUtils;
 @Service
 public class FootballClubService {
 
+	@Autowired
 	private FootballClubRepository footRepository;
 
 
@@ -41,13 +43,13 @@ public class FootballClubService {
 	}
 
 	//Buscar todos los equipos
-	@Transactional(readOnly = true)
+
 	public Collection<FootballClub> findFootballClubs() throws DataAccessException {
 		return this.footRepository.findAll();
 	}
 
 	//Buscar equipo por id
-	@Transactional(readOnly = true)
+
 	public FootballClub findFootballClubById(final int id) throws DataAccessException {
 		return this.footRepository.findById(id);
 	}
@@ -78,13 +80,19 @@ public class FootballClubService {
 	}
 
 	//Buscar presidente por username
-	@Transactional(readOnly = true)
+
 	public President findPresidentByUsername(final String currentPrincipalName) throws DataAccessException {
 		return this.footRepository.findPresidentByUsername(currentPrincipalName);
 	}
 
+	//Buscar presidente por username
+
+	public Coach findCoachByClubId(final int id) throws DataAccessException {
+		return this.footRepository.findCoachByClubId(id);
+	}
+
 	//Buscar equipo por presidente
-	@Transactional(readOnly = true)
+
 	public FootballClub findFootballClubByPresident(final String principalUsername) throws DataAccessException {
 		return this.footRepository.findFootballClubByPresident(principalUsername);
 	}

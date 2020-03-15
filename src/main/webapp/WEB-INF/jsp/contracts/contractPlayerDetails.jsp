@@ -7,6 +7,16 @@
 <%@ page contentType="text/html; charset=UTF-8" %> <!-- Para  tildes, ñ y caracteres especiales como el € %-->
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
+	<fmt:message key="code.label.salary" var="salario1"/> 
+	<fmt:message key="code.label.startDate" var="startfecha"/> 
+	<fmt:message key="code.label.endDate" var="endfecha"/> 
+	<fmt:message key="code.label.clause" var="clausula1"/>
+	<fmt:message key="code.label.player" var="player"/>
+	<fmt:message key="code.label.contract" var="contractWith"/> 
+	<fmt:message key="code.title.contractPlayer" var="contractPl"/> 
+	<fmt:message key="code.security.firePlayer" var="areYouSure"/>
+	<fmt:message key="code.crud.fire" var="fire"/>
+
 <petclinic:layout pageName="contractPlayer">
 
 	<jsp:attribute name="customScript">
@@ -22,34 +32,40 @@
 
 <jsp:body>	
 
-    <h2 style="color:black">Contrato</h2>
+    <h2 style="color:black">${contractPl} <c:out value="${contractPlayer.player.firstName} ${contractPlayer.player.lastName}"/></h2>
 
     <table class="table table-striped">
         <tr>
-            <th>Jugador</th>
+            <th>${player}</th>
             <td><b><c:out value="${contractPlayer.player.firstName} ${contractPlayer.player.lastName}"/></b></td>
         </tr>
         <tr>
-            <th>Contrato con:</th>
+            <th>${contractWith}</th>
             <td><c:out value="${contractPlayer.club.name}"/></td>
         </tr>
         <tr>
-            <th>Salario:</th>
-            <td><c:out value="${contractPlayer.salary}"/></td>
+            <th>${salario1}</th>
+            <td><c:out value="${contractPlayer.salary} €"/></td>
         </tr>
         <tr>
-            <th>Inicio del Contrato:</th>
+            <th>${startfecha}</th>
             <td><c:out value="${contractPlayer.startDate}"/></td>
         </tr>
         <tr>
-            <th>Fin del Contrato:</th>
+            <th>${endfecha}</th>
             <td><c:out value="${contractPlayer.endDate}"/></td>
         </tr>  
         <tr>
-            <th>Cláusula de fin del Contrato:</th>
-            <td><c:out value="${contractPlayer.clause}"/></td>
+            <th>${clausula1}</th>
+            <td><c:out value="${contractPlayer.clause} €"/></td>
         </tr>    
     </table>
+    
+    <c:if test="${footballPlayer.club.president.user.username == principalUsername}">
+    		<spring:url value="/contractPlayer/{footballPlayerId}/delete" var="contractPlayerUrl">
+    			<spring:param name="footballPlayerId" value="${contractPlayer.player.id}"/></spring:url>
+    		<a href="${fn:escapeXml(contractPlayerUrl)}" onclick="return confirm('${areYouSure}')" class="btn btn-default2">${fire}</a>
+    	</c:if> 
     
     <br/>
     <br/>

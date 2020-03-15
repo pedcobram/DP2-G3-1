@@ -17,6 +17,7 @@
 package org.springframework.samples.petclinic.web;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -25,11 +26,18 @@ import javax.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.samples.petclinic.model.Coach;
+import org.springframework.samples.petclinic.model.ContractPlayer;
 import org.springframework.samples.petclinic.model.FootballClub;
 import org.springframework.samples.petclinic.model.FootballClubs;
+import org.springframework.samples.petclinic.model.FootballPlayer;
 import org.springframework.samples.petclinic.model.President;
+import org.springframework.samples.petclinic.service.CoachService;
+import org.springframework.samples.petclinic.service.ContractService;
 import org.springframework.samples.petclinic.service.FootballClubService;
+import org.springframework.samples.petclinic.service.FootballPlayerService;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedNameException;
+import org.springframework.samples.petclinic.web.validators.FootballClubValidator;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -42,7 +50,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -50,12 +57,30 @@ public class FootballClubController {
 
 	private static final String			VIEWS_CLUB_CREATE_OR_UPDATE_FORM	= "footballClubs/createOrUpdateFootballClubForm";
 
+	@Autowired
 	private final FootballClubService	footballClubService;
+
+	@Autowired
+	private final FootballPlayerService	footballPlayerService;
+
+	@Autowired
+	private final ContractService		contractService;
+
+	@Autowired
+	private final CoachService			coachService;
 
 
 	@Autowired
-	public FootballClubController(final FootballClubService footballClubService) {
+	public FootballClubController(final FootballClubService footballClubService, final FootballPlayerService footballPlayerService, final ContractService contractService, final CoachService coachService) {
 		this.footballClubService = footballClubService;
+		this.footballPlayerService = footballPlayerService;
+		this.contractService = contractService;
+		this.coachService = coachService;
+	}
+
+	@InitBinder("footballClub")
+	public void initFootballClubBinder(final WebDataBinder dataBinder) {
+		dataBinder.setValidator(new FootballClubValidator());
 	}
 
 	@InitBinder
@@ -65,12 +90,9 @@ public class FootballClubController {
 
 	@ModelAttribute("status")
 	public List<Boolean> populateStatus() {
-
 		List<Boolean> status = new ArrayList<>();
-
 		status.add(true);
 		status.add(false);
-
 		return status;
 	}
 
@@ -91,119 +113,6 @@ public class FootballClubController {
 		return "footballClubs/footballClubList";
 	}
 
-	//Esto es para generar el xml de la lista de equipos
-	@GetMapping(value = "/footballClub.xml")
-	public @ResponseBody FootballClubs showResourcesFootballClubList() {
-		FootballClubs footballClub = new FootballClubs();
-		footballClub.getFootballClubList().addAll(this.footballClubService.findFootballClubs());
-		return footballClub;
-	}
-
-	//Crear Club - Get
-	@GetMapping(value = "/myfootballClub/new")
-	public String initCreationForm(final Map<String, Object> model) {
-		FootballClub footballClub = new FootballClub();
-
-		model.put("footballClub", footballClub);
-
-		return FootballClubController.VIEWS_CLUB_CREATE_OR_UPDATE_FORM;
-	}
-
-	//Crear Club - Post
-	@PostMapping(value = "/myfootballClub/new")
-	public String processCreationForm(@Valid final FootballClub footballClub, final BindingResult result) throws DataAccessException, DuplicatedNameException {
-
-		//Obtenemos el username del usuario actual conectado
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		String currentPrincipalName = authentication.getName();
-
-		//Obtenemos el presidente del usuario actual conectado
-		President thisUser = this.footballClubService.findPresidentByUsername(currentPrincipalName);
-
-		//Si hay errores seguimos en la vista de creación
-		if (result.hasErrors()) {
-			return FootballClubController.VIEWS_CLUB_CREATE_OR_UPDATE_FORM;
-		} else {
-			try {
-				//Añadimos como presidente el user conectado
-				footballClub.setPresident(thisUser);
-				//Ponemos el número de fans a cero
-				footballClub.setFans(0);
-				//Ponemos el status en Drafted
-				footballClub.setStatus(false);
-				//Guardamos el equipo en la db
-				this.footballClubService.saveFootballClub(footballClub);
-
-				//Si capturamos excepción de nombre duplicado seguimos en la vista de creación
-			} catch (DuplicatedNameException ex) {
-				//Mostramos el mensaje de error en el atributo name
-				result.rejectValue("name", "duplicate", "already exists");
-				return FootballClubController.VIEWS_CLUB_CREATE_OR_UPDATE_FORM;
-			}
-			//Si todo sale bien vamos a la vista de mi club
-			return "redirect:/myfootballClub/" + currentPrincipalName;
-		}
-	}
-
-	//Editar Club - Get
-	@GetMapping(value = "/myfootballClub/{principalUsername}/edit")
-	public String initUpdateFootballClubForm(@PathVariable("principalUsername") final String principalUsername, final Model model) {
-
-		//Buscamos el equipo en la base de datos
-		FootballClub footballClub = this.footballClubService.findFootballClubByPresident(principalUsername);
-		//Añadimos al modelo los atributos del equipo a editar
-		model.addAttribute(footballClub);
-
-		//Obtenemos el username del usuario conectado actual
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		String currentPrincipalName = authentication.getName();
-
-		//Validación: Si el equipo está publicado no se puede editar ó
-		//Si el usuario actual no coincide con el de la url lanzamos la pantalla de error
-		if (!currentPrincipalName.equals(principalUsername) || footballClub.getStatus() == true) {
-			return "redirect:/oups";
-		}
-
-		//Seguimos en la pantalla de edición
-		return FootballClubController.VIEWS_CLUB_CREATE_OR_UPDATE_FORM;
-	}
-
-	//Editar Club - Post
-	@PostMapping(value = "/myfootballClub/{principalUsername}/edit")
-	public String processUpdateFootballClubForm(@Valid final FootballClub footballClub, final BindingResult result, @PathVariable("principalUsername") final String principalUsername) throws DataAccessException, DuplicatedNameException {
-
-		//Si hay errores en la vista seguimos en la pantalla de edición
-		if (result.hasErrors()) {
-			return FootballClubController.VIEWS_CLUB_CREATE_OR_UPDATE_FORM;
-		} else {
-
-			//Obtenemos el username del usuario actual conectado
-			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-			String currentPrincipalName = authentication.getName();
-
-			//Buscamos en la db el equipo del user actual conectado
-			FootballClub footballClubToUpdate = this.footballClubService.findFootballClubByPresident(principalUsername);
-
-			//Copiamos los datos del equipo actual(vista del modelo) al equipo a actualizar excepto el presidente y la id(para que siga siendo el mismo)
-			BeanUtils.copyProperties(footballClub, footballClubToUpdate, "id", "president");
-
-			try {
-
-				//Si todo va bien guardamos los cambios en la db
-				this.footballClubService.saveFootballClub(footballClubToUpdate);
-
-				//Si capturamos excepción de nombre duplicado seguimos en la vista de edición
-			} catch (DuplicatedNameException ex) {
-				//Mostramos el mensaje de error en el atributo name
-				result.rejectValue("name", "duplicate", "already exists");
-				return FootballClubController.VIEWS_CLUB_CREATE_OR_UPDATE_FORM;
-			}
-
-			//Si todo sale bien vamos a la vista de mi club
-			return "redirect:/myfootballClub/" + currentPrincipalName;
-		}
-	}
-
 	//Vista de Club por Id - Authenticateds
 	@GetMapping("/footballClub/{footballClubId}")
 	public ModelAndView showFootballClub(@PathVariable("footballClubId") final int footballClubId) {
@@ -211,6 +120,7 @@ public class FootballClubController {
 		ModelAndView mav = new ModelAndView("footballClubs/footballClubDetails");
 		//Añadimos los datos del equipo según la id de la url
 		mav.addObject(this.footballClubService.findFootballClubById(footballClubId));
+		mav.addObject(this.footballClubService.findCoachByClubId(footballClubId));
 		//devolvemos la vista con los datos del equipo en cuestión
 		return mav;
 	}
@@ -240,8 +150,133 @@ public class FootballClubController {
 
 			//Si todo va bien mandamos a la vista normal de vista de club del presidente
 			ModelAndView mav = new ModelAndView("footballClubs/myClubDetails");
-			mav.addObject(this.footballClubService.findFootballClubByPresident(principalUsername));
+
+			FootballClub club = this.footballClubService.findFootballClubByPresident(principalUsername);
+			mav.addObject(club);
+
+			Coach clubCoach = this.footballClubService.findCoachByClubId(club.getId());
+			if (clubCoach != null) {
+				mav.addObject(clubCoach);
+			}
 			return mav;
+		}
+	}
+
+	//Crear Club - Get
+	@GetMapping(value = "/myfootballClub/new")
+	public String initCreationForm(final Map<String, Object> model) {
+		FootballClub footballClub = new FootballClub();
+		model.put("news", true);
+		model.put("footballClub", footballClub);
+
+		return FootballClubController.VIEWS_CLUB_CREATE_OR_UPDATE_FORM;
+	}
+
+	//Crear Club - Post
+	@PostMapping(value = "/myfootballClub/new")
+	public String processCreationForm(@Valid final FootballClub footballClub, final BindingResult result, final Map<String, Object> model) throws DataAccessException, DuplicatedNameException {
+
+		//Obtenemos el username del usuario actual conectado
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
+
+		//Obtenemos el presidente del usuario actual conectado
+		President thisUser = this.footballClubService.findPresidentByUsername(currentPrincipalName);
+
+		//Si hay errores seguimos en la vista de creación
+		if (result.hasErrors()) {
+			model.put("news", true);
+			return FootballClubController.VIEWS_CLUB_CREATE_OR_UPDATE_FORM;
+		} else {
+			try {
+				//Añadimos como presidente el user conectado
+				footballClub.setPresident(thisUser);
+				//Ponemos el número de fans a cero
+				footballClub.setFans(0);
+				//Ponemos el status en Drafted
+				footballClub.setStatus(false);
+				//Guardamos el equipo en la db
+				this.footballClubService.saveFootballClub(footballClub);
+
+				//Si capturamos excepción de nombre duplicado seguimos en la vista de creación
+			} catch (DuplicatedNameException ex) {
+				//Mostramos el mensaje de error en el atributo name
+				result.rejectValue("name", "duplicate", "already exists");
+				return FootballClubController.VIEWS_CLUB_CREATE_OR_UPDATE_FORM;
+			}
+			//Si todo sale bien vamos a la vista de mi club
+			return "redirect:/myfootballClub/" + currentPrincipalName;
+		}
+	}
+
+	//Editar Club - Get
+	@GetMapping(value = "/myfootballClub/{principalUsername}/edit")
+	public String initUpdateFootballClubForm(@PathVariable("principalUsername") final String principalUsername, final Model model) {
+
+		model.addAttribute("news", false);
+
+		//Buscamos el equipo en la base de datos
+		FootballClub footballClub = this.footballClubService.findFootballClubByPresident(principalUsername);
+		//Añadimos al modelo los atributos del equipo a editar
+		model.addAttribute(footballClub);
+
+		//Obtenemos el username del usuario conectado actual
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
+
+		//Validación: Si el equipo está publicado no se puede editar ó
+		//Si el usuario actual no coincide con el de la url lanzamos la pantalla de error
+		if (!currentPrincipalName.equals(principalUsername) || footballClub.getStatus() == true) {
+			return "redirect:/oups";
+		}
+
+		//Seguimos en la pantalla de edición
+		return FootballClubController.VIEWS_CLUB_CREATE_OR_UPDATE_FORM;
+	}
+
+	//Editar Club - Post
+	@PostMapping(value = "/myfootballClub/{principalUsername}/edit")
+	public String processUpdateFootballClubForm(@Valid final FootballClub footballClub, final BindingResult result, @PathVariable("principalUsername") final String principalUsername, final Model model) throws DataAccessException, DuplicatedNameException {
+
+		//Si hay errores en la vista seguimos en la pantalla de edición
+		if (result.hasErrors()) {
+			model.addAttribute("news", false);
+			return FootballClubController.VIEWS_CLUB_CREATE_OR_UPDATE_FORM;
+		} else {
+
+			//Obtenemos el username del usuario actual conectado
+			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+			String currentPrincipalName = authentication.getName();
+
+			//Buscamos en la db el equipo del user actual conectado
+			FootballClub footballClubToUpdate = this.footballClubService.findFootballClubByPresident(principalUsername);
+
+			//Copiamos los datos del equipo actual(vista del modelo) al equipo a actualizar excepto el presidente y la id(para que siga siendo el mismo)
+			BeanUtils.copyProperties(footballClub, footballClubToUpdate, "id", "president");
+
+			try {
+
+				//Validación mínimo 5 jugadores y 1 entrenador
+				Collection<FootballPlayer> cp = this.footballPlayerService.findAllClubFootballPlayers(footballClubToUpdate.getId());
+				Coach coach = this.coachService.findCoachByClubId(footballClubToUpdate.getId());
+				if (cp.size() < 5 && footballClubToUpdate.getStatus() == true || coach == null && footballClubToUpdate.getStatus() == true) {
+					model.addAttribute("publish", true);
+					result.rejectValue("status", "min5players");
+					return FootballClubController.VIEWS_CLUB_CREATE_OR_UPDATE_FORM;
+				}
+
+				//Si todo va bien guardamos los cambios en la db
+				this.footballClubService.saveFootballClub(footballClubToUpdate);
+
+				//Si capturamos excepción de nombre duplicado seguimos en la vista de edición
+			} catch (DuplicatedNameException ex) {
+				//Mostramos el mensaje de error en el atributo name
+				result.rejectValue("name", "duplicate", "already exists");
+				return FootballClubController.VIEWS_CLUB_CREATE_OR_UPDATE_FORM;
+			}
+
+			//Si todo sale bien vamos a la vista de mi club
+			return "redirect:/myfootballClub/" + currentPrincipalName;
 		}
 	}
 
@@ -255,6 +290,23 @@ public class FootballClubController {
 
 		//Buscamos el equipo del presidente
 		FootballClub thisFootballCLub = this.footballClubService.findFootballClubByPresident(currentPrincipalName);
+
+		//Borramos los contratos del equipo
+		Collection<ContractPlayer> contracts = this.contractService.findAllPlayerContractsByClubId(thisFootballCLub.getId());
+
+		for (ContractPlayer a : contracts) {
+			this.contractService.deleteContract(a);
+		}
+
+		//Pasamos a los jugadores a free agents
+		Collection<FootballPlayer> players = this.footballPlayerService.findAllClubFootballPlayers(thisFootballCLub.getId());
+
+		for (FootballPlayer a : players) {
+			a.setClub(null);
+		}
+
+		Coach coach = this.coachService.findCoachByClubId(thisFootballCLub.getId());
+		coach.setClub(null);
 
 		//Borramos el equipo en cuestión
 		this.footballClubService.deleteFootballClub(thisFootballCLub);

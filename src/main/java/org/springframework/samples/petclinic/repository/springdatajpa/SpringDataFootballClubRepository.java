@@ -22,17 +22,11 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 import org.springframework.data.repository.query.Param;
+import org.springframework.samples.petclinic.model.Coach;
 import org.springframework.samples.petclinic.model.FootballClub;
 import org.springframework.samples.petclinic.model.President;
 import org.springframework.samples.petclinic.repository.FootballClubRepository;
-import org.springframework.samples.petclinic.repository.VetRepository;
 
-/**
- * Spring Data JPA specialization of the {@link VetRepository} interface
- *
- * @author Michael Isvy
- * @since 15.1.2013
- */
 public interface SpringDataFootballClubRepository extends FootballClubRepository, Repository<FootballClub, Integer> {
 
 	@Override
@@ -54,4 +48,9 @@ public interface SpringDataFootballClubRepository extends FootballClubRepository
 	@Override
 	@Query("SELECT f FROM FootballClub f WHERE f.name = name")
 	FootballClub findFootballClubByName(@Param("name") String name);
+
+  @Override
+  @Query("select c from Coach c where c.club.id = ?1")
+	Coach findCoachByClubId(int clubId) throws DataAccessException;
+
 }

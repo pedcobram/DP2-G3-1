@@ -1,6 +1,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ attribute name="name" required="true" rtexprvalue="true"
               description="Name of corresponding property in bean object" %>
 <%@ attribute name="label" required="true" rtexprvalue="true"
@@ -14,7 +15,7 @@
     <c:set var="cssGroup" value="form-group ${status.error ? 'error' : '' }"/>
     <c:set var="valid" value="${not status.error and not empty status.actualValue}"/>
     <div class="${cssGroup}">
-        <label class="col-sm-2 control-label">${label}</label>
+        <label class="col-sm-2 control-label"><fmt:message key="${label}"/></label>
 
         <div class="col-sm-10">
             <form:select class="form-control" path="${name}" items="${names}" size="${size}"/>
