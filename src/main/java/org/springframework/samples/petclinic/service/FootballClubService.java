@@ -20,6 +20,7 @@ import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.samples.petclinic.model.Coach;
 import org.springframework.samples.petclinic.model.FootballClub;
 import org.springframework.samples.petclinic.model.President;
 import org.springframework.samples.petclinic.repository.FootballClubRepository;
@@ -82,6 +83,12 @@ public class FootballClubService {
 
 	public President findPresidentByUsername(final String currentPrincipalName) throws DataAccessException {
 		return this.footRepository.findPresidentByUsername(currentPrincipalName);
+	}
+
+	//Buscar presidente por username
+
+	public Coach findCoachByClubId(final int id) throws DataAccessException {
+		return this.footRepository.findCoachByClubId(id);
 	}
 
 	//Buscar equipo por presidente

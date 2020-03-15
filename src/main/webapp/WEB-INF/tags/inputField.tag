@@ -29,6 +29,7 @@
             path="${name}" 
             placeholder="${placeholder}" 
            	readonly="${readonly}"
+     
        		/>
             
             <c:if test="${valid}">

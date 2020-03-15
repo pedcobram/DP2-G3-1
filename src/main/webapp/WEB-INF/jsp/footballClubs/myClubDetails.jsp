@@ -7,6 +7,12 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page contentType="text/html; charset=UTF-8" %> <!-- Para  tildes, ñ y caracteres especiales como el € %-->
 
+    <!-- Tomo el valor del nombre de usuario actual %-->
+    
+    <security:authorize access="isAuthenticated()">
+   		<security:authentication var="principalUsername" property="principal.username" /> 
+	</security:authorize>
+
 		<fmt:message key="code.title.myFootballClub" var="myFootballClub"/>
 		<fmt:message key="code.title.contractsPlayers" var="contracts"/>
 		<fmt:message key="code.label.name" var="Name"/>
@@ -21,13 +27,16 @@
     	<fmt:message key="code.crud.updateClub" var="updateClub"/>
     	<fmt:message key="code.crud.deleteClub" var="deleteClub"/>   	
     	<fmt:message key="code.list.playerList" var="playerList"/>
-    	<fmt:message key="code.security.deleteClub" var="areYouSure"/>
+    	<fmt:message key="code.security.deleteClub" var="areYouSure"/>	
     	
-    	
+
+	
+
+   
     	
 <petclinic:layout pageName="footballCLubs">
 
-	<jsp:attribute name="customScript">
+<jsp:attribute name="customScript">
 	
 	<!-- Script para mostrar mensajes mousehover %-->
 	
@@ -37,27 +46,17 @@
 			});
 		</script>
 	</jsp:attribute>
-	
+
 <jsp:body>	
+
     <h2 class="th-center">${myFootballClub}</h2>
     
     <c:if test="${!footballClub.crest.isEmpty()}">
     		<div style="margin:2%" class="col-12 text-center">
     			<img width=144px  height=144px src="<spring:url value="${footballClub.crest}" htmlEscape="true" />"/>
 			</div>
-    	</c:if>
+    </c:if>
     
-    <!-- Tomo el valor del nombre de usuario actual %-->
-    
-    <security:authorize access="isAuthenticated()">
-   		<security:authentication var="principalUsername" property="principal.username" /> 
-	</security:authorize>
-	
-	<!-- Creo variables para las "label" con los mensajes internacionalizados (NO ES NECESARIO) %-->
-	
- 
-    
-
     <table class="table table-striped">
         <tr>
             <th>${Name}</th>
@@ -81,7 +80,12 @@
         </tr>
          <tr>
             <th>${Coach}</th>
-            <td><c:out value="${footballClub.coach}"/></td>
+            <td>
+            	<spring:url value="/coachs/{coachId}" var="coachUrl">
+                        <spring:param name="coachId" value="${coach.id}"/>
+                </spring:url>
+                <a href="${fn:escapeXml(coachUrl)}"><b><c:out value="${coach.firstName} ${coach.lastName}"/></b></a>
+            </td>
         </tr>
          <tr>
             <th>${President}</th>
@@ -98,23 +102,19 @@
 	<fmt:message key="publishClubMouseHover" var="mousehover"/>
 	
 	<security:authorize access="hasAnyAuthority('president')">
-		<c:if test="${footballClub.president.user.username == principalUsername}">
+	
+		<c:if test="${(footballClub.president.user.username == principalUsername) && footballClub.status == false}">
     		<spring:url value="/myfootballClub/${principalUsername}/edit" var="editUrl">
 		   		<spring:param name="footballClubId" value="${footballClub.id}"/>
     		</spring:url>
     		<a data-toggle="tooltip" title="${mousehover}" href="${fn:escapeXml(editUrl)}" class="btn btn-default">${updateClub}</a>  	
-    	
-    		<spring:url value="/footballClub/${footballClub.id}/footballPlayers" var="footballPlayersUrl">
-    			<spring:param name="presidentUsername" value="${footballClub.president.user.username}"/>
-    		</spring:url>
-    		<a   href="${fn:escapeXml(footballPlayersUrl)}" class="btn btn-default"><span class="glyphicon glyphicon-user"></span> ${playerList}</a>
-    
-    		<spring:url value="/contractPlayer/list" var="contractPlayersUrl"></spring:url>
-    		<a   href="${fn:escapeXml(contractPlayersUrl)}" class="btn btn-default"><span class="glyphicon glyphicon-inbox"></span> ${contracts}</a>
-    
+    	</c:if> 
+    	<c:if test="${(footballClub.president.user.username == principalUsername)}">
     		<spring:url value="/myfootballClub/delete" var="addUrl"></spring:url>
     		<a href="${fn:escapeXml(addUrl)}" onclick="return confirm('${areYouSure}')" class="btn btn-default2"><span class="glyphicon glyphicon-trash"></span> ${deleteClub}</a>
     	</c:if>      
+    	
+    	
     </security:authorize>
 
     <br/>

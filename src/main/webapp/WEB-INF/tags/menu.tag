@@ -5,6 +5,7 @@
 <%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="jstl" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 	
 <%@ attribute name="name" required="true" rtexprvalue="true"
 	description="Name of the active menu: home, owners, vets or error"%>
@@ -12,6 +13,10 @@
 	<security:authorize access="isAuthenticated()">
    		<security:authentication var="principalUsername" property="principal.username" /> 
 	</security:authorize>
+	
+	<fmt:message key="code.title.contractsPlayers" var="contracts"/>
+	<fmt:message key="code.list.myPlayerList" var="playerList"/>
+	<fmt:message key="code.list.coachList" var="coachList"/>
 
 <nav class="navbar navbar-default" role="navigation">
 	<div class="container">
@@ -62,7 +67,7 @@
 
 			<ul class="nav navbar-nav navbar-right">
 						
-				<sec:authorize access="hasAnyAuthority('president', 'director')">	
+				<sec:authorize access="hasAnyAuthority('president')">	
 					<petclinic:menuItem active="${name eq 'footballClubs'}" url="/myfootballClub/${principalUsername}"
 						title="club page">
 						<span style="color:#ffc800" class="glyphicon glyphicon-bookmark" aria-hidden="true"></span>
@@ -83,17 +88,8 @@
 					</a>
 						<ul class="dropdown-menu">
 						
-						<sec:authorize access="!hasAnyAuthority('president', 'director', 'inversor')">
+						<sec:authorize access="!hasAnyAuthority('president')">
 							<li><a href="<c:url value="/createPresident" />"><fmt:message key="becPresident"/></a></li>
-						</sec:authorize>
-						
-						<sec:authorize access="!hasAnyAuthority('president', 'director', 'inversor')">
-							<li><a href="<c:url value="/presidents/new" />"><fmt:message key="becDirector"/></a></li>
-						</sec:authorize>
-						
-						<sec:authorize access="!hasAnyAuthority('president', 'director', 'inversor')">
-							
-							<li><a href="<c:url value="/presidents/new" />"><fmt:message key="becInversor"/></a></li>
 						</sec:authorize>
 						
 							<li>
@@ -135,10 +131,29 @@
 							</li>
 						</ul></li>
 				</sec:authorize>
-			</ul>
+			</ul>	
 		</div>
-
-
-
 	</div>
 </nav>
+<sec:authorize access="hasAuthority('president')">	
+<nav style="border-color:grey" class="navbar2 navbar2-default">		
+		<div class="th-center">		
+		
+    		<spring:url value="/myfootballClub/footballPlayers" var="footballPlayersUrl"></spring:url>
+    		<a   href="${fn:escapeXml(footballPlayersUrl)}" class="btn btn-default3"><span class="glyphicon glyphicon-user"></span> ${playerList}</a>
+    		
+    		<spring:url value="/contractPlayer/list" var="contractPlayersUrl"></spring:url>
+    		<a   href="${fn:escapeXml(contractPlayersUrl)}" class="btn btn-default3"><span class="glyphicon glyphicon-inbox"></span> ${contracts}</a>
+    		
+    		<spring:url value="/coachs" var="coachsUrl"></spring:url>
+    		<a   href="${fn:escapeXml(coachsUrl)}" class="btn btn-default3"><span class="glyphicon glyphicon-th-list"></span> ${coachList}</a>
+    		
+    		<spring:url value="/contractPlayer/list" var="contractPlayersUrl"></spring:url>
+    		<a   href="${fn:escapeXml(contractPlayersUrl)}" class="btn btn-default3"><span class="glyphicon glyphicon-inbox"></span> Contratos Publicitarios</a>
+    		
+    		<spring:url value="/contractPlayer/list" var="contractPlayersUrl"></spring:url>
+    		<a   href="${fn:escapeXml(contractPlayersUrl)}" class="btn btn-default3"><span class="glyphicon glyphicon-euro"></span> Fichajes</a>
+    
+    	</div> 
+	</nav>
+</sec:authorize>

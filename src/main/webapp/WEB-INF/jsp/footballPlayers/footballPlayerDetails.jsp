@@ -7,6 +7,12 @@
 <%@ page contentType="text/html; charset=UTF-8" %> <!-- Para  tildes, ñ y caracteres especiales como el € %-->
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
+	<!-- Tomo el valor del nombre de usuario actual %-->
+    
+    <security:authorize access="isAuthenticated()">
+   		<security:authentication var="principalUsername" property="principal.username" /> 
+	</security:authorize>
+
 	<fmt:message key="code.title.footballPlayer" var="Player"/>  
 	<fmt:message key="code.title.freeAgent" var="FreeAgent"/> 
 	<fmt:message key="code.label.name" var="Name"/>  
@@ -32,12 +38,6 @@
 
 <jsp:body>	
     <h2 style="color:black">${Player}</h2>
-
-    <!-- Tomo el valor del nombre de usuario actual %-->
-    
-    <security:authorize access="isAuthenticated()">
-   		<security:authentication var="principalUsername" property="principal.username" /> 
-	</security:authorize>
 
     <table class="table table-striped">
         <tr>
@@ -81,21 +81,13 @@
     		</spring:url>	
     		<a data-toggle="tooltip" title="${mousehover}" href="${fn:escapeXml(newContractUrl)}" class="btn btn-default">${Fichar}</a>
     </c:if> 
-    
-    <!-- Tomo el valor del nombre de usuario actual %-->
-    
-    	<security:authorize access="isAuthenticated()">
-   			<security:authentication var="principalUsername" property="principal.username" /> 
-		</security:authorize>
-		
+    	
 		<c:if test="${footballPlayer.club.president.user.username == principalUsername}">
     		<spring:url value="/contractPlayer/{footballPlayerId}" var="contractPlayerUrl">
     			<spring:param name="footballPlayerId" value="${footballPlayer.id}"/></spring:url>
     		<a href="${fn:escapeXml(contractPlayerUrl)}" class="btn btn-default">${Contrato}</a>
     	</c:if> 
     
-    <br/>
-    <br/>
-    <br/>
+
  </jsp:body> 
 </petclinic:layout>

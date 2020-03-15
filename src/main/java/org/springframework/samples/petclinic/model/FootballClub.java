@@ -72,9 +72,6 @@ public class FootballClub extends BaseEntity {
 	@Column(name = "fans")
 	private Integer		fans;
 
-	@Column(name = "coach")
-	private String		coach;
-
 	@Column(name = "money")
 	@NotNull
 	private Integer		money;

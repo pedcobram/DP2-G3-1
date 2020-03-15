@@ -19,6 +19,7 @@ import org.springframework.samples.petclinic.service.ContractService;
 import org.springframework.samples.petclinic.service.FootballClubService;
 import org.springframework.samples.petclinic.service.FootballPlayerService;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedNameException;
+import org.springframework.samples.petclinic.web.validators.ContractPlayerValidator;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -72,6 +73,10 @@ public class ContractController {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String currentPrincipalName = authentication.getName();
 		FootballClub footballClub = this.footballClubService.findFootballClubByPresident(currentPrincipalName);
+
+		if (footballClub == null) {
+			return "footballClubs/myClubEmpty";
+		}
 
 		List<ContractPlayer> contracts = new ArrayList<>();
 

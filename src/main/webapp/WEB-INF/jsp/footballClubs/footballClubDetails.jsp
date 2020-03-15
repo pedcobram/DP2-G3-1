@@ -53,7 +53,12 @@
         </tr>
          <tr>
             <th>${Coach}</th>
-            <td><c:out value="${footballClub.coach}"/></td>
+            <td>
+            	<spring:url value="/coachs/{coachId}" var="coachUrl">
+                        <spring:param name="coachId" value="${coach.id}"/>
+                </spring:url>
+                <a href="${fn:escapeXml(coachUrl)}"><b><c:out value="${coach.firstName} ${coach.lastName}"/></b></a>
+            </td>
         </tr>
          <tr>
             <th>${President}</th>
@@ -65,9 +70,5 @@
     	<a href="${fn:escapeXml(footballPlayersUrl)}" class="btn btn-default">
     				<span class="glyphicon glyphicon-user"></span> 
     								${playerList}</a>
-    
-    <br/>
-    <br/>
-    <br/>
     
 </petclinic:layout>

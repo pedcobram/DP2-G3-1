@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -37,6 +36,7 @@ import org.springframework.samples.petclinic.service.ContractService;
 import org.springframework.samples.petclinic.service.FootballClubService;
 import org.springframework.samples.petclinic.service.FootballPlayerService;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedNameException;
+import org.springframework.samples.petclinic.web.validators.FootballPlayerValidator;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -47,7 +47,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -99,16 +98,6 @@ public class FootballPlayerController {
 		return "footballPlayers/footballPlayerList";
 	}
 
-	//Esto es para generar el xml de la lista de equipos
-	@GetMapping(value = "/footballPlayers.xml")
-	public @ResponseBody Collection<FootballPlayer> showResourcesFootballPlayerList() {
-
-		Collection<FootballPlayer> players = new HashSet<FootballPlayer>();
-		players.addAll(this.footballPlayerService.findAllFootballPlayers());
-
-		return players;
-	}
-
 	//Vista de la lista de jugadores FA
 	@GetMapping(value = "/footballPlayers/freeAgent")
 	public String showFootballPlayerFAList(final Map<String, Object> model) {
@@ -138,6 +127,32 @@ public class FootballPlayerController {
 
 		//Ponemos en el modelo la colección de equipos
 		model.put("footballPlayers", players);
+
+		//Mandamos a la vista de listado de equipos
+		return "footballPlayers/footballPlayerList";
+	}
+
+	//Vista de la lista de jugadores por equipos
+	@GetMapping(value = "/myfootballClub/footballPlayers")
+	public String showPlayerListMyClub(final Map<String, Object> model) {
+
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
+		FootballClub footballClub = this.footballClubService.findFootballClubByPresident(currentPrincipalName);
+
+		if (footballClub == null) {
+			return "footballClubs/myClubEmpty";
+		}
+
+		List<FootballPlayer> players = new ArrayList<>();
+
+		//La llenamos con todos los equipos de la db
+		players.addAll(this.footballPlayerService.findAllClubFootballPlayers(footballClub.getId()));
+
+		//Ponemos en el modelo la colección de equipos
+		model.put("footballPlayers", players);
+		model.put("thisClubPresidentUsername", footballClub.getPresident().getUser().getUsername());
+		model.put("thisClubStatus", footballClub.getStatus());
 
 		//Mandamos a la vista de listado de equipos
 		return "footballPlayers/footballPlayerList";
@@ -274,7 +289,7 @@ public class FootballPlayerController {
 				return FootballPlayerController.VIEWS_PLAYER_CREATE_OR_UPDATE_FORM;
 			}
 			//Si todo sale bien vamos a la vista de mi club
-			return "redirect:/footballClub/" + thisClub.getId() + "/footballPlayers?presidentUsername=" + currentPrincipalName;
+			return "redirect:/myfootballClub/footballPlayers";
 		}
 	}
 }
