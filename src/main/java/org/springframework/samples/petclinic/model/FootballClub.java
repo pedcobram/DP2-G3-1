@@ -16,6 +16,7 @@
 
 package org.springframework.samples.petclinic.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -40,41 +41,46 @@ import lombok.Setter;
 
 @Entity
 @Table(name = "football_Clubs")
-public class FootballClub extends BaseEntity {
+public class FootballClub extends BaseEntity implements Serializable {
+
+	/**
+	 *
+	 */
+	private static final long	serialVersionUID	= 1L;
 
 	@OneToOne(optional = false)
 	@JoinColumn(name = "president_id")
-	private President	president;
+	private President			president;
 
 	@Column(name = "crest")
 	@URL
-	private String		crest;
+	private String				crest;
 
 	@Column(name = "name")
 	@NotEmpty
-	private String		name;
+	private String				name;
 
 	@Column(name = "foundation_date")
 	@Temporal(TemporalType.DATE)
 	@DateTimeFormat(pattern = "yyyy/MM/dd")
 	@Past
 	@NotNull
-	private Date		foundationDate;
+	private Date				foundationDate;
 
 	@Column(name = "stadium")
 	@NotEmpty
-	private String		stadium;
+	private String				stadium;
 
 	@Column(name = "city")
 	@NotEmpty
-	private String		city;
+	private String				city;
 
 	@Column(name = "fans")
-	private Integer		fans;
-
+	private Integer				fans;
+  
 	@Column(name = "money")
 	@NotNull
-	private Integer		money;
+	private Integer				money;
 
 	@Column(name = "status") 		//True=Published, False=Drafted
 	private Boolean		status;

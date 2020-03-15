@@ -73,25 +73,34 @@
 						<span style="color:#ffc800" class="glyphicon glyphicon-bookmark" aria-hidden="true"></span>
 						<span><fmt:message key="myClub"/></span>
 					</petclinic:menuItem>
-				</sec:authorize>				
+				</sec:authorize>
 				
 				<sec:authorize access="!isAuthenticated()">				
 					<li><a href="<c:url value="/login" />"><fmt:message key="login"/></a></li>
 					<li><a href="<c:url value="/authenticateds/new" />"><fmt:message key="register"/></a></li>
-				</sec:authorize>
+				</sec:authorize>				
 				
 				<sec:authorize access="isAuthenticated()">
 					<li class="dropdown"><a href="#" class="dropdown-toggle"
-						data-toggle="dropdown"> <span class="glyphicon glyphicon-user"></span> 
+						data-toggle="dropdown"> <span class="glyphicon glyphicon-user"></span>Â 
 							<strong><sec:authentication property="name" /></strong> <span
 							class="glyphicon glyphicon-chevron-down"></span>
 					</a>
 						<ul class="dropdown-menu">
 						
-						<sec:authorize access="!hasAnyAuthority('president')">
+						<sec:authorize access="!hasAnyAuthority('president', 'competitionAdmin', 'admin', 'referee')">
 							<li><a href="<c:url value="/createPresident" />"><fmt:message key="becPresident"/></a></li>
 						</sec:authorize>
 						
+						<sec:authorize access="!hasAnyAuthority('president', 'competitionAdmin', 'admin', 'referee')">
+							<li><a href="<c:url value="/createReferee" />"><fmt:message key="becReferee"/></a></li>
+						</sec:authorize>
+						
+						<sec:authorize access="!hasAnyAuthority('president', 'competitionAdmin', 'admin', 'referee')">
+							<li><a href="<c:url value="/competitionAdminRequest/new" />"><fmt:message key="becCompetitionAdmin"/></a></li>
+						</sec:authorize>
+								
+
 							<li>
 								<div class="navbar-login">
 									<div class="row">
@@ -104,7 +113,64 @@
 										</sec:authorize>
 										
 										<sec:authorize access="hasAuthority('president')">	
-											<petclinic:menuItem active="${name eq 'authenticateds'}" url="/myPresidentProfile/${principalUsername}"
+											<petclinic:menuItem active="${name eq 'presidents'}" url="/matches/list"
+												title="list match">
+												<span><fmt:message key="matchList"/></span>
+											</petclinic:menuItem>
+										</sec:authorize>
+										
+										<sec:authorize access="hasAuthority('president')">	
+											<petclinic:menuItem active="${name eq 'presidents'}" url="/matchRequests/sent/${principalUsername}"
+												title="sent match requests">
+												<span><fmt:message key="sentMatchRequests"/></span>
+											</petclinic:menuItem>
+										</sec:authorize>
+										
+										<sec:authorize access="hasAuthority('president')">	
+											<petclinic:menuItem active="${name eq 'presidents'}" url="/matchRequests/received/${principalUsername}"
+												title="received match requests">
+												<span><fmt:message key="receivedMatchRequests"/></span>
+											</petclinic:menuItem>
+										</sec:authorize>
+										
+										<sec:authorize access="hasAuthority('president')">	
+											<petclinic:menuItem active="${name eq 'presidents'}" url="/myPresidentProfile/${principalUsername}"
+												title="personal space">
+												<span><fmt:message key="myProfile"/></span>
+											</petclinic:menuItem>
+										</sec:authorize>
+										
+										<sec:authorize access="hasAuthority('referee')">	
+											<petclinic:menuItem active="${name eq 'referees'}" url="/matches/referee/list/"
+												title="personal space">
+												<span><fmt:message key="matchRefereeList"/></span>
+											</petclinic:menuItem>
+										</sec:authorize>
+										
+										<sec:authorize access="hasAuthority('referee')">	
+											<petclinic:menuItem active="${name eq 'referees'}" url="/matchRefereeRequest/list/${principalUsername}"
+												title="personal space">
+												<span><fmt:message key="matchRefereeRequestList"/></span>
+											</petclinic:menuItem>
+										</sec:authorize>
+										
+										<sec:authorize access="hasAuthority('referee')">	
+											<petclinic:menuItem active="${name eq 'referees'}" url="/myRefereeProfile/${principalUsername}"
+												title="personal space">
+												<span><fmt:message key="myProfile"/></span>
+											</petclinic:menuItem>
+										</sec:authorize>
+										
+										<sec:authorize access="hasAnyAuthority('admin')">	
+											<petclinic:menuItem active="${username eq 'competitionAdmin'}" url="/competitionAdminRequest/list"
+												title="club page">
+												<span style="color:#ffc800" class="glyphicon glyphicon-bookmark" aria-hidden="true"></span>
+												<span><fmt:message key="compAdminRequestList"/></span>
+											</petclinic:menuItem>
+										</sec:authorize>
+										
+										<sec:authorize access="hasAuthority('competitionAdmin')">	
+											<petclinic:menuItem active="${name eq 'competitionAdmins'}" url="/myCompetitionAdminProfile/${principalUsername}"
 												title="personal space">
 												<span><fmt:message key="myProfile"/></span>
 											</petclinic:menuItem>

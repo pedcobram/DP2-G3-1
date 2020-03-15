@@ -97,6 +97,12 @@ public class FootballClubService {
 		return this.footRepository.findFootballClubByPresident(principalUsername);
 	}
 
+	//Buscar equipo por nombre de equipo
+	@Transactional(readOnly = true)
+	public FootballClub findFootballClubByName(final String FootballClubName) throws DataAccessException {
+		return this.footRepository.findFootballClubByName(FootballClubName);
+	}
+
 	//Borrar equipo
 	public void deleteFootballClub(final FootballClub footballClub) throws DataAccessException {
 		this.footRepository.delete(footballClub);

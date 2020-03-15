@@ -57,15 +57,8 @@ public class PresidentService {
 
 	@Transactional
 	public void savePresident(final President president) throws DataAccessException {
-		//creating president
 		this.presidentRepository.save(president);
-		//creating authorities
 		this.authoritiesService.saveAuthorities(president.getUser().getUsername(), "president");
-	}
-
-	@Transactional(readOnly = true)
-	public Authenticated findAuthenticatedByUsername(final String userName) throws DataAccessException {
-		return this.presidentRepository.findAuthenticatedByUsername(userName);
 	}
 
 	public void deletePresident(final President president) throws DataAccessException {
@@ -73,6 +66,11 @@ public class PresidentService {
 		this.authoritiesService.saveAuthorities(president.getUser().getUsername(), "authenticated");
 		this.presidentRepository.delete(president);
 
+	}
+
+	@Transactional(readOnly = true)
+	public Authenticated findAuthenticatedByUsername(final String userName) throws DataAccessException {
+		return this.presidentRepository.findAuthenticatedByUsername(userName);
 	}
 
 }

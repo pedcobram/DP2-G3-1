@@ -122,6 +122,8 @@ public class AuthenticatedController {
 			String currentPrincipalName = authentication.getName();
 
 			authenticated.setId(authenticatedId);
+			authenticated.getUser().setEnabled(true);
+
 			this.authenticatedService.saveAuthenticated(authenticated);
 			return "redirect:/myProfile/" + currentPrincipalName;
 		}
