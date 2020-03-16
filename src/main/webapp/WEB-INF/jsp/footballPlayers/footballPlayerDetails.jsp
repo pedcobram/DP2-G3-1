@@ -72,6 +72,11 @@
     		<a data-toggle="tooltip" title="${mousehover}" href="${fn:escapeXml(newContractUrl)}" class="btn btn-default">Fichar</a>
     </c:if> 
     
+    <spring:url value="/footballPlayerStatistic/detail/{playerId}" var="viewPlayerStatistics">
+        	<spring:param name="playerId" value="${footballPlayer.id}"/>
+    </spring:url>
+    <a href="${fn:escapeXml(viewPlayerStatistics)}" class="btn btn-default"><fmt:message key="viewPlayerStatistics"/></a>
+    
     <br/>
     <br/>
     <br/>

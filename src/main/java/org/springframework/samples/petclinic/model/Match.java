@@ -55,9 +55,8 @@ public class Match extends BaseEntity {
 	@JoinColumn(name = "referee", referencedColumnName = "username")
 	private Referee			referee;
 
-	// Match Records TBD
-	//	@OneToOne()
-	//	@JoinColumn(name = "matchRecord", referencedColumnName = "id")
-	//	private MatchRecord matchRecord
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "matchRecord", referencedColumnName = "id")
+	private MatchRecord		matchRecord;
 
 }

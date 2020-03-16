@@ -61,7 +61,10 @@
                 	<c:if test="${matches.referee == null}">
                 		<spring:url value="/matches/refereeRequest/refereeList/${matches.id}" var='editMatchStatus'></spring:url>
                 		<a href="${fn:escapeXml(editMatchStatus)}" class="btn btn-default"><fmt:message key="addRefereeMatch"/></a>    
-                	</c:if>            	
+                	</c:if>             
+                	
+                    <spring:url value="/matches/matchRecord/${matches.id}/view" var='viewMatchRecord'></spring:url>
+                	<a href="${fn:escapeXml(viewMatchRecord)}" class="btn btn-default"><fmt:message key="viewMatchRecord"/></a>                 	         	
                 </td>
             </tr>
         </c:forEach>

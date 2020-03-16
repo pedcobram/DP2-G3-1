@@ -39,7 +39,6 @@ public class FootballPlayerService {
 	@Autowired
 	public FootballPlayerService(final FootballPlayerRepository footRepository) {
 		this.footRepository = footRepository;
-
 	}
 
 	//Buscar todos los jugadores

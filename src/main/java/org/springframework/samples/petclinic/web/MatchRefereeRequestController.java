@@ -8,12 +8,20 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.samples.petclinic.model.FootballPlayer;
+import org.springframework.samples.petclinic.model.FootballPlayerMatchStatistic;
+import org.springframework.samples.petclinic.model.FootballPlayers;
 import org.springframework.samples.petclinic.model.Match;
+import org.springframework.samples.petclinic.model.MatchRecord;
 import org.springframework.samples.petclinic.model.MatchRefereeRequest;
 import org.springframework.samples.petclinic.model.MatchRefereeRequests;
 import org.springframework.samples.petclinic.model.Referee;
 import org.springframework.samples.petclinic.model.Referees;
+import org.springframework.samples.petclinic.model.Enum.MatchRecordStatus;
 import org.springframework.samples.petclinic.model.Enum.RequestStatus;
+import org.springframework.samples.petclinic.service.FootballPlayerMatchStatisticService;
+import org.springframework.samples.petclinic.service.FootballPlayerService;
+import org.springframework.samples.petclinic.service.MatchRecordService;
 import org.springframework.samples.petclinic.service.MatchRefereeRequestService;
 import org.springframework.samples.petclinic.service.MatchService;
 import org.springframework.samples.petclinic.service.RefereeService;
@@ -31,24 +39,34 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class MatchRefereeRequestController {
 
-	private static final String					VIEWS_MATCH_REFEREE_REQUEST_CREATE_OR_UPDATE_FORM	= "matchRefereeRequests/createOrUpdateMatchRefereeRequestForm";
+	private static final String							VIEWS_MATCH_REFEREE_REQUEST_CREATE_OR_UPDATE_FORM	= "matchRefereeRequests/createOrUpdateMatchRefereeRequestForm";
 
-	private static final String					VIEWS_MATCH_REFEREE_LIST							= "matchRefereeRequests/refereeList";
+	private static final String							VIEWS_MATCH_REFEREE_LIST							= "matchRefereeRequests/refereeList";
 
-	private static final String					VIEWS_MATCH_REFEREE_REQUEST_LIST					= "matchRefereeRequests/refereeRequestList";
+	private static final String							VIEWS_MATCH_REFEREE_REQUEST_LIST					= "matchRefereeRequests/refereeRequestList";
 
-	private final MatchRefereeRequestService	matchRefereeRequestService;
+	private final MatchRefereeRequestService			matchRefereeRequestService;
 
-	private final RefereeService				refereeService;
+	private final RefereeService						refereeService;
 
-	private final MatchService					matchService;
+	private final MatchService							matchService;
+
+	private final MatchRecordService					matchRecordService;
+
+	private final FootballPlayerMatchStatisticService	footballPlayerMatchStatisticService;
+
+	private final FootballPlayerService					footballPlayerService;
 
 
 	@Autowired
-	public MatchRefereeRequestController(final MatchRefereeRequestService matchRefereeRequestService, final RefereeService refereeService, final MatchService matchService, final UserService userService) {
+	public MatchRefereeRequestController(final MatchRefereeRequestService matchRefereeRequestService, final FootballPlayerService footballPlayerService, final RefereeService refereeService,
+		final FootballPlayerMatchStatisticService footballPlayerMatchStatisticService, final MatchRecordService matchRecordService, final MatchService matchService, final UserService userService) {
 		this.matchRefereeRequestService = matchRefereeRequestService;
 		this.matchService = matchService;
 		this.refereeService = refereeService;
+		this.matchRecordService = matchRecordService;
+		this.footballPlayerMatchStatisticService = footballPlayerMatchStatisticService;
+		this.footballPlayerService = footballPlayerService;
 	}
 
 	@InitBinder
@@ -187,6 +205,35 @@ public class MatchRefereeRequestController {
 			}
 		}
 
+		// Creamos un acta del partido
+		MatchRecord mr = new MatchRecord();
+
+		mr.setTitle(match.getTitle() + " Record");
+		mr.setMatch(match);
+		mr.setStatus(MatchRecordStatus.NOT_PUBLISHED);
+
+		this.matchRecordService.saveMatchRecord(mr);
+
+		// Añadimos los jugadores al acta
+		FootballPlayers fps = new FootballPlayers();
+
+		fps.getFootballPlayersList().addAll(this.footballPlayerService.findAllClubFootballPlayers(match.getFootballClub1().getId()));
+		fps.getFootballPlayersList().addAll(this.footballPlayerService.findAllClubFootballPlayers(match.getFootballClub2().getId()));
+
+		for (FootballPlayer fp : fps.getFootballPlayersList()) {
+			FootballPlayerMatchStatistic fpms = new FootballPlayerMatchStatistic();
+
+			fpms.setAssists(0);
+			fpms.setGoals(0);
+			fpms.setReceived_goals(0);
+			fpms.setRed_cards(0);
+			fpms.setYellow_cards(0);
+
+			fpms.setMatchRecord(mr);
+			fpms.setPlayer(fp);
+
+			this.footballPlayerMatchStatisticService.saveFootballPlayerStatistic(fpms);
+		}
 		//
 		return "redirect:/matchRefereeRequest/list/" + username;
 
