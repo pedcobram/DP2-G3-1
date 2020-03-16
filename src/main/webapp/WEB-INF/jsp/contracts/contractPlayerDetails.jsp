@@ -67,8 +67,6 @@
     		<a href="${fn:escapeXml(contractPlayerUrl)}" onclick="return confirm('${areYouSure}')" class="btn btn-default2">${fire}</a>
     	</c:if> 
     
-    <br/>
-    <br/>
-    <br/>
+
  </jsp:body> 
 </petclinic:layout>

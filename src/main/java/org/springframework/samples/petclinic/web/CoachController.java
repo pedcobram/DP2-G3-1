@@ -4,6 +4,7 @@ package org.springframework.samples.petclinic.web;
 import java.util.Collection;
 import java.util.Map;
 
+import javax.security.auth.login.CredentialException;
 import javax.validation.Valid;
 
 import org.springframework.beans.BeanUtils;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -226,6 +228,30 @@ public class CoachController {
 			//Si todo sale bien vamos a la vista de mi club
 			return "redirect:/myfootballClub/" + currentPrincipalName;
 		}
+	}
+
+	//DESPEDIR ENTRENADOR
+	@RequestMapping(value = "/coachs/{coachId}/fire")
+	public String processDeleteForm(@PathVariable("coachId") final int coachId) throws CredentialException, DataAccessException, DuplicatedNameException {
+
+		//Obtenemos el username del usuario actual conectado
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
+
+		Coach coach = this.coachService.findCoachById(coachId);
+
+		//Seguridad: Solo el dueño del club puede despedirlo
+		if (!coach.getClub().getPresident().getUser().getUsername().equals(currentPrincipalName)) {
+			throw new CredentialException("Forbidden Access");
+		}
+
+		coach.setClub(null);
+
+		this.coachService.saveCoach(coach);
+
+		//Habría que que restarle a los fondos del club la cláusula de rescisión ya que lo estamos despidiendo. Pero da fallo
+
+		return "redirect:/myfootballClub/" + currentPrincipalName;
 	}
 
 }
