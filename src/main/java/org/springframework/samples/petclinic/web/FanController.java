@@ -40,6 +40,61 @@ public class FanController {
 
 	}
 
+	@GetMapping(value = "/footballClub/{clubId}/fan/new")
+	public String initCreationForm(@PathVariable final Integer clubId, final Map<String, Object> model) {
+		//Obtenemos el username actual conectado
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
+		//Obtenemos el authenticated actual conectado
+		Authenticated thisUser = this.authenticatedService.findAuthenticatedByUsername(currentPrincipalName);
+		//Obtenemos club
+		FootballClub thisClub = this.footballClubService.findFootballClubById(clubId);
+
+		//Comprobamos que no es fan de otro equipo
+		if (this.fanService.existFan(thisUser.getId())) {
+			// si ya es fan vuelve a la vista de club con existFan igual a true
+			model.put("existFan", true);
+			model.put("footballClub", this.footballClubService.findFootballClubById(clubId));
+
+			return "footballClubs/footballClubDetails";
+		} else {
+			//inicializamos el fan
+			Fan f = new Fan();
+			f.setUser(thisUser);
+			f.setClub(thisClub);
+
+			model.put("fan", f);
+
+			return FanController.VIEWS_FAN_CREATE_OR_UPDATE_FORM;
+
+		}
+
+	}
+
+	@PostMapping(value = "/footballClub/{clubId}/fan/new")
+	public String processCreationForm(@PathVariable final Integer clubId, @Valid final Fan f, final BindingResult result) {
+		if (result.hasErrors()) {
+			return FanController.VIEWS_FAN_CREATE_OR_UPDATE_FORM;
+		} else {
+			//Obtenemos el username actual conectado
+			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+			String currentPrincipalName = authentication.getName();
+			//Obtenemos el authenticated actual conectado
+			Authenticated thisUser = this.authenticatedService.findAuthenticatedByUsername(currentPrincipalName);
+			//Obtenemos club
+			FootballClub thisClub = this.footballClubService.findFootballClubById(clubId);
+			//Creamos el fan
+
+			f.setUser(thisUser);
+			f.setClub(thisClub);
+			f.setVip(true);
+
+			this.fanService.saveFan(f);
+
+			return "redirect:/";
+		}
+	}
+
 	@GetMapping(value = "/footballClub/{clubId}/createFanNoVip")
 	public String createFanNoVip(@PathVariable final Integer clubId) {
 
@@ -63,38 +118,8 @@ public class FanController {
 		//Guardamos en la db el nuevo presidente
 		this.fanService.saveFan(f);
 
-		//Redirigimos a la vista del perfil del presidente
+		//Redirigimos a la vista welcome
 		return "redirect:/";
 	}
 
-	@GetMapping(value = "/footballClub/{clubId}/fan/new")
-	public String initCreationForm(@PathVariable final Integer clubId, final Map<String, Object> model) {
-		//Obtenemos el username actual conectado
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		String currentPrincipalName = authentication.getName();
-		//Obtenemos el authenticated actual conectado
-		Authenticated thisUser = this.authenticatedService.findAuthenticatedByUsername(currentPrincipalName);
-		//Obtenemos club
-		FootballClub thisClub = this.footballClubService.findFootballClubById(clubId);
-		//Creamos el fan
-		Fan f = new Fan();
-		f.setUser(thisUser);
-		f.setClub(thisClub);
-
-		model.put("fan", f);
-
-		return FanController.VIEWS_FAN_CREATE_OR_UPDATE_FORM;
-	}
-
-	@PostMapping(value = "/footballClub/{clubId}/fan/new")
-	public String processCreationForm(@Valid final Fan f, final BindingResult result) {
-		if (result.hasErrors()) {
-			return FanController.VIEWS_FAN_CREATE_OR_UPDATE_FORM;
-		} else {
-			//creating owner, user and authorities
-			this.fanService.saveFan(f);
-
-			return "redirect:/";
-		}
-	}
 }

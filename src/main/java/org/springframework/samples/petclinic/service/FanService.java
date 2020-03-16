@@ -20,10 +20,13 @@ public class FanService {
 
 	}
 
-	//Buscar todos los contratos de jugadores
-	@Transactional(readOnly = true)
+	@Transactional()
 	public void saveFan(final Fan f) throws DataAccessException {
 		this.fanRepository.save(f);
+	}
+	@Transactional()
+	public boolean existFan(final int auId) throws DataAccessException {
+		return this.fanRepository.existsByUserId(auId);
 	}
 
 }

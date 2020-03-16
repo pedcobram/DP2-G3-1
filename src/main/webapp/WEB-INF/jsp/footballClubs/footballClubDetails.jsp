@@ -55,9 +55,10 @@
     								 <fmt:message key="playerList"/></a>
     								
     <spring:url value="/footballClub/${footballClubId}/fan/new" var="FanUrl"></spring:url>
-    	<a href="${fn:escapeXml(FanUrl)}" class="btn btn-default">
+    	<a href="${fn:escapeXml(FanUrl)}" class="btn btn-default" >
     				<span class="glyphicon glyphicon-heart-empty"></span> 
     								 <fmt:message key="addFan"/></a>
+    <c:if test="${existFan}"><p style="color: red;"><fmt:message key="existFan"/></p></c:if>
     
     <br/>
     <br/>

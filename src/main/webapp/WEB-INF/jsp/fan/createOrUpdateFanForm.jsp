@@ -11,10 +11,15 @@
     <h2><fmt:message key="wantVip"/></h2>
     <p><fmt:message key="vip"/></p>
     
+    <br/>
+    
     <form:form modelAttribute="fan" class="form-horizontal" id="add-fan-form">
+   
         <div class="form-group has-feedback">
+        	<%-- <input type="hidden" name="clubId" value="${club.id}"/>
+   			<input type="hidden" name="userId" value="${user.id}"/>	
             <petclinic:inputField label="footballClub" name="club.name" readonly="true"/>
-            <petclinic:inputField label="nameLabel" name="user.user.username" readonly="true"/>
+            <petclinic:inputField label="nameLabel" name="user.user.username" readonly="true"/> --%>
             <petclinic:inputField label="creditCard" name="creditCard.creditCardNumber"/>
             <petclinic:inputField label="expirationDate" name="creditCard.expirationDate"/>
             <petclinic:inputField label="cvv" name="creditCard.cvv"/>
