@@ -2,6 +2,7 @@
 package org.springframework.samples.petclinic.web;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
@@ -10,9 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Match;
 import org.springframework.samples.petclinic.model.MatchRefereeRequest;
-import org.springframework.samples.petclinic.model.MatchRefereeRequests;
 import org.springframework.samples.petclinic.model.Referee;
-import org.springframework.samples.petclinic.model.Referees;
 import org.springframework.samples.petclinic.model.Enum.RequestStatus;
 import org.springframework.samples.petclinic.service.MatchRefereeRequestService;
 import org.springframework.samples.petclinic.service.MatchService;
@@ -59,16 +58,16 @@ public class MatchRefereeRequestController {
 	@RequestMapping(value = "/matches/refereeRequest/refereeList/{matchId}")
 	public String initMatchRefereeRequestList(@PathVariable("matchId") final int matchId, final Model model) throws DataAccessException {
 
-		Referees referees = new Referees();
-		MatchRefereeRequests mrrs = new MatchRefereeRequests();
+		List<Referee> referees = new ArrayList<>();
+		List<MatchRefereeRequest> matchRefereeRequests = new ArrayList<>();
 
-		referees.getRefereesList().addAll(this.refereeService.findAllReferees());
-		mrrs.getMatchRefereeRequestList().addAll(this.matchRefereeRequestService.findAllOnHoldMatchRefereeRequests());
+		referees.addAll(this.refereeService.findAllReferees());
+		matchRefereeRequests.addAll(this.matchRefereeRequestService.findAllOnHoldMatchRefereeRequests());
 
 		ArrayList<Referee> toDelete = new ArrayList<>();
 
-		for (Referee ref : referees.getRefereesList()) {
-			for (MatchRefereeRequest mrr : mrrs.getMatchRefereeRequestList()) {
+		for (Referee ref : referees) {
+			for (MatchRefereeRequest mrr : matchRefereeRequests) {
 				if (mrr.getMatch().getId() == matchId) {
 					if (mrr.getReferee().getId() == ref.getId()) {
 						toDelete.add(ref);
@@ -77,7 +76,7 @@ public class MatchRefereeRequestController {
 			}
 		}
 
-		referees.getRefereesList().removeAll(toDelete);
+		referees.removeAll(toDelete);
 
 		model.addAttribute("referees", referees);
 		model.addAttribute("matchId", matchId);
@@ -121,16 +120,16 @@ public class MatchRefereeRequestController {
 
 		this.matchRefereeRequestService.saveMatchRefereeRequest(matchRefereeRequest);
 
-		Referees referees = new Referees();
-		MatchRefereeRequests mrrs = new MatchRefereeRequests();
+		List<Referee> referees = new ArrayList<>();
+		List<MatchRefereeRequest> matchRefereeRequests = new ArrayList<>();
 
-		referees.getRefereesList().addAll(this.refereeService.findAllReferees());
-		mrrs.getMatchRefereeRequestList().addAll(this.matchRefereeRequestService.findAllOnHoldMatchRefereeRequests());
+		referees.addAll(this.refereeService.findAllReferees());
+		matchRefereeRequests.addAll(this.matchRefereeRequestService.findAllOnHoldMatchRefereeRequests());
 
 		ArrayList<Referee> toDelete = new ArrayList<>();
 
-		for (Referee ref : referees.getRefereesList()) {
-			for (MatchRefereeRequest mrr : mrrs.getMatchRefereeRequestList()) {
+		for (Referee ref : referees) {
+			for (MatchRefereeRequest mrr : matchRefereeRequests) {
 				if (mrr.getMatch().getId() == matchId) {
 					if (mrr.getReferee().getId() == ref.getId()) {
 						toDelete.add(ref);
@@ -139,7 +138,7 @@ public class MatchRefereeRequestController {
 			}
 		}
 
-		referees.getRefereesList().removeAll(toDelete);
+		referees.removeAll(toDelete);
 
 		model.addAttribute("referees", referees);
 
@@ -149,9 +148,9 @@ public class MatchRefereeRequestController {
 	@GetMapping(value = "/matchRefereeRequest/list/{refereeName}")
 	public String showMatchRefereeRequestList(final Map<String, Object> model, @PathVariable("refereeName") final String refereeName) {
 
-		MatchRefereeRequests matchRefereeRequests = new MatchRefereeRequests();
+		List<MatchRefereeRequest> matchRefereeRequests = new ArrayList<>();
 
-		matchRefereeRequests.getMatchRefereeRequestList().addAll(this.matchRefereeRequestService.findOnHoldMatchRefereeRequests(refereeName));
+		matchRefereeRequests.addAll(this.matchRefereeRequestService.findOnHoldMatchRefereeRequests(refereeName));
 
 		model.put("matchRefereeRequests", matchRefereeRequests);
 
@@ -178,10 +177,10 @@ public class MatchRefereeRequestController {
 		this.matchService.saveMatch(match);
 
 		// Eliminamos el resto de Match Referee Requests para ese partido
-		MatchRefereeRequests mrrs = new MatchRefereeRequests();
-		mrrs.getMatchRefereeRequestList().addAll(this.matchRefereeRequestService.findAllOnHoldMatchRefereeRequests());
+		List<MatchRefereeRequest> matchRefereeRequests = new ArrayList<>();
+		matchRefereeRequests.addAll(this.matchRefereeRequestService.findAllOnHoldMatchRefereeRequests());
 
-		for (MatchRefereeRequest m : mrrs.getMatchRefereeRequestList()) {
+		for (MatchRefereeRequest m : matchRefereeRequests) {
 			if (m.getMatch().getId() == matchId) {
 				this.matchRefereeRequestService.deleteMatchRefereeRequest(m);
 			}

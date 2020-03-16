@@ -31,7 +31,7 @@
  				</tr>
         	</thead>
         	<tbody>
-        <c:forEach items="${matchRequests.matchRequestList}" var="matchRequest">
+        <c:forEach items="${matchRequests}" var="matchRequest">
             <tr>
                 <td>
                     <c:out value="${matchRequest.title}"/>

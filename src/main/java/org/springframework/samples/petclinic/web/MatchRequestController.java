@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import javax.security.auth.login.CredentialException;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,6 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.FootballClub;
 import org.springframework.samples.petclinic.model.Match;
 import org.springframework.samples.petclinic.model.MatchRequest;
-import org.springframework.samples.petclinic.model.MatchRequests;
 import org.springframework.samples.petclinic.model.Enum.MatchStatus;
 import org.springframework.samples.petclinic.model.Enum.RequestStatus;
 import org.springframework.samples.petclinic.service.FootballClubService;
@@ -70,11 +70,14 @@ public class MatchRequestController {
 	@GetMapping(value = "/matchRequests/sent/{presidentName}")
 	public String showSentMatchRequestList(final Map<String, Object> model, @PathVariable("presidentName") final String presidentName) {
 
-		String footballClub1 = this.footballClubService.findFootballClubByPresident(presidentName).getName();
+		FootballClub footballClub1 = this.footballClubService.findFootballClubByPresident(presidentName);
 
-		MatchRequests matchRequests = new MatchRequests();
+		List<MatchRequest> matchRequests = new ArrayList<>();
 
-		matchRequests.getMatchRequestList().addAll(this.matchRequestService.findAllMatchRequestsSent(footballClub1));
+		//Si el club no existe o no es público la lista estará vacía por razones obvias
+		if (footballClub1 != null && footballClub1.getStatus() == true) {
+			matchRequests.addAll(this.matchRequestService.findAllMatchRequestsSent(footballClub1.getName()));
+		}
 
 		model.put("matchRequests", matchRequests);
 		model.put("receivedRequests", true);
@@ -85,11 +88,14 @@ public class MatchRequestController {
 	@GetMapping(value = "/matchRequests/received/{presidentName}")
 	public String showReceivedMatchRequestList(final Map<String, Object> model, @PathVariable("presidentName") final String presidentName) {
 
-		String footballClub1 = this.footballClubService.findFootballClubByPresident(presidentName).getName();
+		FootballClub footballClub1 = this.footballClubService.findFootballClubByPresident(presidentName);
 
-		MatchRequests matchRequests = new MatchRequests();
+		List<MatchRequest> matchRequests = new ArrayList<>();
 
-		matchRequests.getMatchRequestList().addAll(this.matchRequestService.findAllMatchRequestsReceived(footballClub1));
+		//Si el club no existe o no es público la lista estará vacía por razones obvias
+		if (footballClub1 != null && footballClub1.getStatus() == true) {
+			matchRequests.addAll(this.matchRequestService.findAllMatchRequestsReceived(footballClub1.getName()));
+		}
 
 		model.put("matchRequests", matchRequests);
 		model.put("receivedRequests", false);
@@ -98,13 +104,20 @@ public class MatchRequestController {
 	}
 
 	@GetMapping(value = "matchRequests/{presidentName}/new")
-	public String initCreateMatchRequest(final Map<String, Object> model, @PathVariable("presidentName") final String presidentName) throws DataAccessException {
+	public String initCreateMatchRequest(final Map<String, Object> model, @PathVariable("presidentName") final String presidentName) throws DataAccessException, CredentialException {
 
 		//Obtenemos el username actual conectado
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String currentPrincipalName = authentication.getName();
 
 		FootballClub footballClub1 = this.footballClubService.findFootballClubByPresident(currentPrincipalName);
+
+		//Validación: Si no tiene equipo o no está público no puede hacer peticiones de partidos
+		if (footballClub1 == null || footballClub1.getStatus() == false) {
+			//		return "redirect:/exception/forbidden"; ---> también se puede usar esta opción para ir a la pag de error forbidden
+			throw new CredentialException("Forbidden Access");
+		}
+
 		FootballClub footballClub2 = this.footballClubService.findFootballClubByPresident(presidentName);
 
 		MatchRequest matchRequest = new MatchRequest();
@@ -122,6 +135,12 @@ public class MatchRequestController {
 
 		model.put("stadiums", stadiums);
 		model.put("matchRequest", matchRequest);
+
+		String title = footballClub1.getName() + " vs " + footballClub2.getName() + " ";
+
+		model.put("titleMatch", title);
+
+		matchRequest.setTitle(title);
 
 		return MatchRequestController.VIEWS_MATCH_REQUEST_CREATE_OR_UPDATE_FORM;
 	}
@@ -143,7 +162,10 @@ public class MatchRequestController {
 
 		Date date = matchRequest.getMatchDate();
 
+		String title = footballClub1.getName() + " vs " + footballClub2.getName() + " ";
+
 		model.put("stadiums", stadiums);
+		model.put("titleMatch", title);
 
 		Date now = new Date(System.currentTimeMillis() - 1);
 		Calendar cal = Calendar.getInstance();
@@ -163,11 +185,8 @@ public class MatchRequestController {
 			return MatchRequestController.VIEWS_MATCH_REQUEST_CREATE_OR_UPDATE_FORM;
 		} else {
 
-			matchRequest.setId(matchRequest.getId());
-			matchRequest.setMatchDate(matchRequest.getMatchDate());
-			matchRequest.setStadium(matchRequest.getStadium());
 			matchRequest.setStatus(RequestStatus.ON_HOLD);
-			matchRequest.setTitle(matchRequest.getTitle());
+			matchRequest.setTitle(title);
 			matchRequest.setFootballClub1(footballClub1);
 			matchRequest.setFootballClub2(footballClub2);
 
@@ -182,7 +201,7 @@ public class MatchRequestController {
 	@RequestMapping(value = "/matchRequests/delete/{id}/{presidentName}")
 	public String processDeleteMatchRequest(@PathVariable("id") final int matchRequestId, @PathVariable("presidentName") final String presidentName, final ModelMap model) {
 
-		MatchRequests matchRequests = new MatchRequests();
+		List<MatchRequest> matchRequests = new ArrayList<>();
 
 		MatchRequest matchRequest = this.matchRequestService.findMatchRequestById(matchRequestId);
 
@@ -193,7 +212,7 @@ public class MatchRequestController {
 
 		String footballClub1 = this.footballClubService.findFootballClubByPresident(presidentName).getName();
 
-		matchRequests.getMatchRequestList().addAll(this.matchRequestService.findAllMatchRequestsSent(footballClub1));
+		matchRequests.addAll(this.matchRequestService.findAllMatchRequestsSent(footballClub1));
 		model.put("matchRequests", matchRequests);
 		model.put("receivedRequests", true);
 
@@ -203,7 +222,7 @@ public class MatchRequestController {
 	@RequestMapping(value = "/matchRequests/accept/{id}/{presidentName}")
 	public String processAcceptMatchRequest(@PathVariable("id") final int matchRequestId, @PathVariable("presidentName") final String presidentName, final ModelMap model) {
 
-		MatchRequests matchRequests = new MatchRequests();
+		List<MatchRequest> matchRequests = new ArrayList<>();
 
 		MatchRequest matchRequest = this.matchRequestService.findMatchRequestById(matchRequestId);
 
@@ -213,7 +232,7 @@ public class MatchRequestController {
 
 		String footballClub1 = this.footballClubService.findFootballClubByPresident(presidentName).getName();
 
-		matchRequests.getMatchRequestList().addAll(this.matchRequestService.findAllMatchRequestsReceived(footballClub1));
+		matchRequests.addAll(this.matchRequestService.findAllMatchRequestsReceived(footballClub1));
 		model.put("matchRequests", matchRequests);
 		model.put("receivedRequests", false);
 
@@ -234,7 +253,7 @@ public class MatchRequestController {
 	@RequestMapping(value = "/matchRequests/reject/{id}/{presidentName}")
 	public String processRejectMatchRequest(@PathVariable("id") final int matchRequestId, @PathVariable("presidentName") final String presidentName, final ModelMap model) {
 
-		MatchRequests matchRequests = new MatchRequests();
+		List<MatchRequest> matchRequests = new ArrayList<>();
 
 		MatchRequest matchRequest = this.matchRequestService.findMatchRequestById(matchRequestId);
 
@@ -244,7 +263,7 @@ public class MatchRequestController {
 
 		String footballClub1 = this.footballClubService.findFootballClubByPresident(presidentName).getName();
 
-		matchRequests.getMatchRequestList().addAll(this.matchRequestService.findAllMatchRequestsReceived(footballClub1));
+		matchRequests.addAll(this.matchRequestService.findAllMatchRequestsReceived(footballClub1));
 		model.put("matchRequests", matchRequests);
 		model.put("receivedRequests", false);
 

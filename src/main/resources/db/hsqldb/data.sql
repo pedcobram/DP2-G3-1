@@ -2,19 +2,19 @@
 INSERT INTO users(username,password,enabled) VALUES ('admin1','4dm1n',TRUE);
 INSERT INTO authorities VALUES ('admin1','admin');
 -- One owner user, named owner1 with passwor 0wn3r
-INSERT INTO users(username,password,enabled) VALUES ('owner1','0wn3r',TRUE);
+INSERT INTO users(username,password,enabled) VALUES ('owner1','owner1',TRUE);
 INSERT INTO authorities VALUES ('owner1','president');
-INSERT INTO users(username,password,enabled) VALUES ('owner2','0wn3r',TRUE);
+INSERT INTO users(username,password,enabled) VALUES ('owner2','owner2',TRUE);
 INSERT INTO authorities VALUES ('owner2','president');
-INSERT INTO users(username,password,enabled) VALUES ('owner3','0wn3r',TRUE);
+INSERT INTO users(username,password,enabled) VALUES ('owner3','owner3',TRUE);
 INSERT INTO authorities VALUES ('owner3','president');
-INSERT INTO users(username,password,enabled) VALUES ('owner4','0wn3r',TRUE);
+INSERT INTO users(username,password,enabled) VALUES ('owner4','owner4',TRUE);
 INSERT INTO authorities VALUES ('owner4','president');
-INSERT INTO users(username,password,enabled) VALUES ('owner5','0wn3r',TRUE);
+INSERT INTO users(username,password,enabled) VALUES ('owner5','owner5',TRUE);
 INSERT INTO authorities VALUES ('owner5','president');
-INSERT INTO users(username,password,enabled) VALUES ('owner6','0wn3r',TRUE);
+INSERT INTO users(username,password,enabled) VALUES ('owner6','owner6',TRUE);
 INSERT INTO authorities VALUES ('owner6','president');
-INSERT INTO users(username,password,enabled) VALUES ('owner7','0wn3r',TRUE);
+INSERT INTO users(username,password,enabled) VALUES ('owner7','owner7',TRUE);
 INSERT INTO authorities VALUES ('owner7','president');
 -- User Rafa
 INSERT INTO users(username,password,enabled) VALUES ('rafa','rafa',TRUE);

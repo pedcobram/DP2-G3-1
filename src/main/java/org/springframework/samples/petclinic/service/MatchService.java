@@ -33,6 +33,11 @@ public class MatchService {
 	}
 
 	@Transactional(readOnly = true)
+	public Collection<Match> findAllMyMatches(final String currentPrincipalName) throws DataAccessException {
+		return this.matchRepository.findAllMyMatches(currentPrincipalName);
+	}
+
+	@Transactional(readOnly = true)
 	public Match findMatchById(final int id) throws DataAccessException {
 		return this.matchRepository.findMatchById(id);
 	}

@@ -20,7 +20,7 @@
  				</tr>
         	</thead>
         	<tbody>
-        <c:forEach items="${matchRefereeRequests.matchRefereeRequestList}" var="matchRefereeRequest">
+        <c:forEach items="${matchRefereeRequests}" var="matchRefereeRequest">
             <tr>
                 <td>
                     <c:out value="${matchRefereeRequest.title}"/>

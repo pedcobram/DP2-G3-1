@@ -29,7 +29,7 @@
  				</tr>
         	</thead>
         	<tbody>
-        <c:forEach items="${matches.matchesList}" var="matches">
+        <c:forEach items="${matches}" var="matches">
             <tr>
                 <td>
                     <c:out value="${matches.title}"/>

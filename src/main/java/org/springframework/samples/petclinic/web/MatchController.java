@@ -8,9 +8,10 @@ import java.util.Map;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.samples.petclinic.model.FootballClub;
 import org.springframework.samples.petclinic.model.Match;
-import org.springframework.samples.petclinic.model.Matches;
 import org.springframework.samples.petclinic.model.Enum.MatchStatus;
+import org.springframework.samples.petclinic.service.FootballClubService;
 import org.springframework.samples.petclinic.service.MatchService;
 import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.security.core.Authentication;
@@ -27,16 +28,20 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 public class MatchController {
 
-	private static final String	VIEWS_MATCH_LIST		= "matches/matchList";
+	private static final String			VIEWS_MATCH_LIST		= "matches/matchList";
 
-	private static final String	VIEWS_UPDATE_MATCH_FORM	= "matches/updateMatchForm";
+	private static final String			VIEWS_UPDATE_MATCH_FORM	= "matches/updateMatchForm";
 
-	private final MatchService	matchService;
+	private final MatchService			matchService;
+
+	@Autowired
+	private final FootballClubService	footballClubService;
 
 
 	@Autowired
-	public MatchController(final MatchService matchService, final UserService userService) {
+	public MatchController(final MatchService matchService, final FootballClubService footballClubService, final UserService userService) {
 		this.matchService = matchService;
+		this.footballClubService = footballClubService;
 	}
 
 	@InitBinder
@@ -47,9 +52,17 @@ public class MatchController {
 	@GetMapping(value = "/matches/list")
 	public String showMatchList(final Map<String, Object> model) {
 
-		Matches matches = new Matches();
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
+		FootballClub footballClub = this.footballClubService.findFootballClubByPresident(currentPrincipalName);
 
-		matches.getMatchesList().addAll(this.matchService.findAllMatchRequests());
+		if (footballClub == null) {
+			return "footballClubs/myClubEmpty";
+		}
+
+		List<Match> matches = new ArrayList<>();
+
+		matches.addAll(this.matchService.findAllMyMatches(currentPrincipalName));
 
 		model.put("matches", matches);
 
@@ -100,9 +113,9 @@ public class MatchController {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String currentPrincipalName = authentication.getName();
 
-		Matches matches = new Matches();
+		List<Match> matches = new ArrayList<>();
 
-		matches.getMatchesList().addAll(this.matchService.findAllMatchRequestsByReferee(currentPrincipalName));
+		matches.addAll(this.matchService.findAllMatchRequestsByReferee(currentPrincipalName));
 
 		model.put("matches", matches);
 
