@@ -21,8 +21,21 @@
 	<fmt:message key="code.label.clause" var="Clausula"/>
 	<fmt:message key="code.label.salary" var="Salario"/> 
 	<fmt:message key="code.crud.sign" var="Fichar"/> 
+	<fmt:message key="code.security.firePlayer" var="areYouSure"/>
+	<fmt:message key="code.crud.fire" var="fire"/>
 
 <petclinic:layout pageName="coachs">
+
+<jsp:attribute name="customScript">
+	
+	<!-- Script para mostrar mensajes mousehover %-->
+	
+		<script>
+			$(document).ready(function(){
+  				$('[data-toggle="tooltip"]').tooltip();   
+			});
+		</script>
+	</jsp:attribute>
 
 <jsp:body>	
     <h2 style="color:black">${Coach}</h2>
@@ -86,6 +99,12 @@
     		</spring:url>	
     		<a data-toggle="tooltip" title="${mousehover}" href="${fn:escapeXml(newCoachUrl)}" class="btn btn-default">${Fichar}</a>
     </c:if>
+    
+    <c:if test="${coach.club.president.user.username == principalUsername}">
+    		<spring:url value="/coachs/{coachId}/fire" var="fireCoachUrl">
+    			<spring:param name="coachId" value="${coach.id}"/></spring:url>
+    		<a href="${fn:escapeXml(fireCoachUrl)}" onclick="return confirm('${areYouSure}')" class="btn btn-default2">${fire}</a>
+    	</c:if> 
   
  </jsp:body>
  
