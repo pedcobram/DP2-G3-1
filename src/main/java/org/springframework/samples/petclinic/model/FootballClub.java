@@ -33,13 +33,16 @@ import javax.validation.constraints.Past;
 import org.hibernate.validator.constraints.URL;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+
 @Entity
 @Table(name = "football_Clubs")
 public class FootballClub extends BaseEntity implements Serializable {
 
-	/**
-	 *
-	 */
 	private static final long	serialVersionUID	= 1L;
 
 	@OneToOne(optional = false)
@@ -72,130 +75,10 @@ public class FootballClub extends BaseEntity implements Serializable {
 	@Column(name = "fans")
 	private Integer				fans;
 
-	@Column(name = "coach")
-	private String				coach;
-
 	@Column(name = "money")
 	@NotNull
 	private Integer				money;
 
 	@Column(name = "status") 		//True=Published, False=Drafted
 	private Boolean				status;
-
-	//	@OneToMany(cascade = CascadeType.ALL)
-	//	private Set<FootballPlayer>	players;
-
-	//	private FootballCalendar		calendar;
-
-
-	//GETTER AND SETTER
-
-	public President getPresident() {
-		return this.president;
-	}
-
-	public void setPresident(final President president) {
-		this.president = president;
-	}
-
-	public String getCrest() {
-		return this.crest;
-	}
-
-	public void setCrest(final String Crest) {
-		this.crest = Crest;
-	}
-
-	public String getName() {
-		return this.name;
-	}
-
-	public void setName(final String Name) {
-		this.name = Name;
-	}
-
-	public void setFoundationDate(final Date foundationDate) {
-		this.foundationDate = foundationDate;
-	}
-
-	public Date getFoundationDate() {
-		return this.foundationDate;
-	}
-
-	public String getStadium() {
-		return this.stadium;
-	}
-
-	public void setStadium(final String Stadium) {
-		this.stadium = Stadium;
-	}
-
-	public Integer getFans() {
-		return this.fans;
-	}
-
-	public void setFans(final Integer Fans) {
-		this.fans = Fans;
-	}
-
-	public String getCity() {
-		return this.city;
-	}
-
-	public void setCity(final String City) {
-		this.city = City;
-	}
-
-	public String getCoach() {
-		return this.coach;
-	}
-
-	public void setCoach(final String Coach) {
-		this.coach = Coach;
-	}
-
-	public Integer getMoney() {
-		return this.money;
-	}
-
-	public void setMoney(final Integer Money) {
-		this.money = Money;
-	}
-
-	public Boolean getStatus() {
-		return this.status;
-	}
-
-	public void setStatus(final Boolean status) {
-		this.status = status;
-	}
-
-	//FootballPlayers Getter and Setter
-	/**
-	 * protected Set<FootballPlayer> getFootballPlayersInternal() {
-	 * if (this.players == null) {
-	 * this.players = new HashSet<>();
-	 * }
-	 * return this.players;
-	 * }
-	 *
-	 * protected void setFootballPlayersInternal(final Set<FootballPlayer> players) {
-	 * this.players = players;
-	 * }
-	 *
-	 * public List<FootballPlayer> getFootballPlayers() {
-	 * List<FootballPlayer> sortedFootballPlayers = new ArrayList<>(this.getFootballPlayersInternal());
-	 * PropertyComparator.sort(sortedFootballPlayers, new MutableSortDefinition("name", true, true));
-	 * return Collections.unmodifiableList(sortedFootballPlayers);
-	 * }
-	 *
-	 * public void addFootballPlayer(final FootballPlayer player) {
-	 * this.getFootballPlayersInternal().add(player);
-	 * player.setFootballClub(this);
-	 * }
-	 *
-	 * public boolean removeFootballPlayer(final FootballPlayer player) {
-	 * return this.getFootballPlayersInternal().remove(player);
-	 * }
-	 **/
 }

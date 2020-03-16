@@ -40,6 +40,8 @@
 @btn-default-bg:                 @spring-dark-grey;
 @btn-default-border:             @spring-dark-red;
 
+
+
 @nav-tabs-active-link-hover-color:        @spring-light-grey;
 @nav-tabs-active-link-hover-bg:           @spring-dark-grey;
 @nav-tabs-active-link-hover-border-color: @spring-dark-grey;
@@ -278,3 +280,50 @@ div.c {
   position: absolute;
   margin-left: auto;
 } 
+
+select[multiple],
+select[size] {
+  height: auto;
+  width: auto;
+}
+
+@navbar2-default-link-color:         @spring-light-grey;
+@navbar2-default-link-active-color:  @spring-light-grey;
+@navbar2-default-link-hover-color:   @spring-light-grey;
+@navbar2-default-link-hover-bg:      @spring-dark-red;
+@navbar2-default-toggle-icon-bar-bg: @spring-light-grey;
+@navbar2-default-toggle-hover-bg:    transparent;
+@navbar2-default-link-active-bg:     @spring-dark-red;
+
+
+@nav2-tabs-active-link-hover-color:        @spring-light-grey;
+@nav2-tabs-active-link-hover-bg:           @spring-dark-grey;
+@nav2-tabs-active-link-hover-border-color: @spring-dark-grey;
+@nav2-tabs-border-color:                   @spring-dark-grey;
+
+.nav2 > li > a {
+  color: @spring-grey;
+}
+
+.btn-default3 {
+
+  background-color: @spring-grey;
+  color:white;
+  border-width: 2px;
+  transition: border 0.15s;
+  -webkit-transition: border 0.15s;
+  -moz-transition: border 0.15s;
+  -o-transition: border 0.15s;
+  -ms-transition: border 0.15s;
+  text-transform: uppercase;
+  font-family: "montserratregular", sans-serif;
+  font-size: 13px;
+
+  &:hover,
+  &:focus,
+  &:active,
+  &.active,
+  .open .dropdown-toggle& {
+    background-color: #d20000;
+  }
+}

@@ -27,7 +27,6 @@ import lombok.EqualsAndHashCode;
 public class Match extends BaseEntity {
 
 	@Column(name = "title")
-	@NotEmpty
 	private String			title;
 
 	@Column(name = "match_date")
@@ -59,4 +58,6 @@ public class Match extends BaseEntity {
 	@JoinColumn(name = "matchRecord", referencedColumnName = "id")
 	private MatchRecord		matchRecord;
 
+	@Column(name = "creator")
+	private String			creator; //Será el username
 }

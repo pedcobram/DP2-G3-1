@@ -1,8 +1,10 @@
 
 package org.springframework.samples.petclinic.service;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -11,7 +13,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.samples.petclinic.model.FootballClub;
 import org.springframework.samples.petclinic.model.MatchRequest;
-import org.springframework.samples.petclinic.model.MatchRequests;
 import org.springframework.samples.petclinic.model.Enum.RequestStatus;
 import org.springframework.stereotype.Service;
 
@@ -28,11 +29,11 @@ public class MatchRequestServiceTests {
 	@Test
 	void shouldFindAllMatchRequests() {
 
-		MatchRequests mrs = new MatchRequests();
+		List<MatchRequest> mrs = new ArrayList<>();
 
-		mrs.getMatchRequestList().addAll(this.matchRequestService.findAllMatchRequests());
+		mrs.addAll(this.matchRequestService.findAllMatchRequests());
 
-		int count = mrs.getMatchRequestList().size();
+		int count = mrs.size();
 
 		Assertions.assertTrue(count == 4);
 	}
@@ -40,11 +41,11 @@ public class MatchRequestServiceTests {
 	@Test
 	void shouldFindAllMatchRequestsReceived() {
 
-		MatchRequests mrs = new MatchRequests();
+		List<MatchRequest> mrs = new ArrayList<>();
 
-		mrs.getMatchRequestList().addAll(this.matchRequestService.findAllMatchRequestsReceived("Sevilla Fútbol Club"));
+		mrs.addAll(this.matchRequestService.findAllMatchRequestsReceived("Sevilla Fútbol Club"));
 
-		int count = mrs.getMatchRequestList().size();
+		int count = mrs.size();
 
 		Assertions.assertTrue(count == 2);
 	}
@@ -52,11 +53,11 @@ public class MatchRequestServiceTests {
 	@Test
 	void shouldFindAllMatchRequestsSent() {
 
-		MatchRequests mrs = new MatchRequests();
+		List<MatchRequest> mrs = new ArrayList<>();
 
-		mrs.getMatchRequestList().addAll(this.matchRequestService.findAllMatchRequestsSent("Sevilla Fútbol Club"));
+		mrs.addAll(this.matchRequestService.findAllMatchRequestsSent("Sevilla Fútbol Club"));
 
-		int count = mrs.getMatchRequestList().size();
+		int count = mrs.size();
 
 		Assertions.assertTrue(count == 2);
 	}

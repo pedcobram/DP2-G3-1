@@ -24,7 +24,6 @@ import org.springframework.data.repository.Repository;
 import org.springframework.samples.petclinic.model.FootballClub;
 import org.springframework.samples.petclinic.model.FootballPlayer;
 import org.springframework.samples.petclinic.repository.FootballPlayerRepository;
-import org.springframework.samples.petclinic.repository.VetRepository;
 
 /**
  * Spring Data JPA specialization of the {@link VetRepository} interface

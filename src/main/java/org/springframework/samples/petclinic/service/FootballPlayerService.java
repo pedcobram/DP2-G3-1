@@ -33,6 +33,7 @@ import org.springframework.util.StringUtils;
 @Service
 public class FootballPlayerService {
 
+	@Autowired
 	private FootballPlayerRepository footRepository;
 
 
@@ -42,31 +43,31 @@ public class FootballPlayerService {
 	}
 
 	//Buscar todos los jugadores
-	@Transactional(readOnly = true)
+
 	public Collection<FootballPlayer> findAllFootballPlayers() throws DataAccessException {
 		return this.footRepository.findAll();
 	}
 
 	//Buscar todos los jugadores libres
-	@Transactional(readOnly = true)
+
 	public Collection<FootballPlayer> findAllFootballPlayersFA() throws DataAccessException {
 		return this.footRepository.findAllFreeAgents();
 	}
 
 	//Buscar todos los jugadores de un club
-	@Transactional(readOnly = true)
+
 	public Collection<FootballPlayer> findAllClubFootballPlayers(final int id) throws DataAccessException {
 		return this.footRepository.findPlayersByClubId(id);
 	}
 
 	//Buscar jugador por id
-	@Transactional(readOnly = true)
+
 	public FootballPlayer findFootballPlayerById(final int id) throws DataAccessException {
 		return this.footRepository.findById(id);
 	}
 
 	//Buscar equipo por id de jugador
-	@Transactional(readOnly = true)
+
 	public FootballClub findFootballClubByFootballPlayerId(final int id) throws DataAccessException {
 		return this.footRepository.findClubByPlayerId(id);
 	}
@@ -99,14 +100,9 @@ public class FootballPlayerService {
 		}
 	}
 
-	@Transactional
-	public void saveFootballPlayerClub(final FootballPlayer footballPlayer, final FootballClub footballClub) throws DataAccessException {
+	public void delete(final FootballPlayer a) {
+		this.footRepository.delete(a);
 
-		footballPlayer.setClub(footballClub);
-
-		this.footRepository.save(footballPlayer);
 	}
-
-	//TODO: Borrar jugador
 
 }
