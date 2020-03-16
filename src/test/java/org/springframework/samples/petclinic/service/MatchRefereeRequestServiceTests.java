@@ -1,6 +1,9 @@
 
 package org.springframework.samples.petclinic.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -9,7 +12,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.samples.petclinic.model.Match;
 import org.springframework.samples.petclinic.model.MatchRefereeRequest;
-import org.springframework.samples.petclinic.model.MatchRefereeRequests;
 import org.springframework.samples.petclinic.model.Referee;
 import org.springframework.samples.petclinic.model.Enum.RequestStatus;
 import org.springframework.stereotype.Service;
@@ -36,14 +38,14 @@ public class MatchRefereeRequestServiceTests {
 	@Test
 	void shouldFindAllOnHoldMatchRefereeRequests() {
 
-		MatchRefereeRequests mrrs = new MatchRefereeRequests();
+		List<MatchRefereeRequest> mrrs = new ArrayList<>();
 		Boolean res = true;
 
-		mrrs.getMatchRefereeRequestList().addAll(this.matchRefereeRequestService.findAllOnHoldMatchRefereeRequests());
+		mrrs.addAll(this.matchRefereeRequestService.findAllOnHoldMatchRefereeRequests());
 
-		int count = mrrs.getMatchRefereeRequestList().size();
+		int count = mrrs.size();
 
-		for (MatchRefereeRequest mrr : mrrs.getMatchRefereeRequestList()) {
+		for (MatchRefereeRequest mrr : mrrs) {
 			if (mrr.getStatus() != RequestStatus.ON_HOLD) {
 				res = false;
 				break;
@@ -57,14 +59,14 @@ public class MatchRefereeRequestServiceTests {
 	@Test
 	void shouldFindOnHoldMatchRefereeRequests() {
 
-		MatchRefereeRequests mrrs = new MatchRefereeRequests();
+		List<MatchRefereeRequest> mrrs = new ArrayList<>();
 		Boolean res = true;
 
-		mrrs.getMatchRefereeRequestList().addAll(this.matchRefereeRequestService.findOnHoldMatchRefereeRequests("referee1"));
+		mrrs.addAll(this.matchRefereeRequestService.findOnHoldMatchRefereeRequests("referee1"));
 
-		int count = mrrs.getMatchRefereeRequestList().size();
+		int count = mrrs.size();
 
-		for (MatchRefereeRequest mrr : mrrs.getMatchRefereeRequestList()) {
+		for (MatchRefereeRequest mrr : mrrs) {
 			if (mrr.getStatus() != RequestStatus.ON_HOLD) {
 				res = false;
 				break;

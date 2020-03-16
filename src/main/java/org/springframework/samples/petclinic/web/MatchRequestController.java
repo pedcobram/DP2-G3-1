@@ -189,6 +189,7 @@ public class MatchRequestController {
 			matchRequest.setTitle(title);
 			matchRequest.setFootballClub1(footballClub1);
 			matchRequest.setFootballClub2(footballClub2);
+			matchRequest.setCreator(currentPrincipalName); //Creador del Request
 
 			model.put("matchRequest", matchRequest);
 
@@ -244,6 +245,8 @@ public class MatchRequestController {
 		match.setStadium(matchRequest.getStadium());
 		match.setFootballClub1(matchRequest.getFootballClub1());
 		match.setFootballClub2(matchRequest.getFootballClub2());
+
+		match.setCreator(matchRequest.getCreator());
 
 		this.matchService.saveMatch(match);
 

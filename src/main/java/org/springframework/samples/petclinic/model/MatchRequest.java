@@ -27,7 +27,6 @@ import lombok.EqualsAndHashCode;
 public class MatchRequest extends BaseEntity {
 
 	@Column(name = "title")
-	//	@NotNull
 	private String			title;
 
 	@Column(name = "match_date")
@@ -53,5 +52,8 @@ public class MatchRequest extends BaseEntity {
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "referee", referencedColumnName = "username")
 	private Referee			referee;
+
+	@Column(name = "creator")
+	private String			creator; //Será el username
 
 }

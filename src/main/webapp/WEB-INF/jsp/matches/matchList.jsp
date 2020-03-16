@@ -50,13 +50,18 @@
                     <c:out value="${matches.footballClub2.name}"/>
                 </td>
                 <td>
-                	<c:if test="${matches.referee != null}">
-                   		<c:out value="${matches.referee.firstName}"/>, <c:out value="${matches.referee.lastName}"/>
-                    </c:if>
+                <c:choose>
+        			<c:when test="${matches.referee != null}">
+						<c:out value="${matches.referee.firstName} ${matches.referee.lastName}"/>
+					</c:when>
+            		<c:otherwise>
+            			<c:out value="None"/>
+					</c:otherwise>
+        		</c:choose>	
                 </td> 
                 <td>
-                  	<spring:url value="/matches/edit/${matches.id}" var='editMatchStatus'></spring:url>
-                	<a href="${fn:escapeXml(editMatchStatus)}" class="btn btn-default"><fmt:message key="editMatch"/></a>
+                  	<spring:url value="/matches/${matches.id}" var='matchStatus'></spring:url>
+                	<a href="${fn:escapeXml(matchStatus)}" class="btn btn-default">Data</a>
                 	
                 	<c:if test="${matches.referee == null}">
                 		<spring:url value="/matches/refereeRequest/refereeList/${matches.id}" var='editMatchStatus'></spring:url>

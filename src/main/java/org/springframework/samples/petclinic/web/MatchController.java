@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.security.auth.login.CredentialException;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class MatchController {
@@ -61,25 +63,57 @@ public class MatchController {
 		}
 
 		List<Match> matches = new ArrayList<>();
-
 		matches.addAll(this.matchService.findAllMyMatches(currentPrincipalName));
-
 		model.put("matches", matches);
 
 		return MatchController.VIEWS_MATCH_LIST;
 	}
 
+	@GetMapping("/matches/{matchId}")
+	public ModelAndView showMatch(@PathVariable("matchId") final int matchId) throws CredentialException {
+
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
+
+		Match match = this.matchService.findMatchById(matchId);
+		FootballClub myClub = this.footballClubService.findFootballClubByPresident(currentPrincipalName);
+
+		//Si no se es de uno de los dos equipos = acceso prohibido
+		if (!match.getFootballClub1().equals(myClub) && !match.getFootballClub2().equals(myClub)) {
+			throw new CredentialException("Forbidden Access");
+		}
+
+		//Mandar el nombre del creador a la vista para el botón
+		ModelAndView mav = new ModelAndView("matches/matchDetails");
+
+		mav.addObject(match);
+		mav.addObject("creatorName", match.getCreator());
+
+		if (!match.getMatchStatus().equals(MatchStatus.FINISHED)) {
+			mav.addObject("matchIsNotFinished", true);
+		}
+
+		return mav;
+	}
+
 	@GetMapping(value = "/matches/edit/{matchId}")
-	public String initUpdateMatchForm(@PathVariable("matchId") final int matchId, final Model model) {
+	public String initUpdateMatchForm(@PathVariable("matchId") final int matchId, final Model model) throws CredentialException {
 		Match match = this.matchService.findMatchById(matchId);
 
-		List<MatchStatus> status = new ArrayList<>();
+		//Obtenemos el username actual conectado
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
 
-		status.add(MatchStatus.TO_BE_PLAYED);
-		status.add(MatchStatus.ONGOING);
-		status.add(MatchStatus.FINISHED);
+		//Validación: Si no es el creador no puede editarlo
+		if (!match.getCreator().equals(currentPrincipalName) || match.getMatchStatus().equals(MatchStatus.FINISHED)) {
+			throw new CredentialException("Forbidden Access");
+		}
 
-		model.addAttribute("status", status);
+		List<String> stadiums = new ArrayList<String>();
+		stadiums.add(match.getFootballClub1().getStadium());
+		stadiums.add(match.getFootballClub2().getStadium());
+		model.addAttribute("stadiums", stadiums);
+
 		model.addAttribute(match);
 
 		return MatchController.VIEWS_UPDATE_MATCH_FORM;
@@ -95,11 +129,10 @@ public class MatchController {
 			Match match1 = this.matchService.findMatchById(matchId);
 
 			match.setId(match1.getId());
-			match.setMatchDate(match1.getMatchDate());
-			match.setStadium(match1.getStadium());
 			match.setFootballClub1(match1.getFootballClub1());
 			match.setFootballClub2(match1.getFootballClub2());
 			match.setReferee(match1.getReferee());
+			match.setCreator(match1.getCreator());
 
 			this.matchService.saveMatch(match);
 
