@@ -20,7 +20,7 @@
  				</tr>
         	</thead>
         	<tbody>
-        <c:forEach items="${compAdminRequests.compAdminRequestList}" var="compAdminRequest">
+        <c:forEach items="${compAdminRequests}" var="compAdminRequest">
             <tr>
                 <td>
                     <c:out value="${compAdminRequest.title}"/>

@@ -16,16 +16,23 @@
     <form:form modelAttribute="match" class="form-horizontal" id="add-match-form">
       
        		<div class="form-group has-feedback">
-            <petclinic:inputField label="Title" name="title" />
-            <petclinic:inputField label="Match Date" name="matchDate" readonly="true"/>
-           	<petclinic:inputField label="Stadium" name="stadium" readonly="true"/>
+            <petclinic:inputField label="Title" name="title" readonly="true"/>
+            <petclinic:inputField label="Match Date" name="matchDate"/>
+           	<div class="control-group">
+            	<petclinic:selectField label="Stadium;" name="stadium" names="${stadiums}" size="2"/>
+            </div>
             <petclinic:inputField label="Football Club 1" name="footballClub1.name" readonly="true"/>
             <petclinic:inputField label="Football Club 2" name="footballClub2.name" readonly="true"/>
-            <petclinic:inputField label="Referee first name" name="referee.firstName" readonly="true"/>
-             <petclinic:inputField label="Referee last name" name="referee.lastName" readonly="true"/>
-            <div class="control-group">
-            	<petclinic:selectField label="Status" name="matchStatus" names="${status}" size="3"/>
-            </div>
+            <div class="form-group">
+				<label class="col-sm-2 control-label">Referee:</label>
+				<div class="col-sm-10">
+					<div class="form-control" style="background-color: #f1f1f1"> 
+						<c:out value="${match.referee.firstName} ${match.referee.lastName}"/>
+					</div>
+				</div>	
+			</div>
+            <petclinic:inputField label="Status:" name="matchStatus" readonly="true"/>
+            
         	</div>
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">

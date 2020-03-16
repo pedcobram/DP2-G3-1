@@ -21,6 +21,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import javax.security.auth.login.CredentialException;
 import javax.validation.Valid;
 
 import org.springframework.beans.BeanUtils;
@@ -29,7 +30,6 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Coach;
 import org.springframework.samples.petclinic.model.ContractPlayer;
 import org.springframework.samples.petclinic.model.FootballClub;
-import org.springframework.samples.petclinic.model.FootballClubs;
 import org.springframework.samples.petclinic.model.FootballPlayer;
 import org.springframework.samples.petclinic.model.President;
 import org.springframework.samples.petclinic.service.CoachService;
@@ -101,13 +101,11 @@ public class FootballClubController {
 	public String showFootballClubList(final Map<String, Object> model) {
 
 		//Creamos una colección de equipos
-		FootballClubs footballClubs = new FootballClubs();
-
-		//La llenamos con todos los equipos de la db
-		footballClubs.getFootballClubList().addAll(this.footballClubService.findFootballClubs());
+		List<FootballClub> clubs = new ArrayList<>();
+		clubs.addAll(this.footballClubService.findFootballClubs());
 
 		//Ponemos en el modelo la colección de equipos
-		model.put("footballClubs", footballClubs);
+		model.put("footballClubs", clubs);
 
 		//Mandamos a la vista de listado de equipos
 		return "footballClubs/footballClubList";
@@ -122,6 +120,16 @@ public class FootballClubController {
 		mav.addObject(this.footballClubService.findFootballClubById(footballClubId));
 		mav.addObject(this.footballClubService.findCoachByClubId(footballClubId));
 		//devolvemos la vista con los datos del equipo en cuestión
+
+		//Quitamos el botón si no tiene equipo o no está público no puede hacer peticiones de partidos
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
+		FootballClub footballClub1 = this.footballClubService.findFootballClubByPresident(currentPrincipalName);
+
+		if (footballClub1 == null || footballClub1.getStatus() == false) {
+			mav.addObject("notHasAPublishedTeam", true);
+		}
+
 		return mav;
 	}
 
@@ -211,7 +219,7 @@ public class FootballClubController {
 
 	//Editar Club - Get
 	@GetMapping(value = "/myfootballClub/{principalUsername}/edit")
-	public String initUpdateFootballClubForm(@PathVariable("principalUsername") final String principalUsername, final Model model) {
+	public String initUpdateFootballClubForm(@PathVariable("principalUsername") final String principalUsername, final Model model) throws CredentialException {
 
 		model.addAttribute("news", false);
 
@@ -227,7 +235,7 @@ public class FootballClubController {
 		//Validación: Si el equipo está publicado no se puede editar ó
 		//Si el usuario actual no coincide con el de la url lanzamos la pantalla de error
 		if (!currentPrincipalName.equals(principalUsername) || footballClub.getStatus() == true) {
-			return "redirect:/oups";
+			throw new CredentialException("Forbidden Access");
 		}
 
 		//Seguimos en la pantalla de edición

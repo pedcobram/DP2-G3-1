@@ -28,7 +28,7 @@
  				</tr>
         	</thead>
         	<tbody>
-        <c:forEach items="${referees.refereesList}" var="referees">
+        <c:forEach items="${referees}" var="referees">
             <tr>
                 <td>
                     <c:out value="${referees.firstName}"/>, <c:out value="${referees.lastName}"/> 

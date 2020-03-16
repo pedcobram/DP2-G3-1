@@ -3,13 +3,15 @@
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
-<petclinic:layout pageName="error">
+<fmt:message key="code.error.forbidden" var="forbidden"/>
+
+<petclinic:layout pageName="errorForbidden">
 
 	<div class="col-12 text-center" >
-    	<spring:url value="/resources/images/err.png" var="petsImage"/>
-    	<img src="${petsImage}"/>
+    	<spring:url value="/resources/images/ForbiddenAccess.png" var="forbiddenImage"/>
+    	<img style="margin-bottom:10px" src="${forbiddenImage}"/>
 
-    	<h2><fmt:message key="oups"/></h2>
+    	<h2>${forbidden}</h2>
 
     	<p>${exception.message}</p>
      </div>

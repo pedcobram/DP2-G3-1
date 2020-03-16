@@ -2,19 +2,19 @@
 INSERT INTO users(username,password,enabled) VALUES ('admin1','4dm1n',TRUE);
 INSERT INTO authorities VALUES ('admin1','admin');
 -- One owner user, named owner1 with passwor 0wn3r
-INSERT INTO users(username,password,enabled) VALUES ('owner1','0wn3r',TRUE);
+INSERT INTO users(username,password,enabled) VALUES ('owner1','owner1',TRUE);
 INSERT INTO authorities VALUES ('owner1','president');
-INSERT INTO users(username,password,enabled) VALUES ('owner2','0wn3r',TRUE);
+INSERT INTO users(username,password,enabled) VALUES ('owner2','owner2',TRUE);
 INSERT INTO authorities VALUES ('owner2','president');
-INSERT INTO users(username,password,enabled) VALUES ('owner3','0wn3r',TRUE);
+INSERT INTO users(username,password,enabled) VALUES ('owner3','owner3',TRUE);
 INSERT INTO authorities VALUES ('owner3','president');
-INSERT INTO users(username,password,enabled) VALUES ('owner4','0wn3r',TRUE);
+INSERT INTO users(username,password,enabled) VALUES ('owner4','owner4',TRUE);
 INSERT INTO authorities VALUES ('owner4','president');
-INSERT INTO users(username,password,enabled) VALUES ('owner5','0wn3r',TRUE);
+INSERT INTO users(username,password,enabled) VALUES ('owner5','owner5',TRUE);
 INSERT INTO authorities VALUES ('owner5','president');
-INSERT INTO users(username,password,enabled) VALUES ('owner6','0wn3r',TRUE);
+INSERT INTO users(username,password,enabled) VALUES ('owner6','owner6',TRUE);
 INSERT INTO authorities VALUES ('owner6','president');
-INSERT INTO users(username,password,enabled) VALUES ('owner7','0wn3r',TRUE);
+INSERT INTO users(username,password,enabled) VALUES ('owner7','owner7',TRUE);
 INSERT INTO authorities VALUES ('owner7','president');
 -- User Rafa
 INSERT INTO users(username,password,enabled) VALUES ('rafa','rafa',TRUE);
@@ -85,14 +85,14 @@ INSERT INTO football_Clubs(id,status,name,crest,foundation_date,stadium,city,fan
 INSERT INTO football_Clubs(id,status,name,crest,foundation_date,stadium,city,fans,money,president_id) VALUES (9, true, 'Chelsea Football Club','https://upload.wikimedia.org/wikipedia/sco/thumb/c/cc/Chelsea_FC.svg/1200px-Chelsea_FC.svg.png', '1905-02-19', 'Stamford Bridge', 'London', '41000', '500000000',9);
  
 -- Match Requests
-INSERT INTO match_requests(id, title, match_date, stadium, status, football_Club1, football_Club2) VALUES(1, 'Partido amistoso 1', '2020-05-11 20:30', 'Ramón Sánchez-Pizjuan', 0, 'Sevilla Fútbol Club', 'Real Betis Balompié');
-INSERT INTO match_requests(id, title, match_date, stadium, status, football_Club1, football_Club2) VALUES(2, 'Partido amistoso 2', '2021-05-11 20:30', 'Ramón Sánchez-Pizjuan', 0, 'Sevilla Fútbol Club', 'Fútbol Club Barcelona');
-INSERT INTO match_requests(id, title, match_date, stadium, status, football_Club1, football_Club2) VALUES(3, 'Partido amistoso 3', '2020-05-11 20:30', 'Benito Villamarín', 0, 'Real Betis Balompié', 'Sevilla Fútbol Club' );
-INSERT INTO match_requests(id, title, match_date, stadium, status, football_Club1, football_Club2) VALUES(4, 'Partido amistoso 4', '2021-05-11 20:30', 'Camp Nou', 0, 'Fútbol Club Barcelona', 'Sevilla Fútbol Club');
+INSERT INTO match_requests(id, title, match_date, stadium, status, football_Club1, football_Club2, creator) VALUES(1, 'Partido amistoso 1', '2020-05-11 20:30', 'Ramón Sánchez-Pizjuan', 0, 'Sevilla Fútbol Club', 'Real Betis Balompié', 'presidente1');
+INSERT INTO match_requests(id, title, match_date, stadium, status, football_Club1, football_Club2, creator) VALUES(2, 'Partido amistoso 2', '2021-05-11 20:30', 'Ramón Sánchez-Pizjuan', 0, 'Sevilla Fútbol Club', 'Fútbol Club Barcelona', 'presidente1');
+INSERT INTO match_requests(id, title, match_date, stadium, status, football_Club1, football_Club2, creator) VALUES(3, 'Partido amistoso 3', '2020-05-11 20:30', 'Benito Villamarín', 0, 'Real Betis Balompié', 'Sevilla Fútbol Club', 'presidente1');
+INSERT INTO match_requests(id, title, match_date, stadium, status, football_Club1, football_Club2, creator) VALUES(4, 'Partido amistoso 4', '2021-05-11 20:30', 'Camp Nou', 0, 'Fútbol Club Barcelona', 'Sevilla Fútbol Club', 'presidente1');
 
 -- Matches
-INSERT INTO matches(id, title, match_date, match_status, stadium, football_Club1, football_Club2) VALUES(1, 'Match title 1', '2020-05-11 20:30', 0, 'Ramón Sánchez-Pizjuan', 'Sevilla Fútbol Club', 'Real Betis Balompié');
-INSERT INTO matches(id, title, match_date, match_status, stadium, football_Club1, football_Club2) VALUES(2, 'Match title 2', '2020-03-11 20:30', 2, 'Camp Nou', 'Fútbol Club Barcelona', 'Sevilla Fútbol Club');
+INSERT INTO matches(id, title, match_date, match_status, stadium, football_Club1, football_Club2, creator) VALUES(1, 'Match title 1', '2020-05-11 20:30', 0, 'Ramón Sánchez-Pizjuan', 'Sevilla Fútbol Club', 'Real Betis Balompié', 'presidente1');
+INSERT INTO matches(id, title, match_date, match_status, stadium, football_Club1, football_Club2, creator) VALUES(2, 'Match title 2', '2020-03-11 20:30', 1, 'Camp Nou', 'Fútbol Club Barcelona', 'Sevilla Fútbol Club', 'presidente1');
 
 -- Match Referee Requests
 INSERT INTO match_referee_request(id, title, status, username, match_id) VALUES(1, 'Test title', 0, 'referee1', 1);

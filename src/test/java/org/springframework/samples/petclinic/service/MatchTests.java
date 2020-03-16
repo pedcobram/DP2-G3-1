@@ -1,8 +1,10 @@
 
 package org.springframework.samples.petclinic.service;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -12,10 +14,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.samples.petclinic.model.FootballClub;
 import org.springframework.samples.petclinic.model.Match;
 import org.springframework.samples.petclinic.model.MatchRefereeRequest;
-import org.springframework.samples.petclinic.model.MatchRefereeRequests;
 import org.springframework.samples.petclinic.model.MatchRequest;
-import org.springframework.samples.petclinic.model.MatchRequests;
-import org.springframework.samples.petclinic.model.Matches;
 import org.springframework.samples.petclinic.model.Referee;
 import org.springframework.samples.petclinic.model.Enum.MatchStatus;
 import org.springframework.stereotype.Service;
@@ -42,11 +41,11 @@ public class MatchTests {
 	@Test
 	void shouldFindAllMatchRequests() {
 
-		Matches ms = new Matches();
+		List<Match> ms = new ArrayList<>();
 
-		ms.getMatchesList().addAll(this.matchService.findAllMatchRequests());
+		ms.addAll(this.matchService.findAllMatchRequests());
 
-		int count = ms.getMatchesList().size();
+		int count = ms.size();
 
 		Assertions.assertTrue(count == 2);
 
@@ -55,13 +54,13 @@ public class MatchTests {
 	@Test
 	void shouldFindAllMatchRequestsByReferee() {
 
-		Matches ms = new Matches();
+		List<Match> ms = new ArrayList<>();
 
 		Referee ref = this.refereeService.findRefereeById(1);
 
-		ms.getMatchesList().addAll(this.matchService.findAllMatchRequestsByReferee(ref.getUser().getUsername()));
+		ms.addAll(this.matchService.findAllMatchRequestsByReferee(ref.getUser().getUsername()));
 
-		int count = ms.getMatchesList().size();
+		int count = ms.size();
 
 		Assertions.assertTrue(count == 0);
 
@@ -133,7 +132,7 @@ public class MatchTests {
 		m.setId(100);
 		m.setTitle("JUnit test");
 		m.setMatchDate(date);
-		m.setMatchStatus(MatchStatus.ONGOING);
+		m.setMatchStatus(MatchStatus.FINISHED);
 		m.setStadium("Stadium");
 		m.setFootballClub1(fc1);
 		m.setFootballClub2(fc2);
@@ -154,21 +153,21 @@ public class MatchTests {
 
 		Match m = this.matchService.findMatchById(1);
 
-		MatchRequests mrs = new MatchRequests();
+		List<MatchRequest> mrs = new ArrayList<>();
 
-		mrs.getMatchRequestList().addAll(this.matchRequestService.findAllMatchRequests());
+		mrs.addAll(this.matchRequestService.findAllMatchRequests());
 
-		for (MatchRequest mrr : mrs.getMatchRequestList()) {
+		for (MatchRequest mrr : mrs) {
 			mrr.setFootballClub1(null);
 			mrr.setFootballClub2(null);
 			mrr.setReferee(null);
 		}
 
-		MatchRefereeRequests mrrs = new MatchRefereeRequests();
+		List<MatchRefereeRequest> mrrs = new ArrayList<>();
 
-		mrrs.getMatchRefereeRequestList().addAll(this.matchRefereeRequestService.findAllOnHoldMatchRefereeRequests());
+		mrrs.addAll(this.matchRefereeRequestService.findAllOnHoldMatchRefereeRequests());
 
-		for (MatchRefereeRequest mrr : mrrs.getMatchRefereeRequestList()) {
+		for (MatchRefereeRequest mrr : mrrs) {
 			if (mrr.getMatch().getId() == m.getId()) {
 				mrr.setMatch(null);
 				mrr.setReferee(null);

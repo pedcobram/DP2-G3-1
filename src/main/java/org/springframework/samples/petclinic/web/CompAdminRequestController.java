@@ -1,6 +1,8 @@
 
 package org.springframework.samples.petclinic.web;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
@@ -9,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Authenticated;
 import org.springframework.samples.petclinic.model.CompAdminRequest;
-import org.springframework.samples.petclinic.model.CompAdminRequests;
 import org.springframework.samples.petclinic.model.CompetitionAdmin;
 import org.springframework.samples.petclinic.model.Enum.RequestStatus;
 import org.springframework.samples.petclinic.service.AuthenticatedService;
@@ -62,9 +63,9 @@ public class CompAdminRequestController {
 	@GetMapping(value = "/competitionAdminRequest/list")
 	public String showCompetitionAdminRequestList(final Map<String, Object> model) {
 
-		CompAdminRequests compAdminRequests = new CompAdminRequests();
+		List<CompAdminRequest> compAdminRequests = new ArrayList<>();
 
-		compAdminRequests.getCompAdminRequestList().addAll(this.compAdminRequestService.findCompAdminRequests());
+		compAdminRequests.addAll(this.compAdminRequestService.findCompAdminRequests());
 
 		model.put("compAdminRequests", compAdminRequests);
 

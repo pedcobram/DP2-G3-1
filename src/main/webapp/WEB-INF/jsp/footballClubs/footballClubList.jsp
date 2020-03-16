@@ -29,7 +29,7 @@
  				</tr>
         	</thead>
         	<tbody>
-        <c:forEach items="${footballClubs.footballClubList}" var="footballClub">
+        <c:forEach items="${footballClubs}" var="footballClub">
             <tr>              		
                 <td>
                 <spring:url value="/footballClub/{footballClubId}" var="footballClubUrl">

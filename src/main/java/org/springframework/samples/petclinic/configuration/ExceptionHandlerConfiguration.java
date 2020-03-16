@@ -1,6 +1,7 @@
 
 package org.springframework.samples.petclinic.configuration;
 
+import javax.security.auth.login.CredentialException;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +27,15 @@ public class ExceptionHandlerConfiguration {
 		request.setAttribute("javax.servlet.error.request_uri", request.getPathInfo());
 		request.setAttribute("javax.servlet.error.status_code", 400);
 		request.setAttribute("exeption", ex);
-		return "exception";
+		return "exceptions/exception";
+	}
+
+	@ExceptionHandler(CredentialException.class)
+	public String forbiddenErrorHandler(final HttpServletRequest request, final CredentialException ex) {
+		request.setAttribute("javax.servlet.error.request_uri", request.getPathInfo());
+		request.setAttribute("javax.servlet.error.status_code", 400);
+		request.setAttribute("exeption", ex);
+		return "exceptions/forbidden";
 	}
 
 }

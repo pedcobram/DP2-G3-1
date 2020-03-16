@@ -10,6 +10,8 @@ public interface MatchRepository {
 
 	Collection<Match> findAllMatches();
 
+	Collection<Match> findAllMyMatches(String currentPrincipalName);
+
 	Collection<Match> findAllMatchRequestsByReferee(String currentPrincipalName);
 
 	Match findMatchById(int id) throws DataAccessException;

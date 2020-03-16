@@ -1,15 +1,16 @@
 
 package org.springframework.samples.petclinic.service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.samples.petclinic.model.MatchRefereeRequest;
-import org.springframework.samples.petclinic.model.MatchRefereeRequests;
 import org.springframework.samples.petclinic.model.Referee;
-import org.springframework.samples.petclinic.model.Referees;
 import org.springframework.samples.petclinic.model.User;
 import org.springframework.stereotype.Service;
 
@@ -61,11 +62,11 @@ public class RefereeServiceTests {
 
 		Boolean res = true;
 
-		Referees rs = new Referees();
+		List<Referee> rs = new ArrayList<>();
 
-		rs.getRefereesList().addAll(this.refereeService.findAllReferees());
+		rs.addAll(this.refereeService.findAllReferees());
 
-		for (Referee r : rs.getRefereesList()) {
+		for (Referee r : rs) {
 			if (r == null) {
 				res = false;
 				break;
@@ -81,11 +82,11 @@ public class RefereeServiceTests {
 
 		Referee ref = this.refereeService.findRefereeByUsername("referee1");
 
-		MatchRefereeRequests mrrs = new MatchRefereeRequests();
+		List<MatchRefereeRequest> mrrs = new ArrayList<>();
 
-		mrrs.getMatchRefereeRequestList().addAll(this.matchRefereeRequestService.findOnHoldMatchRefereeRequests("referee1"));
+		mrrs.addAll(this.matchRefereeRequestService.findOnHoldMatchRefereeRequests("referee1"));
 
-		for (MatchRefereeRequest mrr : mrrs.getMatchRefereeRequestList()) {
+		for (MatchRefereeRequest mrr : mrrs) {
 			mrr.setReferee(null);
 		}
 

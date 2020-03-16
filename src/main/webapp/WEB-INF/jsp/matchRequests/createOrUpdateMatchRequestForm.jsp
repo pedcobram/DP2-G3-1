@@ -8,6 +8,10 @@
 <%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 <%@ page contentType="text/html; charset=UTF-8" %> <!-- Para  tildes, ñ y caracteres especiales como el € %-->
 
+
+	<fmt:message key="code.title.friendlyMatch" var="friendlyMatch"/> 
+
+
 <petclinic:layout pageName="matchRequests">
    		
    	<jsp:body>
@@ -19,7 +23,15 @@
     <form:form modelAttribute="matchRequest" class="form-horizontal" id="add-match-request-form">
       
        		<div class="form-group has-feedback">
-            <petclinic:inputField label="Title" name="title"/>
+       		<div class="form-group">
+				<label class="col-sm-2 control-label">Title:</label>
+				<div class="col-sm-10">
+					<div class="form-control" style="background-color: #f1f1f1"> 
+						${titleMatch} ${friendlyMatch} 
+						<span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
+					</div>
+				</div>	
+			</div>
             <petclinic:inputField label="Match Date" name="matchDate"/>
             <div class="control-group">
             	<petclinic:selectField label="Stadium" name="stadium" names="${stadiums}" size="2"/>

@@ -112,12 +112,7 @@
 											</petclinic:menuItem>
 										</sec:authorize>
 										
-										<sec:authorize access="hasAuthority('president')">	
-											<petclinic:menuItem active="${name eq 'presidents'}" url="/matches/list"
-												title="list match">
-												<span><fmt:message key="matchList"/></span>
-											</petclinic:menuItem>
-										</sec:authorize>
+										
 										
 										<sec:authorize access="hasAuthority('president')">	
 											<petclinic:menuItem active="${name eq 'presidents'}" url="/matchRequests/sent/${principalUsername}"
@@ -218,7 +213,16 @@
     		<a   href="${fn:escapeXml(contractPlayersUrl)}" class="btn btn-default3"><span class="glyphicon glyphicon-inbox"></span> Contratos Publicitarios</a>
     		
     		<spring:url value="/contractPlayer/list" var="contractPlayersUrl"></spring:url>
-    		<a   href="${fn:escapeXml(contractPlayersUrl)}" class="btn btn-default3"><span class="glyphicon glyphicon-euro"></span> Fichajes</a>
+    		<a   href="${fn:escapeXml(contractPlayersUrl)}" class="btn btn-default3"><span class="glyphicon glyphicon-sort"></span> Fichajes</a>
+    		
+    		<spring:url value="/matches/list" var="matchesUrl"></spring:url>
+    		<a   href="${fn:escapeXml(matchesUrl)}" class="btn btn-default3"><span class="glyphicon glyphicon-list-alt"></span> <fmt:message key="matchList"/></a>
+    		
+    		
+    		
+									
+										
+    		
     
     	</div> 
 	</nav>
