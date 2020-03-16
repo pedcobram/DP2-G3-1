@@ -88,6 +88,11 @@
     		<a href="${fn:escapeXml(contractPlayerUrl)}" class="btn btn-default">${Contrato}</a>
     	</c:if> 
     
+    <spring:url value="/footballPlayerStatistic/detail/{playerId}" var="viewPlayerStatistics">
+        	<spring:param name="playerId" value="${footballPlayer.id}"/>
+    </spring:url>
+    <a href="${fn:escapeXml(viewPlayerStatistics)}" class="btn btn-default"><fmt:message key="viewPlayerStatistics"/></a>
+    
 
  </jsp:body> 
 </petclinic:layout>
