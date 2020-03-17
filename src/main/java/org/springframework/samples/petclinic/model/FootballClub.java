@@ -28,7 +28,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Past;
 
 import org.hibernate.validator.constraints.URL;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -60,7 +59,6 @@ public class FootballClub extends BaseEntity implements Serializable {
 	@Column(name = "foundation_date")
 	@Temporal(TemporalType.DATE)
 	@DateTimeFormat(pattern = "yyyy/MM/dd")
-	@Past
 	@NotNull
 	private Date				foundationDate;
 
@@ -72,13 +70,13 @@ public class FootballClub extends BaseEntity implements Serializable {
 	@NotEmpty
 	private String				city;
 
-	@Column(name = "fans")
-	private Integer				fans;
-
 	@Column(name = "money")
 	@NotNull
 	private Integer				money;
 
-	@Column(name = "status") 		//True=Published, False=Drafted
+	@Column(name = "fans")
+	private Integer				fans;
+
+	@Column(name = "status")
 	private Boolean				status;
 }

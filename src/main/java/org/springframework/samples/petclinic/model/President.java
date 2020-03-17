@@ -24,6 +24,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Pattern;
 
 import org.springframework.core.style.ToStringCreator;
 
@@ -32,8 +33,8 @@ import org.springframework.core.style.ToStringCreator;
 public class President extends Person {
 
 	@Column(name = "telephone")
-	@NotEmpty
 	@Digits(fraction = 0, integer = 10)
+	@NotEmpty
 	private String	telephone;
 
 	@Column(name = "email")
@@ -42,6 +43,7 @@ public class President extends Person {
 
 	@Column(name = "dni")
 	@NotEmpty
+	@Pattern(regexp = "[0-9]{7,8}[A-Za-z]")
 	private String	dni;
 
 	//
