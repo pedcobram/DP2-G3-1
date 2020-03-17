@@ -20,6 +20,7 @@ import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.samples.petclinic.model.Contract;
 import org.springframework.samples.petclinic.model.ContractCommercial;
 import org.springframework.samples.petclinic.model.ContractPlayer;
 import org.springframework.samples.petclinic.repository.ContractRepository;
@@ -74,7 +75,11 @@ public class ContractService {
 	}
 
 	@Transactional
-	public void saveContractCommercial(final ContractCommercial contractCommercial) {
+	public void saveContractCommercial(final ContractCommercial contractCommercial) throws DataAccessException {
 		this.contractRepository.save(contractCommercial);
+	}
+
+	public void deleteContract(final Contract contract) throws DataAccessException {
+		this.contractRepository.delete(contract);
 	}
 }

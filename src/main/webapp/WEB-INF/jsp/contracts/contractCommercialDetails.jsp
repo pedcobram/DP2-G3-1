@@ -7,7 +7,7 @@
 <%@ page contentType="text/html; charset=UTF-8" %> <!-- Para  tildes, ñ y caracteres especiales como el € %-->
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
-<petclinic:layout pageName="contractCommercial">
+<petclinic:layout pageName="contractsCommercial">
 
 	<jsp:attribute name="customScript">
 	
@@ -27,7 +27,7 @@
     <table class="table table-striped">
         <tr>
             <th>Banner publicitario:</th>
-            <td><img width=30px height= auto hspace="20"; src="${contractCommercial.publicity}"/></td>
+            <td><img width=30px height= auto hspace="20" src="${contractCommercial.publicity}"/></td>
         </tr>
         <tr>
             <th>Contrato con:</th>
@@ -50,6 +50,18 @@
             <td><c:out value="${contractCommercial.clause}"/></td>
         </tr>    
     </table>
+    <c:choose>
+		<c:when test="${not empty footballClub}">
+			<spring:url value="/contractsCommercial/{contractCommercialId}/addToMyClub" var="addContractToClubURL">
+		   		<spring:param name="contractCommercialId" value="${contractCommercial.id}"/>
+		   	</spring:url>	
+		   		<a data-toggle="tooltip" href="${fn:escapeXml(addContractToClubURL)}" class="btn btn-default">Añadir Contrato Publicitario</a>
+		</c:when>    
+		<c:otherwise>
+			<p style="color:red">Para poder adquirir un contrato publicitario primero necesitas un Club</p>
+		</c:otherwise>
+	</c:choose>
+       	
     
     <br/>
     <br/>

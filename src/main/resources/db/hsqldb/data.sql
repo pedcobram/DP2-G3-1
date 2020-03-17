@@ -94,6 +94,11 @@ INSERT INTO visits(id,pet_id,visit_date,description) VALUES (2, 8, '2013-01-02',
 INSERT INTO visits(id,pet_id,visit_date,description) VALUES (3, 8, '2013-01-03', 'neutered');
 INSERT INTO visits(id,pet_id,visit_date,description) VALUES (4, 7, '2013-01-04', 'spayed');
 
+INSERT INTO contract_Commercial(id,end_contract_clause,end_date,start_date,money,publicity) VALUES (1, 1000,'2023-01-01','2013-01-01',100000,'https://e00-marca.uecdn.es/assets/sports/logos/football/png/144x144/179.png');
+INSERT INTO contract_Commercial(id,end_contract_clause,end_date,start_date,money,publicity) VALUES (2, 1000,'2020-01-01','2010-01-01',100000,'https://e00-marca.uecdn.es/assets/sports/logos/football/png/144x144/186.png');
+
+
+
 INSERT INTO football_Clubs(id,status,name,crest,foundation_date,stadium,city,fans,coach,money,president_id) VALUES (1, true, 'Sevilla Fútbol Club','https://e00-marca.uecdn.es/assets/sports/logos/football/png/144x144/179.png', '1889-01-25', 'Ramón Sánchez-Pizjuan', 'Seville', '44000', 'Julen Lopetegui', '150000000',1);
 INSERT INTO football_Clubs(id,status,name,crest,foundation_date,stadium,city,fans,coach,money,president_id) VALUES (2, true, 'Real Madrid Club de Fútbol','https://e00-marca.uecdn.es/assets/sports/logos/football/png/144x144/186.png', '1902-03-06', 'Santiago Bernabeu', 'Madrid', '81000', 'Zinedine Zidane', '600000000',2);
 INSERT INTO football_Clubs(id,status,name,crest,foundation_date,stadium,city,fans,coach,money,president_id) VALUES (3, true, 'Fútbol Club Barcelona','https://e00-marca.uecdn.es/assets/sports/logos/football/png/144x144/178.png', '1899-11-29', 'Camp Nou', 'Barcelona', '99300', 'Quique Setién', '650000000',3);

@@ -31,6 +31,8 @@ public interface ContractRepository {
 
 	void save(ContractCommercial contractCommercial) throws DataAccessException;
 
+	void delete(Contract contract) throws DataAccessException;
+
 	Collection<ContractCommercial> findAllCommercialContracts() throws DataAccessException;
 
 	ContractCommercial findContractCommercialById(int id) throws DataAccessException;

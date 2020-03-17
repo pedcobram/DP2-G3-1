@@ -96,9 +96,8 @@
     	</spring:url>
     	<a   href="${fn:escapeXml(footballPlayersUrl)}" class="btn btn-default"><span class="glyphicon glyphicon-user"></span> <fmt:message key="playerList"/></a>
     
-		<spring:url value="/footballClub/contractCommercials/new" var="newContractUrl"></spring:url>	
-    	<a data-toggle="tooltip" href="${fn:escapeXml(newContractUrl)}" class="btn btn-default">Crear Contrato Publicitario</a>
-    	
+    	<spring:url value="/contractsCommercial" var="contractCommercialUrl"></spring:url>	
+    	<a data-toggle="tooltip" href="${fn:escapeXml(contractCommercialUrl)}" class="btn btn-default">Lista de contratos comerciales</a>
     </c:if>  
     
     <security:authorize access="hasAnyAuthority('president')">
