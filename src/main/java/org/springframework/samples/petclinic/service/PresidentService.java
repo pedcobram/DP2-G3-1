@@ -16,11 +16,8 @@
 
 package org.springframework.samples.petclinic.service;
 
-import java.util.Collection;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
-import org.springframework.samples.petclinic.model.Authenticated;
 import org.springframework.samples.petclinic.model.President;
 import org.springframework.samples.petclinic.repository.PresidentRepository;
 import org.springframework.stereotype.Service;
@@ -29,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class PresidentService {
 
+	@Autowired
 	private PresidentRepository	presidentRepository;
 
 	@Autowired
@@ -50,11 +48,6 @@ public class PresidentService {
 		return this.presidentRepository.findByUsername(userName);
 	}
 
-	@Transactional(readOnly = true)
-	public Collection<President> findPresidentByLastName(final String lastName) throws DataAccessException {
-		return this.presidentRepository.findByLastName(lastName);
-	}
-
 	@Transactional
 	public void savePresident(final President president) throws DataAccessException {
 		this.presidentRepository.save(president);
@@ -67,10 +60,4 @@ public class PresidentService {
 		this.presidentRepository.delete(president);
 
 	}
-
-	@Transactional(readOnly = true)
-	public Authenticated findAuthenticatedByUsername(final String userName) throws DataAccessException {
-		return this.presidentRepository.findAuthenticatedByUsername(userName);
-	}
-
 }

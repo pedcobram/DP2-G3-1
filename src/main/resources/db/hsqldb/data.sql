@@ -45,16 +45,15 @@ INSERT INTO users(username,password,enabled) VALUES ('referee2','referee2',TRUE)
 INSERT INTO authorities VALUES ('referee2','referee'); 
 
 -- Competition Admin Requests 
-INSERT INTO comp_Admin_Requests(id, title, description, status, username) VALUES (1, 'Test title 01', 'Test description 01', 0, 'rafa');
+INSERT INTO comp_Admin_Requests(id, title, description, status, username) VALUES (1, 'Test title 01', 'Test description 01', 0, 'presidente1');
 
 -- Competition Admin
 INSERT INTO competition_Admins VALUES (1, 'Pedro Manuel', 'Cobos Ramos', '22222222A', 'pedcobram@alum.us.es', '600222333', 'pedro');
 
 -- Authenticated users
-INSERT INTO authenticateds VALUES (1, 'Rafael', 'Liébana Fuentes', '11111111A', 'rafliefue@alum.us.es', '600111222', 'rafa');
-INSERT INTO authenticateds VALUES (3, 'Ignacio José', 'Rodríguez Flores', '33333333A', 'ignrodflo@alum.us.es', '600333444', 'ignacio');
-INSERT INTO authenticateds VALUES (4, 'Gonzalo', 'Fernandez Jiménez', '44444444A', 'gonferjim@alum.us.es', '600444555', 'gonzalo');
-INSERT INTO authenticateds VALUES (5, 'Manuel', 'Sánchez Rodríguez', '55555555A', 'mansanrod@alum.us.es', '600555666', 'manuel');
+INSERT INTO authenticateds VALUES (1, 'Ignacio José', 'Rodríguez Flores', '33333333A', 'ignrodflo@alum.us.es', '600333444', 'ignacio');
+INSERT INTO authenticateds VALUES (2, 'Gonzalo', 'Fernandez Jiménez', '44444444A', 'gonferjim@alum.us.es', '600444555', 'gonzalo');
+INSERT INTO authenticateds VALUES (3, 'Manuel', 'Sánchez Rodríguez', '55555555A', 'mansanrod@alum.us.es', '600555666', 'manuel');
 
 
 -- President users

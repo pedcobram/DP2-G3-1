@@ -16,31 +16,19 @@
 
 package org.springframework.samples.petclinic.repository.springdatajpa;
 
-import java.util.Collection;
-
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 import org.springframework.data.repository.query.Param;
-import org.springframework.samples.petclinic.model.Authenticated;
 import org.springframework.samples.petclinic.model.President;
 import org.springframework.samples.petclinic.repository.PresidentRepository;
 
 public interface SpringDataPresidentRepository extends PresidentRepository, Repository<President, Integer> {
 
 	@Override
-	@Query("SELECT DISTINCT a FROM President a WHERE a.lastName LIKE :lastName%")
-	Collection<President> findByLastName(@Param("lastName") String lastName);
-
-	@Override
 	@Query("SELECT a FROM President a WHERE a.id =:id")
 	President findById(@Param("id") int id);
 
 	@Override
-	@Query("SELECT a FROM President a WHERE a.user.username =:username")
-	President findByUsername(@Param("username") String username);
-
-	@Override
-	@Query("SELECT a FROM Authenticated a WHERE a.user.username =:username")
-	Authenticated findAuthenticatedByUsername(@Param("username") String username);
-
+	@Query("select p from President p where p.user.username = ?1")
+	President findByUsername(String username);
 }

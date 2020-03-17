@@ -39,7 +39,7 @@ public class CompetitionAdminServiceTests {
 	@Test
 	void shouldSaveCompetitionAdmin() {
 
-		User rafa = this.competitionAdminService.findAuthenticatedByUsername("rafa").getUser();
+		User ignacio = this.competitionAdminService.findAuthenticatedByUsername("ignacio").getUser();
 
 		CompetitionAdmin compAdmin = new CompetitionAdmin();
 
@@ -49,7 +49,7 @@ public class CompetitionAdminServiceTests {
 		compAdmin.setEmail("Test@gmail.com");
 		compAdmin.setTelephone("548927415");
 		compAdmin.setDni("49589845T");
-		compAdmin.setUser(rafa);
+		compAdmin.setUser(ignacio);
 
 		this.competitionAdminService.saveCompetitionAdmin(compAdmin);
 
