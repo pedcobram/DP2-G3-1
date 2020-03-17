@@ -8,31 +8,49 @@
 <%@ page contentType="text/html; charset=UTF-8" %> <!-- Para  tildes, ñ y caracteres especiales como el € %-->
 
 <petclinic:layout pageName="fanVip">
-   <c:if test="${isNew}"> <h2><fmt:message key="wantVip"/></h2>
-    <p><fmt:message key="vip"/></p></c:if>
-    
+    <h2><fmt:message key="wantVip"/></h2>
+    <p><fmt:message key="footballClub"/>: ${fan.club.name}   </p>
+    <p><fmt:message key="vip"/></p>
     <br/>
     
-    <form:form modelAttribute="fan" class="form-horizontal" id="add-fan-form">
+     <form:form modelAttribute="fan" class="form-horizontal" id="add-fan-form">
    
         <div class="form-group has-feedback">
+         	<input type="hidden" name="id" value="${fan.id}"/>
             <petclinic:inputField label="creditCard" name="creditCard.creditCardNumber"/>
             <petclinic:inputField label="expirationDate" name="creditCard.expirationDate"/>
             <petclinic:inputField label="cvv" name="creditCard.cvv"/>
         </div>
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
-                
-                    
-                    <button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-ok"></span><fmt:message key="yesVip"/></button>
+            	 <c:choose>
+                        <c:when test="${isNew}">
+                            <button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-ok"></span><fmt:message key="yesVip"/></button>
             		<spring:url value="/footballClub/${fan.club.id}/createFanNoVip" var="FanUrl"></spring:url>
     	<a href="${fn:escapeXml(FanUrl)}" class="btn btn-default">
     				<span class="glyphicon glyphicon-remove"></span> 
     								 <fmt:message key="noVip"/></a>
+                        </c:when>
+                        <c:otherwise>
+                            <button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-ok"></span><fmt:message key="yesVip"/></button>
+    						<a href="/" class="btn btn-default"><span class="glyphicon glyphicon-remove"></span><fmt:message key="noVip"/></a>
+
+                        </c:otherwise>
+                    </c:choose>
+            
+            
+            
+            
+            
+            
+                <c:if test="${isNew}">
                 
+                    
+                    
+                </c:if>
             </div>
         </div>
-    </form:form>
+    </form:form> 
      
                    
 </petclinic:layout>

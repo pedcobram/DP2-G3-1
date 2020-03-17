@@ -36,20 +36,34 @@ public class WelcomeController {
 	})
 	public String welcome(final Map<String, Object> model) {
 
-		//Obtenemos el username actual conectado
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		String currentPrincipalName = authentication.getName();
-		if (authentication.isAuthenticated()) {
-			//Obtenemos el authenticated actual conectado
-			Authenticated thisUser = this.authenticatedService.findAuthenticatedByUsername(currentPrincipalName);
-			if (this.fanService.existFan(thisUser.getId())) {
-				boolean VIP = this.fanService.findByUserId(thisUser.getId()).isVip();
-				model.put("isVip", VIP);
-				model.put("isFan", true);
+		//bloque try por si el usuario no esta logueado
+		try {
+			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
+			if (authentication.isAuthenticated()) {
+
+				//Obtenemos el authenticated actual conectado
+				String currentPrincipalName = authentication.getName();
+				Authenticated thisUser = this.authenticatedService.findAuthenticatedByUsername(currentPrincipalName);
+				//Comprobamos si es Fan y si es asi comprobamos si es VIP
+				if (this.fanService.existFan(thisUser.getId())) {
+					boolean VIP = this.fanService.findByUserId(thisUser.getId()).isVip();
+					model.put("isVip", VIP);
+					model.put("isFan", true);
+					//info, sobre el club que es fan, que queramos mostrar en inicio
+
+				}
 			}
+			return "welcome";
+
+		} catch (NullPointerException n) {
+			// si no esta logueado va la vista Welcome con isVip y isFan a FALSE
+			model.put("isVip", false);
+			model.put("isFan", false);
+
+			return "welcome";
+
 		}
 
-		return "welcome";
 	}
 }

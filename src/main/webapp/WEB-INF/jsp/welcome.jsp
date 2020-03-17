@@ -17,10 +17,14 @@
     </div> %--> 
     
     <c:if test="${isFan&&!isVip}"> 
-    <spring:url value="/noVip" var="FanUrl"></spring:url>
-    	<a href="${fn:escapeXml(FanUrl)}" class="btn btn-default">
+   
+    	<a href="/footballClub/noVip" class="btn btn-default">
     					 <fmt:message key="noVip"/></a>
-    
-    
+	 	
     </c:if>
+    <c:if test="${isFan}"> 
+    <a href="/footballClub/fan/delete" class="btn btn-default">
+    					 <fmt:message key="noVip"/></a>
+    </c:if>
+    
 </petclinic:layout>

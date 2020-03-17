@@ -14,6 +14,7 @@ import org.springframework.samples.petclinic.service.AuthoritiesService;
 import org.springframework.samples.petclinic.service.FanService;
 import org.springframework.samples.petclinic.service.FootballClubService;
 import org.springframework.samples.petclinic.service.UserService;
+import org.springframework.samples.petclinic.web.validators.CreditCardValidator;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -21,6 +22,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class FanController {
@@ -73,9 +75,14 @@ public class FanController {
 
 	}
 
+	//NUEVO VIP
+
 	@PostMapping(value = "/footballClub/{clubId}/fan/new")
 	public String processCreationForm(@PathVariable final Integer clubId, @Valid final Fan f, final BindingResult result, final Map<String, Object> model) {
-
+		CreditCardValidator ccValid = new CreditCardValidator();
+		if (ccValid.supports(f.getCreditCard().getClass())) {
+			ccValid.validate(f.getCreditCard(), result);
+		}
 		if (result.hasErrors()) {
 			model.put("isNew", true);
 			model.put("fan", f);
@@ -99,6 +106,8 @@ public class FanController {
 			return "redirect:/";
 		}
 	}
+
+	//NUEVO NO VIP
 
 	@GetMapping(value = "/footballClub/{clubId}/createFanNoVip")
 	public String createFanNoVip(@PathVariable final Integer clubId) {
@@ -127,9 +136,9 @@ public class FanController {
 		return "redirect:/";
 	}
 
-	//EDIT
+	//EDIT TO VIP
 
-	@GetMapping(value = "/noVip")
+	@GetMapping(value = "/footballClub/noVip")
 	public String initUpdateFanForm(final Map<String, Object> model) {
 		model.put("isNew", false);
 
@@ -151,17 +160,42 @@ public class FanController {
 		return FanController.VIEWS_FAN_CREATE_OR_UPDATE_FORM;
 	}
 
-	@PostMapping(value = "/footballClub/{clubId}/fan/edit")
-	public String processUpdateFanForm(@Valid final Fan f, final BindingResult result) {
+	@PostMapping(value = "/footballClub/noVip")
+	public String processUpdateFanForm(@Valid final Fan f, final BindingResult result, final Map<String, Object> model) {
 
 		//Si hay errores en la vista seguimos en la pantalla de edición
 		if (result.hasErrors()) {
+			model.put("isNew", true);
+			model.put("fan", f);
 			return FanController.VIEWS_FAN_CREATE_OR_UPDATE_FORM;
 		} else {
 
-			//Si todo sale bien vamos a la vista de mi club
+			//Si todo sale bien vamos a la vista de welcome
+
+			this.fanService.saveFan(f);
+
 			return "redirect:/";
 		}
+	}
+	//Borrar Club
+	@RequestMapping(value = "/footballClub/fan/delete")
+	public String processDeleteForm() {
+
+		//Obtenemos el username actual conectado
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
+
+		//Obtenemos el authenticated actual conectado
+		Authenticated thisUser = this.authenticatedService.findAuthenticatedByUsername(currentPrincipalName);
+
+		//Buscamos el fan en la base de datos
+		Fan f = this.fanService.findByUserId(thisUser.getId());
+
+		//Borramos el equipo en cuestión
+		this.fanService.delete(f);
+
+		//Volvemos a la vista de mi club, en este caso sería la de "club empty"
+		return "redirect:/";
 	}
 
 }

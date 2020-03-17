@@ -34,4 +34,9 @@ public class FanService {
 		return this.fanRepository.findByUserId(id);
 	}
 
+	public void delete(final Fan f) {
+		this.fanRepository.delete(f);
+
+	}
+
 }

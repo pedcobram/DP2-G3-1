@@ -2,7 +2,7 @@
 package org.springframework.samples.petclinic.datatypes;
 
 import javax.persistence.Embeddable;
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Pattern;
 
 import org.hibernate.validator.constraints.CreditCardNumber;
@@ -22,15 +22,15 @@ public class CreditCard extends DomainDatatype {
 
 	// Attributes -------------------------------------------------------------
 
-	@NotBlank
+	@NotEmpty
 	@CreditCardNumber
 	private String				creditCardNumber;
 
-	@NotBlank
+	@NotEmpty
 	@Pattern(regexp = "^(1[0-2]|0[1-9]|\\d)\\/(\\d{2})$", message = "“MM/YY”")
 	private String				expirationDate;
 
-	@NotBlank
+	@NotEmpty
 	@Pattern(regexp = "^\\d{3}$", message = "“999”")
 	private String				cvv;
 

@@ -7,6 +7,8 @@ import javax.persistence.OneToOne;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
+import org.springframework.samples.petclinic.datatypes.CreditCard;
+
 import lombok.Data;
 
 @Data
@@ -16,15 +18,15 @@ public class Fan extends BaseEntity {
 	@OneToOne
 	@JoinColumn(name = "club_id", referencedColumnName = "id")
 	@Valid
-	private FootballClub												club;
+	private FootballClub	club;
 
 	@OneToOne
 	@JoinColumn(name = "user_id", referencedColumnName = "id")
-	private Authenticated												user;
+	private Authenticated	user;
 
 	@NotNull
-	private boolean														vip;
+	private boolean			vip;
 
-	private org.springframework.samples.petclinic.datatypes.CreditCard	CreditCard;
+	private CreditCard		creditCard;
 
 }
