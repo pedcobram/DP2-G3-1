@@ -8,4 +8,6 @@ public interface FanRepository extends CrudRepository<Fan, Integer> {
 
 	boolean existsByUserId(int auId);
 
+	Fan findByUserId(int id);
+
 }

@@ -36,4 +36,8 @@ public interface SpringDataFanRepository extends FanRepository, Repository<Fan, 
 	@Query("SELECT CASE WHEN count(f)>0 THEN true ELSE false END FROM Fan f WHERE f.user.id =: auId")
 	boolean existsByUserId(@Param("auId") int auId) throws DataAccessException;
 
+	@Override
+	@Query("SELECT f FROM Fan f WHERE f.user.id =: auId")
+	Fan findByUserId(@Param("auId") int id) throws DataAccessException;
+
 }

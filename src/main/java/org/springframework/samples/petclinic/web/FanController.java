@@ -42,6 +42,8 @@ public class FanController {
 
 	@GetMapping(value = "/footballClub/{clubId}/fan/new")
 	public String initCreationForm(@PathVariable final Integer clubId, final Map<String, Object> model) {
+		model.put("isNew", true);
+
 		//Obtenemos el username actual conectado
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String currentPrincipalName = authentication.getName();
@@ -72,8 +74,11 @@ public class FanController {
 	}
 
 	@PostMapping(value = "/footballClub/{clubId}/fan/new")
-	public String processCreationForm(@PathVariable final Integer clubId, @Valid final Fan f, final BindingResult result) {
+	public String processCreationForm(@PathVariable final Integer clubId, @Valid final Fan f, final BindingResult result, final Map<String, Object> model) {
+
 		if (result.hasErrors()) {
+			model.put("isNew", true);
+			model.put("fan", f);
 			return FanController.VIEWS_FAN_CREATE_OR_UPDATE_FORM;
 		} else {
 			//Obtenemos el username actual conectado
@@ -120,6 +125,43 @@ public class FanController {
 
 		//Redirigimos a la vista welcome
 		return "redirect:/";
+	}
+
+	//EDIT
+
+	@GetMapping(value = "/noVip")
+	public String initUpdateFanForm(final Map<String, Object> model) {
+		model.put("isNew", false);
+
+		//Obtenemos el username actual conectado
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
+
+		//Obtenemos el authenticated actual conectado
+		Authenticated thisUser = this.authenticatedService.findAuthenticatedByUsername(currentPrincipalName);
+
+		//Buscamos el fan en la base de datos
+		Fan f = this.fanService.findByUserId(thisUser.getId());
+
+		//lo ponemos en model
+
+		model.put("fan", f);
+
+		//Seguimos en la pantalla de edición
+		return FanController.VIEWS_FAN_CREATE_OR_UPDATE_FORM;
+	}
+
+	@PostMapping(value = "/footballClub/{clubId}/fan/edit")
+	public String processUpdateFanForm(@Valid final Fan f, final BindingResult result) {
+
+		//Si hay errores en la vista seguimos en la pantalla de edición
+		if (result.hasErrors()) {
+			return FanController.VIEWS_FAN_CREATE_OR_UPDATE_FORM;
+		} else {
+
+			//Si todo sale bien vamos a la vista de mi club
+			return "redirect:/";
+		}
 	}
 
 }

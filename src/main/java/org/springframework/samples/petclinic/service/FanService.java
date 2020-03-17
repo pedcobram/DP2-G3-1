@@ -29,4 +29,9 @@ public class FanService {
 		return this.fanRepository.existsByUserId(auId);
 	}
 
+	public Fan findByUserId(final Integer id) {
+
+		return this.fanRepository.findByUserId(id);
+	}
+
 }
