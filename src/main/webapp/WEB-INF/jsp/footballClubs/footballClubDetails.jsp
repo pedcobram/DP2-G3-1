@@ -68,8 +68,7 @@
     
     <spring:url value="/footballClub/${footballClubId}/footballPlayers" var="footballPlayersUrl"></spring:url>
     	<a href="${fn:escapeXml(footballPlayersUrl)}" class="btn btn-default">
-    				<span class="glyphicon glyphicon-user"></span> 
-                            ${playerList}</a>
+    				<span class="glyphicon glyphicon-user"></span> ${playerList}</a>
 					 
 	<c:if test="${footballClub.president.user.username != principalUsername && !notHasAPublishedTeam}">
      	<security:authorize access="hasAnyAuthority('president')">
@@ -77,5 +76,12 @@
     		<a href="${fn:escapeXml(newMatchRequest)}" class="btn btn-default2"><fmt:message key="newMatchRequest"/></a>
     	</security:authorize>
     </c:if>    								 
+    								    								
+    <spring:url value="/footballClub/${footballClubId}/fan/new" var="FanUrl"></spring:url>
+    	<a href="${fn:escapeXml(FanUrl)}" class="btn btn-default" >
+    				<span class="glyphicon glyphicon-heart-empty"></span> 
+    								 <fmt:message key="addFan"/></a>
+    <c:if test="${existFan}"><p style="color: red;"><fmt:message key="existFan"/></p></c:if>
+    
     
 </petclinic:layout>
