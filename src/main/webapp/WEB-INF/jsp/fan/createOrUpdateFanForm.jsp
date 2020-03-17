@@ -17,6 +17,8 @@
    
         <div class="form-group has-feedback">
          	<input type="hidden" name="id" value="${fan.id}"/>
+         	<input type="hidden" name="clubId" value="${fan.club.id}"/>
+         	<input type="hidden" name="userId" value="${fan.user.id}"/>
             <petclinic:inputField label="creditCard" name="creditCard.creditCardNumber"/>
             <petclinic:inputField label="expirationDate" name="creditCard.expirationDate"/>
             <petclinic:inputField label="cvv" name="creditCard.cvv"/>
@@ -33,7 +35,7 @@
                         </c:when>
                         <c:otherwise>
                             <button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-ok"></span><fmt:message key="yesVip"/></button>
-    						<a href="/" class="btn btn-default"><span class="glyphicon glyphicon-remove"></span><fmt:message key="noVip"/></a>
+    						<a href="/" class="btn btn-default"><span class="glyphicon glyphicon-remove"></span><fmt:message key="noVipnow"/></a>
 
                         </c:otherwise>
                     </c:choose>

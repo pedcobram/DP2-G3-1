@@ -4,6 +4,7 @@ package org.springframework.samples.petclinic.web;
 import java.util.Map;
 
 import javax.validation.Valid;
+import javax.websocket.server.PathParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.model.Authenticated;
@@ -79,28 +80,31 @@ public class FanController {
 
 	@PostMapping(value = "/footballClub/{clubId}/fan/new")
 	public String processCreationForm(@PathVariable final Integer clubId, @Valid final Fan f, final BindingResult result, final Map<String, Object> model) {
+
+		//Validamos tarjeta
 		CreditCardValidator ccValid = new CreditCardValidator();
 		if (ccValid.supports(f.getCreditCard().getClass())) {
 			ccValid.validate(f.getCreditCard(), result);
 		}
+		//Obtenemos el username actual conectado
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
+		//Obtenemos el authenticated actual conectado
+		Authenticated thisUser = this.authenticatedService.findAuthenticatedByUsername(currentPrincipalName);
+		//Obtenemos club
+		FootballClub thisClub = this.footballClubService.findFootballClubById(clubId);
+		//Creamos el fan
+
+		f.setUser(thisUser);
+		f.setClub(thisClub);
+
 		if (result.hasErrors()) {
 			model.put("isNew", true);
 			model.put("fan", f);
 			return FanController.VIEWS_FAN_CREATE_OR_UPDATE_FORM;
 		} else {
-			//Obtenemos el username actual conectado
-			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-			String currentPrincipalName = authentication.getName();
-			//Obtenemos el authenticated actual conectado
-			Authenticated thisUser = this.authenticatedService.findAuthenticatedByUsername(currentPrincipalName);
-			//Obtenemos club
-			FootballClub thisClub = this.footballClubService.findFootballClubById(clubId);
-			//Creamos el fan
 
-			f.setUser(thisUser);
-			f.setClub(thisClub);
 			f.setVip(true);
-
 			this.fanService.saveFan(f);
 
 			return "redirect:/";
@@ -161,7 +165,19 @@ public class FanController {
 	}
 
 	@PostMapping(value = "/footballClub/noVip")
-	public String processUpdateFanForm(@Valid final Fan f, final BindingResult result, final Map<String, Object> model) {
+	public String processUpdateFanForm(@Valid final Fan f, @PathParam("userId") final int userId, @PathParam("clubId") final int clubId, final BindingResult result, final Map<String, Object> model) {
+
+		//Validamos tarjeta
+		CreditCardValidator ccValid = new CreditCardValidator();
+		if (ccValid.supports(f.getCreditCard().getClass())) {
+			ccValid.validate(f.getCreditCard(), result);
+		}
+		//Obtenemos el authenticated actual conectado
+		Authenticated thisUser = this.authenticatedService.findAuthenticatedById(userId);
+		//Obtenemos el club del que quiere ser fan
+		FootballClub club = this.footballClubService.findFootballClubById(clubId);
+		f.setUser(thisUser);
+		f.setClub(club);
 
 		//Si hay errores en la vista seguimos en la pantalla de edición
 		if (result.hasErrors()) {
@@ -171,7 +187,7 @@ public class FanController {
 		} else {
 
 			//Si todo sale bien vamos a la vista de welcome
-
+			f.setVip(true);
 			this.fanService.saveFan(f);
 
 			return "redirect:/";

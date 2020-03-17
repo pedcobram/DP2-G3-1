@@ -1,9 +1,7 @@
 
 package org.springframework.samples.petclinic.web.validators;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDate;
 
 import org.springframework.samples.petclinic.datatypes.CreditCard;
 import org.springframework.validation.Errors;
@@ -30,26 +28,24 @@ public class CreditCardValidator implements Validator {
 			errors.rejectValue("creditCard.creditCardNumber", "code.validator.creditCard.number");
 		}
 		//ExpiritionDate Validation
-		if (ccDate.isEmpty() || ccDate == null || ccDate.matches("^(1[0-2]|0[1-9]|\\d)\\/(\\d{2})$")) {
+
+		if (ccDate.isEmpty() || ccDate == null || !ccDate.matches("^(1[0-2]|0[1-9]|\\d)\\/(\\d{2})$")) {
 			errors.rejectValue("creditCard.expirationDate", "code.validator.creditCard.date");
 
-		}
-		//Expirated
-		String[] exdate = ccDate.split("/");
-		Date date;
-		try {
-			date = new SimpleDateFormat("dd/MM/yy").parse("01/" + exdate[0] + "/" + exdate[1]);
-			Date today = new Date();
-			if (date.after(today)) {
+		} else {
+			//Expirated
+			String[] exdate = ccDate.split("/");
+
+			LocalDate date = LocalDate.of(Integer.parseInt(exdate[1]), Integer.parseInt(exdate[0]), 01);
+			LocalDate today = LocalDate.now();
+
+			if (date.isAfter(today)) {
 				errors.rejectValue("creditCard.expirationDate", "code.validator.creditCard.datePast");
 			}
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 
 		//CVV Validation
-		if (ccCVV.isEmpty() || ccCVV == null || ccCVV.matches("^\\d{3}$")) {
+		if (ccCVV.isEmpty() || ccCVV == null || !ccCVV.matches("^\\d{3}$")) {
 			errors.rejectValue("creditCard.cvv", "code.validator.creditCard.cvv");
 
 		}

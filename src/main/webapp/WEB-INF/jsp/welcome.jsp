@@ -19,12 +19,12 @@
     <c:if test="${isFan&&!isVip}"> 
    
     	<a href="/footballClub/noVip" class="btn btn-default">
-    					 <fmt:message key="noVip"/></a>
+    					 <fmt:message key="serVip"/></a>
 	 	
     </c:if>
     <c:if test="${isFan}"> 
     <a href="/footballClub/fan/delete" class="btn btn-default">
-    					 <fmt:message key="noVip"/></a>
+    					 <fmt:message key="deleteVip"/></a>
     </c:if>
     
 </petclinic:layout>
