@@ -23,7 +23,9 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Coach;
+import org.springframework.samples.petclinic.model.ContractPlayer;
 import org.springframework.samples.petclinic.model.FootballClub;
+import org.springframework.samples.petclinic.model.FootballPlayer;
 import org.springframework.samples.petclinic.model.President;
 import org.springframework.samples.petclinic.repository.FootballClubRepository;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedNameException;
@@ -35,7 +37,16 @@ import org.springframework.util.StringUtils;
 public class FootballClubService {
 
 	@Autowired
-	private FootballClubRepository footRepository;
+	private FootballClubRepository	footRepository;
+
+	@Autowired
+	private FootballPlayerService	footballPlayerService;
+
+	@Autowired
+	private ContractService			contractService;
+
+	@Autowired
+	private CoachService			coachService;
 
 
 	@Autowired
@@ -107,7 +118,26 @@ public class FootballClubService {
 
 	//Borrar equipo
 	public void deleteFootballClub(final FootballClub footballClub) throws DataAccessException {
-		this.footRepository.delete(footballClub);
+
+		if (footballClub != null) {
+
+			Collection<ContractPlayer> contracts = this.contractService.findAllPlayerContractsByClubId(footballClub.getId());
+			for (ContractPlayer a : contracts) {
+				this.contractService.deleteContract(a);
+			}
+
+			Collection<FootballPlayer> players = this.footballPlayerService.findAllClubFootballPlayers(footballClub.getId());
+			for (FootballPlayer a : players) {
+				a.setClub(null);
+			}
+
+			Coach coach = this.coachService.findCoachByClubId(footballClub.getId());
+			if (coach != null) {
+				coach.setClub(null);
+			}
+
+			this.footRepository.delete(footballClub);
+		}
 	}
 
 }

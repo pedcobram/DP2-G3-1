@@ -1,11 +1,14 @@
 
 package org.springframework.samples.petclinic.service;
 
+import javax.security.auth.login.CredentialException;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.President;
 import org.springframework.samples.petclinic.model.User;
 import org.springframework.stereotype.Service;
@@ -42,7 +45,7 @@ public class PresidentServiceTests {
 	}
 
 	@Test
-	void shouldSavePresident() {
+	void shouldSavePresident() throws DataAccessException, CredentialException {
 
 		User ignacio = this.authenticatedService.findAuthenticatedByUsername("ignacio").getUser();
 
@@ -82,7 +85,7 @@ public class PresidentServiceTests {
 	}
 
 	@Test
-	void shouldUpdatePresident() {
+	void shouldUpdatePresident() throws DataAccessException, CredentialException {
 		President president = this.presidentService.findPresidentById(1);
 
 		String oldLastName = president.getLastName();

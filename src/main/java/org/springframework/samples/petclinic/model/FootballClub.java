@@ -46,6 +46,7 @@ public class FootballClub extends BaseEntity implements Serializable {
 
 	@OneToOne(optional = false)
 	@JoinColumn(name = "president_id")
+	@NotNull
 	private President			president;
 
 	@Column(name = "crest")
@@ -75,8 +76,10 @@ public class FootballClub extends BaseEntity implements Serializable {
 	private Integer				money;
 
 	@Column(name = "fans")
+	@NotNull
 	private Integer				fans;
 
 	@Column(name = "status")
+	@NotNull
 	private Boolean				status;
 }

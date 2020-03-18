@@ -28,6 +28,12 @@ import javax.validation.constraints.Pattern;
 
 import org.springframework.core.style.ToStringCreator;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+
 @Entity
 @Table(name = "presidents")
 public class President extends Person {
@@ -52,36 +58,6 @@ public class President extends Person {
 	private User	user;
 	//
 
-
-	public User getUser() {
-		return this.user;
-	}
-
-	public void setUser(final User user) {
-		this.user = user;
-	}
-
-	public String getEmail() {
-		return this.email;
-	}
-
-	public void setEmail(final String email) {
-		this.email = email;
-	}
-	public String getDni() {
-		return this.dni;
-	}
-
-	public void setDni(final String dni) {
-		this.dni = dni;
-	}
-	public String getTelephone() {
-		return this.telephone;
-	}
-
-	public void setTelephone(final String telephone) {
-		this.telephone = telephone;
-	}
 
 	@Override
 	public String toString() {

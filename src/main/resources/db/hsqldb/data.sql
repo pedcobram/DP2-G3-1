@@ -1,5 +1,5 @@
 -- One admin user, named admin1 with passwor 4dm1n and authority admin
-INSERT INTO users(username,password,enabled) VALUES ('admin1','4dm1n',TRUE);
+INSERT INTO users(username,password,enabled) VALUES ('admin1','admin1',TRUE);
 INSERT INTO authorities VALUES ('admin1','admin');
 -- One owner user, named owner1 with passwor 0wn3r
 INSERT INTO users(username,password,enabled) VALUES ('owner1','owner1',TRUE);
@@ -108,9 +108,9 @@ INSERT INTO coachs(id, first_name, last_name, football_Clubs_id, salary, clause,
 INSERT INTO coachs(id, first_name, last_name, football_Clubs_id, salary, clause, birth_date) VALUES (8, 'Pep', 'Guardiola', 8, '10000000', '15000000', '1974-07-07' );
 INSERT INTO coachs(id, first_name, last_name, football_Clubs_id, salary, clause, birth_date) VALUES (9, 'Frank', 'Lampard', 9, '5000000', '6000000', '1980-05-25' );
 
-INSERT INTO coachs(id, first_name, last_name, birth_date) VALUES (10, 'Marcelino', 'Garcia Toral', '1975-01-19' );
-INSERT INTO coachs(id, first_name, last_name, birth_date) VALUES (11, 'Unai', 'Emery', '1974-07-07' );
-INSERT INTO coachs(id, first_name, last_name, birth_date) VALUES (12, 'Mauricio', 'Pochetino',  '1980-05-25' );
+INSERT INTO coachs(id, first_name, last_name, salary, clause, birth_date) VALUES (10, 'Marcelino', 'Garcia Toral','0' ,'0' ,'1975-01-19');
+INSERT INTO coachs(id, first_name, last_name, salary, clause, birth_date) VALUES (11, 'Unai', 'Emery','0' ,'0' ,'1974-07-07');
+INSERT INTO coachs(id, first_name, last_name, salary, clause, birth_date) VALUES (12, 'Mauricio', 'Pochetino','0' ,'0' ,'1980-05-25');
 
 INSERT INTO football_Players(id, first_name, last_name, position, football_Clubs_id, value, birth_date) VALUES (1, 'Tomas', 'Vaclik', 0, 1, '18000000', '1989-03-29');
 INSERT INTO football_Players(id, first_name, last_name, position, football_Clubs_id, value, birth_date) VALUES (2, 'Diego', 'Carlos', 1, 1, '25000000', '1993-03-15');

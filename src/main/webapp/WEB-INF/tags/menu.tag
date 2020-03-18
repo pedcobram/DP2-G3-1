@@ -89,7 +89,7 @@
 						<ul class="dropdown-menu">
 						
 						<sec:authorize access="!hasAnyAuthority('president', 'competitionAdmin', 'admin', 'referee')">
-							<li><a href="<c:url value="/createPresident" />"><fmt:message key="becPresident"/></a></li>
+							<li><a href="<c:url value="/presidents/new" />"><fmt:message key="becPresident"/></a></li>
 						</sec:authorize>
 						
 						<sec:authorize access="!hasAnyAuthority('president', 'competitionAdmin', 'admin', 'referee')">
@@ -112,7 +112,12 @@
 											</petclinic:menuItem>
 										</sec:authorize>
 										
-										
+										<sec:authorize access="hasAuthority('president')">	
+											<petclinic:menuItem active="${name eq 'presidents'}" url="/presidents/${principalUsername}"
+												title="personal space">
+												<span><fmt:message key="myProfile"/></span>
+											</petclinic:menuItem>
+										</sec:authorize>
 										
 										<sec:authorize access="hasAuthority('president')">	
 											<petclinic:menuItem active="${name eq 'presidents'}" url="/matchRequests/sent/${principalUsername}"
@@ -128,12 +133,7 @@
 											</petclinic:menuItem>
 										</sec:authorize>
 										
-										<sec:authorize access="hasAuthority('president')">	
-											<petclinic:menuItem active="${name eq 'presidents'}" url="/myPresidentProfile/${principalUsername}"
-												title="personal space">
-												<span><fmt:message key="myProfile"/></span>
-											</petclinic:menuItem>
-										</sec:authorize>
+										
 										
 										<sec:authorize access="hasAuthority('referee')">	
 											<petclinic:menuItem active="${name eq 'referees'}" url="/matches/referee/list/"
