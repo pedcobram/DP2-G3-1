@@ -22,7 +22,6 @@ import org.springframework.data.repository.Repository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.samples.petclinic.model.Fan;
 import org.springframework.samples.petclinic.repository.FanRepository;
-import org.springframework.samples.petclinic.repository.PetRepository;
 
 /**
  * Spring Data JPA specialization of the {@link PetRepository} interface
