@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.security.auth.login.CredentialException;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -170,7 +171,7 @@ public class CompAdminRequestController {
 	}
 
 	@GetMapping(value = "/competitionAdminRequest/accept/{username}")
-	public String acceptCompetitionAdminRequest(@Valid final CompAdminRequest compAdminRequest, final BindingResult result, @PathVariable("username") final String username) throws DataAccessException {
+	public String acceptCompetitionAdminRequest(@Valid final CompAdminRequest compAdminRequest, final BindingResult result, @PathVariable("username") final String username) throws DataAccessException, CredentialException {
 
 		//
 		CompAdminRequest preCompAdminRequest = this.compAdminRequestService.findCompAdminRequestByUsername(username);

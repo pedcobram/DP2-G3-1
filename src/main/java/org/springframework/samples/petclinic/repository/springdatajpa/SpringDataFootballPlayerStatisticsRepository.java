@@ -28,4 +28,7 @@ public interface SpringDataFootballPlayerStatisticsRepository extends FootballPl
 	@Query("SELECT a FROM FootballPlayerStatistic a WHERE a.player.id =:player_id")
 	FootballPlayerStatistic findFootballPlayerStatisticByPlayerId(@Param("player_id") int player_id) throws DataAccessException;
 
+	@Override
+	@Query("SELECT COUNT(a) FROM FootballPlayerStatistic a")
+	int count() throws DataAccessException;
 }

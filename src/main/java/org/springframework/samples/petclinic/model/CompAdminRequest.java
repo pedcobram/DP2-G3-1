@@ -22,11 +22,11 @@ public class CompAdminRequest extends BaseEntity {
 
 	@NotEmpty
 	@Column(name = "title")
-	private String					title;
+	private String			title;
 
 	@NotEmpty
 	@Column(name = "description")
-	private String					description;
+	private String			description;
 
 	@Column(name = "status")
 	private RequestStatus	status;
@@ -34,6 +34,6 @@ public class CompAdminRequest extends BaseEntity {
 	//
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "username", referencedColumnName = "username")
-	private User					user;
+	private User			user;
 	//
 }

@@ -42,6 +42,7 @@ public class CompAdminRequestService {
 	}
 
 	public void deleteCompAdminRequest(final CompAdminRequest compAdminRequest) throws DataAccessException {
+		compAdminRequest.setUser(null);
 		this.compAdminRequestRepository.delete(compAdminRequest);
 	}
 

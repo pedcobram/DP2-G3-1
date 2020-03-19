@@ -19,7 +19,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Entity
-@Table(name = "Match_Record")
+@Table(name = "match_record")
 public class MatchRecord extends BaseEntity {
 
 	@Column(name = "title")

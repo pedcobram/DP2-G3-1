@@ -1,6 +1,8 @@
 
 package org.springframework.samples.petclinic.service;
 
+import javax.security.auth.login.CredentialException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Authenticated;
@@ -44,7 +46,7 @@ public class CompetitionAdminService {
 	}
 
 	@Transactional
-	public void saveCompetitionAdmin(final CompetitionAdmin competitionAdmin) throws DataAccessException {
+	public void saveCompetitionAdmin(final CompetitionAdmin competitionAdmin) throws DataAccessException, CredentialException {
 		this.competitionAdminRepository.save(competitionAdmin);
 		this.authoritiesService.saveAuthorities(competitionAdmin.getUser().getUsername(), "competitionAdmin");
 	}

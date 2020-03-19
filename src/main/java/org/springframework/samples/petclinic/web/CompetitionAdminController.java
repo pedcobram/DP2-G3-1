@@ -4,9 +4,11 @@ package org.springframework.samples.petclinic.web;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.security.auth.login.CredentialException;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Authenticated;
 import org.springframework.samples.petclinic.model.CompetitionAdmin;
 import org.springframework.samples.petclinic.service.AuthenticatedService;
@@ -93,7 +95,7 @@ public class CompetitionAdminController {
 	}
 
 	@PostMapping(value = "/myCompetitionAdminProfile/{competitionAdminId}/edit")
-	public String processUpdateCompetitionAdminForm(@Valid final CompetitionAdmin competitionAdmin, final BindingResult result, @PathVariable("competitionAdminId") final int competitionAdminId) {
+	public String processUpdateCompetitionAdminForm(@Valid final CompetitionAdmin competitionAdmin, final BindingResult result, @PathVariable("competitionAdminId") final int competitionAdminId) throws DataAccessException, CredentialException {
 
 		if (result.hasErrors()) {
 			return CompetitionAdminController.VIEWS_COMPETITION_ADMIN_CREATE_OR_UPDATE_FORM;
