@@ -1,5 +1,5 @@
 
-package org.springframework.samples.petclinic.model;
+package org.springframework.samples.petclinic.model.rafa;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -12,6 +12,7 @@ import javax.validation.Validator;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.samples.petclinic.model.Coach;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 class CoachValidatorTests {

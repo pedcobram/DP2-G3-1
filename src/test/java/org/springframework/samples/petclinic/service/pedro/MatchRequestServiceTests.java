@@ -1,5 +1,5 @@
 
-package org.springframework.samples.petclinic.service;
+package org.springframework.samples.petclinic.service.pedro;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -14,6 +14,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.samples.petclinic.model.FootballClub;
 import org.springframework.samples.petclinic.model.MatchRequest;
 import org.springframework.samples.petclinic.model.Enum.RequestStatus;
+import org.springframework.samples.petclinic.service.FootballClubService;
+import org.springframework.samples.petclinic.service.MatchRequestService;
 import org.springframework.stereotype.Service;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))

@@ -28,12 +28,7 @@
     	<fmt:message key="code.crud.deleteClub" var="deleteClub"/>   	
     	<fmt:message key="code.list.playerList" var="playerList"/>
     	<fmt:message key="code.security.deleteClub" var="areYouSure"/>	
-    	
-
-	
-
-   
-    	
+    	 	
 <petclinic:layout pageName="footballCLubs">
 
 <jsp:attribute name="customScript">
@@ -104,13 +99,13 @@
 	<security:authorize access="hasAnyAuthority('president')">
 	
 		<c:if test="${(footballClub.president.user.username == principalUsername) && footballClub.status == false}">
-    		<spring:url value="/myfootballClub/${principalUsername}/edit" var="editUrl">
-		   		<spring:param name="footballClubId" value="${footballClub.id}"/>
+    		<spring:url value="/footballClubs/myClub/{principalUsername}/edit" var="editUrl">
+		   		<spring:param name="principalUsername" value="${footballClub.president.user.username}"/>
     		</spring:url>
     		<a data-toggle="tooltip" title="${mousehover}" href="${fn:escapeXml(editUrl)}" class="btn btn-default">${updateClub}</a>  	
     	</c:if> 
     	<c:if test="${(footballClub.president.user.username == principalUsername)}">
-    		<spring:url value="/myfootballClub/delete" var="addUrl"></spring:url>
+    		<spring:url value="/footballClubs/myClub/{principalUsername}/delete" var="addUrl"></spring:url>
     		<a href="${fn:escapeXml(addUrl)}" onclick="return confirm('${areYouSure}')" class="btn btn-default2"><span class="glyphicon glyphicon-trash"></span> ${deleteClub}</a>
     	</c:if>      
     	

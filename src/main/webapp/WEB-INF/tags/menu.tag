@@ -45,7 +45,7 @@
 					<span><fmt:message key="tournaments"/></span>
 				</petclinic:menuItem>
 
-				<petclinic:menuItem active="${name eq 'footballClubs'}" url="/footballClub"
+				<petclinic:menuItem active="${name eq 'footballClubs'}" url="/footballClubs/list"
 					title="registered teams">
 					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
 					<span><fmt:message key="teams"/></span>
@@ -68,7 +68,7 @@
 			<ul class="nav navbar-nav navbar-right">
 						
 				<sec:authorize access="hasAnyAuthority('president')">	
-					<petclinic:menuItem active="${name eq 'footballClubs'}" url="/myfootballClub/${principalUsername}"
+					<petclinic:menuItem active="${name eq 'footballClubs'}" url="/footballClubs/myClub/${principalUsername}"
 						title="club page">
 						<span style="color:#ffc800" class="glyphicon glyphicon-bookmark" aria-hidden="true"></span>
 						<span><fmt:message key="myClub"/></span>

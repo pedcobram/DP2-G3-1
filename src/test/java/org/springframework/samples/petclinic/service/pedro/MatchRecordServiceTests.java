@@ -1,5 +1,5 @@
 
-package org.springframework.samples.petclinic.service;
+package org.springframework.samples.petclinic.service.pedro;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -9,6 +9,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.samples.petclinic.model.Match;
 import org.springframework.samples.petclinic.model.MatchRecord;
 import org.springframework.samples.petclinic.model.Enum.MatchRecordStatus;
+import org.springframework.samples.petclinic.service.MatchRecordService;
+import org.springframework.samples.petclinic.service.MatchService;
 import org.springframework.stereotype.Service;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))

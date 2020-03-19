@@ -15,7 +15,7 @@
     <h2 class="th-center" style="color:black"> ${noClubYet}</h2>
     <div class="th-center">
   	 	<security:authorize access="hasAnyAuthority('president')">
-        	<spring:url value="/myfootballClub/new" var="addUrl"></spring:url>
+        	<spring:url value="/footballClubs/myClub/new" var="addUrl"></spring:url>
     		<a href="${fn:escapeXml(addUrl)}" class="btn btn-default2" style="color:white"><b>${create}</b></a>
      	</security:authorize>
     </div>

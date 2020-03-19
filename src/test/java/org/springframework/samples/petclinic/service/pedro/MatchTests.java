@@ -1,5 +1,5 @@
 
-package org.springframework.samples.petclinic.service;
+package org.springframework.samples.petclinic.service.pedro;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -17,6 +17,11 @@ import org.springframework.samples.petclinic.model.MatchRefereeRequest;
 import org.springframework.samples.petclinic.model.MatchRequest;
 import org.springframework.samples.petclinic.model.Referee;
 import org.springframework.samples.petclinic.model.Enum.MatchStatus;
+import org.springframework.samples.petclinic.service.FootballClubService;
+import org.springframework.samples.petclinic.service.MatchRefereeRequestService;
+import org.springframework.samples.petclinic.service.MatchRequestService;
+import org.springframework.samples.petclinic.service.MatchService;
+import org.springframework.samples.petclinic.service.RefereeService;
 import org.springframework.stereotype.Service;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))

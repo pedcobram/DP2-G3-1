@@ -65,19 +65,20 @@ public class PresidentService {
 	@Transactional
 	public void savePresident(final President president) throws DataAccessException, CredentialException {
 
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		String currentPrincipalName = authentication.getName();
-
-		if (!president.getUser().getUsername().equals(currentPrincipalName)) { //SEGURIDAD
-			throw new CredentialException("Forbidden Access");
-		}
-
+		/**
+		 * Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		 * String currentPrincipalName = authentication.getName();
+		 * 
+		 * if (!president.getUser().getUsername().equals(currentPrincipalName)) { //SEGURIDAD
+		 * throw new CredentialException("Forbidden Access");
+		 * }
+		 **/
 		this.presidentRepository.save(president);
 		this.authoritiesService.saveAuthorities(president.getUser().getUsername(), "president");
 	}
 
 	@Transactional
-	public void deletePresident(final President president) throws DataAccessException {
+	public void deletePresident(final President president) throws DataAccessException, CredentialException {
 
 		FootballClub footballClub = this.footballClubService.findFootballClubByPresident(president.getUser().getUsername());
 		this.footballClubService.deleteFootballClub(footballClub);

@@ -87,7 +87,7 @@ public class PresidentController {
 	}
 
 	@RequestMapping(value = "/presidents/delete") //BORRAR PRESIDENTE
-	public String deletePresident() {
+	public String deletePresident() throws DataAccessException, CredentialException {
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String currentPrincipalName = authentication.getName();

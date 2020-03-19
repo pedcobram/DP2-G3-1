@@ -1,5 +1,5 @@
 
-package org.springframework.samples.petclinic.model;
+package org.springframework.samples.petclinic.model.rafa;
 
 import java.util.Date;
 import java.util.Locale;
@@ -11,6 +11,9 @@ import javax.validation.Validator;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.samples.petclinic.model.ContractPlayer;
+import org.springframework.samples.petclinic.model.FootballClub;
+import org.springframework.samples.petclinic.model.FootballPlayer;
 import org.springframework.samples.petclinic.model.Enum.FootballPlayerPosition;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 

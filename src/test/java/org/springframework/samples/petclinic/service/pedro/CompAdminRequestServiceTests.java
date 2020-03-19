@@ -1,5 +1,5 @@
 
-package org.springframework.samples.petclinic.service;
+package org.springframework.samples.petclinic.service.pedro;
 
 import java.util.Collection;
 
@@ -11,6 +11,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.samples.petclinic.model.CompAdminRequest;
 import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.model.Enum.RequestStatus;
+import org.springframework.samples.petclinic.service.CompAdminRequestService;
+import org.springframework.samples.petclinic.service.CompetitionAdminService;
 import org.springframework.stereotype.Service;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
