@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import javax.websocket.server.PathParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Authenticated;
 import org.springframework.samples.petclinic.model.Fan;
 import org.springframework.samples.petclinic.model.FootballClub;
@@ -15,6 +16,7 @@ import org.springframework.samples.petclinic.service.AuthoritiesService;
 import org.springframework.samples.petclinic.service.FanService;
 import org.springframework.samples.petclinic.service.FootballClubService;
 import org.springframework.samples.petclinic.service.UserService;
+import org.springframework.samples.petclinic.service.exceptions.DuplicatedFanUserException;
 import org.springframework.samples.petclinic.web.validators.CreditCardValidator;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -54,23 +56,21 @@ public class FanController {
 		Authenticated thisUser = this.authenticatedService.findAuthenticatedByUsername(currentPrincipalName);
 		//Obtenemos club
 		FootballClub thisClub = this.footballClubService.findFootballClubById(clubId);
-
-		//Comprobamos que no es fan de otro equipo
-		if (this.fanService.existFan(thisUser.getId())) {
-			// si ya es fan vuelve a la vista de club con existFan igual a true
-			model.put("existFan", true);
-			model.put("footballClub", this.footballClubService.findFootballClubById(clubId));
-
-			return "footballClubs/footballClubDetails";
-		} else {
-			//inicializamos el fan
+		try {
 			Fan f = new Fan();
 			f.setUser(thisUser);
 			f.setClub(thisClub);
 
 			model.put("fan", f);
+			this.fanService.saveFan(f);
 
 			return FanController.VIEWS_FAN_CREATE_OR_UPDATE_FORM;
+
+		} catch (DuplicatedFanUserException ex) {
+			model.put("existFan", true);
+			model.put("footballClub", this.footballClubService.findFootballClubById(clubId));
+
+			return "footballClubs/footballClubDetails";
 
 		}
 
@@ -79,7 +79,7 @@ public class FanController {
 	//NUEVO VIP
 
 	@PostMapping(value = "/footballClub/{clubId}/fan/new")
-	public String processCreationForm(@PathVariable final Integer clubId, @Valid final Fan f, final BindingResult result, final Map<String, Object> model) {
+	public String processCreationForm(@PathVariable final Integer clubId, @Valid final Fan f, final BindingResult result, final Map<String, Object> model) throws DataAccessException {
 
 		//Validamos tarjeta
 		CreditCardValidator ccValid = new CreditCardValidator();
@@ -103,42 +103,49 @@ public class FanController {
 			model.put("fan", f);
 			return FanController.VIEWS_FAN_CREATE_OR_UPDATE_FORM;
 		} else {
+			try {
+				f.setVip(true);
+				this.fanService.saveFan(f);
+				return "redirect:/";
+			} catch (DuplicatedFanUserException ex) {
+				model.put("existFan", true);
+				model.put("footballClub", this.footballClubService.findFootballClubById(clubId));
 
-			f.setVip(true);
-			this.fanService.saveFan(f);
+				return "footballClubs/footballClubDetails";
 
-			return "redirect:/";
+			}
+
 		}
 	}
 
 	//NUEVO NO VIP
 
-	@GetMapping(value = "/footballClub/{clubId}/createFanNoVip")
-	public String createFanNoVip(@PathVariable final Integer clubId) {
-
-		//Obtenemos el username actual conectado
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		String currentPrincipalName = authentication.getName();
-
-		//Creamos el fan
-		Fan f = new Fan();
-
-		//Obtenemos el authenticated actual conectado
-		Authenticated thisUser = this.authenticatedService.findAuthenticatedByUsername(currentPrincipalName);
-
-		//Obtenemos el club del que quiere ser fan
-		FootballClub club = this.footballClubService.findFootballClubById(clubId);
-
-		//Añadimos los datos del user y el club al fan
-		f.setClub(club);
-		f.setUser(thisUser);
-
-		//Guardamos en la db el nuevo presidente
-		this.fanService.saveFan(f);
-
-		//Redirigimos a la vista welcome
-		return "redirect:/";
-	}
+	//	@GetMapping(value = "/footballClub/{clubId}/createFanNoVip")
+	//	public String createFanNoVip(@PathVariable final Integer clubId) throws DataAccessException, DuplicatedFanUserException {
+	//
+	//		//Obtenemos el username actual conectado
+	//		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	//		String currentPrincipalName = authentication.getName();
+	//
+	//		//Creamos el fan
+	//		Fan f = new Fan();
+	//
+	//		//Obtenemos el authenticated actual conectado
+	//		Authenticated thisUser = this.authenticatedService.findAuthenticatedByUsername(currentPrincipalName);
+	//
+	//		//Obtenemos el club del que quiere ser fan
+	//		FootballClub club = this.footballClubService.findFootballClubById(clubId);
+	//
+	//		//Añadimos los datos del user y el club al fan
+	//		f.setClub(club);
+	//		f.setUser(thisUser);
+	//
+	//		//Guardamos en la db el nuevo presidente
+	//		this.fanService.saveFan(f);
+	//
+	//		//Redirigimos a la vista welcome
+	//		return "redirect:/";
+	//	}
 
 	//EDIT TO VIP
 
@@ -165,7 +172,7 @@ public class FanController {
 	}
 
 	@PostMapping(value = "/footballClub/noVip")
-	public String processUpdateFanForm(@Valid final Fan f, @PathParam("userId") final int userId, @PathParam("clubId") final int clubId, final BindingResult result, final Map<String, Object> model) {
+	public String processUpdateFanForm(@Valid final Fan f, @PathParam("userId") final int userId, @PathParam("clubId") final int clubId, final BindingResult result, final Map<String, Object> model) throws DataAccessException, DuplicatedFanUserException {
 
 		//Validamos tarjeta
 		CreditCardValidator ccValid = new CreditCardValidator();

@@ -25,8 +25,13 @@ public class FanService {
 
 	@Transactional(rollbackFor = DuplicatedFanUserException.class)
 	public void saveFan(@Valid final Fan f) throws DataAccessException, DuplicatedFanUserException {
-		if (this.existFan(f.getUser().getId())) {
-			throw new DuplicatedFanUserException();
+		Fan otherf = this.findByUserId(f.getUser().getId());
+		if (otherf != null) {
+			if (this.existFan(f.getUser().getId()) && f.getId() != otherf.getId()) {
+				throw new DuplicatedFanUserException();
+			} else {
+				this.fanRepository.save(f);
+			}
 		} else {
 			this.fanRepository.save(f);
 		}
