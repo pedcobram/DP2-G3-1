@@ -73,9 +73,8 @@ public class CompAdminRequestController {
 		return "compAdminRequests/compAdminRequestList";
 	}
 
-	//Crear Competition Admin Request - Get
 	@GetMapping(value = "/competitionAdminRequest/new")
-	public String initCreationForm(final Map<String, Object> model) {
+	public String initCompAdminCreationForm(final Map<String, Object> model) {
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String currentPrincipalName = authentication.getName();

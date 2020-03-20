@@ -12,7 +12,7 @@ public interface MatchRepository {
 
 	Collection<Match> findAllMyMatches(String currentPrincipalName);
 
-	Collection<Match> findAllMatchRequestsByReferee(String currentPrincipalName);
+	Collection<Match> findAllMatchesByReferee(String currentPrincipalName);
 
 	Match findMatchById(int id) throws DataAccessException;
 

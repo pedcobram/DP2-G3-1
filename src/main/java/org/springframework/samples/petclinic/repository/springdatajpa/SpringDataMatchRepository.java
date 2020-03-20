@@ -18,7 +18,7 @@ public interface SpringDataMatchRepository extends MatchRepository, Repository<M
 
 	@Override
 	@Query("SELECT a FROM Match a WHERE a.referee.user.username =:currentPrincipalName")
-	Collection<Match> findAllMatchRequestsByReferee(@Param("currentPrincipalName") String currentPrincipalName);
+	Collection<Match> findAllMatchesByReferee(@Param("currentPrincipalName") String currentPrincipalName);
 
 	@Override
 	@Query("SELECT a FROM Match a WHERE a.id =:id")

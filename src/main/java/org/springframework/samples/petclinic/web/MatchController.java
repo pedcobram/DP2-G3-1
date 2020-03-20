@@ -149,7 +149,7 @@ public class MatchController {
 
 		List<Match> matches = new ArrayList<>();
 
-		matches.addAll(this.matchService.findAllMatchRequestsByReferee(currentPrincipalName));
+		matches.addAll(this.matchService.findAllMatchesByReferee(currentPrincipalName));
 
 		model.put("matches", matches);
 

@@ -27,8 +27,8 @@ public class MatchService {
 	}
 
 	@Transactional(readOnly = true)
-	public Collection<Match> findAllMatchRequestsByReferee(final String currentPrincipalName) throws DataAccessException {
-		return this.matchRepository.findAllMatchRequestsByReferee(currentPrincipalName);
+	public Collection<Match> findAllMatchesByReferee(final String currentPrincipalName) throws DataAccessException {
+		return this.matchRepository.findAllMatchesByReferee(currentPrincipalName);
 	}
 
 	@Transactional(readOnly = true)

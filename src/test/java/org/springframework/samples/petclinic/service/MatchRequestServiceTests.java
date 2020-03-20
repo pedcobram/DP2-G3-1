@@ -6,11 +6,14 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import javax.validation.ConstraintViolationException;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.samples.petclinic.model.FootballClub;
 import org.springframework.samples.petclinic.model.MatchRequest;
 import org.springframework.samples.petclinic.model.Enum.RequestStatus;
@@ -26,7 +29,7 @@ public class MatchRequestServiceTests {
 	protected FootballClubService	footballClubService;
 
 
-	@Test
+	@Test //CASO POSITIVO
 	void shouldFindAllMatchRequests() {
 
 		List<MatchRequest> mrs = new ArrayList<>();
@@ -38,7 +41,7 @@ public class MatchRequestServiceTests {
 		Assertions.assertTrue(count == 4);
 	}
 
-	@Test
+	@Test //CASO POSITIVO
 	void shouldFindAllMatchRequestsReceived() {
 
 		List<MatchRequest> mrs = new ArrayList<>();
@@ -50,7 +53,19 @@ public class MatchRequestServiceTests {
 		Assertions.assertTrue(count == 2);
 	}
 
-	@Test
+	@Test //CASO NEGATIVO
+	void shouldNotFindAllMatchRequestsReceived() {
+
+		List<MatchRequest> mrs = new ArrayList<>();
+
+		mrs.addAll(this.matchRequestService.findAllMatchRequestsReceived("Sevillaa Fútboll Clubb"));
+
+		int count = mrs.size();
+
+		Assertions.assertTrue(count == 0);
+	}
+
+	@Test //CASO POSITIVO
 	void shouldFindAllMatchRequestsSent() {
 
 		List<MatchRequest> mrs = new ArrayList<>();
@@ -62,7 +77,19 @@ public class MatchRequestServiceTests {
 		Assertions.assertTrue(count == 2);
 	}
 
-	@Test
+	@Test //CASO NEGATIVO
+	void shouldNotFindAllMatchRequestsSent() {
+
+		List<MatchRequest> mrs = new ArrayList<>();
+
+		mrs.addAll(this.matchRequestService.findAllMatchRequestsSent("Sevillaa Fútboll Clubb"));
+
+		int count = mrs.size();
+
+		Assertions.assertTrue(count == 0);
+	}
+
+	@Test //CASO POSITIVO
 	void shouldFindMatchRequestById() {
 
 		Boolean res = true;
@@ -73,10 +100,24 @@ public class MatchRequestServiceTests {
 			res = false;
 		}
 
-		Assertions.assertTrue(res == true);
+		Assertions.assertTrue(res);
 	}
 
-	@Test
+	@Test //CASO NEGATIVO
+	void shouldNotFindMatchRequestById() {
+
+		Boolean res = true;
+
+		MatchRequest mr = this.matchRequestService.findMatchRequestById(100);
+
+		if (mr == null) {
+			res = false;
+		}
+
+		Assertions.assertFalse(res);
+	}
+
+	@Test //CASO POSITIVO
 	void shouldSaveMatchRequest() {
 
 		MatchRequest newMR = new MatchRequest();
@@ -103,7 +144,32 @@ public class MatchRequestServiceTests {
 		Assertions.assertTrue(count == 5);
 	}
 
-	@Test
+	@Test //CASO NEGATIVO
+	void shouldNotSaveMatchRequest() {
+
+		MatchRequest newMR = new MatchRequest();
+
+		Calendar d = Calendar.getInstance();
+		d.set(2025, 02, 02, 20, 20);
+		Date date = d.getTime();
+
+		FootballClub fc1 = this.footballClubService.findFootballClubById(1);
+		FootballClub fc2 = this.footballClubService.findFootballClubById(2);
+
+		newMR.setId(100);
+		newMR.setTitle("");
+		newMR.setStatus(RequestStatus.ON_HOLD);
+		newMR.setStadium("Stadium");
+		newMR.setFootballClub1(fc1);
+		newMR.setFootballClub2(fc2);
+		newMR.setMatchDate(date);
+
+		Assertions.assertThrows(ConstraintViolationException.class, () -> {
+			this.matchRequestService.saveMatchRequest(newMR);
+		});
+	}
+
+	@Test //CASO POSITIVO
 	void shouldDeleteMatchRequest() {
 
 		MatchRequest mr = this.matchRequestService.findMatchRequestById(2);
@@ -117,6 +183,16 @@ public class MatchRequestServiceTests {
 		int post_count = this.matchRequestService.count();
 
 		Assertions.assertTrue(post_count == 3);
+	}
+
+	@Test //CASO NEGATIVO
+	void shouldNotDeleteMatchRequest() {
+
+		MatchRequest mr = this.matchRequestService.findMatchRequestById(200);
+
+		Assertions.assertThrows(InvalidDataAccessApiUsageException.class, () -> {
+			this.matchRequestService.deleteMatchRequest(mr);
+		});
 	}
 
 }
