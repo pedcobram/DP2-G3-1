@@ -36,8 +36,6 @@ public class WelcomeController {
 	})
 	public String welcome(final Map<String, Object> model) {
 
-		return "welcome";
-
 		//bloque try por si el usuario no esta logueado
 		try {
 			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
