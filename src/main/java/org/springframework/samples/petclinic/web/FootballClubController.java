@@ -33,7 +33,7 @@ import org.springframework.samples.petclinic.model.President;
 import org.springframework.samples.petclinic.service.FootballClubService;
 import org.springframework.samples.petclinic.service.exceptions.DateException;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedNameException;
-import org.springframework.samples.petclinic.service.exceptions.MinimunPlayersAndCoachException;
+import org.springframework.samples.petclinic.service.exceptions.NumberOfPlayersAndCoachException;
 import org.springframework.samples.petclinic.web.validators.FootballClubValidator;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -153,7 +153,7 @@ public class FootballClubController {
 
 	@PostMapping(value = "/footballClubs/myClub/new") //CREAR CLUB - POST
 	public String processCreationForm(@Valid final FootballClub footballClub, final BindingResult result, final Map<String, Object> model)
-		throws DataAccessException, DuplicatedNameException, MinimunPlayersAndCoachException, CredentialException, DateException {
+		throws DataAccessException, DuplicatedNameException, NumberOfPlayersAndCoachException, CredentialException, DateException {
 
 		model.put("isNew", true);
 
@@ -203,7 +203,7 @@ public class FootballClubController {
 
 	@PostMapping(value = "/footballClubs/myClub/{principalUsername}/edit") //EDITAR CLUB - POST
 	public String processUpdateFootballClubForm(@Valid final FootballClub footballClub, final BindingResult result, @PathVariable("principalUsername") final String principalUsername, final Model model)
-		throws DataAccessException, DuplicatedNameException, MinimunPlayersAndCoachException, CredentialException {
+		throws DataAccessException, DuplicatedNameException, NumberOfPlayersAndCoachException, CredentialException {
 
 		model.addAttribute("isEditing", true);
 
@@ -239,7 +239,7 @@ public class FootballClubController {
 			} catch (DuplicatedNameException ex) {
 				result.rejectValue("name", "duplicate", "already exists");
 				return FootballClubController.VIEWS_CLUB_CREATE_OR_UPDATE_FORM;
-			} catch (MinimunPlayersAndCoachException ex) {
+			} catch (NumberOfPlayersAndCoachException ex) {
 				result.rejectValue("status", "min5players", "5 y 1");
 				return FootballClubController.VIEWS_CLUB_CREATE_OR_UPDATE_FORM;
 			} catch (DateException ex) {

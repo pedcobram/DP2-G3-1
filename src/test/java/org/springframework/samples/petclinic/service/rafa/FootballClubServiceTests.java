@@ -23,7 +23,7 @@ import org.springframework.samples.petclinic.service.FootballClubService;
 import org.springframework.samples.petclinic.service.FootballPlayerService;
 import org.springframework.samples.petclinic.service.exceptions.DateException;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedNameException;
-import org.springframework.samples.petclinic.service.exceptions.MinimunPlayersAndCoachException;
+import org.springframework.samples.petclinic.service.exceptions.NumberOfPlayersAndCoachException;
 import org.springframework.stereotype.Service;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
@@ -122,7 +122,7 @@ public class FootballClubServiceTests {
 	}
 
 	@Test //CASO POSITIVO - Guardar Equipo en la DB y se genera el Id
-	void shouldSaveFootballClubAndGenerateId() throws DataAccessException, DuplicatedNameException, MinimunPlayersAndCoachException, DateException {
+	void shouldSaveFootballClubAndGenerateId() throws DataAccessException, DuplicatedNameException, NumberOfPlayersAndCoachException, DateException {
 
 		President president = this.footballClubService.findPresidentByUsername("rafa");
 
@@ -135,7 +135,6 @@ public class FootballClubServiceTests {
 
 		FootballClub footballClub = new FootballClub();
 
-		footballClub.setId(999);
 		footballClub.setCity("Midgar");
 		footballClub.setFans(0);
 		footballClub.setFoundationDate(now);
@@ -154,7 +153,7 @@ public class FootballClubServiceTests {
 	}
 
 	@Test //CASO NEGATIVO - Guardar Equipo en la DB si el presidente ya tiene un Equipo
-	void shouldThrowExceptionIfPresidentAlreadyHasOneClub() throws DataAccessException, DuplicatedNameException, MinimunPlayersAndCoachException, DateException {
+	void shouldThrowExceptionIfPresidentAlreadyHasOneClub() throws DataAccessException, DuplicatedNameException, NumberOfPlayersAndCoachException, DateException {
 
 		President president = this.footballClubService.findPresidentByUsername("presidente1");
 
@@ -183,7 +182,7 @@ public class FootballClubServiceTests {
 	}
 
 	@Test //CASO NEGATIVO - Guardar Equipo en la DB si ponemos un nombre ya existente
-	void shouldThrowExceptionWithTheSameName() throws DataAccessException, DuplicatedNameException, MinimunPlayersAndCoachException, DateException {
+	void shouldThrowExceptionWithTheSameName() throws DataAccessException, DuplicatedNameException, NumberOfPlayersAndCoachException, DateException {
 
 		President president = this.footballClubService.findPresidentByUsername("rafa");
 
@@ -212,7 +211,7 @@ public class FootballClubServiceTests {
 	}
 
 	@Test //CASO NEGATIVO - Guardar Equipo en la DB si ponemos una fecha futura
-	void shouldThrowExceptionWithFutureFoundationDate() throws DataAccessException, DuplicatedNameException, MinimunPlayersAndCoachException, DateException {
+	void shouldThrowExceptionWithFutureFoundationDate() throws DataAccessException, DuplicatedNameException, NumberOfPlayersAndCoachException, DateException {
 
 		President president = this.footballClubService.findPresidentByUsername("rafa");
 
@@ -241,7 +240,7 @@ public class FootballClubServiceTests {
 	}
 
 	@Test //CASO POSITIVO - Actualizar Equipo de la DB 
-	void shouldUpdateFootballClubData() throws DataAccessException, DuplicatedNameException, MinimunPlayersAndCoachException, DateException {
+	void shouldUpdateFootballClubData() throws DataAccessException, DuplicatedNameException, NumberOfPlayersAndCoachException, DateException {
 
 		FootballClub footballClub = this.footballClubService.findFootballClubById(9);
 
@@ -258,7 +257,7 @@ public class FootballClubServiceTests {
 	}
 
 	@Test //CASO NEGATIVO - Actualizar Equipo de la DB con mismo nombre
-	void shouldThrowExceptionUpdatingWithTheSameName() throws DataAccessException, DuplicatedNameException, MinimunPlayersAndCoachException, DateException {
+	void shouldThrowExceptionUpdatingWithTheSameName() throws DataAccessException, DuplicatedNameException, NumberOfPlayersAndCoachException, DateException {
 
 		FootballClub footballClub = this.footballClubService.findFootballClubById(9);
 
@@ -273,7 +272,7 @@ public class FootballClubServiceTests {
 	}
 
 	@Test //CASO NEGATIVO - Actualizar Equipo de la DB con fecha Futura
-	void shouldThrowExceptionUpdatingWithFutureDate() throws DataAccessException, DuplicatedNameException, MinimunPlayersAndCoachException, DateException {
+	void shouldThrowExceptionUpdatingWithFutureDate() throws DataAccessException, DuplicatedNameException, NumberOfPlayersAndCoachException, DateException {
 
 		FootballClub footballClub = this.footballClubService.findFootballClubById(9);
 
@@ -291,7 +290,7 @@ public class FootballClubServiceTests {
 	}
 
 	@Test //CASO POSITIVO - Publicar Equipo de la DB con mínimo de 5 jugadores y 1 entrenador
-	void shouldPublishFootballClub() throws DataAccessException, DuplicatedNameException, MinimunPlayersAndCoachException, DateException {
+	void shouldPublishFootballClub() throws DataAccessException, DuplicatedNameException, NumberOfPlayersAndCoachException, DateException {
 
 		FootballClub footballClub = this.footballClubService.findFootballClubById(10);
 
@@ -315,13 +314,13 @@ public class FootballClubServiceTests {
 	}
 
 	@Test //CASO NEGATIVO - Publicar Equipo de la DB sin mínimo de 5 jugadores y 1 entrenador
-	void shouldThrowExceptionPublishingWiththoutMinimunPlayersAndCoach() throws DataAccessException, DuplicatedNameException, MinimunPlayersAndCoachException, DateException {
+	void shouldThrowExceptionPublishingWiththoutMinimunPlayersAndCoach() throws DataAccessException, DuplicatedNameException, NumberOfPlayersAndCoachException, DateException {
 
 		FootballClub footballClub = this.footballClubService.findFootballClubById(10);
 
 		footballClub.setStatus(true);
 
-		Assertions.assertThrows(MinimunPlayersAndCoachException.class, () -> {
+		Assertions.assertThrows(NumberOfPlayersAndCoachException.class, () -> {
 			this.footballClubService.saveFootballClub(footballClub);
 		});
 	}

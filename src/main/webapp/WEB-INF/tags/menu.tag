@@ -200,7 +200,7 @@
 <nav style="border-color:grey" class="navbar2 navbar2-default">		
 		<div class="th-center">		
 		
-    		<spring:url value="/myfootballClub/footballPlayers" var="footballPlayersUrl"></spring:url>
+    		<spring:url value="/footballClubs/myClub/footballPlayers" var="footballPlayersUrl"></spring:url>
     		<a   href="${fn:escapeXml(footballPlayersUrl)}" class="btn btn-default3"><span class="glyphicon glyphicon-user"></span> ${playerList}</a>
     		
     		<spring:url value="/contractPlayer/list" var="contractPlayersUrl"></spring:url>

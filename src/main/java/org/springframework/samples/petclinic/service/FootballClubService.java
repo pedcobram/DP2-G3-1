@@ -31,7 +31,7 @@ import org.springframework.samples.petclinic.model.President;
 import org.springframework.samples.petclinic.repository.FootballClubRepository;
 import org.springframework.samples.petclinic.service.exceptions.DateException;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedNameException;
-import org.springframework.samples.petclinic.service.exceptions.MinimunPlayersAndCoachException;
+import org.springframework.samples.petclinic.service.exceptions.NumberOfPlayersAndCoachException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -96,9 +96,9 @@ public class FootballClubService {
 
 	//Guardar equipo con validación de nombre duplicado
 	@Transactional(rollbackFor = {
-		DuplicatedNameException.class, MinimunPlayersAndCoachException.class
+		DuplicatedNameException.class, NumberOfPlayersAndCoachException.class
 	})
-	public void saveFootballClub(@Valid final FootballClub footballClub) throws DataAccessException, DuplicatedNameException, MinimunPlayersAndCoachException, DateException {
+	public void saveFootballClub(@Valid final FootballClub footballClub) throws DataAccessException, DuplicatedNameException, NumberOfPlayersAndCoachException, DateException {
 
 		String name = footballClub.getName().toLowerCase();
 		FootballClub otherFootClub = null;
@@ -130,7 +130,7 @@ public class FootballClubService {
 			Coach coach = this.coachService.findCoachByClubId(footballClub.getId());
 
 			if (cp.size() < 5 && footballClub.getStatus() == true || coach == null && footballClub.getStatus() == true) {
-				throw new MinimunPlayersAndCoachException();
+				throw new NumberOfPlayersAndCoachException();
 			}
 		}
 

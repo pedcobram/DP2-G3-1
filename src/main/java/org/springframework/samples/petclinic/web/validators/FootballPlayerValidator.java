@@ -44,8 +44,8 @@ public class FootballPlayerValidator implements Validator {
 		}
 
 		// Birth Date Validation
-		if (footballPlayer.getBirthDate() == null || footballPlayer.getBirthDate().after(now)) {
-			errors.rejectValue("birthDate", "code.error.validator.requiredAnd16Years", FootballPlayerValidator.REQUIRED);
+		if (footballPlayer.getBirthDate() == null) {
+			errors.rejectValue("birthDate", "code.error.validator.required", FootballPlayerValidator.REQUIRED);
 		}
 
 	}

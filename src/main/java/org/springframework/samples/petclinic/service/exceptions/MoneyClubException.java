@@ -10,6 +10,6 @@ package org.springframework.samples.petclinic.service.exceptions;
  *
  * @author japarejo
  */
-public class MinimunPlayersAndCoachException extends Exception {
+public class MoneyClubException extends Exception {
 
 }

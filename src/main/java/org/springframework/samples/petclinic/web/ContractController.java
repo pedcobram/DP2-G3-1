@@ -19,6 +19,7 @@ import org.springframework.samples.petclinic.service.ContractService;
 import org.springframework.samples.petclinic.service.FootballClubService;
 import org.springframework.samples.petclinic.service.FootballPlayerService;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedNameException;
+import org.springframework.samples.petclinic.service.exceptions.MoneyClubException;
 import org.springframework.samples.petclinic.web.validators.ContractPlayerValidator;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -132,7 +133,8 @@ public class ContractController {
 
 	//Crear Contrato de Jugador - Post
 	@PostMapping(value = "/contractPlayer/{footballPlayerId}/new")
-	public String processCreationForm(@Valid final ContractPlayer contractPlayer, final BindingResult result, @PathVariable("footballPlayerId") final int footballPlayerId, final Model model) throws DataAccessException, DuplicatedNameException {
+	public String processCreationForm(@Valid final ContractPlayer contractPlayer, final BindingResult result, @PathVariable("footballPlayerId") final int footballPlayerId, final Model model)
+		throws DataAccessException, DuplicatedNameException, MoneyClubException {
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String currentPrincipalName = authentication.getName();

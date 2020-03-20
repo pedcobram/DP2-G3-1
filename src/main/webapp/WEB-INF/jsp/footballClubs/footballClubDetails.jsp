@@ -65,8 +65,8 @@
             <td><c:out value="${footballClub.president.firstName} ${footballClub.president.lastName}"/></td>
         </tr>       
     </table>
-    
-    <spring:url value="/footballClub/${footballClubId}/footballPlayers" var="footballPlayersUrl"></spring:url>
+
+    <spring:url value="/footballClubs/list/${footballClubId}/footballPlayers" var="footballPlayersUrl"></spring:url>
     	<a href="${fn:escapeXml(footballPlayersUrl)}" class="btn btn-default">
     				<span class="glyphicon glyphicon-user"></span> 
                             ${playerList}</a>
