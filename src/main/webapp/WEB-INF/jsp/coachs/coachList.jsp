@@ -56,17 +56,6 @@
             </tr>
         </c:forEach>
         </tbody>
-        </table>
-        
-        <!-- Tomo el valor del nombre de usuario actual %-->
-    
-    	<security:authorize access="isAuthenticated()">
-   			<security:authentication var="principalUsername" property="principal.username" /> 
-		</security:authorize>
-    
-    	<c:if test="${thisClubPresidentUsername == principalUsername && thisClubStatus == false}">
-    		<spring:url value="/coachs/new" var="coachsNewUrl"></spring:url>
-    		<a href="${fn:escapeXml(coachsNewUrl)}" class="btn btn-default">${RegisterCoach}</a>
-    		<p style="margin-top:0.5%; margin-left: 1%">${RegisterCoachInfo}</p>
-    	</c:if> 
+        </table>     
+   
 </petclinic:layout>

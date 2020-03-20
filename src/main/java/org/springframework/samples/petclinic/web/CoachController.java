@@ -1,6 +1,7 @@
 
 package org.springframework.samples.petclinic.web;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 
@@ -70,7 +71,9 @@ public class CoachController {
 
 		if (footballClub.getStatus() == false) {
 
-			Collection<Coach> coachsFA = this.coachService.findAllCoachsFA();
+			Collection<Coach> coachsFA = new ArrayList<>();
+			coachsFA.addAll(this.coachService.findAllCoachsFA());
+
 			model.put("coachs", coachsFA);
 			model.put("thisClubStatus", footballClub.getStatus());
 			model.put("thisClubPresidentUsername", footballClub.getPresident().getUser().getUsername());
@@ -78,7 +81,8 @@ public class CoachController {
 			return "coachs/coachList";
 		} else {
 
-			Collection<Coach> coachs = this.coachService.findAllCoachs();
+			Collection<Coach> coachs = new ArrayList<>();
+			coachs.addAll(this.coachService.findAllCoachs());
 			model.put("coachs", coachs);
 
 			return "coachs/coachList";

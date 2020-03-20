@@ -62,6 +62,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
       .antMatchers("/footballPlayers/**").authenticated()
       .antMatchers("/footballClubs/list/**").authenticated()
       .antMatchers("/footballClubs/myClub/**").hasAnyAuthority("president")
+      .antMatchers("/transfers/**").hasAnyAuthority("president")
       .antMatchers("/coachs/**").hasAnyAuthority("president")
       .antMatchers("/myfootballClub/**").hasAnyAuthority("president")
       .antMatchers("/footballPlayer/new").hasAnyAuthority("president")

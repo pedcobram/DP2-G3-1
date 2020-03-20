@@ -206,24 +206,15 @@
     		<spring:url value="/contractPlayer/list" var="contractPlayersUrl"></spring:url>
     		<a   href="${fn:escapeXml(contractPlayersUrl)}" class="btn btn-default3"><span class="glyphicon glyphicon-inbox"></span> ${contracts}</a>
     		
-    		<spring:url value="/coachs" var="coachsUrl"></spring:url>
-    		<a   href="${fn:escapeXml(coachsUrl)}" class="btn btn-default3"><span class="glyphicon glyphicon-th-list"></span> ${coachList}</a>
-    		
     		<spring:url value="/contractPlayer/list" var="contractPlayersUrl"></spring:url>
     		<a   href="${fn:escapeXml(contractPlayersUrl)}" class="btn btn-default3"><span class="glyphicon glyphicon-inbox"></span> Contratos Publicitarios</a>
     		
-    		<spring:url value="/contractPlayer/list" var="contractPlayersUrl"></spring:url>
+    		<spring:url value="/transfers/panel" var="contractPlayersUrl"></spring:url>
     		<a   href="${fn:escapeXml(contractPlayersUrl)}" class="btn btn-default3"><span class="glyphicon glyphicon-sort"></span> Fichajes</a>
     		
     		<spring:url value="/matches/list" var="matchesUrl"></spring:url>
     		<a   href="${fn:escapeXml(matchesUrl)}" class="btn btn-default3"><span class="glyphicon glyphicon-list-alt"></span> <fmt:message key="matchList"/></a>
     		
-    		
-    		
-									
-										
-    		
-    
     	</div> 
 	</nav>
 </sec:authorize>

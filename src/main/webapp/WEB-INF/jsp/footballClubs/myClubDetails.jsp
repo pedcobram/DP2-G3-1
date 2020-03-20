@@ -27,7 +27,9 @@
     	<fmt:message key="code.crud.updateClub" var="updateClub"/>
     	<fmt:message key="code.crud.deleteClub" var="deleteClub"/>   	
     	<fmt:message key="code.list.playerList" var="playerList"/>
-    	<fmt:message key="code.security.deleteClub" var="areYouSure"/>	
+    	<fmt:message key="code.security.deleteClub" var="areYouSure"/>
+    	<fmt:message key="code.crud.registerCoach" var="RegisterCoach"/> 	
+		<fmt:message key="code.information.registerCoach" var="RegisterCoachInfo"/>	
     	 	
 <petclinic:layout pageName="footballCLubs">
 
@@ -107,7 +109,13 @@
     	<c:if test="${(footballClub.president.user.username == principalUsername)}">
     		<spring:url value="/footballClubs/myClub/{principalUsername}/delete" var="addUrl"></spring:url>
     		<a href="${fn:escapeXml(addUrl)}" onclick="return confirm('${areYouSure}')" class="btn btn-default2"><span class="glyphicon glyphicon-trash"></span> ${deleteClub}</a>
-    	</c:if>      
+    	</c:if>
+    	  
+    	<c:if test="${footballClub.president.user.username == principalUsername && footballClub.status == false}">
+    		<spring:url value="/coachs/new" var="coachsNewUrl"></spring:url>
+    		<a style="margin-left: 5%" href="${fn:escapeXml(coachsNewUrl)}" class="btn btn-default">${RegisterCoach}</a>
+    		<p style="margin-top:0.5%; margin-left: 28%">${RegisterCoachInfo}</p>
+    	</c:if>    
     	
     	
     </security:authorize>

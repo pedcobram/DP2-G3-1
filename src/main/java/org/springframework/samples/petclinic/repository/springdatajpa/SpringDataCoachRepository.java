@@ -16,6 +16,10 @@ public interface SpringDataCoachRepository extends CoachRepository, Repository<C
 	Collection<Coach> findAll() throws DataAccessException;
 
 	@Override
+	@Query("select c from Coach c where c.club != null")
+	Collection<Coach> findAllWithClub() throws DataAccessException;
+
+	@Override
 	@Query("select c from Coach c where c.club = null")
 	Collection<Coach> findAllFreeAgents() throws DataAccessException;
 

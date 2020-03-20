@@ -67,15 +67,15 @@
     </table>
 
     <spring:url value="/footballClubs/list/${footballClubId}/footballPlayers" var="footballPlayersUrl"></spring:url>
-    	<a href="${fn:escapeXml(footballPlayersUrl)}" class="btn btn-default">
-    				<span class="glyphicon glyphicon-user"></span> 
-                            ${playerList}</a>
+    	<a href="${fn:escapeXml(footballPlayersUrl)}" class="btn btn-default"><span class="glyphicon glyphicon-user"></span> ${playerList}</a>
 					 
 	<c:if test="${footballClub.president.user.username != principalUsername && !notHasAPublishedTeam}">
      	<security:authorize access="hasAnyAuthority('president')">
       	  <spring:url value="/matchRequests/${footballClub.president.user.username}/new" var="newMatchRequest"></spring:url>
     		<a href="${fn:escapeXml(newMatchRequest)}" class="btn btn-default2"><fmt:message key="newMatchRequest"/></a>
     	</security:authorize>
-    </c:if>    								 
+    </c:if>   
+    
+     								 
     
 </petclinic:layout>
