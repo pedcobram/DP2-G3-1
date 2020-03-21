@@ -45,7 +45,7 @@
 				<label class="col-sm-2 control-label">${Money}</label>
 				<div class="col-sm-10">
 					<div class="form-control" style="background-color: #f1f1f1"> 
-						100.000.00,00 €
+						100.000.000,00 €
 					</div>
 				</div>	
 			</div> 

@@ -96,7 +96,7 @@ public class FootballClubService {
 
 	//Guardar equipo con validación de nombre duplicado
 	@Transactional(rollbackFor = {
-		DuplicatedNameException.class, NumberOfPlayersAndCoachException.class
+		DuplicatedNameException.class, NumberOfPlayersAndCoachException.class, DateException.class
 	})
 	public void saveFootballClub(@Valid final FootballClub footballClub) throws DataAccessException, DuplicatedNameException, NumberOfPlayersAndCoachException, DateException {
 

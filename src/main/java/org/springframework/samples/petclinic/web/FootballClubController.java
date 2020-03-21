@@ -169,7 +169,7 @@ public class FootballClubController {
 
 				footballClub.setPresident(thisUser);
 				footballClub.setFans(0);
-				footballClub.setMoney(10000000);
+				footballClub.setMoney(100000000);
 				footballClub.setStatus(false);
 				this.footballClubService.saveFootballClub(footballClub);
 

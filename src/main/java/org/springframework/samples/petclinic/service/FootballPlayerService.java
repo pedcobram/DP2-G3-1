@@ -76,7 +76,9 @@ public class FootballPlayerService {
 	}
 
 	//Guardar jugador con validación de nombre duplicado
-	@Transactional(rollbackFor = DuplicatedNameException.class)
+	@Transactional(rollbackFor = {
+		DuplicatedNameException.class, NumberOfPlayersAndCoachException.class, DateException.class, StatusException.class
+	})
 	public void saveFootballPlayer(@Valid final FootballPlayer footballPlayer, @Valid final ContractPlayer newContract)
 		throws DataAccessException, DuplicatedNameException, NumberOfPlayersAndCoachException, MoneyClubException, StatusException, DateException {
 
