@@ -1,8 +1,6 @@
 
 package org.springframework.samples.petclinic.service;
 
-import javax.validation.ConstraintViolationException;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +10,8 @@ import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.samples.petclinic.model.Match;
 import org.springframework.samples.petclinic.model.MatchRecord;
 import org.springframework.samples.petclinic.model.Enum.MatchRecordStatus;
+import org.springframework.samples.petclinic.service.exceptions.IllegalDateException;
+import org.springframework.samples.petclinic.service.exceptions.MatchRecordResultException;
 import org.springframework.stereotype.Service;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
@@ -57,7 +57,7 @@ public class MatchRecordServiceTests {
 
 		Boolean res = true;
 
-		MatchRecord mr = this.matchRecordService.findMatchRecordByMatchId(1);
+		MatchRecord mr = this.matchRecordService.findMatchRecordByMatchId(2);
 
 		if (mr == null) {
 			res = false;
@@ -81,7 +81,7 @@ public class MatchRecordServiceTests {
 	}
 
 	@Test //CASO POSITIVO
-	void shouldSaveMatchRecord() {
+	void shouldSaveMatchRecord() throws IllegalDateException, MatchRecordResultException {
 
 		Match m = this.matchService.findMatchById(1);
 
@@ -90,8 +90,8 @@ public class MatchRecordServiceTests {
 		mr.setId(100);
 		mr.setMatch(m);
 		mr.setResult("Test");
-		mr.setSeason_end("0000");
-		mr.setSeason_start("0000");
+		mr.setSeason_end("2021");
+		mr.setSeason_start("2020");
 		mr.setStatus(MatchRecordStatus.NOT_PUBLISHED);
 		mr.setTitle("Test");
 
@@ -113,13 +113,13 @@ public class MatchRecordServiceTests {
 		mr.setStatus(MatchRecordStatus.NOT_PUBLISHED);
 		mr.setTitle("");
 
-		Assertions.assertThrows(ConstraintViolationException.class, () -> {
+		Assertions.assertThrows(IllegalDateException.class, () -> {
 			this.matchRecordService.saveMatchRecord(mr);
 		});
 	}
 
 	@Test //CASO POSITIVO
-	void shouldDeleteMatchRecord() {
+	void shouldDeleteMatchRecord() throws IllegalDateException, MatchRecordResultException {
 
 		Match m = this.matchService.findMatchById(1);
 
@@ -128,8 +128,8 @@ public class MatchRecordServiceTests {
 		mr.setId(100);
 		mr.setMatch(m);
 		mr.setResult("Test");
-		mr.setSeason_end("0000");
-		mr.setSeason_start("0000");
+		mr.setSeason_end("2021");
+		mr.setSeason_start("2020");
 		mr.setStatus(MatchRecordStatus.NOT_PUBLISHED);
 		mr.setTitle("Test");
 

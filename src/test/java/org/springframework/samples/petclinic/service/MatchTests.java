@@ -48,7 +48,7 @@ public class MatchTests {
 
 		int count = ms.size();
 
-		Assertions.assertTrue(count == 2);
+		Assertions.assertTrue(count == 3);
 	}
 
 	@Test //CASO POSITIVO
@@ -104,62 +104,6 @@ public class MatchTests {
 	}
 
 	@Test //CASO POSITIVO
-	void shouldFindMatchByFootballClubName1() {
-
-		Boolean res = true;
-
-		Match m = this.matchService.findMatchByFootballClubName1("Sevilla Fútbol Club");
-
-		if (m == null) {
-			res = false;
-		}
-
-		Assertions.assertTrue(res);
-	}
-
-	@Test //CASO NEGATIVO
-	void shouldNotFindMatchByFootballClubName1() {
-
-		Boolean res = true;
-
-		Match m = this.matchService.findMatchByFootballClubName1("Invented name");
-
-		if (m == null) {
-			res = false;
-		}
-
-		Assertions.assertFalse(res);
-	}
-
-	@Test //CASO POSITIVO
-	void shouldFindMatchByFootballClubName2() {
-
-		Boolean res = true;
-
-		Match m = this.matchService.findMatchByFootballClubName2("Sevilla Fútbol Club");
-
-		if (m == null) {
-			res = false;
-		}
-
-		Assertions.assertTrue(res);
-	}
-
-	@Test //CASO NEGATIVO
-	void shouldNootFindMatchByFootballClubName2() {
-
-		Boolean res = true;
-
-		Match m = this.matchService.findMatchByFootballClubName2("Invented name");
-
-		if (m == null) {
-			res = false;
-		}
-
-		Assertions.assertFalse(res);
-	}
-
-	@Test //CASO POSITIVO
 	void shouldSaveMatch() {
 
 		Match m = new Match();
@@ -186,7 +130,7 @@ public class MatchTests {
 
 		int count = this.matchService.count();
 
-		Assertions.assertTrue(count == 3);
+		Assertions.assertTrue(count == 4);
 	}
 
 	@Test //CASO NEGATIVO
@@ -232,13 +176,13 @@ public class MatchTests {
 
 		int pre_delete = this.matchService.count();
 
-		Assertions.assertTrue(pre_delete == 3);
+		Assertions.assertTrue(pre_delete == 4);
 
 		this.matchService.deleteMatch(m);
 
 		int post_delete = this.matchService.count();
 
-		Assertions.assertTrue(post_delete == 2);
+		Assertions.assertTrue(post_delete == 3);
 	}
 
 	@Test //CASO NEGATIVO

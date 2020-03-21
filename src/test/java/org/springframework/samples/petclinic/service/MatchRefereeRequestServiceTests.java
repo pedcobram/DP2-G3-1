@@ -114,7 +114,7 @@ public class MatchRefereeRequestServiceTests {
 
 		Boolean res = true;
 
-		MatchRefereeRequest mrr = this.matchRefereeRequestService.findMatchRefereeRequestByUsernameAndMatchId("referee1", 1);
+		MatchRefereeRequest mrr = this.matchRefereeRequestService.findMatchRefereeRequestByUsernameAndMatchId("referee1", 3);
 
 		if (mrr == null) {
 			res = false;

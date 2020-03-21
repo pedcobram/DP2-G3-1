@@ -16,6 +16,7 @@
     <form:form modelAttribute="matchRecord" class="form-horizontal" id="add-footballPlayer-form">
         <div class="form-group has-feedback">
             <petclinic:inputField label="Title" name="title" />
+            <petclinic:inputField label="Season Start" name="season_start" />
             <petclinic:inputField label="Result" name="result"/>
             <div class="control-group">
                     <petclinic:selectField label="matchStatus" name="status" names="${matchStatus}" size="2" />

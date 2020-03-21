@@ -49,7 +49,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
       .antMatchers("/competitionAdmin/**").hasAnyAuthority("competitionAdmin")
       .antMatchers("/myCompetitionAdminRequest/**").authenticated()
       .antMatchers("/competitionAdminRequest/list/**").hasAnyAuthority("admin")
-      .antMatchers("/competitionAdminRequest/**").permitAll() //
+      .antMatchers("/competitionAdminRequest/**").authenticated()
       .antMatchers("/deleteCompAdminRequest/**").authenticated()
       .antMatchers("/deleteCompetitionAdmin/**").hasAnyAuthority("competitionAdmin")
       .antMatchers("/myCompetitionAdminProfile/**").hasAnyAuthority("competitionAdmin")

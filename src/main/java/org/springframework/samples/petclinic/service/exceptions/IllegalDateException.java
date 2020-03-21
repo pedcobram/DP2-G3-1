@@ -1,7 +1,7 @@
 
 package org.springframework.samples.petclinic.service.exceptions;
 
-public class IllegalRoleAccessException extends Exception {
+public class IllegalDateException extends Exception {
 
 	/**
 	 *

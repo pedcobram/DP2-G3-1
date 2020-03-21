@@ -16,10 +16,6 @@ public interface MatchRepository {
 
 	Match findMatchById(int id) throws DataAccessException;
 
-	Match findMatchByFootballClubName1(String footballClubName1) throws DataAccessException;
-
-	Match findMatchByFootballClubName2(String footballClubName2) throws DataAccessException;
-
 	void save(Match match) throws DataAccessException;
 
 	void delete(Match match) throws DataAccessException;

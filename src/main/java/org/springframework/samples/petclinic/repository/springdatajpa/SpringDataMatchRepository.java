@@ -25,14 +25,6 @@ public interface SpringDataMatchRepository extends MatchRepository, Repository<M
 	Match findMatchById(@Param("id") int id) throws DataAccessException;
 
 	@Override
-	@Query("SELECT a FROM Match a WHERE a.footballClub1.name =:footballClubName1")
-	Match findMatchByFootballClubName1(@Param("footballClubName1") String footballClubName1) throws DataAccessException;
-
-	@Override
-	@Query("SELECT a FROM Match a WHERE a.footballClub1.name =:footballClubName2")
-	Match findMatchByFootballClubName2(@Param("footballClubName2") String footballClubName2) throws DataAccessException;
-
-	@Override
 	@Query("select m from Match m where m.footballClub1.president.user.username = ?1 or m.footballClub2.president.user.username = ?1")
 	Collection<Match> findAllMyMatches(String currentPrincipalName);
 

@@ -7,7 +7,7 @@
 <%@ page contentType="text/html; charset=UTF-8" %> <!-- Para  tildes, ñ y caracteres especiales como el € %-->
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
-<petclinic:layout pageName="matchRecords">
+<petclinic:layout pageName="matchRecord">
 	
 <jsp:body>	
 
@@ -17,6 +17,10 @@
         <tr>
             <th><fmt:message key="titleMatchRecord"/></th>
             <td><b><c:out value="${matchRecord.title}"/></b></td>
+        </tr>
+         <tr>
+            <th><fmt:message key="seasonMatchRecord"/></th>
+            <td><b><c:out value="${matchRecord.season_start}"/> - <c:out value="${matchRecord.season_end}"/></b></td>
         </tr>
         <tr>
             <th><fmt:message key="statusMatchRecord"/></th>
@@ -29,8 +33,8 @@
     </table>
     
    <c:if test="${matchRecord.status eq 'NOT_PUBLISHED'}">
-   	 	<spring:url value="/matches/matchRecord/${matchRecord.id}/edit" var="editMatchRecord">
-    		<spring:param name="matchId" value="${matchRecord.match.id}"/>
+   	 	<spring:url value="/matches/matchRecord/${matchRecord.match.id}/edit/" var="editMatchRecord">
+    		<!-- <spring:param name="matchId" value="${matchRecord.match.id}"/> -->
    		</spring:url>	
     	<a href="${fn:escapeXml(editMatchRecord)}" class="btn btn-default">Editar</a>
   	</c:if>

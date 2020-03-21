@@ -60,8 +60,10 @@
         		</c:choose>	
                 </td> 
                 <td>
-                  	<spring:url value="/matches/${matches.id}" var='matchStatus'></spring:url>
-                	<a href="${fn:escapeXml(matchStatus)}" class="btn btn-default">Data</a>
+                	<c:if test="${matches.referee.user.username != principalUsername}">
+                  		<spring:url value="/matches/${matches.id}" var='matchStatus'></spring:url>
+                		<a href="${fn:escapeXml(matchStatus)}" class="btn btn-default">Data</a>
+                	</c:if>     
                 	
                 	<c:if test="${matches.referee == null}">
                 		<spring:url value="/matches/refereeRequest/refereeList/${matches.id}" var='editMatchStatus'></spring:url>

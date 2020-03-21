@@ -59,7 +59,7 @@ public class FootballPlayerMatchStatisticTests {
 
 		FootballPlayerMatchStatistics fpss = new FootballPlayerMatchStatistics();
 
-		fpss.getFootballPlayerStatisticsList().addAll(this.footballPlayerMatchStatisticService.findFootballPlayerMatchStatisticByMatchId(1));
+		fpss.getFootballPlayerStatisticsList().addAll(this.footballPlayerMatchStatisticService.findFootballPlayerMatchStatisticByMatchRecordId(1));
 
 		int count = fpss.getFootballPlayerStatisticsList().size();
 

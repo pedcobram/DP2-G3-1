@@ -41,16 +41,6 @@ public class MatchService {
 		return this.matchRepository.findMatchById(id);
 	}
 
-	@Transactional(readOnly = true)
-	public Match findMatchByFootballClubName1(final String footballClubName1) throws DataAccessException {
-		return this.matchRepository.findMatchByFootballClubName1(footballClubName1);
-	}
-
-	@Transactional(readOnly = true)
-	public Match findMatchByFootballClubName2(final String footballClubName2) throws DataAccessException {
-		return this.matchRepository.findMatchByFootballClubName2(footballClubName2);
-	}
-
 	@Transactional()
 	public void saveMatch(final Match match) throws DataAccessException {
 		this.matchRepository.save(match);
