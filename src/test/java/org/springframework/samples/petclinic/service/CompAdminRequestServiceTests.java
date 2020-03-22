@@ -8,9 +8,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.CompAdminRequest;
 import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.model.Enum.RequestStatus;
+import org.springframework.samples.petclinic.service.exceptions.PendingRequestException;
 import org.springframework.stereotype.Service;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
@@ -108,13 +110,20 @@ public class CompAdminRequestServiceTests {
 	}
 
 	@Test //CASO POSITIVO
-	void shouldCountCompAdminRequestByUsername() {
-		int countByUsername = this.compAdminRequestService.countCompAdminRequestByUsername("gonzalo");
-		Assertions.assertTrue(countByUsername == 1);
+	void shouldCountCompAdminRequestByUsername() throws DataAccessException, PendingRequestException {
+		int countByUsername = this.compAdminRequestService.countCompAdminRequestByUsername("gonzalo0");
+		Assertions.assertTrue(countByUsername == 0);
+	}
+
+	@Test //CASO REGLA DE NEGOCIO
+	void shouldExceptionCountCompAdminRequestByUsername() throws DataAccessException, PendingRequestException {
+		Assertions.assertThrows(PendingRequestException.class, () -> {
+			this.compAdminRequestService.countCompAdminRequestByUsername("gonzalo");
+		});
 	}
 
 	@Test //CASO NEGATIVO
-	void shouldNotCountCompAdminRequestByUsername() {
+	void shouldNotCountCompAdminRequestByUsername() throws DataAccessException, PendingRequestException {
 		Integer countByUsername = this.compAdminRequestService.countCompAdminRequestByUsername("gonzaloTest");
 		Assertions.assertTrue(countByUsername == 0);
 	}

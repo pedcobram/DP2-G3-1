@@ -47,7 +47,7 @@ public class CompetitionAdminValidatorTests {
 
 		ConstraintViolation<CompetitionAdmin> violation = constraintViolations.iterator().next();
 		Assertions.assertTrue(violation.getPropertyPath().toString().compareTo("telephone") == 0);
-		Assertions.assertTrue(violation.getMessage().compareTo("numeric value out of bounds (<10 digits>.<0 digits> expected)") == 0);
+		Assertions.assertTrue(violation.getMessage().compareTo("must not be empty") == 0);
 
 	}
 

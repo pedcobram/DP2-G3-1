@@ -61,23 +61,13 @@ public class CompetitionAdminController {
 
 		//Obtenemos el Competition Admin
 		CompetitionAdmin competitionAdmin = this.competitionAdminService.findCompetitionAdminByUsername(currentPrincipalName);
-		Authenticated newAuth = new Authenticated();
 
-		newAuth.setId(competitionAdmin.getId());
-		newAuth.setFirstName(competitionAdmin.getFirstName());
-		newAuth.setLastName(competitionAdmin.getLastName());
-		newAuth.setDni(competitionAdmin.getDni());
-		newAuth.setTelephone(competitionAdmin.getTelephone());
-		newAuth.setUser(competitionAdmin.getUser());
-		newAuth.setEmail(competitionAdmin.getEmail());
-
-		//Guardamos en la db el nuevo presidente
-		this.authenticatedService.saveAuthenticated(newAuth);
+		//Eliminamos el Competition Admin
 		this.competitionAdminService.deleteCompetitionAdmin(competitionAdmin);
 
+		//CON ESTO CONSEGUIMOS QUE NO HAGA FALTA RELOGUEAR PARA GANAR LOS PRIVILEGIOS
 		Authenticated thisUser = this.authenticatedService.findAuthenticatedByUsername(username);
 
-		//CON ESTO CONSEGUIMOS QUE NO HAGA FALTA RELOGUEAR PARA GANAR LOS PRIVILEGIOS
 		Set<GrantedAuthority> authorities2 = new HashSet<>();
 		authorities2.add(new SimpleGrantedAuthority("authenticated"));
 		Authentication reAuth = new UsernamePasswordAuthenticationToken(currentPrincipalName, thisUser.getUser().getPassword());
@@ -105,16 +95,24 @@ public class CompetitionAdminController {
 			String currentPrincipalName = authentication.getName();
 
 			competitionAdmin.setId(competitionAdminId);
-			competitionAdmin.getUser().setEnabled(true);
 
 			this.competitionAdminService.saveCompetitionAdmin(competitionAdmin);
+
 			return "redirect:/myCompetitionAdminProfile/" + currentPrincipalName;
 		}
 	}
 
-	//Añadir restricción de que solo el Principal actual puede ver su vista de edición
 	@GetMapping("/myCompetitionAdminProfile/{competitionAdminUsername}")
-	public ModelAndView showCompetitionAdminProfile(@PathVariable("competitionAdminUsername") final String competitionAdminUsername) {
+	public ModelAndView showCompetitionAdminProfile(@PathVariable("competitionAdminUsername") final String competitionAdminUsername) throws CredentialException {
+
+		//Obtenemos el username actual conectado
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
+
+		if (this.competitionAdminService.findCompetitionAdminByUsername(competitionAdminUsername).getUser().getUsername() != currentPrincipalName) {
+			throw new CredentialException("Forbidden Access");
+		}
+
 		ModelAndView mav = new ModelAndView("competitionAdmins/competitionAdminDetails");
 		mav.addObject(this.competitionAdminService.findCompetitionAdminByUsername(competitionAdminUsername));
 		return mav;

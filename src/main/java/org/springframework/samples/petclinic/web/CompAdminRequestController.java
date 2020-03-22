@@ -19,6 +19,7 @@ import org.springframework.samples.petclinic.service.AuthoritiesService;
 import org.springframework.samples.petclinic.service.CompAdminRequestService;
 import org.springframework.samples.petclinic.service.CompetitionAdminService;
 import org.springframework.samples.petclinic.service.UserService;
+import org.springframework.samples.petclinic.service.exceptions.PendingRequestException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -79,15 +80,15 @@ public class CompAdminRequestController {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String currentPrincipalName = authentication.getName();
 
-		int count = this.compAdminRequestService.countCompAdminRequestByUsername(currentPrincipalName);
+		try {
+			this.compAdminRequestService.countCompAdminRequestByUsername(currentPrincipalName);
+		} catch (PendingRequestException pre) {
+			return "redirect:/myCompetitionAdminRequest/" + currentPrincipalName;
+		}
 
 		CompAdminRequest compAdminRequest = new CompAdminRequest();
 
 		model.put("compAdminRequest", compAdminRequest);
-
-		if (count > 0) {
-			return "redirect:/myCompetitionAdminRequest/" + currentPrincipalName;
-		}
 
 		return CompAdminRequestController.VIEWS_COMP_ADMIN_REQUEST_CREATE_OR_UPDATE_FORM;
 	}
@@ -131,6 +132,7 @@ public class CompAdminRequestController {
 
 			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 			String currentPrincipalName = authentication.getName();
+
 			Authenticated auth = this.authenticatedService.findAuthenticatedByUsername(currentPrincipalName);
 			CompAdminRequest last_id = this.compAdminRequestService.findCompAdminRequestByUsername(currentPrincipalName);
 
@@ -152,7 +154,6 @@ public class CompAdminRequestController {
 		Authenticated thisUser = this.authenticatedService.findAuthenticatedByUsername(currentPrincipalName);
 
 		CompAdminRequest tbdeleted = this.compAdminRequestService.findCompAdminRequestById(id);
-		tbdeleted.setUser(null); //Si no es null da error referencial
 		this.compAdminRequestService.deleteCompAdminRequest(tbdeleted);
 
 		Authentication reAuth = new UsernamePasswordAuthenticationToken(currentPrincipalName, thisUser.getUser().getPassword());
@@ -204,7 +205,6 @@ public class CompAdminRequestController {
 
 		//
 		return "redirect:/competitionAdminRequest/list";
-
 	}
 
 	@GetMapping(value = "/competitionAdminRequest/reject/{username}")
@@ -224,7 +224,6 @@ public class CompAdminRequestController {
 
 		//
 		return "redirect:/competitionAdminRequest/list";
-
 	}
 
 }

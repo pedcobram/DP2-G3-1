@@ -36,7 +36,10 @@ public class MatchRecordService {
 	public void saveMatchRecord(final MatchRecord matchRecord) throws IllegalDateException, MatchRecordResultException {
 
 		// RN: Fecha de inicio de temporada menor que fecha de finalizacion
-		if (matchRecord.getSeason_start() != null && matchRecord.getSeason_end() != null && !matchRecord.getSeason_start().isEmpty() && !matchRecord.getSeason_end().isEmpty()
+		if (matchRecord.getSeason_start() != null 
+			&& matchRecord.getSeason_end() != null 
+			&& !matchRecord.getSeason_start().isEmpty() 
+			&& !matchRecord.getSeason_end().isEmpty()
 			&& Integer.parseInt(matchRecord.getSeason_end()) <= Integer.parseInt(matchRecord.getSeason_start())) {
 			throw new IllegalDateException();
 		}

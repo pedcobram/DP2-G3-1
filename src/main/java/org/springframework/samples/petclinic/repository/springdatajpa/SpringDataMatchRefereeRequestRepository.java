@@ -14,6 +14,10 @@ import org.springframework.samples.petclinic.repository.MatchRefereeRequestRepos
 public interface SpringDataMatchRefereeRequestRepository extends MatchRefereeRequestRepository, Repository<MatchRefereeRequest, Integer> {
 
 	@Override
+	@Query("SELECT a FROM MatchRefereeRequest a")
+	Collection<MatchRefereeRequest> findAllMatchRefereeRequests() throws DataAccessException;
+
+	@Override
 	@Query("SELECT a FROM MatchRefereeRequest a WHERE a.status = 0")
 	Collection<MatchRefereeRequest> findAllOnHoldMatchRefereeRequests() throws DataAccessException;
 

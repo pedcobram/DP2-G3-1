@@ -70,8 +70,10 @@
                 		<a href="${fn:escapeXml(editMatchStatus)}" class="btn btn-default"><fmt:message key="code.button.matchlist.addreferee"/></a>    
                 	</c:if>             
                 	
-                    <spring:url value="/matches/matchRecord/${matches.id}/view" var='viewMatchRecord'></spring:url>
-                	<a href="${fn:escapeXml(viewMatchRecord)}" class="btn btn-default"><fmt:message key="code.button.matchlist.matchrecord"/></a>                 	         	
+                	<c:if test="${matches.referee != null}">
+                    	<spring:url value="/matches/matchRecord/${matches.id}/view" var='viewMatchRecord'></spring:url>
+                		<a href="${fn:escapeXml(viewMatchRecord)}" class="btn btn-default"><fmt:message key="code.button.matchlist.matchrecord"/></a>   
+                	</c:if>              	         	
                 </td>
             </tr>
         </c:forEach>

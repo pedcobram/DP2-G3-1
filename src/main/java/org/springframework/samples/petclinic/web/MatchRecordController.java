@@ -192,6 +192,11 @@ public class MatchRecordController {
 
 		MatchRecord mr = this.matchRecordService.findMatchRecordByMatchId(matchId);
 
+		// Si se intenta acceder a un match record que no existe, devuelve al inicio
+		if (this.matchRecordService.findMatchRecordByMatchId(matchId) == null) {
+			return "redirect:/";
+		}
+
 		FootballPlayerMatchStatistics fpms = new FootballPlayerMatchStatistics();
 		fpms.getFootballPlayerStatisticsList().addAll(this.footballPlayerMatchStatisticService.findFootballPlayerMatchStatisticByMatchRecordId(mr.getId()));
 
