@@ -18,6 +18,8 @@ INSERT INTO users(username,password,enabled) VALUES ('owner7','owner7',TRUE);
 INSERT INTO authorities VALUES ('owner7','president');
 INSERT INTO users(username,password,enabled) VALUES ('owner8','owner8',TRUE);
 INSERT INTO authorities VALUES ('owner8','president');
+INSERT INTO users(username,password,enabled) VALUES ('owner9','owner9',TRUE);
+INSERT INTO authorities VALUES ('owner9','president');
 -- User Rafa
 INSERT INTO users(username,password,enabled) VALUES ('rafa','rafa',TRUE);
 INSERT INTO authorities VALUES ('rafa','president');
@@ -70,6 +72,7 @@ INSERT INTO presidents VALUES (8, 'President8', 'Surname8', '81111111A', 'email@
 INSERT INTO presidents VALUES (9, 'President9', 'Surname9', '91111111A', 'email@gmail.com', '800111222', 'owner7');
 INSERT INTO presidents VALUES (10, 'Rafael', 'Liébana Fuentes', '11111111A', 'rafliefue@alum.us.es', '600111222', 'rafa');
 INSERT INTO presidents VALUES (11, 'Wakka', 'Chappu', '11111112A', 'wakka@gmail.com', '600121222', 'owner8');
+INSERT INTO presidents VALUES (12, 'Bickson', 'Graav', '11111122A', 'bickson@gmail.com', '602121222', 'owner9');
 
 -- Referee users
 INSERT INTO referees VALUES (1, 'referee1', 'Surname1', '11111111A', 'email1@gmail.com', '600111222', 'referee1');
@@ -81,11 +84,12 @@ INSERT INTO football_Clubs(id,status,name,crest,foundation_date,stadium,city,fan
 INSERT INTO football_Clubs(id,status,name,crest,foundation_date,stadium,city,fans,money,president_id) VALUES (3, true, 'Fútbol Club Barcelona','https://e00-marca.uecdn.es/assets/sports/logos/football/png/144x144/178.png', '1899-11-29', 'Camp Nou', 'Barcelona', '99300', '650000000',3);
 INSERT INTO football_Clubs(id,status,name,crest,foundation_date,stadium,city,fans,money,president_id) VALUES (4, true, 'Valencia Club de Fútbol','https://e00-marca.uecdn.es/assets/sports/logos/football/png/144x144/191.png', '1919-03-18', 'Mestalla', 'Valencia', '48600', '200000000',4);
 INSERT INTO football_Clubs(id,status,name,crest,foundation_date,stadium,city,fans,money,president_id) VALUES (5, true, 'Atlético de Madrid','https://e00-marca.uecdn.es/assets/sports/logos/football/png/144x144/175.png', '1903-04-26', 'Wanda Metropolitano', 'Madrid', '69000', '350000000',5);
-INSERT INTO football_Clubs(id,status,name,crest,foundation_date,stadium,city,fans,money,president_id) VALUES (6, true, 'Real Betis Balompié','https://e00-marca.uecdn.es/assets/sports/logos/football/png/144x144/185.png', '1907-09-12', 'Benito Villamarín', 'Seville', '60000', '350000000',6);
+INSERT INTO football_Clubs(id,status,name,crest,foundation_date,stadium,city,fans,money,president_id) VALUES (6, true, 'Real Betis Balompié','https://e00-marca.uecdn.es/assets/sports/logos/football/png/144x144/185.png', '1907-09-12', 'Benito Villamarín', 'Seville', '60000', '100000000',6);
 INSERT INTO football_Clubs(id,status,name,crest,foundation_date,stadium,city,fans,money,president_id) VALUES (7, true, 'Liverpool Football Club','https://pluspng.com/img-png/logo-liverpool-fc-png-liverpool-318.png', '1892-06-03', 'Anfield', 'Liverpool', '54000', '350000000',7);
-INSERT INTO football_Clubs(id,status,name,crest,foundation_date,stadium,city,fans,money,president_id) VALUES (8, true, 'Manchester City Football Club','https://upload.wikimedia.org/wikipedia/sco/thumb/e/eb/Manchester_City_FC_badge.svg/1200px-Manchester_City_FC_badge.svg.png', '1894-04-16', 'City Of Manchester Stadium', 'Manchester', '55000', '550000000',8);
+INSERT INTO football_Clubs(id,status,name,crest,foundation_date,stadium,city,fans,money,president_id) VALUES (8, true, 'Manchester City Football Club','https://upload.wikimedia.org/wikipedia/sco/thumb/e/eb/Manchester_City_FC_badge.svg/1200px-Manchester_City_FC_badge.svg.png', '1894-04-16', 'City Of Manchester Stadium', 'Manchester', '55000', '10000000',8);
 INSERT INTO football_Clubs(id,status,name,crest,foundation_date,stadium,city,fans,money,president_id) VALUES (9, false, 'Chelsea Football Club','https://upload.wikimedia.org/wikipedia/sco/thumb/c/cc/Chelsea_FC.svg/1200px-Chelsea_FC.svg.png', '1905-02-19', 'Stamford Bridge', 'London', '41000', '500000000',9);
 INSERT INTO football_Clubs(id,status,name,crest,foundation_date,stadium,city,fans,money,president_id) VALUES (10, false, 'Besaid Aurochs','https://www.gamerguides.com/assets/trophies/44/1831-teamwork.png', '2000-02-19', 'Besaid Island Stadium', 'Besaid Island', '40', '1000000', 11);
+INSERT INTO football_Clubs(id,status,name,crest,foundation_date,stadium,city,fans,money,president_id) VALUES (11, true, 'Luca Goers','https://cdn.staticneo.com/w/finalfantasy/f/f5/GoersSymbol.png', '2000-02-18', 'Luca Stadium', 'Luca', '40000', '200000000', 12); 
  
 -- Match Requests
 INSERT INTO match_requests(id, title, match_date, stadium, status, football_Club1, football_Club2, creator) VALUES(1, 'Partido amistoso 1', '2020-05-11 20:30', 'Ramón Sánchez-Pizjuan', 0, 'Sevilla Fútbol Club', 'Real Betis Balompié', 'presidente1');

@@ -13,9 +13,13 @@ import org.springframework.samples.petclinic.model.Coach;
 import org.springframework.samples.petclinic.model.FootballClub;
 import org.springframework.samples.petclinic.service.CoachService;
 import org.springframework.samples.petclinic.service.FootballClubService;
+import org.springframework.samples.petclinic.service.exceptions.DateException;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedNameException;
 import org.springframework.samples.petclinic.service.exceptions.MoneyClubException;
 import org.springframework.samples.petclinic.service.exceptions.NumberOfPlayersAndCoachException;
+import org.springframework.samples.petclinic.service.exceptions.SalaryException;
+import org.springframework.samples.petclinic.service.exceptions.StatusException;
+import org.springframework.samples.petclinic.service.exceptions.StatusRegisteringException;
 import org.springframework.samples.petclinic.web.validators.CoachValidator;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -85,7 +89,8 @@ public class CoachController {
 	}
 
 	@PostMapping(value = "/coachs/new") //REGISTRAR ENTRENADOR - POST
-	public String processCreationForm(@Valid final Coach coach, final BindingResult result, final Model model) throws DataAccessException, DuplicatedNameException, NumberOfPlayersAndCoachException, MoneyClubException {
+	public String processCreationForm(@Valid final Coach coach, final BindingResult result, final Model model)
+		throws DataAccessException, DuplicatedNameException, NumberOfPlayersAndCoachException, MoneyClubException, SalaryException, StatusRegisteringException {
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String currentPrincipalName = authentication.getName();
@@ -101,12 +106,22 @@ public class CoachController {
 				result.rejectValue("firstName", "duplicate", "already exists");
 				result.rejectValue("lastName", "duplicate", "already exists");
 				return CoachController.VIEWS_COACH_CREATE_OR_UPDATE_FORM;
+			} catch (DateException ex) {
+				result.rejectValue("birthDate", "code.error.validator.18Years", "18 years");
+				return CoachController.VIEWS_COACH_CREATE_OR_UPDATE_FORM;
+			} catch (SalaryException ex) {
+				result.rejectValue("salary", "code.error.validator.salaryMinAndMaxCoach", "wrong money!");
+				return CoachController.VIEWS_COACH_CREATE_OR_UPDATE_FORM;
 			} catch (MoneyClubException ex) {
 				result.rejectValue("salary", "code.error.validator.salary", "Not enough money!");
 				return CoachController.VIEWS_COACH_CREATE_OR_UPDATE_FORM;
 			} catch (NumberOfPlayersAndCoachException ex) {
 				result.rejectValue("firstName", "code.error.validator.justOneCoach", "just one coach");
 				return CoachController.VIEWS_COACH_CREATE_OR_UPDATE_FORM;
+			} catch (StatusException ex) {
+				return "redirect:exceptions/forbidden";
+			} catch (StatusRegisteringException ex) {
+				return "redirect:exceptions/forbidden";
 			}
 			return "redirect:/coachs/" + coach.getId();
 		}
@@ -149,7 +164,7 @@ public class CoachController {
 
 	@PostMapping(value = "/coachs/{coachId}/sign") //FICHAR ENTRENADOR - POST
 	public String processUpdateFootballClubForm(@Valid final Coach coach, final BindingResult result, @PathVariable("coachId") final int coachId, final Model model)
-		throws DataAccessException, DuplicatedNameException, NumberOfPlayersAndCoachException, MoneyClubException, CredentialException {
+		throws DataAccessException, DuplicatedNameException, NumberOfPlayersAndCoachException, MoneyClubException, CredentialException, StatusRegisteringException {
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String currentPrincipalName = authentication.getName();
@@ -208,6 +223,9 @@ public class CoachController {
 
 						Integer clausulaApagar = coach1.getClause();
 						this.coachService.signCoach(coachToUpdate, clausulaApagar);
+					} catch (SalaryException ex) {
+						result.rejectValue("salary", "code.error.validator.salaryMinAndMaxCoach", "wrong money!");
+						return CoachController.VIEWS_COACH_CREATE_OR_UPDATE_FORM;
 					} catch (MoneyClubException e) {
 						result.rejectValue("salary", "code.error.validator.signTransaction", "Not enough money!");
 						return CoachController.VIEWS_COACH_CREATE_OR_UPDATE_FORM;
@@ -222,6 +240,9 @@ public class CoachController {
 						coachToUpdate.setClub(myClub);
 						coachToUpdate.setClause(coachToUpdate.getSalary() * 3);
 						this.coachService.signCoach(coachToUpdate, clausulaApagar);
+					} catch (SalaryException ex) {
+						result.rejectValue("salary", "code.error.validator.salaryMinAndMaxCoach", "wrong money!");
+						return CoachController.VIEWS_COACH_CREATE_OR_UPDATE_FORM;
 					} catch (MoneyClubException e) {
 						result.rejectValue("salary", "code.error.validator.signTransaction", "Not enough money!");
 						return CoachController.VIEWS_COACH_CREATE_OR_UPDATE_FORM;
@@ -236,11 +257,20 @@ public class CoachController {
 					result.rejectValue("firstName", "duplicate", "already exists");
 					result.rejectValue("lastName", "duplicate", "already exists");
 					return CoachController.VIEWS_COACH_CREATE_OR_UPDATE_FORM;
+				} catch (DateException ex) {
+					result.rejectValue("birthDate", "code.error.validator.18Years", "18 years");
+					return CoachController.VIEWS_COACH_CREATE_OR_UPDATE_FORM;
 				} catch (NumberOfPlayersAndCoachException e) {
 					result.rejectValue("firstName", "code.error.validator.justOneCoach", "just one coach");
 					return CoachController.VIEWS_COACH_CREATE_OR_UPDATE_FORM;
+				} catch (SalaryException ex) {
+					result.rejectValue("salary", "code.error.validator.salaryMinAndMaxCoach", "wrong money!");
+					return CoachController.VIEWS_COACH_CREATE_OR_UPDATE_FORM;
 				} catch (MoneyClubException e) {
 					result.rejectValue("salary", "code.error.validator.salary", "Not enough money!");
+					return CoachController.VIEWS_COACH_CREATE_OR_UPDATE_FORM;
+				} catch (StatusException ex) {
+					result.rejectValue("salary", "code.error.validator.signWithoutCoach", "No tienes entrenador, no puedes fichar otro");
 					return CoachController.VIEWS_COACH_CREATE_OR_UPDATE_FORM;
 				}
 			}

@@ -104,7 +104,7 @@ public class FootballClubServiceTests {
 
 		int count = clubs.size();
 
-		Assertions.assertTrue(count == 10);
+		Assertions.assertTrue(count == 11);
 
 	}
 
