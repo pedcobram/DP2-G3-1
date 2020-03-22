@@ -9,24 +9,23 @@
 
 <petclinic:layout pageName="referees">
 
-    <h2><fmt:message key="refereeDetails"/></h2>
-
+    <h2><fmt:message key="code.title.refereedetails"/></h2>
 
     <table class="table table-striped">
         <tr>
-            <th><fmt:message key="nameRefereeDetails"/></th>
+            <th><fmt:message key="code.label.refereedetails.name"/></th>
             <td><b><c:out value="${referee.firstName} ${referee.lastName}"/></b></td>
         </tr>
         <tr>
-            <th><fmt:message key="emailRefereeDetails"/></th>
+            <th><fmt:message key="code.label.refereedetails.email"/></th>
             <td><c:out value="${referee.email}"/></td>
         </tr>
         <tr>
-            <th><fmt:message key="dniRefereeDetails"/></th>
+            <th><fmt:message key="code.label.refereedetails.dni"/></th>
             <td><c:out value="${referee.dni}"/></td>
         </tr>
         <tr>
-            <th><fmt:message key="tlphRefereeDetails"/></th>
+            <th><fmt:message key="code.label.refereedetails.telephone"/></th>
             <td><c:out value="${referee.telephone}"/></td>
         </tr>
     </table>
@@ -43,11 +42,11 @@
     	<spring:url value="{refereeId}/edit" var="editUrl">
         	<spring:param name="refereeId" value="${referee.id}"/>
     	</spring:url>
-    	<a href="${fn:escapeXml(editUrl)}" class="btn btn-default"><fmt:message key="editRefereeDetails"/></a>
+    	<a href="${fn:escapeXml(editUrl)}" class="btn btn-default"><fmt:message key="code.button.refereedetails.edit"/></a>
     	
     	
     	<spring:url value="/deleteReferee/${principalUsername}" var="editUrl"></spring:url>
-    	<a href="${fn:escapeXml(editUrl)}" class="btn btn-default2" style="color:white"><b><fmt:message key="deleteReferee"/></b></a>
+    	<a href="${fn:escapeXml(editUrl)}" class="btn btn-default2" style="color:white"><b><fmt:message key="code.button.refereedetails.delete"/></b></a>
     	
     </c:if>  
     

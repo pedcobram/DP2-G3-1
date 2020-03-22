@@ -5,6 +5,8 @@ import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.samples.petclinic.model.MatchRefereeRequest;
+import org.springframework.samples.petclinic.model.MatchRefereeRequests;
 import org.springframework.samples.petclinic.model.Referee;
 import org.springframework.samples.petclinic.repository.RefereeRepository;
 import org.springframework.stereotype.Service;
@@ -13,10 +15,13 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class RefereeService {
 
-	private RefereeRepository	refereeRepository;
+	private RefereeRepository			refereeRepository;
 
 	@Autowired
-	private AuthoritiesService	authoritiesService;
+	private AuthoritiesService			authoritiesService;
+
+	@Autowired
+	private MatchRefereeRequestService	matchRefereeRequestService;
 
 
 	@Autowired
@@ -47,6 +52,17 @@ public class RefereeService {
 
 	@Transactional()
 	public void deleteReferee(final Referee referee) throws DataAccessException {
+
+		MatchRefereeRequests mrrs = new MatchRefereeRequests();
+
+		mrrs.getMatchRefereeRequests().addAll(this.matchRefereeRequestService.findAllMatchRefereeRequests());
+
+		for (MatchRefereeRequest mrr : mrrs.getMatchRefereeRequests()) {
+			if (mrr.getReferee() == referee) {
+				mrr.setReferee(null);
+			}
+		}
+
 		this.authoritiesService.deleteAuthorities(referee.getUser().getUsername(), "referee");
 		this.authoritiesService.saveAuthorities(referee.getUser().getUsername(), "authenticated");
 		this.refereeRepository.delete(referee);

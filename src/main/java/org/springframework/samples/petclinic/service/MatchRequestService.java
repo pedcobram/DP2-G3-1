@@ -13,8 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class MatchRequestService {
 
-	@Autowired
-	MatchRequestRepository matchRequestRepository;
+	private MatchRequestRepository matchRequestRepository;
 
 
 	@Autowired

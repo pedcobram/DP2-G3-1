@@ -32,8 +32,8 @@ public class FootballPlayerMatchStatisticService {
 	}
 
 	@Transactional(readOnly = true)
-	public Collection<FootballPlayerMatchStatistic> findFootballPlayerMatchStatisticByMatchId(final int match_id) throws DataAccessException {
-		return this.footballPlayerMatchStatisticRepository.findFootballPlayerMatchStatisticByMatchId(match_id);
+	public Collection<FootballPlayerMatchStatistic> findFootballPlayerMatchStatisticByMatchRecordId(final int match_record_id) throws DataAccessException {
+		return this.footballPlayerMatchStatisticRepository.findFootballPlayerMatchStatisticByMatchRecordId(match_record_id);
 	}
 
 	@Transactional(readOnly = true)

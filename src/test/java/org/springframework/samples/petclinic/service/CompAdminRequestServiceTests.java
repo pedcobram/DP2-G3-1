@@ -3,17 +3,20 @@ package org.springframework.samples.petclinic.service;
 
 import java.util.Collection;
 
-import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.CompAdminRequest;
 import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.model.Enum.RequestStatus;
+import org.springframework.samples.petclinic.service.exceptions.PendingRequestException;
 import org.springframework.stereotype.Service;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
+
 public class CompAdminRequestServiceTests {
 
 	@Autowired
@@ -22,53 +25,73 @@ public class CompAdminRequestServiceTests {
 	@Autowired
 	protected CompetitionAdminService	competitionAdminService;
 
+	@Autowired
+	protected AuthoritiesService		authoritiesService;
 
-	@Test
+
+	@Test //CASO POSITIVO
 	void shouldCount() {
-		// Contamos cuantas peticiones hay en BD, debe ser solo una
 		int count = this.compAdminRequestService.count();
-		Assertions.assertThat(count == 1);
+		Assertions.assertTrue(count == 1);
 	}
 
-	@Test
+	@Test //CASO POSITIVO
 	void shouldFindCompAdminRequestById() {
-		// Creamos un CompAdminRequest null y
-		// llamamos al repo para ver si existe uno como ese id, si no devolvería null
 		CompAdminRequest findById = null;
 		findById = this.compAdminRequestService.findCompAdminRequestById(1);
-		Assertions.assertThat(findById != null);
-
+		Assertions.assertTrue(findById != null);
 	}
 
-	@Test
+	@Test //CASO NEGATIVO
+	void shouldNotFindCompAdminRequestById() {
+		CompAdminRequest findById = null;
+		findById = this.compAdminRequestService.findCompAdminRequestById(1000);
+		Assertions.assertTrue(findById == null);
+	}
+
+	@Test //CASO POSITIVO
 	void shouldFindCompAdminRequestByUsername() {
-		// Creamos un CompAdminRequest null y
-		// llamamos al repo para ver si existe uno como ese nombre, si no devolvería null
 		CompAdminRequest findByUsername = null;
-		findByUsername = this.compAdminRequestService.findCompAdminRequestByUsername("pedro");
-		Assertions.assertThat(findByUsername != null);
-
+		findByUsername = this.compAdminRequestService.findCompAdminRequestByUsername("gonzalo");
+		Assertions.assertTrue(findByUsername != null);
 	}
 
-	@Test
+	@Test //CASO NEGATIVO
+	void shouldNotFindCompAdminRequestByUsername() {
+		CompAdminRequest findByUsername = null;
+		findByUsername = this.compAdminRequestService.findCompAdminRequestByUsername("pedroTest");
+		Assertions.assertTrue(findByUsername == null);
+	}
+
+	@Test //CASO POSITIVO
 	void shouldDeleteCompAdminRequest() {
 
 		//Cogemos una ya existente y la intentamos borrar
-		CompAdminRequest tbdeleted = this.compAdminRequestService.findCompAdminRequestById(1);
-		tbdeleted.setUser(null); //Si no da error
+		CompAdminRequest tbdeleted = this.compAdminRequestService.findCompAdminRequestByUsername("gonzalo");
 		this.compAdminRequestService.deleteCompAdminRequest(tbdeleted);
 
-		// Contamos las peticiones existentes, que deben ser 0 una vez eliminada
-		int count = this.compAdminRequestService.count();
+		tbdeleted = this.compAdminRequestService.findCompAdminRequestByUsername("gonzalo");
 
-		Assertions.assertThat(count == 0);
+		Assertions.assertFalse(tbdeleted != null);
 	}
 
-	@Test
+	@Test //CASO NEGATIVO
+	void shouldNotDeleteCompAdminRequest() {
+
+		CompAdminRequest tbdeleted = this.compAdminRequestService.findCompAdminRequestByUsername("gonzaloTest");
+
+		Assertions.assertThrows(NullPointerException.class, () -> {
+			this.compAdminRequestService.deleteCompAdminRequest(tbdeleted);
+		});
+	}
+
+	@Test //CASO POSITIVO
 	void shouldSaveCompAdminRequest() {
 
-		// Cogemos un usuario que no sea Competition Admin
-		User rafa = this.competitionAdminService.findAuthenticatedByUsername("rafa").getUser();
+		User user = new User();
+		user.setEnabled(true);
+		user.setUsername("username");
+		user.setPassword("username");
 
 		// Creamos uno nuevo manualmente
 		CompAdminRequest newComp = new CompAdminRequest();
@@ -76,28 +99,40 @@ public class CompAdminRequestServiceTests {
 		newComp.setTitle("JUnit testing title");
 		newComp.setDescription("JUnit testing description");
 		newComp.setStatus(RequestStatus.ON_HOLD);
-		newComp.setUser(rafa);
+		newComp.setUser(user);
 
 		//Lo guardamos y contamos cuantas peticiones de Competition Admin hay
 		this.compAdminRequestService.saveCompAdminRequest(newComp);
 		int count = this.compAdminRequestService.count();
 
 		// Debería haber 2, una que existía previamente y la nueva
-		Assertions.assertThat(count == 2);
+		Assertions.assertTrue(count == 2);
 	}
 
-	@Test
-	void shouldCountCompAdminRequestByUsername() {
-
-		int countByUsername = this.compAdminRequestService.countCompAdminRequestByUsername("pedro");
-		Assertions.assertThat(countByUsername == 1);
+	@Test //CASO POSITIVO
+	void shouldCountCompAdminRequestByUsername() throws DataAccessException, PendingRequestException {
+		int countByUsername = this.compAdminRequestService.countCompAdminRequestByUsername("gonzalo0");
+		Assertions.assertTrue(countByUsername == 0);
 	}
 
-	@Test
+	@Test //CASO REGLA DE NEGOCIO
+	void shouldExceptionCountCompAdminRequestByUsername() throws DataAccessException, PendingRequestException {
+		Assertions.assertThrows(PendingRequestException.class, () -> {
+			this.compAdminRequestService.countCompAdminRequestByUsername("gonzalo");
+		});
+	}
+
+	@Test //CASO NEGATIVO
+	void shouldNotCountCompAdminRequestByUsername() throws DataAccessException, PendingRequestException {
+		Integer countByUsername = this.compAdminRequestService.countCompAdminRequestByUsername("gonzaloTest");
+		Assertions.assertTrue(countByUsername == 0);
+	}
+
+	@Test //CASO POSITIVO
 	void shouldFindCompAdminRequests() {
 		Collection<CompAdminRequest> collection = null;
 		collection = this.compAdminRequestService.findCompAdminRequests();
-		Assertions.assertThat(collection.size() == 1);
+		Assertions.assertTrue(collection.size() == 1);
 	}
 
 }

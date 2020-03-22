@@ -1,6 +1,8 @@
 
 package org.springframework.samples.petclinic.service;
 
+import javax.security.auth.login.CredentialException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Authenticated;
@@ -16,6 +18,9 @@ public class CompetitionAdminService {
 
 	@Autowired
 	private AuthoritiesService			authoritiesService;
+
+	@Autowired
+	private AuthenticatedService		authenticatedService;
 
 
 	@Autowired
@@ -44,13 +49,30 @@ public class CompetitionAdminService {
 	}
 
 	@Transactional
-	public void saveCompetitionAdmin(final CompetitionAdmin competitionAdmin) throws DataAccessException {
+	public void saveCompetitionAdmin(final CompetitionAdmin competitionAdmin) throws DataAccessException, CredentialException {
+
+		competitionAdmin.getUser().setEnabled(true);
+
 		this.competitionAdminRepository.save(competitionAdmin);
 		this.authoritiesService.saveAuthorities(competitionAdmin.getUser().getUsername(), "competitionAdmin");
 	}
 
 	@Transactional()
 	public void deleteCompetitionAdmin(final CompetitionAdmin competitionAdmin) throws DataAccessException {
+
+		Authenticated newAuth = new Authenticated();
+
+		newAuth.setId(competitionAdmin.getId());
+		newAuth.setFirstName(competitionAdmin.getFirstName());
+		newAuth.setLastName(competitionAdmin.getLastName());
+		newAuth.setDni(competitionAdmin.getDni());
+		newAuth.setTelephone(competitionAdmin.getTelephone());
+		newAuth.setUser(competitionAdmin.getUser());
+		newAuth.setEmail(competitionAdmin.getEmail());
+
+		//Guardamos en la db el nuevo comp admin
+		this.authenticatedService.saveAuthenticated(newAuth);
+
 		this.authoritiesService.deleteAuthorities(competitionAdmin.getUser().getUsername(), "competitionAdmin");
 		this.authoritiesService.saveAuthorities(competitionAdmin.getUser().getUsername(), "authenticated");
 		this.competitionAdminRepository.delete(competitionAdmin);

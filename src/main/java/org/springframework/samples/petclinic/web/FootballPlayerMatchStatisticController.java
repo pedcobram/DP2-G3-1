@@ -12,9 +12,10 @@ public class FootballPlayerMatchStatisticController {
 
 	//private static final String						VIEWS_FOOTBALL_PLAYER_MATCH_STATISTIC_CREATE_OR_UPDATE_FORM	= "footballPlayerMatchStatistic/createOrUpdateFootballPlayerMatchStatisticForm";
 
-	private static final String							VIEWS_FOOTBALL_PLAYER_STATISTIC_DETAIL	= "footballPlayerMatchStatistic/footballPlayerMatchStatisticDetails";
+	//private static final String							VIEWS_FOOTBALL_PLAYER_STATISTIC_DETAIL	= "footballPlayerMatchStatistic/footballPlayerMatchStatisticDetails";
 
-	private final FootballPlayerMatchStatisticService	footballPlayerMatchStatisticService;
+	@SuppressWarnings("unused")
+	private final FootballPlayerMatchStatisticService footballPlayerMatchStatisticService;
 
 
 	@Autowired

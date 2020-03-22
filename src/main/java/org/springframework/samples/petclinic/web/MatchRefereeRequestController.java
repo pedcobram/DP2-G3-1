@@ -25,6 +25,8 @@ import org.springframework.samples.petclinic.service.MatchRefereeRequestService;
 import org.springframework.samples.petclinic.service.MatchService;
 import org.springframework.samples.petclinic.service.RefereeService;
 import org.springframework.samples.petclinic.service.UserService;
+import org.springframework.samples.petclinic.service.exceptions.IllegalDateException;
+import org.springframework.samples.petclinic.service.exceptions.MatchRecordResultException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -176,7 +178,8 @@ public class MatchRefereeRequestController {
 	}
 
 	@GetMapping(value = "/matchRefereeRequest/list/accept/{username}/{matchId}")
-	public String acceptMatchRefereeRequest(@Valid final MatchRefereeRequest matchRefereeRequest, final BindingResult result, @PathVariable("username") final String username, @PathVariable("matchId") final int matchId) throws DataAccessException {
+	public String acceptMatchRefereeRequest(@Valid final MatchRefereeRequest matchRefereeRequest, final BindingResult result, @PathVariable("username") final String username, @PathVariable("matchId") final int matchId)
+		throws DataAccessException, IllegalDateException, MatchRecordResultException {
 
 		Referee ref = this.refereeService.findRefereeByUsername(username);
 		Match match = this.matchService.findMatchById(matchId);
@@ -233,6 +236,7 @@ public class MatchRefereeRequestController {
 
 			this.footballPlayerMatchStatisticService.saveFootballPlayerStatistic(fpms);
 		}
+
 		//
 		return "redirect:/matchRefereeRequest/list/" + username;
 

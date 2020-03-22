@@ -6,15 +6,16 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import javax.validation.ConstraintViolationException;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.samples.petclinic.model.FootballClub;
 import org.springframework.samples.petclinic.model.Match;
-import org.springframework.samples.petclinic.model.MatchRefereeRequest;
-import org.springframework.samples.petclinic.model.MatchRequest;
 import org.springframework.samples.petclinic.model.Referee;
 import org.springframework.samples.petclinic.model.Enum.MatchStatus;
 import org.springframework.stereotype.Service;
@@ -38,7 +39,7 @@ public class MatchTests {
 	protected MatchRefereeRequestService	matchRefereeRequestService;
 
 
-	@Test
+	@Test //CASO POSITIVO
 	void shouldFindAllMatchRequests() {
 
 		List<Match> ms = new ArrayList<>();
@@ -47,26 +48,34 @@ public class MatchTests {
 
 		int count = ms.size();
 
-		Assertions.assertTrue(count == 2);
-
+		Assertions.assertTrue(count == 3);
 	}
 
-	@Test
-	void shouldFindAllMatchRequestsByReferee() {
+	@Test //CASO POSITIVO
+	void shouldFindAllMatchesByReferee() {
 
 		List<Match> ms = new ArrayList<>();
 
-		Referee ref = this.refereeService.findRefereeById(1);
+		ms.addAll(this.matchService.findAllMatchesByReferee("referee1"));
 
-		ms.addAll(this.matchService.findAllMatchRequestsByReferee(ref.getUser().getUsername()));
+		int count = ms.size();
+
+		Assertions.assertTrue(count == 1);
+	}
+
+	@Test //CASO NEGATIVO
+	void shouldNotFindAllMatchesByReferee() {
+
+		List<Match> ms = new ArrayList<>();
+
+		ms.addAll(this.matchService.findAllMatchesByReferee("referee100"));
 
 		int count = ms.size();
 
 		Assertions.assertTrue(count == 0);
-
 	}
 
-	@Test
+	@Test //CASO POSITIVO
 	void shouldFindMatchById() {
 
 		Boolean res = true;
@@ -77,45 +86,24 @@ public class MatchTests {
 			res = false;
 		}
 
-		Assertions.assertTrue(res == true);
-
+		Assertions.assertTrue(res);
 	}
 
-	@Test
-	void shouldFindMatchByFootballClubName1() {
+	@Test //CASO NEGATIVO
+	void shouldNotFindMatchById() {
 
 		Boolean res = true;
 
-		FootballClub fc = this.footballClubService.findFootballClubById(1);
-
-		Match m = this.matchService.findMatchByFootballClubName1(fc.getName());
+		Match m = this.matchService.findMatchById(100);
 
 		if (m == null) {
 			res = false;
 		}
 
-		Assertions.assertTrue(res == true);
-
+		Assertions.assertFalse(res);
 	}
 
-	@Test
-	void shouldFindMatchByFootballClubName2() {
-
-		Boolean res = true;
-
-		FootballClub fc = this.footballClubService.findFootballClubById(1);
-
-		Match m = this.matchService.findMatchByFootballClubName2(fc.getName());
-
-		if (m == null) {
-			res = false;
-		}
-
-		Assertions.assertTrue(res == true);
-
-	}
-
-	@Test
+	@Test //CASO POSITIVO
 	void shouldSaveMatch() {
 
 		Match m = new Match();
@@ -142,49 +130,69 @@ public class MatchTests {
 
 		int count = this.matchService.count();
 
-		Assertions.assertTrue(count == 3);
-
+		Assertions.assertTrue(count == 4);
 	}
 
-	@Test
+	@Test //CASO NEGATIVO
+	void shouldNotSaveMatch() {
+
+		Match m = new Match();
+
+		FootballClub fc1 = this.footballClubService.findFootballClubById(1);
+		FootballClub fc2 = this.footballClubService.findFootballClubById(2);
+
+		Referee ref = this.refereeService.findRefereeById(1);
+
+		m.setId(100);
+		m.setTitle("JUnit test");
+		m.setMatchDate(null);
+		m.setMatchStatus(MatchStatus.FINISHED);
+		m.setStadium("Stadium");
+		m.setFootballClub1(fc1);
+		m.setFootballClub2(fc2);
+		m.setReferee(ref);
+
+		Assertions.assertThrows(ConstraintViolationException.class, () -> {
+			this.matchService.saveMatch(m);
+		});
+	}
+
+	@Test //CASO POSITIVO
 	void shouldDeteleMatch() {
 
-		// Todas las referencias donde esté el match se deben poner a null antes de borrarlo
+		Match m = new Match();
 
-		Match m = this.matchService.findMatchById(1);
+		Calendar d = Calendar.getInstance();
+		d.set(2025, 02, 02, 20, 20);
+		Date matchDate = d.getTime();
 
-		List<MatchRequest> mrs = new ArrayList<>();
+		m.setTitle("Title");
+		m.setMatchDate(matchDate);
+		m.setMatchStatus(MatchStatus.TO_BE_PLAYED);
+		m.setStadium("Stadium");
+		m.setCreator("Creator");
 
-		mrs.addAll(this.matchRequestService.findAllMatchRequests());
+		this.matchService.saveMatch(m);
 
-		for (MatchRequest mrr : mrs) {
-			mrr.setFootballClub1(null);
-			mrr.setFootballClub2(null);
-			mrr.setReferee(null);
-		}
+		int pre_delete = this.matchService.count();
 
-		List<MatchRefereeRequest> mrrs = new ArrayList<>();
-
-		mrrs.addAll(this.matchRefereeRequestService.findAllOnHoldMatchRefereeRequests());
-
-		for (MatchRefereeRequest mrr : mrrs) {
-			if (mrr.getMatch().getId() == m.getId()) {
-				mrr.setMatch(null);
-				mrr.setReferee(null);
-			}
-
-		}
-
-		m.setFootballClub1(null);
-		m.setFootballClub2(null);
-		m.setReferee(null);
+		Assertions.assertTrue(pre_delete == 4);
 
 		this.matchService.deleteMatch(m);
 
-		int count = this.matchService.count();
+		int post_delete = this.matchService.count();
 
-		Assertions.assertTrue(count == 1);
+		Assertions.assertTrue(post_delete == 3);
+	}
 
+	@Test //CASO NEGATIVO
+	void shouldNotDeteleMatch() {
+
+		Match m = this.matchService.findMatchById(100);
+
+		Assertions.assertThrows(InvalidDataAccessApiUsageException.class, () -> {
+			this.matchService.deleteMatch(m);
+		});
 	}
 
 }

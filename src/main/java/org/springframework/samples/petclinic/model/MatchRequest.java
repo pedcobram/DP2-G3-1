@@ -11,6 +11,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
@@ -27,6 +28,7 @@ import lombok.EqualsAndHashCode;
 public class MatchRequest extends BaseEntity {
 
 	@Column(name = "title")
+	@NotBlank
 	private String			title;
 
 	@Column(name = "match_date")
@@ -39,6 +41,8 @@ public class MatchRequest extends BaseEntity {
 	@NotEmpty
 	private String			stadium;
 
+	@Column(name = "status")
+	@NotNull
 	private RequestStatus	status;
 
 	@OneToOne(cascade = CascadeType.ALL)

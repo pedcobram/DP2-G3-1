@@ -45,7 +45,7 @@ INSERT INTO users(username,password,enabled) VALUES ('referee2','referee2',TRUE)
 INSERT INTO authorities VALUES ('referee2','referee'); 
 
 -- Competition Admin Requests 
-INSERT INTO comp_Admin_Requests(id, title, description, status, username) VALUES (1, 'Test title 01', 'Test description 01', 0, 'rafa');
+INSERT INTO comp_Admin_Requests(id, title, description, status, username) VALUES (1, 'Test title 01', 'Test description 01', 0, 'gonzalo');
 
 -- Competition Admin
 INSERT INTO competition_Admins VALUES (1, 'Pedro Manuel', 'Cobos Ramos', '22222222A', 'pedcobram@alum.us.es', '600222333', 'pedro');
@@ -55,7 +55,6 @@ INSERT INTO authenticateds VALUES (1, 'Rafael', 'Liébana Fuentes', '11111111A',
 INSERT INTO authenticateds VALUES (3, 'Ignacio José', 'Rodríguez Flores', '33333333A', 'ignrodflo@alum.us.es', '600333444', 'ignacio');
 INSERT INTO authenticateds VALUES (4, 'Gonzalo', 'Fernandez Jiménez', '44444444A', 'gonferjim@alum.us.es', '600444555', 'gonzalo');
 INSERT INTO authenticateds VALUES (5, 'Manuel', 'Sánchez Rodríguez', '55555555A', 'mansanrod@alum.us.es', '600555666', 'manuel');
-
 
 -- President users
 INSERT INTO presidents VALUES (1, 'President1', 'Surname1', '11111111A', 'email@gmail.com', '100111222', 'presidente1');
@@ -87,16 +86,16 @@ INSERT INTO football_Clubs(id,status,name,crest,foundation_date,stadium,city,fan
 -- Match Requests
 INSERT INTO match_requests(id, title, match_date, stadium, status, football_Club1, football_Club2, creator) VALUES(1, 'Partido amistoso 1', '2020-05-11 20:30', 'Ramón Sánchez-Pizjuan', 0, 'Sevilla Fútbol Club', 'Real Betis Balompié', 'presidente1');
 INSERT INTO match_requests(id, title, match_date, stadium, status, football_Club1, football_Club2, creator) VALUES(2, 'Partido amistoso 2', '2021-05-11 20:30', 'Ramón Sánchez-Pizjuan', 0, 'Sevilla Fútbol Club', 'Fútbol Club Barcelona', 'presidente1');
-INSERT INTO match_requests(id, title, match_date, stadium, status, football_Club1, football_Club2, creator) VALUES(3, 'Partido amistoso 3', '2020-05-11 20:30', 'Benito Villamarín', 0, 'Real Betis Balompié', 'Sevilla Fútbol Club', 'presidente1');
-INSERT INTO match_requests(id, title, match_date, stadium, status, football_Club1, football_Club2, creator) VALUES(4, 'Partido amistoso 4', '2021-05-11 20:30', 'Camp Nou', 0, 'Fútbol Club Barcelona', 'Sevilla Fútbol Club', 'presidente1');
+INSERT INTO match_requests(id, title, match_date, stadium, status, football_Club1, football_Club2, creator) VALUES(3, 'Partido amistoso 3', '2020-05-11 20:30', 'Benito Villamarín', 0, 'Real Betis Balompié', 'Sevilla Fútbol Club', 'presidente6');
+INSERT INTO match_requests(id, title, match_date, stadium, status, football_Club1, football_Club2, creator) VALUES(4, 'Partido amistoso 4', '2021-05-11 20:30', 'Camp Nou', 0, 'Fútbol Club Barcelona', 'Sevilla Fútbol Club', 'presidente3');
 
 -- Matches
 INSERT INTO matches(id, title, match_date, match_status, stadium, football_Club1, football_Club2, creator) VALUES(1, 'Match title 1', '2020-05-11 20:30', 0, 'Ramón Sánchez-Pizjuan', 'Sevilla Fútbol Club', 'Real Betis Balompié', 'presidente1');
-INSERT INTO matches(id, title, match_date, match_status, stadium, football_Club1, football_Club2, creator) VALUES(2, 'Match title 2', '2020-03-11 20:30', 1, 'Camp Nou', 'Fútbol Club Barcelona', 'Sevilla Fútbol Club', 'presidente1');
-
+INSERT INTO matches(id, title, match_date, match_status, stadium, football_Club1, football_Club2, referee, creator) VALUES(2, 'Match title 2', '2020-03-11 20:30', 1, 'Camp Nou', 'Fútbol Club Barcelona', 'Sevilla Fútbol Club', 'referee1', 'presidente3');
+INSERT INTO matches(id, title, match_date, match_status, stadium, football_Club1, football_Club2, creator) VALUES(3, 'Match title 3', '2021-05-11 20:30', 0, 'Ramón Sánchez-Pizjuan', 'Sevilla Fútbol Club', 'Real Betis Balompié', 'presidente1');
 -- Match Referee Requests
-INSERT INTO match_referee_request(id, title, status, username, match_id) VALUES(1, 'Test title', 0, 'referee1', 1);
-INSERT INTO match_referee_request(id, title, status, username, match_id) VALUES(2, 'Test title', 0, 'referee2', 1);
+INSERT INTO match_referee_request(id, title, status, username, match_id) VALUES(1, 'Test title 1', 0, 'referee1', 3);
+INSERT INTO match_referee_request(id, title, status, username, match_id) VALUES(2, 'Test title 2', 0, 'referee2', 3);    
 
 -- Coachs
 INSERT INTO coachs(id, first_name, last_name, football_Clubs_id, salary, clause, birth_date) VALUES (1, 'Julen', 'Lopetegui', 1, '3000000', '6000000', '1968-03-29' );
@@ -112,6 +111,8 @@ INSERT INTO coachs(id, first_name, last_name, football_Clubs_id, salary, clause,
 INSERT INTO coachs(id, first_name, last_name, birth_date) VALUES (10, 'Marcelino', 'Garcia Toral', '1975-01-19' );
 INSERT INTO coachs(id, first_name, last_name, birth_date) VALUES (11, 'Unai', 'Emery', '1974-07-07' );
 INSERT INTO coachs(id, first_name, last_name, birth_date) VALUES (12, 'Mauricio', 'Pochetino',  '1980-05-25' );
+
+-- Football Players
 
 INSERT INTO football_Players(id, first_name, last_name, position, football_Clubs_id, value, birth_date) VALUES (1, 'Tomas', 'Vaclik', 0, 1, '18000000', '1989-03-29');
 INSERT INTO football_Players(id, first_name, last_name, position, football_Clubs_id, value, birth_date) VALUES (2, 'Diego', 'Carlos', 1, 1, '25000000', '1993-03-15');
@@ -265,3 +266,9 @@ INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_card
 INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(62, 0, 0, 0, 0, null, 2019, 2020, 62);
 INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(63, 0, 0, 0, 0, null, 2019, 2020, 63);
 INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(64, 0, 0, 0, 0, null, 2019, 2020, 64);
+
+-- Match Records
+INSERT INTO match_record(id, title, status, season_end, season_start, result, match) VALUES(1, 'title', 0, '2020', '2019', 'result', 2);
+
+-- Football Player Match Statistics
+INSERT INTO football_player_match_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id, match_record) VALUES (1, 0, 0, 0, 0, null, 2019, 2020, 1, 1);
