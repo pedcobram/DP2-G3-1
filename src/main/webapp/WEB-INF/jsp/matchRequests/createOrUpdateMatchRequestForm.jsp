@@ -16,8 +16,8 @@
    		
    	<jsp:body>
    	<h2>
-        <c:if test="${matchRequest['new']}"><fmt:message key="newMatchRequestForm"/> </c:if>
-        <c:if test="${!matchRequest['new']}"><fmt:message key="notNewMatchRequestForm"/> </c:if>
+        <c:if test="${matchRequest['new']}"><fmt:message key="code.title.matchrequests.new"/> </c:if>
+        <c:if test="${!matchRequest['new']}"><fmt:message key="code.title.matchrequests.notnew"/> </c:if>
     </h2>
     
     <form:form modelAttribute="matchRequest" class="form-horizontal" id="add-match-request-form">
@@ -32,21 +32,21 @@
 					</div>
 				</div>	
 			</div>
-            <petclinic:inputField label="Match Date" name="matchDate"/>
+            <petclinic:inputField label="code.label.matchrequests.matchdate" name="matchDate"/>
             <div class="control-group">
             	<petclinic:selectField label="Stadium" name="stadium" names="${stadiums}" size="2"/>
             </div>
-            <petclinic:inputField label="Football Club 1" name="footballClub1.name" readonly="true"/>
-            <petclinic:inputField label="Football Club 2" name="footballClub2.name" readonly="true"/>
+            <petclinic:inputField label="code.label.matchrequests.footballclub.one" name="footballClub1.name" readonly="true"/>
+            <petclinic:inputField label="code.label.matchrequests.footballclub.two" name="footballClub2.name" readonly="true"/>
         	</div>
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
                 <c:choose>
                     <c:when test="${matchRequest['new']}">
-                        <button class="btn btn-default" type="submit"><fmt:message key="submitCompAdminRequestForm"/></button>
+                        <button class="btn btn-default" type="submit"><fmt:message key="code.button.matchrequests.submit"/></button>
                     </c:when>
                     <c:otherwise>
-                        <button class="btn btn-default" type="submit"><fmt:message key="updateCompAdminRequestForm"/></button>
+                        <button class="btn btn-default" type="submit"><fmt:message key="code.button.matchrequests.update"/></button>
                     </c:otherwise>
                 </c:choose>
             </div>

@@ -10,30 +10,30 @@
 
 <petclinic:layout pageName="competitionAdmins">
     <h2>
-        <c:if test="${competitionAdmin['new']}"><fmt:message key="newCompAdminForm"/> </c:if>
-        <c:if test="${!competitionAdmin['new']}"><fmt:message key="notNewCompAdminForm"/> </c:if>
+        <c:if test="${competitionAdmin['new']}"><fmt:message key="code.title.createorupdatecompetitionadminform.new"/> </c:if>
+        <c:if test="${!competitionAdmin['new']}"><fmt:message key="code.title.createorupdatecompetitionadminform.notnew"/> </c:if>
     </h2>
 
     
     <form:form modelAttribute="competitionAdmin" class="form-horizontal" id="add-competition-admin-form">
       
        		<div class="form-group has-feedback">
-            <petclinic:inputField label="First Name" name="firstName"/>
-            <petclinic:inputField label="Last Name" name="lastName"/>
-            <petclinic:inputField label="Dni" name="dni"/>
-            <petclinic:inputField label="Email" name="email"/>
-            <petclinic:inputField label="Telephone" name="telephone"/>
-            <petclinic:inputField label="Username" name="user.username"/>
-            <petclinic:inputField label="Password" name="user.password"/>
+            <petclinic:inputField label="code.label.createorupdatecompetitionadminform.firstname" name="firstName"/>
+            <petclinic:inputField label="code.label.createorupdatecompetitionadminform.lastname" name="lastName"/>
+            <petclinic:inputField label="code.label.createorupdatecompetitionadminform.dni" name="dni"/>
+            <petclinic:inputField label="code.label.createorupdatecompetitionadminform.email" name="email"/>
+            <petclinic:inputField label="code.label.createorupdatecompetitionadminform.telephone" name="telephone"/>
+            <petclinic:inputField label="code.label.createorupdatecompetitionadminform.username" name="user.username"/>
+            <petclinic:inputField label="code.label.createorupdatecompetitionadminform.password" name="user.password"/>
         	</div>
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
                 <c:choose>
                     <c:when test="${competitionAdmin['new']}">
-                        <button class="btn btn-default" type="submit"><fmt:message key="submitCompAdminForm"/></button>
+                        <button class="btn btn-default" type="submit"><fmt:message key="code.button.createorupdatecompetitionadminform.submit"/></button>
                     </c:when>
                     <c:otherwise>
-                        <button class="btn btn-default" type="submit"><fmt:message key="updateCompAdminForm"/></button>
+                        <button class="btn btn-default" type="submit"><fmt:message key="code.button.createorupdatecompetitionadminform.update"/></button>
                     </c:otherwise>
                 </c:choose>
             </div>

@@ -27,42 +27,42 @@
 
 <petclinic:layout pageName="matches">
 
-    <h2 style="color:black">Detalles del partido</h2>
+    <h2 style="color:black"><fmt:message key="code.title.matchdetails"/></h2>
     
     <table class="table table-striped">
         <tr>
-            <th>Título</th>
+            <th><fmt:message key="code.label.matchdetails.title"/></th>
             <td><c:out value="${match.title}"/></td>
         </tr>
         <tr>
-            <th>Fecha del Partido</th>
+            <th><fmt:message key="code.label.matchdetails.matchdate"/></th>
             <td><c:out value="${match.matchDate}"/></td>
         </tr>
         <tr>
-            <th>${Stadium}</th>
+            <th><fmt:message key="code.label.matchdetails.stadium"/></th>
             <td><c:out value="${match.stadium}"/></td>
         </tr>
         <tr>
-            <th>Participante 1:</th>
+            <th><fmt:message key="code.label.matchdetails.footballclub.one"/></th>
             <td><c:out value="${match.footballClub1.name}"/></td>
         </tr>
         <tr>
-            <th>Participante 2:</th>
+            <th><fmt:message key="code.label.matchdetails.footballclub.two"/></th>
             <td><c:out value="${match.footballClub2.name}"/></td>
         </tr>
          <tr>
-            <th>Árbitro</th>
+            <th><fmt:message key="code.label.matchdetails.referee"/></th>
             <td><c:out value="${match.referee.firstName} ${match.referee.lastName}"/></td>
         </tr>  
         <tr>		
-        	<th>Status</th>
+        	<th><fmt:message key="code.label.matchdetails.status"/></th>
         	<td><c:out value="${match.matchStatus}"/></td>        
         </tr> 
     </table>
     
 	<c:if test="${principalUsername == creatorName && matchIsNotFinished}">
       	  <spring:url value="/matches/edit/${match.id}" var='editMatchStatus'></spring:url>
-    		<a href="${fn:escapeXml(editMatchStatus)}" class="btn btn-default"><fmt:message key="editMatch"/></a> 	
+    		<a href="${fn:escapeXml(editMatchStatus)}" class="btn btn-default"><fmt:message key="code.button.matchdetails.edit"/></a> 	
     </c:if>    								 
     
 </petclinic:layout>

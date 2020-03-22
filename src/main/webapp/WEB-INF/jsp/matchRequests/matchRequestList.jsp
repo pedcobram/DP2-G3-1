@@ -14,20 +14,20 @@
 	</security:authorize>
 	
 	<c:if test="${receivedRequests == false}">
-		<h2 style="color:black"><fmt:message key="receivedMatchRequests"/></h2>
+		<h2 style="color:black"><fmt:message key="code.title.matchrequestlist.received"/></h2>
 	</c:if>
 	<c:if test="${receivedRequests == true}">
-		<h2 style="color:black"><fmt:message key="sentMatchRequests"/></h2>
+		<h2 style="color:black"><fmt:message key="code.title.matchrequestlist.sent"/></h2>
 	</c:if>
  		<table id="matchRequestsTable" class="table table-striped">
 			<thead>
        			<tr>
-           			<th><fmt:message key="titleMatchRequestList"/></th>
-           			<th><fmt:message key="matchDateMatchRequestList"/></th>
-           			<th><fmt:message key="statusMatchRequestList"/></th>
-           			<th><fmt:message key="footballClub1MatchRequestList"/></th>
-           			<th><fmt:message key="footballClub2MatchRequestList"/></th>
-           			<th><fmt:message key="actionsMatchRequestList"/></th>
+           			<th><fmt:message key="code.label.matchrequestlist.title"/></th>
+           			<th><fmt:message key="code.label.matchrequestlist.matchdate"/></th>
+           			<th><fmt:message key="code.label.matchrequestlist.status"/></th>
+           			<th><fmt:message key="code.label.matchrequestlist.footballclub.one"/></th>
+           			<th><fmt:message key="code.label.matchrequestlist.footballclub.two"/></th>
+           			<th><fmt:message key="code.label.matchrequestlist.actions"/></th>
  				</tr>
         	</thead>
         	<tbody>
@@ -51,15 +51,15 @@
                 <td>
                	<c:if test="${matchRequest.footballClub1.president.user.username == principalUsername}">
                 	<spring:url value="/matchRequests/delete/${matchRequest.id}/${principalUsername}" var='deleteMatchRequest'></spring:url>
-                	<a href="${fn:escapeXml(deleteMatchRequest)}" class="btn btn-default"><fmt:message key="deleteMatchRequestList"/></a>
+                	<a href="${fn:escapeXml(deleteMatchRequest)}" class="btn btn-default"><fmt:message key="code.button.matchrequestlist.delete"/></a>
                 </c:if>   
                 <c:if test="${receivedRequests == false && matchRequest.status == 'ON_HOLD'}">
                 	<spring:url value="/matchRequests/accept/${matchRequest.id}/${principalUsername}" var='acceptMatchRequest'></spring:url>
-                	<a href="${fn:escapeXml(acceptMatchRequest)}" class="btn btn-default"><fmt:message key="acceptMatchRequestList"/></a>
+                	<a href="${fn:escapeXml(acceptMatchRequest)}" class="btn btn-default"><fmt:message key="code.button.matchrequestlist.accept"/></a>
                 </c:if>   
                 <c:if test="${receivedRequests == false && matchRequest.status == 'ON_HOLD'}">
                 	<spring:url value="/matchRequests/reject/${matchRequest.id}/${principalUsername}" var='rejectMatchRequest'></spring:url>
-                	<a href="${fn:escapeXml(rejectMatchRequest)}" class="btn btn-default"><fmt:message key="rejectMatchRequestList"/></a>
+                	<a href="${fn:escapeXml(rejectMatchRequest)}" class="btn btn-default"><fmt:message key="code.button.matchrequestlist.reject"/></a>
                 </c:if>        
                 </td>
                 

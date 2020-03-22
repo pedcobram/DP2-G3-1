@@ -8,15 +8,15 @@
 
 <petclinic:layout pageName="compAdminRequests">
 	
-	<h2 style="color:black"><fmt:message key="refereeRequestList"/></h2>
+	<h2 style="color:black"><fmt:message key="code.title.refereerequestlist"/></h2>
  		<table id="vetsTable" class="table table-striped">
 			<thead>
        			<tr>
-           			<th><fmt:message key="titleRefereeRequestList"/></th>
-           			<th><fmt:message key="statusRefereeRequestList"/></th>
-           			<th><fmt:message key="usernameRefereeRequestList"/></th>
-           			<th><fmt:message key="matchTitleRefereeRequestList"/></th>
-           			<th><fmt:message key="actionsRefereeRequestList"/></th>
+           			<th><fmt:message key="code.label.refereerequestlist.title"/></th>
+           			<th><fmt:message key="code.label.refereerequestlist.status"/></th>
+           			<th><fmt:message key="code.label.refereerequestlist.username"/></th>
+           			<th><fmt:message key="code.label.refereerequestlist.matchtitle"/></th>
+           			<th><fmt:message key="code.label.refereerequestlist.actions"/></th>
  				</tr>
         	</thead>
         	<tbody>
@@ -36,10 +36,10 @@
                 </td>
                 <td>
                 	<spring:url value="accept/${matchRefereeRequest.referee.user.username}/${matchRefereeRequest.match.id}" var='acceptRefereeRequestList'></spring:url>
-                	<a href="${fn:escapeXml(acceptRefereeRequestList)}" class="btn btn-default"><fmt:message key="acceptRefereeRequestList"/></a>
+                	<a href="${fn:escapeXml(acceptRefereeRequestList)}" class="btn btn-default"><fmt:message key="code.button.refereerequestlist.accept"/></a>
                 	
                 	<spring:url value="reject/${matchRefereeRequest.referee.user.username}/${matchRefereeRequest.match.id}" var='rejectRefereeRequestList'></spring:url>
-                	<a href="${fn:escapeXml(rejectRefereeRequestList)}" class="btn btn-default"><fmt:message key="rejectRefereeRequestList"/></a>
+                	<a href="${fn:escapeXml(rejectRefereeRequestList)}" class="btn btn-default"><fmt:message key="code.button.refereerequestlist.reject"/></a>
                 </td>
             </tr>
         </c:forEach>

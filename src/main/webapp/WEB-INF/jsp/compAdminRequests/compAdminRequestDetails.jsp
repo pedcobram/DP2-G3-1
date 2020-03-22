@@ -9,20 +9,20 @@
 
 <petclinic:layout pageName="compAdminRequestDetails">
 
-    <h2><fmt:message key="compAdminRequestDetails"/></h2>
+    <h2><fmt:message key="code.title.compadminrequestdetails"/></h2>
 
 
     <table class="table table-striped">
         <tr>
-            <th><fmt:message key="titleCompAdminRequestDetails"/></th>
+            <th><fmt:message key="code.label.compadminrequestdetails.title"/></th>
             <td><b><c:out value="${compAdminRequest.title}"/></b></td>
         </tr>
         <tr>
-            <th><fmt:message key="descriptionCompAdminRequestDetails"/></th>
+            <th><fmt:message key="code.label.compadminrequestdetails.description"/></th>
             <td><c:out value="${compAdminRequest.description}"/></td>
         </tr>
         <tr>
-            <th><fmt:message key="statusCompAdminRequestDetails"/></th>
+            <th><fmt:message key="code.label.compadminrequestdetails.status"/></th>
             <td><c:out value="${compAdminRequest.status}"/></td>
         </tr>
     </table>
@@ -41,13 +41,13 @@
     	<spring:url value="/competitionAdminRequest/{compAdminRequestId}/edit" var="editUrl">
         	<spring:param name="compAdminRequestId" value="${compAdminRequest.id}"/>
     	</spring:url>
-    	<a href="${fn:escapeXml(editUrl)}" class="btn btn-default"><fmt:message key="editCompAdminRequestDetails"/></a>
+    	<a href="${fn:escapeXml(editUrl)}" class="btn btn-default"><fmt:message key="code.button.compadminrequestdetails.edit"/></a>
     	
     	
     	<spring:url value="/deleteCompAdminRequest/{compAdminRequestId}" var="editUrl">
     		<spring:param name="compAdminRequestId" value="${compAdminRequest.id}"/>
     	</spring:url>
-    	<a href="${fn:escapeXml(editUrl)}" class="btn btn-default2" style="color:white"><b><fmt:message key="deleteCompAdminRequestDetails"/></b></a>
+    	<a href="${fn:escapeXml(editUrl)}" class="btn btn-default2" style="color:white"><b><fmt:message key="code.button.compadminrequestdetails.delete"/></b></a>
     	
     </c:if>  
      

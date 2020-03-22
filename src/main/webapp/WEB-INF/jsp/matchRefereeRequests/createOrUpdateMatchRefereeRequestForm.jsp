@@ -11,19 +11,19 @@
 <petclinic:layout pageName="matchRefereeRequest">
    		
    	<jsp:body>
-   	<h2> <fmt:message key="matchRefereeRequest"/> </h2>
+   	<h2> <fmt:message key="code.title.createorupdatematchrefereerequestform"/> </h2>
     
     <form:form modelAttribute="matchRefereeRequest" class="form-horizontal" id="add-match-request-form">
       
        		<div class="form-group has-feedback">
-            <petclinic:inputField label="Title" name="title"/>
-            <petclinic:inputField label="Status" name="status" readonly="true"/>
-            <petclinic:inputField label="Referee" name="referee.user" readonly="true"/>
-            <petclinic:inputField label="Match name" name="match.title" readonly="true"/>
+            <petclinic:inputField label="code.label.createorupdatematchrefereerequestform.title" name="title"/>
+            <petclinic:inputField label="code.label.createorupdatematchrefereerequestform.status" name="status" readonly="true"/>
+            <petclinic:inputField label="code.label.createorupdatematchrefereerequestform.referee" name="referee.user" readonly="true"/>
+            <petclinic:inputField label="code.label.createorupdatematchrefereerequestform.matchname" name="match.title" readonly="true"/>
         	</div>
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
-               	<button class="btn btn-default" type="submit"><fmt:message key="submitMatchRefereeRequest"/></button>
+               	<button class="btn btn-default" type="submit"><fmt:message key="code.button.createorupdatematchrefereerequestform.submit"/></button>
             </div>
         </div>
     </form:form>

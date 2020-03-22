@@ -9,24 +9,23 @@
 
 <petclinic:layout pageName="competitionAdmins">
 
-    <h2><fmt:message key="compAdminDetails"/></h2>
-
+    <h2><fmt:message key="code.title.competitionadmindetails"/></h2>
 
     <table class="table table-striped">
         <tr>
-            <th><fmt:message key="nameCompAdminDetails"/></th>
+            <th><fmt:message key="code.label.competitionadmindetails.name"/></th>
             <td><b><c:out value="${competitionAdmin.firstName} ${competitionAdmin.lastName}"/></b></td>
         </tr>
         <tr>
-            <th><fmt:message key="emailCompAdminDetails"/></th>
+            <th><fmt:message key="code.label.competitionadmindetails.email"/></th>
             <td><c:out value="${competitionAdmin.email}"/></td>
         </tr>
         <tr>
-            <th><fmt:message key="dniCompAdminDetails"/></th>
+            <th><fmt:message key="code.label.competitionadmindetails.dni"/></th>
             <td><c:out value="${competitionAdmin.dni}"/></td>
         </tr>
         <tr>
-            <th><fmt:message key="tlfnCompAdminDetails"/></th>
+            <th><fmt:message key="code.label.competitionadmindetails.telephone"/></th>
             <td><c:out value="${competitionAdmin.telephone}"/></td>
         </tr>
     </table>
@@ -43,11 +42,11 @@
     	<spring:url value="{competitionAdminId}/edit" var="editUrl">
         	<spring:param name="competitionAdminId" value="${competitionAdmin.id}"/>
     	</spring:url>
-    	<a href="${fn:escapeXml(editUrl)}" class="btn btn-default"><fmt:message key="editCompAdminDetails"/></a>
+    	<a href="${fn:escapeXml(editUrl)}" class="btn btn-default"><fmt:message key="code.button.competitionadmindetails.edit"/></a>
     	
     	
     	<spring:url value="/deleteCompetitionAdmin/${competitionAdmin.user.username}" var="editUrl"></spring:url>
-    	<a href="${fn:escapeXml(editUrl)}" class="btn btn-default2" style="color:white"><b><fmt:message key="deleteCompAdminDetails"/></b></a>
+    	<a href="${fn:escapeXml(editUrl)}" class="btn btn-default2" style="color:white"><b><fmt:message key="code.button.competitionadmindetails.delete"/></b></a>
     	
     </c:if>  
     

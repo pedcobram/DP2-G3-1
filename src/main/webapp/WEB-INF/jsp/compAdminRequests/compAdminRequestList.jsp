@@ -8,15 +8,15 @@
 
 <petclinic:layout pageName="compAdminRequests">
 	
-	<h2 style="color:black"><fmt:message key="compAdminRequestList"/></h2>
+	<h2 style="color:black"><fmt:message key="code.title.compadminrequestlist"/></h2>
  		<table id="vetsTable" class="table table-striped">
 			<thead>
        			<tr>
-           			<th><fmt:message key="titleCompAdminRequestList"/></th>
-           			<th><fmt:message key="descriptionCompAdminRequestList"/></th>
-           			<th><fmt:message key="statusCompAdminRequestList"/></th>
-           			<th><fmt:message key="usernameCompAdminRequestList"/></th>
-           			<th><fmt:message key="actionsCompAdminRequestList"/></th>
+           			<th><fmt:message key="code.label.compadminrequestlist.title"/></th>
+           			<th><fmt:message key="code.label.compadminrequestlist.description"/></th>
+           			<th><fmt:message key="code.label.compadminrequestlist.status"/></th>
+           			<th><fmt:message key="code.label.compadminrequestlist.username"/></th>
+           			<th><fmt:message key="code.label.compadminrequestlist.actions"/></th>
  				</tr>
         	</thead>
         	<tbody>
@@ -36,10 +36,10 @@
                 </td>
                 <td>
                 	<spring:url value="accept/${compAdminRequest.user.username}" var='acceptCompAdminRequest'></spring:url>
-                	<a href="${fn:escapeXml(acceptCompAdminRequest)}" class="btn btn-default"><fmt:message key="acceptRequestCompAdminRequestList"/></a>
+                	<a href="${fn:escapeXml(acceptCompAdminRequest)}" class="btn btn-default"><fmt:message key="code.button.compadminrequestlist.accept"/></a>
                 	
                 	<spring:url value="reject/${compAdminRequest.user.username}" var='rejectCompAdminRequest'></spring:url>
-                	<a href="${fn:escapeXml(rejectCompAdminRequest)}" class="btn btn-default"><fmt:message key="rejectRequestCompAdminRequestList"/></a>
+                	<a href="${fn:escapeXml(rejectCompAdminRequest)}" class="btn btn-default"><fmt:message key="code.button.compadminrequestlist.reject"/></a>
                 </td>
             </tr>
         </c:forEach>
