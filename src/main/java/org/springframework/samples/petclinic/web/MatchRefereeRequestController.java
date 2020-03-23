@@ -201,8 +201,15 @@ public class MatchRefereeRequestController {
 		matchRefereeRequests.addAll(this.matchRefereeRequestService.findAllOnHoldMatchRefereeRequests());
 
 		for (MatchRefereeRequest m : matchRefereeRequests) {
-			if (m.getMatch().getId() == matchId) {
-				this.matchRefereeRequestService.deleteMatchRefereeRequest(m);
+			if (m.getMatch().getId() == matchId && m.getReferee() != ref) {
+
+				m.setId(m.getId());
+				m.setTitle(m.getTitle());
+				m.setStatus(RequestStatus.REFUSE);
+				m.setReferee(m.getReferee());
+				m.setMatch(m.getMatch());
+
+				this.matchRefereeRequestService.saveMatchRefereeRequest(m);
 			}
 		}
 

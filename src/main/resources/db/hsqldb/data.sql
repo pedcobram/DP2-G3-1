@@ -208,82 +208,82 @@ INSERT into contract_player(id, football_Clubs_id, start_date, end_date, end_con
 INSERT into contract_player(id, football_Clubs_id, start_date, end_date, end_contract_clause ,football_Players_id, salary) VALUES (7, 1, '2019-06-30', '2024-06-30', '12500000', 47, '1500000');
 
 -- Football Player Statistics
-INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(1, 0, 0, 0, 0, null, 2019, 2020, 1);
-INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(2, 0, 0, 0, 0, null, 2019, 2020, 2);
-INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(3, 0, 0, 0, 0, null, 2019, 2020, 3);
-INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(4, 0, 0, 0, 0, null, 2019, 2020, 4);
-INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(5, 0, 0, 0, 0, null, 2019, 2020, 5);
+INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(1, 0, 0, 0, 0, 0, 2019, 2020, 1);
+INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(2, 0, 0, 0, 0, 0, 2019, 2020, 2);
+INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(3, 0, 0, 0, 0, 0, 2019, 2020, 3);
+INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(4, 0, 0, 0, 0, 0, 2019, 2020, 4);
+INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(5, 0, 0, 0, 0, 0, 2019, 2020, 5);
 
-INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(6, 0, 0, 0, 0, null, 2019, 2020, 6);
-INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(7, 0, 0, 0, 0, null, 2019, 2020, 7);
-INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(8, 0, 0, 0, 0, null, 2019, 2020, 8);
-INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(9, 0, 0, 0, 0, null, 2019, 2020, 9);
-INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(10, 0, 0, 0, 0, null, 2019, 2020, 10);
+INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(6, 0, 0, 0, 0, 0, 2019, 2020, 6);
+INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(7, 0, 0, 0, 0, 0, 2019, 2020, 7);
+INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(8, 0, 0, 0, 0, 0, 2019, 2020, 8);
+INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(9, 0, 0, 0, 0, 0, 2019, 2020, 9);
+INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(10, 0, 0, 0, 0, 0, 2019, 2020, 10);
 
-INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(11, 0, 0, 0, 0, null, 2019, 2020, 11);
-INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(12, 0, 0, 0, 0, null, 2019, 2020, 12);
-INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(13, 0, 0, 0, 0, null, 2019, 2020, 13);
-INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(14, 0, 0, 0, 0, null, 2019, 2020, 14);
-INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(15, 0, 0, 0, 0, null, 2019, 2020, 15);
+INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(11, 0, 0, 0, 0, 0, 2019, 2020, 11);
+INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(12, 0, 0, 0, 0, 0, 2019, 2020, 12);
+INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(13, 0, 0, 0, 0, 0, 2019, 2020, 13);
+INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(14, 0, 0, 0, 0, 0, 2019, 2020, 14);
+INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(15, 0, 0, 0, 0, 0, 2019, 2020, 15);
 
-INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(16, 0, 0, 0, 0, null, 2019, 2020, 16);
-INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(17, 0, 0, 0, 0, null, 2019, 2020, 17);
-INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(18, 0, 0, 0, 0, null, 2019, 2020, 18);
-INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(19, 0, 0, 0, 0, null, 2019, 2020, 19);
-INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(20, 0, 0, 0, 0, null, 2019, 2020, 20);
+INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(16, 0, 0, 0, 0, 0, 2019, 2020, 16);
+INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(17, 0, 0, 0, 0, 0, 2019, 2020, 17);
+INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(18, 0, 0, 0, 0, 0, 2019, 2020, 18);
+INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(19, 0, 0, 0, 0, 0, 2019, 2020, 19);
+INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(20, 0, 0, 0, 0, 0, 2019, 2020, 20);
 
-INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(21, 0, 0, 0, 0, null, 2019, 2020, 21);
-INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(22, 0, 0, 0, 0, null, 2019, 2020, 22);
-INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(23, 0, 0, 0, 0, null, 2019, 2020, 23);
-INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(24, 0, 0, 0, 0, null, 2019, 2020, 24);
-INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(25, 0, 0, 0, 0, null, 2019, 2020, 25);
+INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(21, 0, 0, 0, 0, 0, 2019, 2020, 21);
+INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(22, 0, 0, 0, 0, 0, 2019, 2020, 22);
+INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(23, 0, 0, 0, 0, 0, 2019, 2020, 23);
+INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(24, 0, 0, 0, 0, 0, 2019, 2020, 24);
+INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(25, 0, 0, 0, 0, 0, 2019, 2020, 25);
 
-INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(26, 0, 0, 0, 0, null, 2019, 2020, 26);
-INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(27, 0, 0, 0, 0, null, 2019, 2020, 27);
-INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(28, 0, 0, 0, 0, null, 2019, 2020, 28);
-INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(29, 0, 0, 0, 0, null, 2019, 2020, 29);
-INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(30, 0, 0, 0, 0, null, 2019, 2020, 30);
+INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(26, 0, 0, 0, 0, 0, 2019, 2020, 26);
+INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(27, 0, 0, 0, 0, 0, 2019, 2020, 27);
+INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(28, 0, 0, 0, 0, 0, 2019, 2020, 28);
+INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(29, 0, 0, 0, 0, 0, 2019, 2020, 29);
+INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(30, 0, 0, 0, 0, 0, 2019, 2020, 30);
 
-INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(31, 0, 0, 0, 0, null, 2019, 2020, 31);
-INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(32, 0, 0, 0, 0, null, 2019, 2020, 32);
-INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(33, 0, 0, 0, 0, null, 2019, 2020, 33);
-INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(34, 0, 0, 0, 0, null, 2019, 2020, 34);
-INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(35, 0, 0, 0, 0, null, 2019, 2020, 35);
+INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(31, 0, 0, 0, 0, 0, 2019, 2020, 31);
+INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(32, 0, 0, 0, 0, 0, 2019, 2020, 32);
+INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(33, 0, 0, 0, 0, 0, 2019, 2020, 33);
+INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(34, 0, 0, 0, 0, 0, 2019, 2020, 34);
+INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(35, 0, 0, 0, 0, 0, 2019, 2020, 35);
 
-INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(36, 0, 0, 0, 0, null, 2019, 2020, 36);
-INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(37, 0, 0, 0, 0, null, 2019, 2020, 37);
-INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(38, 0, 0, 0, 0, null, 2019, 2020, 38);
-INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(39, 0, 0, 0, 0, null, 2019, 2020, 39);
-INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(40, 0, 0, 0, 0, null, 2019, 2020, 40);
+INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(36, 0, 0, 0, 0, 0, 2019, 2020, 36);
+INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(37, 0, 0, 0, 0, 0, 2019, 2020, 37);
+INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(38, 0, 0, 0, 0, 0, 2019, 2020, 38);
+INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(39, 0, 0, 0, 0, 0, 2019, 2020, 39);
+INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(40, 0, 0, 0, 0, 0, 2019, 2020, 40);
 
-INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(41, 0, 0, 0, 0, null, 2019, 2020, 41);
-INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(42, 0, 0, 0, 0, null, 2019, 2020, 42);
-INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(43, 0, 0, 0, 0, null, 2019, 2020, 43);
-INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(44, 0, 0, 0, 0, null, 2019, 2020, 44);
-INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(45, 0, 0, 0, 0, null, 2019, 2020, 45);
+INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(41, 0, 0, 0, 0, 0, 2019, 2020, 41);
+INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(42, 0, 0, 0, 0, 0, 2019, 2020, 42);
+INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(43, 0, 0, 0, 0, 0, 2019, 2020, 43);
+INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(44, 0, 0, 0, 0, 0, 2019, 2020, 44);
+INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(45, 0, 0, 0, 0, 0, 2019, 2020, 45);
 
-INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(46, 0, 0, 0, 0, null, 2019, 2020, 46);
-INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(47, 0, 0, 0, 0, null, 2019, 2020, 47);
-INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(48, 0, 0, 0, 0, null, 2019, 2020, 48);
-INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(49, 0, 0, 0, 0, null, 2019, 2020, 49);
-INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(50, 0, 0, 0, 0, null, 2019, 2020, 50);
+INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(46, 0, 0, 0, 0, 0, 2019, 2020, 46);
+INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(47, 0, 0, 0, 0, 0, 2019, 2020, 47);
+INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(48, 0, 0, 0, 0, 0, 2019, 2020, 48);
+INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(49, 0, 0, 0, 0, 0, 2019, 2020, 49);
+INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(50, 0, 0, 0, 0, 0, 2019, 2020, 50);
 
-INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(51, 0, 0, 0, 0, null, 2019, 2020, 51);
-INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(52, 0, 0, 0, 0, null, 2019, 2020, 52);
-INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(53, 0, 0, 0, 0, null, 2019, 2020, 53);
-INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(54, 0, 0, 0, 0, null, 2019, 2020, 54);
-INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(55, 0, 0, 0, 0, null, 2019, 2020, 55);
+INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(51, 0, 0, 0, 0, 0, 2019, 2020, 51);
+INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(52, 0, 0, 0, 0, 0, 2019, 2020, 52);
+INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(53, 0, 0, 0, 0, 0, 2019, 2020, 53);
+INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(54, 0, 0, 0, 0, 0, 2019, 2020, 54);
+INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(55, 0, 0, 0, 0, 0, 2019, 2020, 55);
 
-INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(56, 0, 0, 0, 0, null, 2019, 2020, 56);
-INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(57, 0, 0, 0, 0, null, 2019, 2020, 57);
-INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(58, 0, 0, 0, 0, null, 2019, 2020, 58);
-INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(59, 0, 0, 0, 0, null, 2019, 2020, 59);
-INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(60, 0, 0, 0, 0, null, 2019, 2020, 60);
+INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(56, 0, 0, 0, 0, 0, 2019, 2020, 56);
+INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(57, 0, 0, 0, 0, 0, 2019, 2020, 57);
+INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(58, 0, 0, 0, 0, 0, 2019, 2020, 58);
+INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(59, 0, 0, 0, 0, 0, 2019, 2020, 59);
+INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(60, 0, 0, 0, 0, 0, 2019, 2020, 60);
 
-INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(61, 0, 0, 0, 0, null, 2019, 2020, 61);
-INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(62, 0, 0, 0, 0, null, 2019, 2020, 62);
-INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(63, 0, 0, 0, 0, null, 2019, 2020, 63);
-INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(64, 0, 0, 0, 0, null, 2019, 2020, 64);
+INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(61, 0, 0, 0, 0, 0, 2019, 2020, 61);
+INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(62, 0, 0, 0, 0, 0, 2019, 2020, 62);
+INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(63, 0, 0, 0, 0, 0, 2019, 2020, 63);
+INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(64, 0, 0, 0, 0, 0, 2019, 2020, 64);
 
 -- Match Records
 INSERT INTO match_record(id, title, status, season_end, season_start, result, match) VALUES(1, 'title', 0, '2020', '2019', 'result', 2);

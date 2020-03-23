@@ -14,6 +14,7 @@ import org.springframework.samples.petclinic.model.FootballPlayerStatistic;
 import org.springframework.samples.petclinic.model.Match;
 import org.springframework.samples.petclinic.model.MatchRecord;
 import org.springframework.samples.petclinic.model.Enum.MatchRecordStatus;
+import org.springframework.samples.petclinic.model.Enum.MatchStatus;
 import org.springframework.samples.petclinic.service.FootballPlayerMatchStatisticService;
 import org.springframework.samples.petclinic.service.FootballPlayerStatisticService;
 import org.springframework.samples.petclinic.service.MatchRecordService;
@@ -155,21 +156,27 @@ public class MatchRecordController {
 
 				if (mr.getStatus() == MatchRecordStatus.PUBLISHED) {
 
+					//Cambiamos el estado del partido a finalizado una vez se cierre el acta
+					Match m = this.matchService.findMatchById(matchId);
+					m.setMatchStatus(MatchStatus.FINISHED);
+
+					//Añadimos las estadísticas del partido a la personal de los jugadores
 					FootballPlayerMatchStatistics fpmss = new FootballPlayerMatchStatistics();
 					fpmss.getFootballPlayerStatisticsList().addAll(this.footballPlayerMatchStatisticService.findFootballPlayerMatchStatisticByMatchRecordId(mr.getId()));
 
 					for (FootballPlayerMatchStatistic fpms : fpmss.getFootballPlayerStatisticsList()) {
 						FootballPlayerStatistic fps = this.footballPlayerStatisticService.findFootballPlayerStatisticByPlayerId(fpms.getPlayer().getId());
 						if (fpms.getPlayer().getId() == fps.getId()) {
+
 							fps.setId(fps.getId());
-							fps.setAssists(fpms.getAssists());
-							fps.setGoals(fpms.getGoals());
+							fps.setReceived_goals(fpms.getReceived_goals() + fps.getReceived_goals());
+							fps.setRed_cards(fpms.getRed_cards() + fps.getRed_cards());
+							fps.setYellow_cards(fpms.getYellow_cards() + fps.getYellow_cards());
+							fps.setAssists(fpms.getAssists() + fps.getAssists());
+							fps.setGoals(fpms.getGoals() + fps.getGoals());
 							fps.setPlayer(fpms.getPlayer());
-							fps.setReceived_goals(fpms.getReceived_goals());
-							fps.setRed_cards(fpms.getRed_cards());
 							fps.setSeason_end(fpms.getSeason_end());
 							fps.setSeason_start(fpms.getSeason_start());
-							fps.setYellow_cards(fpms.getYellow_cards());
 
 							this.footballPlayerStatisticService.saveFootballPlayerStatistic(fps);
 						}
