@@ -94,14 +94,14 @@ public class CoachController {
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String currentPrincipalName = authentication.getName();
-		FootballClub thisClub = this.footballClubService.findFootballClubByPresident(currentPrincipalName);
+		FootballClub myClub = this.footballClubService.findFootballClubByPresident(currentPrincipalName);
 		model.addAttribute("regs", true);
 		if (result.hasErrors()) {
 			return CoachController.VIEWS_COACH_CREATE_OR_UPDATE_FORM;
 		} else {
 			try {
 				coach.setClause(coach.getSalary() * 3);
-				this.coachService.saveCoach(coach, thisClub);
+				this.coachService.saveCoach(coach, myClub);
 			} catch (DuplicatedNameException ex) {
 				result.rejectValue("firstName", "duplicate", "already exists");
 				result.rejectValue("lastName", "duplicate", "already exists");
@@ -214,15 +214,10 @@ public class CoachController {
 			if (clubCoach != null) { //SI TENGO ENTRENADOR
 
 				if (coachToUpdate.getClub() != null) { //Y al que quiero fichar tiene otro club
-
 					try {
-						clubCoach.setClub(coachToUpdate.getClub()); //Mi entrenador se va al suyo
-
-						coachToUpdate.setClub(myClub);
-						coachToUpdate.setClause(coachToUpdate.getSalary() * 3);
-
 						Integer clausulaApagar = coach1.getClause();
-						this.coachService.signCoach(coachToUpdate, clausulaApagar);
+						coachToUpdate.setClause(coachToUpdate.getSalary() * 3);
+						this.coachService.signCoach(coachToUpdate, myClub, clausulaApagar);
 					} catch (SalaryException ex) {
 						result.rejectValue("salary", "code.error.validator.salaryMinAndMaxCoach", "wrong money!");
 						return CoachController.VIEWS_COACH_CREATE_OR_UPDATE_FORM;
@@ -233,13 +228,9 @@ public class CoachController {
 
 				} else { //Si al que quiero fichar no tiene club			
 					try {
-						clubCoach.setClub(null); //Mi entrenador pasa a agente libre
 						Integer clausulaApagar = clubCoach.getClause();
-						clubCoach.setSalary(0);
-						clubCoach.setClause(0);
-						coachToUpdate.setClub(myClub);
 						coachToUpdate.setClause(coachToUpdate.getSalary() * 3);
-						this.coachService.signCoach(coachToUpdate, clausulaApagar);
+						this.coachService.signCoach(coachToUpdate, myClub, clausulaApagar);
 					} catch (SalaryException ex) {
 						result.rejectValue("salary", "code.error.validator.salaryMinAndMaxCoach", "wrong money!");
 						return CoachController.VIEWS_COACH_CREATE_OR_UPDATE_FORM;
@@ -297,8 +288,6 @@ public class CoachController {
 		} catch (MoneyClubException e) {
 			return "redirect:/coachs/" + coach.getId();
 		}
-
-		//Habría que que restarle a los fondos del club la cláusula de rescisión ya que lo estamos despidiendo. Pero da fallo
 
 		return "redirect:/footballClubs/myClub/" + currentPrincipalName;
 	}

@@ -46,7 +46,7 @@ public class FootballClubService {
 	private FootballPlayerService	footballPlayerService;
 
 	@Autowired
-	private ContractService			contractService;
+	private ContractPlayerService			contractService;
 
 	@Autowired
 	private CoachService			coachService;
@@ -146,7 +146,7 @@ public class FootballClubService {
 
 			Collection<ContractPlayer> contracts = this.contractService.findAllPlayerContractsByClubId(footballClub.getId());
 			for (ContractPlayer a : contracts) {
-				this.contractService.deleteContract(a);
+				this.contractService.deleteContractDeletingClub(a);
 			}
 
 			Collection<FootballPlayer> players = this.footballPlayerService.findAllClubFootballPlayers(footballClub.getId());

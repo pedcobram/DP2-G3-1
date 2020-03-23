@@ -38,6 +38,7 @@ import org.springframework.samples.petclinic.service.exceptions.DateException;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedNameException;
 import org.springframework.samples.petclinic.service.exceptions.MoneyClubException;
 import org.springframework.samples.petclinic.service.exceptions.NumberOfPlayersAndCoachException;
+import org.springframework.samples.petclinic.service.exceptions.SalaryException;
 import org.springframework.samples.petclinic.service.exceptions.StatusException;
 import org.springframework.samples.petclinic.web.validators.FootballPlayerValidator;
 import org.springframework.security.core.Authentication;
@@ -190,7 +191,7 @@ public class FootballPlayerController {
 
 	@PostMapping(value = "/footballPlayer/new") //REGISTRAR JUGADOR - POST
 	public String processCreationForm(@Valid final FootballPlayer footballPlayer, final BindingResult result, final Model model)
-		throws DataAccessException, DuplicatedNameException, NumberOfPlayersAndCoachException, MoneyClubException, StatusException, DateException {
+		throws DataAccessException, DuplicatedNameException, NumberOfPlayersAndCoachException, MoneyClubException, StatusException, DateException, SalaryException {
 
 		//Contract Fields
 		Date moment = new Date(System.currentTimeMillis() - 1);

@@ -399,11 +399,9 @@ public class CoachServiceTests {
 		Assertions.assertTrue(coachToSing.getClause() == 10000000); //Vemos que su cláusula es de 10mill€
 		Integer newSalary = 25000000; //25mill€
 
-		myCoach.setClub(coachToSing.getClub());
 		coachToSing.setSalary(newSalary);
-		coachToSing.setClub(myClub);
 
-		this.coachService.signCoach(coachToSing, coachToSingClause);
+		this.coachService.signCoach(coachToSing, myClub, coachToSingClause);
 
 		myCoach = this.coachService.findCoachByClubId(7); //Vemos que nuestro entrenador ha cambiado por el que queríamos fichar
 
@@ -429,10 +427,9 @@ public class CoachServiceTests {
 		Integer newSalary = 1000000; //1mill€
 
 		coachToSing.setSalary(newSalary);
-		coachToSing.setClub(myClub);
 
 		Assertions.assertThrows(MoneyClubException.class, () -> {
-			this.coachService.signCoach(coachToSing, coachToSingClause);
+			this.coachService.signCoach(coachToSing, myClub, coachToSingClause);
 		});
 	}
 
@@ -454,10 +451,9 @@ public class CoachServiceTests {
 		Integer newSalary = 999999; //999.999,00€
 
 		coachToSing.setSalary(newSalary);
-		coachToSing.setClub(myClub);
 
 		Assertions.assertThrows(SalaryException.class, () -> {
-			this.coachService.signCoach(coachToSing, coachToSingClause);
+			this.coachService.signCoach(coachToSing, myClub, coachToSingClause);
 		});
 	}
 
@@ -479,10 +475,9 @@ public class CoachServiceTests {
 		Integer newSalary = 25000001; //25mill€ + 1€
 
 		coachToSing.setSalary(newSalary);
-		coachToSing.setClub(myClub);
 
 		Assertions.assertThrows(SalaryException.class, () -> {
-			this.coachService.signCoach(coachToSing, coachToSingClause);
+			this.coachService.signCoach(coachToSing, myClub, coachToSingClause);
 		});
 	}
 

@@ -31,6 +31,7 @@ import org.springframework.samples.petclinic.service.exceptions.DateException;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedNameException;
 import org.springframework.samples.petclinic.service.exceptions.MoneyClubException;
 import org.springframework.samples.petclinic.service.exceptions.NumberOfPlayersAndCoachException;
+import org.springframework.samples.petclinic.service.exceptions.SalaryException;
 import org.springframework.samples.petclinic.service.exceptions.StatusException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,7 +44,7 @@ public class FootballPlayerService {
 	private FootballPlayerRepository	footRepository;
 
 	@Autowired
-	private ContractService				contractService;
+	private ContractPlayerService				contractService;
 
 
 	@Autowired
@@ -77,10 +78,10 @@ public class FootballPlayerService {
 
 	//Guardar jugador con validación de nombre duplicado
 	@Transactional(rollbackFor = {
-		DuplicatedNameException.class, NumberOfPlayersAndCoachException.class, DateException.class, StatusException.class
+		DuplicatedNameException.class, NumberOfPlayersAndCoachException.class, DateException.class, StatusException.class, SalaryException.class, MoneyClubException.class
 	})
 	public void saveFootballPlayer(@Valid final FootballPlayer footballPlayer, @Valid final ContractPlayer newContract)
-		throws DataAccessException, DuplicatedNameException, NumberOfPlayersAndCoachException, MoneyClubException, StatusException, DateException {
+		throws DataAccessException, DuplicatedNameException, NumberOfPlayersAndCoachException, MoneyClubException, StatusException, DateException, SalaryException {
 
 		String firstname = footballPlayer.getFirstName().toLowerCase();
 		String lastname = footballPlayer.getLastName().toLowerCase();
@@ -123,8 +124,6 @@ public class FootballPlayerService {
 		//RN: El salario no puede ser superior a los fondos del equipo
 		if (newContract.getClub().getMoney() < newContract.getSalary()) {
 			throw new MoneyClubException();
-		} else {
-			newContract.getClub().setMoney(newContract.getClub().getMoney() - newContract.getSalary());
 		}
 
 		//RN: Si el club es público no puede registrar a un jugador
@@ -132,6 +131,7 @@ public class FootballPlayerService {
 			throw new StatusException();
 		}
 
+		newContract.getClub().setMoney(newContract.getClub().getMoney() - newContract.getSalary());
 		this.footRepository.save(footballPlayer);
 		this.contractService.saveContractPlayer(newContract);
 

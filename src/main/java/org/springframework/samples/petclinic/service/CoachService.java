@@ -62,7 +62,7 @@ public class CoachService {
 
 	//REGISTRAR ENTRENADOR o FICHAR AGENTE LIBRE SI NO TENGO ENTRENADOR
 	@Transactional(rollbackFor = {
-		DuplicatedNameException.class, NumberOfPlayersAndCoachException.class, MoneyClubException.class
+		DuplicatedNameException.class, NumberOfPlayersAndCoachException.class, DateException.class, StatusException.class, SalaryException.class, MoneyClubException.class, StatusRegisteringException.class
 	})
 	public void saveCoach(@Valid final Coach coach, final FootballClub myClub)
 		throws DataAccessException, DuplicatedNameException, NumberOfPlayersAndCoachException, MoneyClubException, SalaryException, DateException, StatusException, StatusRegisteringException {
@@ -113,8 +113,6 @@ public class CoachService {
 		//RN: El salario no puede ser superior a los fondos del equipo
 		if (myClub.getMoney() < coach.getSalary()) {
 			throw new MoneyClubException();
-		} else {
-			myClub.setMoney(myClub.getMoney() - coach.getSalary());
 		}
 
 		//RN: No se puede fichar a un entrenador de Otro equipo si no tenemos entrenador
@@ -127,6 +125,7 @@ public class CoachService {
 			throw new StatusException();
 		}
 
+		myClub.setMoney(myClub.getMoney() - coach.getSalary());
 		coach.setClub(myClub);
 		this.coachRepository.save(coach);
 
@@ -134,21 +133,33 @@ public class CoachService {
 
 	//FICHAR A OTRO ENTRENADOR SI TENGO ENTRENADOR
 	@Transactional(rollbackFor = MoneyClubException.class)
-	public void signCoach(@Valid final Coach coach, final Integer clause) throws DataAccessException, MoneyClubException, SalaryException {
+	public void signCoach(@Valid final Coach coachToUpdate, final FootballClub myClub, final Integer clause) throws DataAccessException, MoneyClubException, SalaryException {
 
 		//RN: El salario mínimo y máximo
-		if (coach.getSalary() < 1000000 || coach.getSalary() > 25000000) {
+		if (coachToUpdate.getSalary() < 1000000 || coachToUpdate.getSalary() > 25000000) {
 			throw new SalaryException();
 		}
 
 		//RN: La transacción total no puede ser mayor a los fondos del club
-		if (coach.getClub().getMoney() < coach.getSalary() + clause) {
+		if (myClub.getMoney() < coachToUpdate.getSalary() + clause) {
 			throw new MoneyClubException();
-		} else {
-			coach.getClub().setMoney(coach.getClub().getMoney() - (coach.getSalary() + clause));
 		}
 
-		this.coachRepository.save(coach);
+		Coach myOldCoach = this.findCoachByClubId(myClub.getId());
+
+		if (coachToUpdate.getClub() != null) { //Si nuestro fichaje tiene club
+			myOldCoach.setClub(coachToUpdate.getClub()); //Mi entrenador se va al suyo
+		} else { //Si es agente libre mi entrenador pasa a serlo
+			myOldCoach.setClub(null);
+			myOldCoach.setSalary(0);
+			myOldCoach.setClause(0);
+		}
+
+		coachToUpdate.setClub(myClub);
+
+		myClub.setMoney(myClub.getMoney() - (coachToUpdate.getSalary() + clause));
+
+		this.coachRepository.save(coachToUpdate);
 
 	}
 
@@ -160,10 +171,11 @@ public class CoachService {
 
 		if (coach.getClub().getMoney() < coach.getClause()) {
 			throw new MoneyClubException();
-		} else {
-			coach.getClub().setMoney(coach.getClub().getMoney() - coach.getClause());
 		}
+
+		coach.getClub().setMoney(coach.getClub().getMoney() - coach.getClause());
 		coach.setClub(null);
+
 		this.coachRepository.save(coach);
 
 	}

@@ -24,6 +24,7 @@ import org.springframework.samples.petclinic.service.exceptions.DateException;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedNameException;
 import org.springframework.samples.petclinic.service.exceptions.MoneyClubException;
 import org.springframework.samples.petclinic.service.exceptions.NumberOfPlayersAndCoachException;
+import org.springframework.samples.petclinic.service.exceptions.SalaryException;
 import org.springframework.samples.petclinic.service.exceptions.StatusException;
 import org.springframework.stereotype.Service;
 
@@ -104,7 +105,7 @@ public class FootballPlayerServiceTests {
 	}
 
 	@Test //CASO POSITIVO - Registrar Jugador
-	void shouldRegisterFootballPlayerAndGenerateId() throws DataAccessException, DuplicatedNameException, NumberOfPlayersAndCoachException, DateException, MoneyClubException, StatusException {
+	void shouldRegisterFootballPlayerAndGenerateId() throws DataAccessException, DuplicatedNameException, NumberOfPlayersAndCoachException, DateException, MoneyClubException, StatusException, SalaryException {
 
 		FootballPlayer player = this.footballPlayerService.findFootballPlayerById(69);
 
@@ -140,7 +141,7 @@ public class FootballPlayerServiceTests {
 		footballPlayer.setFirstName("Vincent");
 		footballPlayer.setLastName("Valentine");
 		footballPlayer.setPosition(FootballPlayerPosition.STRIKER);
-		footballPlayer.setValue(1000);
+		footballPlayer.setValue(1000000);
 
 		ContractPlayer newContract = new ContractPlayer();
 		newContract.setClause(5000000);
@@ -365,7 +366,7 @@ public class FootballPlayerServiceTests {
 		newContract.setPlayer(footballPlayer);
 		newContract.setEndDate(end);
 		newContract.setStartDate(start);
-		newContract.setSalary(1000001); //Ponemos el salario superior a los fondos del club(1000000)
+		newContract.setSalary(2000001); //Ponemos el salario superior a los fondos del club(1000000)
 
 		Assertions.assertThrows(MoneyClubException.class, () -> {
 			this.footballPlayerService.saveFootballPlayer(footballPlayer, newContract);

@@ -28,8 +28,6 @@ public interface ContractRepository {
 
 	Contract findById(int id) throws DataAccessException;
 
-	Collection<ContractPlayer> findAllPlayerContracts() throws DataAccessException;
-
 	ContractPlayer findContractPlayerById(int id) throws DataAccessException;
 
 	ContractPlayer findContractPlayerByPlayerId(int playerId) throws DataAccessException;
