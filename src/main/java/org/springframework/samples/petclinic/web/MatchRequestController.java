@@ -124,8 +124,15 @@ public class MatchRequestController {
 		MatchRequest matchRequest = new MatchRequest();
 		List<String> stadiums = new ArrayList<String>();
 
+		String title = footballClub1.getName() + " vs " + footballClub2.getName() + " ";
+
+		model.put("titleMatch", title);
+
 		matchRequest.setFootballClub1(footballClub1);
 		matchRequest.setFootballClub2(footballClub2);
+		matchRequest.setTitle(title);
+		matchRequest.setCreator(currentPrincipalName);
+		matchRequest.setStatus(RequestStatus.ON_HOLD);
 
 		LocalDateTime now = LocalDateTime.now();
 		Date now_date = Date.from(now.atZone(ZoneId.systemDefault()).toInstant());
@@ -136,10 +143,6 @@ public class MatchRequestController {
 
 		model.put("stadiums", stadiums);
 		model.put("matchRequest", matchRequest);
-
-		String title = footballClub1.getName() + " vs " + footballClub2.getName() + " ";
-
-		model.put("titleMatch", title);
 
 		matchRequest.setTitle(title);
 
@@ -176,10 +179,19 @@ public class MatchRequestController {
 			matchRequest.setMatchDate(matchRequest.getMatchDate());
 			matchRequest.setFootballClub1(footballClub1);
 			matchRequest.setFootballClub2(footballClub2);
+			matchRequest.setCreator(currentPrincipalName);
+			matchRequest.setReferee(null);
 
 			model.put("matchRequest", matchRequest);
 
-			this.matchRequestService.saveMatchRequest(matchRequest);
+			try {
+
+				this.matchRequestService.saveMatchRequest(matchRequest);
+
+			} catch (IllegalDateException ide) {
+				result.rejectValue("matchDate", "code.error.validator.atleast1monthinadvance", "Match date must be at least one month from now");
+				return MatchRequestController.VIEWS_MATCH_REQUEST_CREATE_OR_UPDATE_FORM;
+			}
 
 			return MatchRequestController.VIEWS_MATCH_REQUEST_LIST;
 		}

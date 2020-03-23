@@ -23,20 +23,16 @@
     <form:form modelAttribute="matchRequest" class="form-horizontal" id="add-match-request-form">
       
        		<div class="form-group has-feedback">
-       		<div class="form-group">
-				<label class="col-sm-2 control-label">Title:</label>
-				<div class="col-sm-10">
-					<div class="form-control" style="background-color: #f1f1f1"> 
-						${titleMatch} ${friendlyMatch} 
-						<span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
-					</div>
-				</div>	
+       			<div class="form-group">
 			</div>
+			 
+			<petclinic:inputField label="code.label.matchrequests.title" name="title" readonly="true"/>
             <petclinic:inputField label="code.label.matchrequests.matchdate" name="matchDate"/>
             <div class="control-group">
             	<petclinic:selectField label="code.label.matchrequests.stadium" name="stadium" names="${stadiums}" size="2"/>
             </div>
             <petclinic:inputField label="code.label.matchrequests.footballclub.one" name="footballClub1.name" readonly="true"/>
+            <petclinic:inputField label="code.label.matchrequests.status" name="status" readonly="true"/>
             <petclinic:inputField label="code.label.matchrequests.footballclub.two" name="footballClub2.name" readonly="true"/>
             <petclinic:inputField label="code.label.matchrequests.creator" name="creator" readonly="true"/>
         	</div>

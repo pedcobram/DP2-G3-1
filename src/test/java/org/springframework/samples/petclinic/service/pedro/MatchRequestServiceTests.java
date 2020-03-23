@@ -1,6 +1,8 @@
 
 package org.springframework.samples.petclinic.service.pedro;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -170,6 +172,30 @@ public class MatchRequestServiceTests {
 		newMR.setMatchDate(date);
 
 		Assertions.assertThrows(ConstraintViolationException.class, () -> {
+			this.matchRequestService.saveMatchRequest(newMR);
+		});
+	}
+
+	@Test //CASO REGLA DE NEGOCIO
+	void shouldIllegalDateExceptionSaveMatchRequest() {
+
+		MatchRequest newMR = new MatchRequest();
+
+		LocalDateTime now = LocalDateTime.now();
+		Date now_date = Date.from(now.atZone(ZoneId.systemDefault()).toInstant());
+
+		FootballClub fc1 = this.footballClubService.findFootballClubById(1);
+		FootballClub fc2 = this.footballClubService.findFootballClubById(2);
+
+		newMR.setId(100);
+		newMR.setTitle("JUnit test");
+		newMR.setStatus(RequestStatus.ON_HOLD);
+		newMR.setStadium("Stadium");
+		newMR.setFootballClub1(fc1);
+		newMR.setFootballClub2(fc2);
+		newMR.setMatchDate(now_date);
+
+		Assertions.assertThrows(IllegalDateException.class, () -> {
 			this.matchRequestService.saveMatchRequest(newMR);
 		});
 	}
