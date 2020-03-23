@@ -1,7 +1,6 @@
 
 package org.springframework.samples.petclinic.web.validators;
 
-import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -22,7 +21,6 @@ public class FootballClubValidator implements Validator {
 		String Name = footballClub.getName();
 		String City = footballClub.getCity();
 		String Stadium = footballClub.getStadium();
-		Date now = new Date(System.currentTimeMillis() - 1);
 
 		// Name Validation
 		if (!StringUtils.hasLength(Name) || Name.length() > 50 || Name.length() < 3) {
@@ -40,8 +38,8 @@ public class FootballClubValidator implements Validator {
 		}
 
 		// Foundation Date Validation
-		if (footballClub.getFoundationDate() == null || footballClub.getFoundationDate().after(now)) {
-			errors.rejectValue("foundationDate", "code.error.validator.requiredAndPast");
+		if (footballClub.getFoundationDate() == null) {
+			errors.rejectValue("foundationDate", "code.error.validator.required");
 		}
 
 		Pattern p1 = Pattern.compile("(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]");

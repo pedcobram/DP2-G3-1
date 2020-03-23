@@ -1,9 +1,6 @@
 
 package org.springframework.samples.petclinic.web.validators;
 
-import java.util.Calendar;
-import java.util.Date;
-
 import org.springframework.samples.petclinic.model.Coach;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
@@ -20,14 +17,6 @@ public class CoachValidator implements Validator {
 		String firstName = coach.getFirstName();
 		String lastName = coach.getLastName();
 
-		Date now = new Date(System.currentTimeMillis() - 1);
-
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(now);
-		cal.add(Calendar.YEAR, -18);
-
-		now = cal.getTime();
-
 		// First Name Validation
 		if (!StringUtils.hasLength(firstName) || firstName.length() > 50 || firstName.length() < 2) {
 			errors.rejectValue("firstName", "code.error.validator.requiredAndLength250", CoachValidator.REQUIRED + " and between 2 and 50 character");
@@ -43,14 +32,9 @@ public class CoachValidator implements Validator {
 			errors.rejectValue("salary", "code.error.validator.required", CoachValidator.REQUIRED);
 		}
 
-		// Salary Validation 2
-		if (coach.getSalary() != null && coach.getSalary() < 1000000) {
-			errors.rejectValue("salary", "code.error.validator.OneMillionAtLeast", CoachValidator.REQUIRED);
-		}
-
 		// Birth Date Validation
-		if (coach.getBirthDate() == null || coach.getBirthDate().after(now)) {
-			errors.rejectValue("birthDate", "code.error.validator.requiredAnd18Years", CoachValidator.REQUIRED);
+		if (coach.getBirthDate() == null) {
+			errors.rejectValue("birthDate", "code.error.validator.required", CoachValidator.REQUIRED);
 		}
 
 	}

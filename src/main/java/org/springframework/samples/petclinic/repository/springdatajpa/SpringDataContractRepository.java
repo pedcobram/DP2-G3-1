@@ -28,10 +28,6 @@ import org.springframework.samples.petclinic.repository.ContractRepository;
 public interface SpringDataContractRepository extends ContractRepository, Repository<Contract, Integer> {
 
 	@Override
-	@Query("Select c from ContractPlayer c")
-	Collection<ContractPlayer> findAllPlayerContracts() throws DataAccessException;
-
-	@Override
 	@Query("Select c from ContractPlayer c where c.id = ?1")
 	ContractPlayer findContractPlayerById(int id) throws DataAccessException;
 

@@ -20,9 +20,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
  * and open the template in the editor.
  */
 
-/**
- * @author japarejo
- */
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
@@ -37,7 +35,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
       .antMatchers(HttpMethod.GET, "/", "/exception/**").permitAll()
       .antMatchers("/users/new").permitAll()
       .antMatchers("/authenticateds/new").permitAll()
-      .antMatchers("/presidents/**").authenticated()
       .antMatchers("/footballPlayerStatistic/**").authenticated()
       .antMatchers("/matchRefereeRequest/**").hasAnyAuthority("referee")
       .antMatchers("/matches/edit/**").hasAnyAuthority("president")
@@ -53,22 +50,25 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
       .antMatchers("/deleteCompAdminRequest/**").authenticated()
       .antMatchers("/deleteCompetitionAdmin/**").hasAnyAuthority("competitionAdmin")
       .antMatchers("/myCompetitionAdminProfile/**").hasAnyAuthority("competitionAdmin")
-      .antMatchers("/matchRequests/**").authenticated()
-      .antMatchers("/admin/**").hasAnyAuthority("admin")
+      .antMatchers("/matchRequests/**").authenticated()          
+      .antMatchers("/presidents/new").authenticated()
+      .antMatchers("/presidents/**").hasAnyAuthority("president")
+      .antMatchers("/admin/**").hasAnyAuthority("admin")      
       .antMatchers("/authenticateds/**").authenticated()
       .antMatchers("/myProfile/**").authenticated()
       .antMatchers("/myPresidentProfile/**").authenticated()
       .antMatchers("/footballPlayers/**").authenticated()
-      .antMatchers("/createPresident/**").authenticated()
-      .antMatchers("/deletePresident/**").authenticated()
-      .antMatchers("/footballClub/**").authenticated()
+      .antMatchers("/footballClubs/list/**").authenticated()
+      .antMatchers("/footballClubs/myClub/**").hasAnyAuthority("president")
+      .antMatchers("/transfers/**").hasAnyAuthority("president")
       .antMatchers("/coachs/**").hasAnyAuthority("president")
       .antMatchers("/myfootballClub/**").hasAnyAuthority("president")
       .antMatchers("/footballPlayer/new").hasAnyAuthority("president")
       .antMatchers("/contractPlayer/**").hasAnyAuthority("president")
       .anyRequest().denyAll().and().formLogin()
 			/* .loginPage("/login") */
-			.failureUrl("/login-error").and().logout().logoutSuccessUrl("/");
+			.failureUrl("/login-error").and().logout().logoutSuccessUrl("/")
+			.and().exceptionHandling().accessDeniedPage("/exception/forbidden");
 		// Configuración para que funcione la consola de administración
 		// de la BD H2 (deshabilitar las cabeceras de protección contra
 		// ataques de tipo csrf y habilitar los framesets si su contenido

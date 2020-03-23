@@ -49,13 +49,13 @@
 	<!-- Muestro el botón de editar si el usuario coincide con el usuario actual %-->  
 
 	<c:if test="${president.user.username == principalUsername}">
-    	<spring:url value="{presidentId}/edit" var="editUrl">
-        	<spring:param name="presidentId" value="${president.id}"/>
+    	<spring:url value="/presidents/{principalUsername}/edit" var="editUrl">
+        	<spring:param name="principalUsername" value="${president.user.username}"/>
     	</spring:url>
     	<a href="${fn:escapeXml(editUrl)}" class="btn btn-default">${Update}</a>
     	
     	
-    	<spring:url value="/deletePresident" var="editUrl"></spring:url>
+    	<spring:url value="/presidents/delete" var="editUrl"></spring:url>
     	<a href="${fn:escapeXml(editUrl)}" class="btn btn-default2" style="color:white"><b>${Delete}</b></a>
     	
     </c:if>  

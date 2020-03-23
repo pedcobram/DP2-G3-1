@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.FootballPlayer;
 import org.springframework.samples.petclinic.model.FootballPlayerMatchStatistic;
-import org.springframework.samples.petclinic.model.FootballPlayers;
 import org.springframework.samples.petclinic.model.Match;
 import org.springframework.samples.petclinic.model.MatchRecord;
 import org.springframework.samples.petclinic.model.MatchRefereeRequest;
@@ -217,12 +216,13 @@ public class MatchRefereeRequestController {
 		this.matchRecordService.saveMatchRecord(mr);
 
 		// Añadimos los jugadores al acta
-		FootballPlayers fps = new FootballPlayers();
 
-		fps.getFootballPlayersList().addAll(this.footballPlayerService.findAllClubFootballPlayers(match.getFootballClub1().getId()));
-		fps.getFootballPlayersList().addAll(this.footballPlayerService.findAllClubFootballPlayers(match.getFootballClub2().getId()));
+		List<FootballPlayer> fps = new ArrayList<>();
 
-		for (FootballPlayer fp : fps.getFootballPlayersList()) {
+		fps.addAll(this.footballPlayerService.findAllClubFootballPlayers(match.getFootballClub1().getId()));
+		fps.addAll(this.footballPlayerService.findAllClubFootballPlayers(match.getFootballClub2().getId()));
+
+		for (FootballPlayer fp : fps) {
 			FootballPlayerMatchStatistic fpms = new FootballPlayerMatchStatistic();
 
 			fpms.setAssists(0);

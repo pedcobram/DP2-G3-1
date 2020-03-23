@@ -1,7 +1,6 @@
 
 package org.springframework.samples.petclinic.web;
 
-import java.util.Collection;
 import java.util.Map;
 
 import javax.security.auth.login.CredentialException;
@@ -14,7 +13,13 @@ import org.springframework.samples.petclinic.model.Coach;
 import org.springframework.samples.petclinic.model.FootballClub;
 import org.springframework.samples.petclinic.service.CoachService;
 import org.springframework.samples.petclinic.service.FootballClubService;
+import org.springframework.samples.petclinic.service.exceptions.DateException;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedNameException;
+import org.springframework.samples.petclinic.service.exceptions.MoneyClubException;
+import org.springframework.samples.petclinic.service.exceptions.NumberOfPlayersAndCoachException;
+import org.springframework.samples.petclinic.service.exceptions.SalaryException;
+import org.springframework.samples.petclinic.service.exceptions.StatusException;
+import org.springframework.samples.petclinic.service.exceptions.StatusRegisteringException;
 import org.springframework.samples.petclinic.web.validators.CoachValidator;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -57,34 +62,6 @@ public class CoachController {
 		dataBinder.setDisallowedFields("id");
 	}
 
-	@GetMapping(value = "/coachs") //LISTA DE ENTRENADORES
-	public String showCoachList(final Map<String, Object> model) {
-
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		String currentPrincipalName = authentication.getName();
-		FootballClub footballClub = this.footballClubService.findFootballClubByPresident(currentPrincipalName);
-
-		if (footballClub == null) {
-			return "footballClubs/myClubEmpty";
-		}
-
-		if (footballClub.getStatus() == false) {
-
-			Collection<Coach> coachsFA = this.coachService.findAllCoachsFA();
-			model.put("coachs", coachsFA);
-			model.put("thisClubStatus", footballClub.getStatus());
-			model.put("thisClubPresidentUsername", footballClub.getPresident().getUser().getUsername());
-
-			return "coachs/coachList";
-		} else {
-
-			Collection<Coach> coachs = this.coachService.findAllCoachs();
-			model.put("coachs", coachs);
-
-			return "coachs/coachList";
-		}
-	}
-
 	@GetMapping("/coachs/{coachId}") //VISTA DETALLADA DE ENTRENADOR
 	public ModelAndView showCoach(@PathVariable("coachId") final int coachId) {
 
@@ -107,41 +84,51 @@ public class CoachController {
 
 		Coach coach = new Coach();
 		model.put("coach", coach);
-
+		model.put("regs", true);
 		return CoachController.VIEWS_COACH_CREATE_OR_UPDATE_FORM;
 	}
 
 	@PostMapping(value = "/coachs/new") //REGISTRAR ENTRENADOR - POST
-	public String processCreationForm(@Valid final Coach coach, final BindingResult result, final Model model) throws DataAccessException, DuplicatedNameException {
+	public String processCreationForm(@Valid final Coach coach, final BindingResult result, final Model model)
+		throws DataAccessException, DuplicatedNameException, NumberOfPlayersAndCoachException, MoneyClubException, SalaryException, StatusRegisteringException {
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String currentPrincipalName = authentication.getName();
-		FootballClub thisClub = this.footballClubService.findFootballClubByPresident(currentPrincipalName);
-		Coach thereIsACoach = this.coachService.findCoachByClubId(thisClub.getId());
-
-		if (thereIsACoach != null) { //Validación Solo se puede tener un Coach
-			result.rejectValue("firstName", "code.error.validator.justOneCoach", "just one coach");
-			return CoachController.VIEWS_COACH_CREATE_OR_UPDATE_FORM;
-		}
-
+		FootballClub myClub = this.footballClubService.findFootballClubByPresident(currentPrincipalName);
+		model.addAttribute("regs", true);
 		if (result.hasErrors()) {
 			return CoachController.VIEWS_COACH_CREATE_OR_UPDATE_FORM;
 		} else {
 			try {
-				coach.setClub(thisClub);
 				coach.setClause(coach.getSalary() * 3);
-				this.coachService.saveCoach(coach);
+				this.coachService.saveCoach(coach, myClub);
 			} catch (DuplicatedNameException ex) {
 				result.rejectValue("firstName", "duplicate", "already exists");
+				result.rejectValue("lastName", "duplicate", "already exists");
 				return CoachController.VIEWS_COACH_CREATE_OR_UPDATE_FORM;
+			} catch (DateException ex) {
+				result.rejectValue("birthDate", "code.error.validator.18Years", "18 years");
+				return CoachController.VIEWS_COACH_CREATE_OR_UPDATE_FORM;
+			} catch (SalaryException ex) {
+				result.rejectValue("salary", "code.error.validator.salaryMinAndMaxCoach", "wrong money!");
+				return CoachController.VIEWS_COACH_CREATE_OR_UPDATE_FORM;
+			} catch (MoneyClubException ex) {
+				result.rejectValue("salary", "code.error.validator.salary", "Not enough money!");
+				return CoachController.VIEWS_COACH_CREATE_OR_UPDATE_FORM;
+			} catch (NumberOfPlayersAndCoachException ex) {
+				result.rejectValue("firstName", "code.error.validator.justOneCoach", "just one coach");
+				return CoachController.VIEWS_COACH_CREATE_OR_UPDATE_FORM;
+			} catch (StatusException ex) {
+				return "redirect:exceptions/forbidden";
+			} catch (StatusRegisteringException ex) {
+				return "redirect:exceptions/forbidden";
 			}
 			return "redirect:/coachs/" + coach.getId();
 		}
 	}
 
-	//Fichar Coach
-	@GetMapping(value = "/coachs/{coachId}/sign")
-	public String initSignCoachForm(@PathVariable("coachId") final int coachId, final Model model) {
+	@GetMapping(value = "/coachs/{coachId}/sign")  //FICHAR ENTRENADOR - GET
+	public String initSignCoachForm(@PathVariable("coachId") final int coachId, final Model model) throws CredentialException {
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String currentPrincipalName = authentication.getName();
@@ -149,7 +136,11 @@ public class CoachController {
 		Coach myCoach = this.coachService.findCoachByClubId(myClub.getId());
 		Coach coach = this.coachService.findCoachById(coachId);
 
-		if (coach.getClub() == null) {
+		if (myClub.getStatus() == false && coach.getClub() != null) { //SEGURIDAD
+			throw new CredentialException();
+		}
+
+		if (coach.getClub() == null) {  //Añadiendo variables al modelo
 			model.addAttribute("freeAgent", true);
 		} else {
 			model.addAttribute("freeAgent", false);
@@ -157,7 +148,9 @@ public class CoachController {
 			model.addAttribute("toPayValue", coach.getClause() + " €");
 		}
 
-		if (myCoach != null) {
+		if (myCoach != null) {  //Añadiendo variables al modelo
+			model.addAttribute("iHaveCoach", true);
+			model.addAttribute("toPayValue", myCoach.getClause() + " €");
 			model.addAttribute("myCoachFirstName", myCoach.getFirstName());
 			model.addAttribute("myCoachLastName", myCoach.getLastName());
 		}
@@ -169,23 +162,38 @@ public class CoachController {
 
 	}
 
-	//Editar Club - Post
-	@PostMapping(value = "/coachs/{coachId}/sign")
-	public String processUpdateFootballClubForm(@Valid final Coach coach, final BindingResult result, @PathVariable("coachId") final int coachId, final Model model) throws DataAccessException, DuplicatedNameException {
+	@PostMapping(value = "/coachs/{coachId}/sign") //FICHAR ENTRENADOR - POST
+	public String processUpdateFootballClubForm(@Valid final Coach coach, final BindingResult result, @PathVariable("coachId") final int coachId, final Model model)
+		throws DataAccessException, DuplicatedNameException, NumberOfPlayersAndCoachException, MoneyClubException, CredentialException, StatusRegisteringException {
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String currentPrincipalName = authentication.getName();
 		FootballClub myClub = this.footballClubService.findFootballClubByPresident(currentPrincipalName);
 		Coach coach1 = this.coachService.findCoachById(coachId);
+		Coach myCoach = this.coachService.findCoachByClubId(myClub.getId());
 
-		if (coach1.getClub() == null) {
+		if (myClub.getStatus() == false && coach.getClub() != null) { //SEGURIDAD
+			throw new CredentialException();
+		}
+
+		if (coach.getClub() == null) {  //Añadiendo variables al modelo
 			model.addAttribute("freeAgent", true);
 		} else {
 			model.addAttribute("freeAgent", false);
-			model.addAttribute("clubCoach", coach1.getClub().getName());
-			model.addAttribute("toPayValue", coach1.getClause() + " €");
+			model.addAttribute("clubCoach", coach.getClub().getName());
+			model.addAttribute("toPayValue", coach.getClause() + " €");
 		}
+
+		if (myCoach != null) {  //Añadiendo variables al modelo
+			model.addAttribute("iHaveCoach", true);
+			model.addAttribute("toPayValue", myCoach.getClause() + " €");
+			model.addAttribute("myCoachFirstName", myCoach.getFirstName());
+			model.addAttribute("myCoachLastName", myCoach.getLastName());
+		}
+
+		model.addAttribute(coach);
 		model.addAttribute("clubName", myClub.getName());
+		model.addAttribute("readonly", true);
 
 		if (result.hasErrors()) {
 			model.addAttribute(coach);
@@ -200,58 +208,88 @@ public class CoachController {
 			//Copiamos los datos del coach actual(vista del modelo) al equipo a actualizar excepto el club
 			BeanUtils.copyProperties(coach, coachToUpdate, "id", "club");
 
-			try {
+			/** Entrenador de MI EQUIPO **/
+			Coach clubCoach = this.coachService.findCoachByClubId(myClub.getId());
 
-				/** Entrenador de MI EQUIPO **/
-				Coach clubCoach = this.coachService.findCoachByClubId(myClub.getId());
+			if (clubCoach != null) { //SI TENGO ENTRENADOR
 
-				if (clubCoach != null) { //Si tengo entrenador
-					if (coachToUpdate.getClub() != null) { //Y al que quiero fichar tiene otro club
-						clubCoach.setClub(coachToUpdate.getClub()); //Mi entrenador se va al suyo
-					} else { //Si al que quiero fichar no tiene club
-						clubCoach.setClub(null); //Mi entrenador pasa a agente libre
-						clubCoach.setSalary(0);
-						clubCoach.setClause(0);
+				if (coachToUpdate.getClub() != null) { //Y al que quiero fichar tiene otro club
+					try {
+						Integer clausulaApagar = coach1.getClause();
+						coachToUpdate.setClause(coachToUpdate.getSalary() * 3);
+						this.coachService.signCoach(coachToUpdate, myClub, clausulaApagar);
+					} catch (SalaryException ex) {
+						result.rejectValue("salary", "code.error.validator.salaryMinAndMaxCoach", "wrong money!");
+						return CoachController.VIEWS_COACH_CREATE_OR_UPDATE_FORM;
+					} catch (MoneyClubException e) {
+						result.rejectValue("salary", "code.error.validator.signTransaction", "Not enough money!");
+						return CoachController.VIEWS_COACH_CREATE_OR_UPDATE_FORM;
+					}
+
+				} else { //Si al que quiero fichar no tiene club			
+					try {
+						Integer clausulaApagar = clubCoach.getClause();
+						coachToUpdate.setClause(coachToUpdate.getSalary() * 3);
+						this.coachService.signCoach(coachToUpdate, myClub, clausulaApagar);
+					} catch (SalaryException ex) {
+						result.rejectValue("salary", "code.error.validator.salaryMinAndMaxCoach", "wrong money!");
+						return CoachController.VIEWS_COACH_CREATE_OR_UPDATE_FORM;
+					} catch (MoneyClubException e) {
+						result.rejectValue("salary", "code.error.validator.signTransaction", "Not enough money!");
+						return CoachController.VIEWS_COACH_CREATE_OR_UPDATE_FORM;
 					}
 				}
 
-				coachToUpdate.setClub(myClub);
-				coachToUpdate.setClause(coachToUpdate.getSalary() * 3);
-				this.coachService.saveCoach(coachToUpdate);
-
-			} catch (DuplicatedNameException ex) {
-
-				result.rejectValue("firstName", "duplicate", "already exists");
-				return CoachController.VIEWS_COACH_CREATE_OR_UPDATE_FORM;
+			} else { //SI NO TENGO ENTRENADOR			
+				try {
+					coachToUpdate.setClause(coachToUpdate.getSalary() * 3);
+					this.coachService.saveCoach(coachToUpdate, myClub);
+				} catch (DuplicatedNameException e) {
+					result.rejectValue("firstName", "duplicate", "already exists");
+					result.rejectValue("lastName", "duplicate", "already exists");
+					return CoachController.VIEWS_COACH_CREATE_OR_UPDATE_FORM;
+				} catch (DateException ex) {
+					result.rejectValue("birthDate", "code.error.validator.18Years", "18 years");
+					return CoachController.VIEWS_COACH_CREATE_OR_UPDATE_FORM;
+				} catch (NumberOfPlayersAndCoachException e) {
+					result.rejectValue("firstName", "code.error.validator.justOneCoach", "just one coach");
+					return CoachController.VIEWS_COACH_CREATE_OR_UPDATE_FORM;
+				} catch (SalaryException ex) {
+					result.rejectValue("salary", "code.error.validator.salaryMinAndMaxCoach", "wrong money!");
+					return CoachController.VIEWS_COACH_CREATE_OR_UPDATE_FORM;
+				} catch (MoneyClubException e) {
+					result.rejectValue("salary", "code.error.validator.salary", "Not enough money!");
+					return CoachController.VIEWS_COACH_CREATE_OR_UPDATE_FORM;
+				} catch (StatusException ex) {
+					result.rejectValue("salary", "code.error.validator.signWithoutCoach", "No tienes entrenador, no puedes fichar otro");
+					return CoachController.VIEWS_COACH_CREATE_OR_UPDATE_FORM;
+				}
 			}
 
 			//Si todo sale bien vamos a la vista de mi club
-			return "redirect:/myfootballClub/" + currentPrincipalName;
+			return "redirect:/footballClubs/myClub/" + currentPrincipalName;
 		}
 	}
 
-	//DESPEDIR ENTRENADOR
-	@RequestMapping(value = "/coachs/{coachId}/fire")
-	public String processDeleteForm(@PathVariable("coachId") final int coachId) throws CredentialException, DataAccessException, DuplicatedNameException {
+	@RequestMapping(value = "/coachs/{coachId}/fire") //DESPEDIR ENTRENADOR
+	public String processDeleteForm(@PathVariable("coachId") final int coachId) throws CredentialException, DataAccessException {
 
-		//Obtenemos el username del usuario actual conectado
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String currentPrincipalName = authentication.getName();
-
 		Coach coach = this.coachService.findCoachById(coachId);
 
-		//Seguridad: Solo el dueño del club puede despedirlo
-		if (!coach.getClub().getPresident().getUser().getUsername().equals(currentPrincipalName)) {
+		if (!coach.getClub().getPresident().getUser().getUsername().equals(currentPrincipalName)) { //SEGURIDAD
 			throw new CredentialException("Forbidden Access");
 		}
 
-		coach.setClub(null);
+		try {
 
-		this.coachService.saveCoach(coach);
+			this.coachService.fireCoach(coach);
+		} catch (MoneyClubException e) {
+			return "redirect:/coachs/" + coach.getId();
+		}
 
-		//Habría que que restarle a los fondos del club la cláusula de rescisión ya que lo estamos despidiendo. Pero da fallo
-
-		return "redirect:/myfootballClub/" + currentPrincipalName;
+		return "redirect:/footballClubs/myClub/" + currentPrincipalName;
 	}
 
 }

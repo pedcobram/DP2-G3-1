@@ -1,5 +1,5 @@
 
-package org.springframework.samples.petclinic.service;
+package org.springframework.samples.petclinic.service.pedro;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +13,9 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.samples.petclinic.model.Referee;
 import org.springframework.samples.petclinic.model.User;
+import org.springframework.samples.petclinic.service.AuthenticatedService;
+import org.springframework.samples.petclinic.service.MatchRefereeRequestService;
+import org.springframework.samples.petclinic.service.RefereeService;
 import org.springframework.stereotype.Service;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))

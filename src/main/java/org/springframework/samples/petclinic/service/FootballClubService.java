@@ -17,16 +17,21 @@
 package org.springframework.samples.petclinic.service;
 
 import java.util.Collection;
+import java.util.Date;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Coach;
+import org.springframework.samples.petclinic.model.ContractPlayer;
 import org.springframework.samples.petclinic.model.FootballClub;
+import org.springframework.samples.petclinic.model.FootballPlayer;
 import org.springframework.samples.petclinic.model.President;
 import org.springframework.samples.petclinic.repository.FootballClubRepository;
+import org.springframework.samples.petclinic.service.exceptions.DateException;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedNameException;
+import org.springframework.samples.petclinic.service.exceptions.NumberOfPlayersAndCoachException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -35,7 +40,16 @@ import org.springframework.util.StringUtils;
 public class FootballClubService {
 
 	@Autowired
-	private FootballClubRepository footRepository;
+	private FootballClubRepository	footRepository;
+
+	@Autowired
+	private FootballPlayerService	footballPlayerService;
+
+	@Autowired
+	private ContractPlayerService			contractService;
+
+	@Autowired
+	private CoachService			coachService;
 
 
 	@Autowired
@@ -45,20 +59,46 @@ public class FootballClubService {
 	}
 
 	//Buscar todos los equipos
+	@Transactional(readOnly = true)
+	public Collection<FootballClub> findAll() throws DataAccessException {
+		return this.footRepository.findAll();
+	}
 
+	//Buscar todos los equipos Publicados
+	@Transactional(readOnly = true)
 	public Collection<FootballClub> findFootballClubs() throws DataAccessException {
 		return this.footRepository.findAllPublished();
 	}
 
 	//Buscar equipo por id
-
+	@Transactional(readOnly = true)
 	public FootballClub findFootballClubById(final int id) throws DataAccessException {
 		return this.footRepository.findById(id);
 	}
 
+	//Buscar presidente por username
+	@Transactional(readOnly = true)
+	public President findPresidentByUsername(final String currentPrincipalName) throws DataAccessException {
+		return this.footRepository.findPresidentByUsername(currentPrincipalName);
+	}
+
+	//Buscar entrenador por clubId
+	@Transactional(readOnly = true)
+	public Coach findCoachByClubId(final int id) throws DataAccessException {
+		return this.coachService.findCoachByClubId(id);
+	}
+
+	//Buscar equipo por username
+	@Transactional(readOnly = true)
+	public FootballClub findFootballClubByPresident(final String principalUsername) throws DataAccessException {
+		return this.footRepository.findFootballClubByPresident(principalUsername);
+	}
+
 	//Guardar equipo con validación de nombre duplicado
-	@Transactional(rollbackFor = DuplicatedNameException.class)
-	public void saveFootballClub(@Valid final FootballClub footballClub) throws DataAccessException, DuplicatedNameException {
+	@Transactional(rollbackFor = {
+		DuplicatedNameException.class, NumberOfPlayersAndCoachException.class, DateException.class
+	})
+	public void saveFootballClub(@Valid final FootballClub footballClub) throws DataAccessException, DuplicatedNameException, NumberOfPlayersAndCoachException, DateException {
 
 		String name = footballClub.getName().toLowerCase();
 		FootballClub otherFootClub = null;
@@ -72,42 +112,55 @@ public class FootballClubService {
 			}
 		}
 
-		//Si el campo de nombre tiene contenido y el "otherFootClub" existe y no coincide el id con el actual lanzamos excepción
+		//RN: El nombre no puede ser el mismo
 		if (StringUtils.hasLength(footballClub.getName()) && otherFootClub != null && otherFootClub.getId() != footballClub.getId()) {
 			throw new DuplicatedNameException();
-		} else {
-			this.footRepository.save(footballClub);
-
 		}
-	}
 
-	//Buscar presidente por username
+		Date now = new Date(System.currentTimeMillis() - 1);
 
-	public President findPresidentByUsername(final String currentPrincipalName) throws DataAccessException {
-		return this.footRepository.findPresidentByUsername(currentPrincipalName);
-	}
+		//RN: La fecha de fundación debe ser pasado
+		if (footballClub.getFoundationDate().after(now)) {
+			throw new DateException();
+		}
 
-	//Buscar presidente por username
+		//RN: Minimo 5 jugadores y 1 entrenador
+		if (footballClub.getId() != null) { //Para que no lo haga en el crear equipo
+			Collection<FootballPlayer> cp = this.footballPlayerService.findAllClubFootballPlayers(footballClub.getId());
+			Coach coach = this.coachService.findCoachByClubId(footballClub.getId());
 
-	public Coach findCoachByClubId(final int id) throws DataAccessException {
-		return this.footRepository.findCoachByClubId(id);
-	}
+			if (cp.size() < 5 && footballClub.getStatus() == true || coach == null && footballClub.getStatus() == true) {
+				throw new NumberOfPlayersAndCoachException();
+			}
+		}
 
-	//Buscar equipo por presidente
+		this.footRepository.save(footballClub);
 
-	public FootballClub findFootballClubByPresident(final String principalUsername) throws DataAccessException {
-		return this.footRepository.findFootballClubByPresident(principalUsername);
-	}
-
-	//Buscar equipo por nombre de equipo
-	@Transactional(readOnly = true)
-	public FootballClub findFootballClubByName(final String FootballClubName) throws DataAccessException {
-		return this.footRepository.findFootballClubByName(FootballClubName);
 	}
 
 	//Borrar equipo
+	@Transactional
 	public void deleteFootballClub(final FootballClub footballClub) throws DataAccessException {
-		this.footRepository.delete(footballClub);
+
+		if (footballClub != null) {
+
+			Collection<ContractPlayer> contracts = this.contractService.findAllPlayerContractsByClubId(footballClub.getId());
+			for (ContractPlayer a : contracts) {
+				this.contractService.deleteContractDeletingClub(a);
+			}
+
+			Collection<FootballPlayer> players = this.footballPlayerService.findAllClubFootballPlayers(footballClub.getId());
+			for (FootballPlayer a : players) {
+				a.setClub(null);
+			}
+
+			Coach coach = this.coachService.findCoachByClubId(footballClub.getId());
+			if (coach != null) {
+				coach.setClub(null);
+			}
+
+			this.footRepository.delete(footballClub);
+		}
 	}
 
 }

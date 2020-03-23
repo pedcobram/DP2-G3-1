@@ -1,5 +1,5 @@
 -- One admin user, named admin1 with passwor 4dm1n and authority admin
-INSERT INTO users(username,password,enabled) VALUES ('admin1','4dm1n',TRUE);
+INSERT INTO users(username,password,enabled) VALUES ('admin1','admin1',TRUE);
 INSERT INTO authorities VALUES ('admin1','admin');
 -- One owner user, named owner1 with passwor 0wn3r
 INSERT INTO users(username,password,enabled) VALUES ('owner1','owner1',TRUE);
@@ -16,6 +16,10 @@ INSERT INTO users(username,password,enabled) VALUES ('owner6','owner6',TRUE);
 INSERT INTO authorities VALUES ('owner6','president');
 INSERT INTO users(username,password,enabled) VALUES ('owner7','owner7',TRUE);
 INSERT INTO authorities VALUES ('owner7','president');
+INSERT INTO users(username,password,enabled) VALUES ('owner8','owner8',TRUE);
+INSERT INTO authorities VALUES ('owner8','president');
+INSERT INTO users(username,password,enabled) VALUES ('owner9','owner9',TRUE);
+INSERT INTO authorities VALUES ('owner9','president');
 -- User Rafa
 INSERT INTO users(username,password,enabled) VALUES ('rafa','rafa',TRUE);
 INSERT INTO authorities VALUES ('rafa','president');
@@ -51,10 +55,9 @@ INSERT INTO comp_Admin_Requests(id, title, description, status, username) VALUES
 INSERT INTO competition_Admins VALUES (1, 'Pedro Manuel', 'Cobos Ramos', '22222222A', 'pedcobram@alum.us.es', '600222333', 'pedro');
 
 -- Authenticated users
-INSERT INTO authenticateds VALUES (1, 'Rafael', 'Liébana Fuentes', '11111111A', 'rafliefue@alum.us.es', '600111222', 'rafa');
-INSERT INTO authenticateds VALUES (3, 'Ignacio José', 'Rodríguez Flores', '33333333A', 'ignrodflo@alum.us.es', '600333444', 'ignacio');
-INSERT INTO authenticateds VALUES (4, 'Gonzalo', 'Fernandez Jiménez', '44444444A', 'gonferjim@alum.us.es', '600444555', 'gonzalo');
-INSERT INTO authenticateds VALUES (5, 'Manuel', 'Sánchez Rodríguez', '55555555A', 'mansanrod@alum.us.es', '600555666', 'manuel');
+INSERT INTO authenticateds VALUES (1, 'Ignacio José', 'Rodríguez Flores', '33333333A', 'ignrodflo@alum.us.es', '600333444', 'ignacio');
+INSERT INTO authenticateds VALUES (2, 'Gonzalo', 'Fernandez Jiménez', '44444444A', 'gonferjim@alum.us.es', '600444555', 'gonzalo');
+INSERT INTO authenticateds VALUES (3, 'Manuel', 'Sánchez Rodríguez', '55555555A', 'mansanrod@alum.us.es', '600555666', 'manuel');
 
 -- President users
 INSERT INTO presidents VALUES (1, 'President1', 'Surname1', '11111111A', 'email@gmail.com', '100111222', 'presidente1');
@@ -67,6 +70,8 @@ INSERT INTO presidents VALUES (7, 'President7', 'Surname7', '71111111A', 'email@
 INSERT INTO presidents VALUES (8, 'President8', 'Surname8', '81111111A', 'email@gmail.com', '700111222', 'owner6');
 INSERT INTO presidents VALUES (9, 'President9', 'Surname9', '91111111A', 'email@gmail.com', '800111222', 'owner7');
 INSERT INTO presidents VALUES (10, 'Rafael', 'Liébana Fuentes', '11111111A', 'rafliefue@alum.us.es', '600111222', 'rafa');
+INSERT INTO presidents VALUES (11, 'Wakka', 'Chappu', '11111112A', 'wakka@gmail.com', '600121222', 'owner8');
+INSERT INTO presidents VALUES (12, 'Bickson', 'Graav', '11111122A', 'bickson@gmail.com', '602121222', 'owner9');
 
 -- Referee users
 INSERT INTO referees VALUES (1, 'referee1', 'Surname1', '11111111A', 'email1@gmail.com', '600111222', 'referee1');
@@ -78,10 +83,12 @@ INSERT INTO football_Clubs(id,status,name,crest,foundation_date,stadium,city,fan
 INSERT INTO football_Clubs(id,status,name,crest,foundation_date,stadium,city,fans,money,president_id) VALUES (3, true, 'Fútbol Club Barcelona','https://e00-marca.uecdn.es/assets/sports/logos/football/png/144x144/178.png', '1899-11-29', 'Camp Nou', 'Barcelona', '99300', '650000000',3);
 INSERT INTO football_Clubs(id,status,name,crest,foundation_date,stadium,city,fans,money,president_id) VALUES (4, true, 'Valencia Club de Fútbol','https://e00-marca.uecdn.es/assets/sports/logos/football/png/144x144/191.png', '1919-03-18', 'Mestalla', 'Valencia', '48600', '200000000',4);
 INSERT INTO football_Clubs(id,status,name,crest,foundation_date,stadium,city,fans,money,president_id) VALUES (5, true, 'Atlético de Madrid','https://e00-marca.uecdn.es/assets/sports/logos/football/png/144x144/175.png', '1903-04-26', 'Wanda Metropolitano', 'Madrid', '69000', '350000000',5);
-INSERT INTO football_Clubs(id,status,name,crest,foundation_date,stadium,city,fans,money,president_id) VALUES (6, true, 'Real Betis Balompié','https://e00-marca.uecdn.es/assets/sports/logos/football/png/144x144/185.png', '1907-09-12', 'Benito Villamarín', 'Seville', '60000', '350000000',6);
+INSERT INTO football_Clubs(id,status,name,crest,foundation_date,stadium,city,fans,money,president_id) VALUES (6, true, 'Real Betis Balompié','https://e00-marca.uecdn.es/assets/sports/logos/football/png/144x144/185.png', '1907-09-12', 'Benito Villamarín', 'Seville', '60000', '100000000',6);
 INSERT INTO football_Clubs(id,status,name,crest,foundation_date,stadium,city,fans,money,president_id) VALUES (7, true, 'Liverpool Football Club','https://pluspng.com/img-png/logo-liverpool-fc-png-liverpool-318.png', '1892-06-03', 'Anfield', 'Liverpool', '54000', '350000000',7);
-INSERT INTO football_Clubs(id,status,name,crest,foundation_date,stadium,city,fans,money,president_id) VALUES (8, true, 'Manchester City Football Club','https://upload.wikimedia.org/wikipedia/sco/thumb/e/eb/Manchester_City_FC_badge.svg/1200px-Manchester_City_FC_badge.svg.png', '1894-04-16', 'City Of Manchester Stadium', 'Manchester', '55000', '550000000',8);
-INSERT INTO football_Clubs(id,status,name,crest,foundation_date,stadium,city,fans,money,president_id) VALUES (9, true, 'Chelsea Football Club','https://upload.wikimedia.org/wikipedia/sco/thumb/c/cc/Chelsea_FC.svg/1200px-Chelsea_FC.svg.png', '1905-02-19', 'Stamford Bridge', 'London', '41000', '500000000',9);
+INSERT INTO football_Clubs(id,status,name,crest,foundation_date,stadium,city,fans,money,president_id) VALUES (8, true, 'Manchester City Football Club','https://upload.wikimedia.org/wikipedia/sco/thumb/e/eb/Manchester_City_FC_badge.svg/1200px-Manchester_City_FC_badge.svg.png', '1894-04-16', 'City Of Manchester Stadium', 'Manchester', '55000', '10000000',8);
+INSERT INTO football_Clubs(id,status,name,crest,foundation_date,stadium,city,fans,money,president_id) VALUES (9, false, 'Chelsea Football Club','https://upload.wikimedia.org/wikipedia/sco/thumb/c/cc/Chelsea_FC.svg/1200px-Chelsea_FC.svg.png', '1905-02-19', 'Stamford Bridge', 'London', '41000', '500000000',9);
+INSERT INTO football_Clubs(id,status,name,crest,foundation_date,stadium,city,fans,money,president_id) VALUES (10, false, 'Besaid Aurochs','https://www.gamerguides.com/assets/trophies/44/1831-teamwork.png', '2000-02-19', 'Besaid Island Stadium', 'Besaid Island', '40', '2000000', 11);
+INSERT INTO football_Clubs(id,status,name,crest,foundation_date,stadium,city,fans,money,president_id) VALUES (11, true, 'Luca Goers','https://cdn.staticneo.com/w/finalfantasy/f/f5/GoersSymbol.png', '2000-02-18', 'Luca Stadium', 'Luca', '40000', '200000000', 12); 
  
 -- Match Requests
 INSERT INTO match_requests(id, title, match_date, stadium, status, football_Club1, football_Club2, creator) VALUES(1, 'Partido amistoso 1', '2020-05-11 20:30', 'Ramón Sánchez-Pizjuan', 0, 'Sevilla Fútbol Club', 'Real Betis Balompié', 'presidente1');
@@ -108,12 +115,11 @@ INSERT INTO coachs(id, first_name, last_name, football_Clubs_id, salary, clause,
 INSERT INTO coachs(id, first_name, last_name, football_Clubs_id, salary, clause, birth_date) VALUES (8, 'Pep', 'Guardiola', 8, '10000000', '15000000', '1974-07-07' );
 INSERT INTO coachs(id, first_name, last_name, football_Clubs_id, salary, clause, birth_date) VALUES (9, 'Frank', 'Lampard', 9, '5000000', '6000000', '1980-05-25' );
 
-INSERT INTO coachs(id, first_name, last_name, birth_date) VALUES (10, 'Marcelino', 'Garcia Toral', '1975-01-19' );
-INSERT INTO coachs(id, first_name, last_name, birth_date) VALUES (11, 'Unai', 'Emery', '1974-07-07' );
-INSERT INTO coachs(id, first_name, last_name, birth_date) VALUES (12, 'Mauricio', 'Pochetino',  '1980-05-25' );
+INSERT INTO coachs(id, first_name, last_name, salary, clause, birth_date) VALUES (10, 'Marcelino', 'Garcia Toral','0' ,'0' ,'1975-01-19');
+INSERT INTO coachs(id, first_name, last_name, salary, clause, birth_date) VALUES (11, 'Unai', 'Emery','0' ,'0' ,'1974-07-07');
+INSERT INTO coachs(id, first_name, last_name, salary, clause, birth_date) VALUES (12, 'Mauricio', 'Pochetino','0' ,'0' ,'1980-05-25');
 
 -- Football Players
-
 INSERT INTO football_Players(id, first_name, last_name, position, football_Clubs_id, value, birth_date) VALUES (1, 'Tomas', 'Vaclik', 0, 1, '18000000', '1989-03-29');
 INSERT INTO football_Players(id, first_name, last_name, position, football_Clubs_id, value, birth_date) VALUES (2, 'Diego', 'Carlos', 1, 1, '25000000', '1993-03-15');
 INSERT INTO football_Players(id, first_name, last_name, position, football_Clubs_id, value, birth_date) VALUES (3, 'Fernando', 'Reges', 2, 1, '7000000', '1987-07-25');
@@ -186,8 +192,20 @@ INSERT INTO football_Players(id, first_name, last_name, position, football_Clubs
 INSERT INTO football_Players(id, first_name, last_name, position, football_Clubs_id, value, birth_date) VALUES (62, 'Andreas', 'Christensen', 1, 9, '30000000', '1996-04-10');
 INSERT INTO football_Players(id, first_name, last_name, position, football_Clubs_id, value, birth_date) VALUES (63, 'Tammy', 'Abraham', 2, 9, '50000000', '1997-10-02');
 
-INSERT INTO football_Players(id, first_name, last_name, position, value, birth_date) VALUES (64, 'Jorge', 'Salcedo', 0, '10000000', '1994-10-03');
+INSERT INTO football_Players(id, first_name, last_name, position, value, birth_date) VALUES (64, 'Jorge', 'Salcedo', 2, '10000000', '1994-10-03');
 INSERT INTO football_Players(id, first_name, last_name, position, value, birth_date) VALUES (65, 'Albert', 'Martin', 3, '60000000', '1992-11-06');
+INSERT INTO football_Players(id, first_name, last_name, position, value, birth_date) VALUES (66, 'Sergio', 'Molina', 0, '99999999', '1984-11-06');
+INSERT INTO football_Players(id, first_name, last_name, position, value, birth_date) VALUES (67, 'Pablo', 'Escobar', 3, '70000000', '1949-11-06');
+INSERT INTO football_Players(id, first_name, last_name, position, value, birth_date) VALUES (68, 'Rafael', 'Cantero', 1, '11000000', '1990-11-06');
+
+-- Football Player Contracts
+INSERT into contract_player(id, football_Clubs_id, start_date, end_date, end_contract_clause ,football_Players_id, salary) VALUES (1, 1, '2018-06-30', '2021-06-30', '9000000', 1, '1500000');
+INSERT into contract_player(id, football_Clubs_id, start_date, end_date, end_contract_clause ,football_Players_id, salary) VALUES (2, 1, '2019-06-30', '2023-06-30', '12500000', 2, '2000000');
+INSERT into contract_player(id, football_Clubs_id, start_date, end_date, end_contract_clause ,football_Players_id, salary) VALUES (3, 1, '2019-06-30', '2022-06-30', '4500000', 3, '2000000');
+INSERT into contract_player(id, football_Clubs_id, start_date, end_date, end_contract_clause ,football_Players_id, salary) VALUES (4, 1, '2019-06-30', '2023-06-30', '12500000', 4, '2500000');
+INSERT into contract_player(id, football_Clubs_id, start_date, end_date, end_contract_clause ,football_Players_id, salary) VALUES (5, 1, '2019-06-30', '2023-06-30', '6000000', 5, '1500000');
+INSERT into contract_player(id, football_Clubs_id, start_date, end_date, end_contract_clause ,football_Players_id, salary) VALUES (6, 1, '2017-06-30', '2022-06-30', '2000000', 46, '2500000');
+INSERT into contract_player(id, football_Clubs_id, start_date, end_date, end_contract_clause ,football_Players_id, salary) VALUES (7, 1, '2019-06-30', '2024-06-30', '12500000', 47, '1500000');
 
 -- Football Player Statistics
 INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(1, 0, 0, 0, 0, null, 2019, 2020, 1);

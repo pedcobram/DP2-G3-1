@@ -10,6 +10,7 @@
 	<fmt:message key="code.title.signingInformation" var="dataSing"/> 
 	<fmt:message key="code.title.coachInformation" var="dataCoach"/> 
 	<fmt:message key="code.crud.register" var="register"/> 
+	<fmt:message key="code.crud.sign" var="sign"/> 
 	<fmt:message key="code.label.salary" var="salario"/> 
 	<fmt:message key="code.label.clause" var="clausula"/> 
 	<fmt:message key="code.title.signingFor" var="firmaPor"/>  	
@@ -17,6 +18,7 @@
 	<fmt:message key="code.title.isFreeAgent" var="free"/> 
 	<fmt:message key="code.title.toPay" var="toPay"/>  
 	<fmt:message key="code.title.and" var="andS"/>
+	<fmt:message key="code.title.isNowFreeAgent" var="isNowFreeAgent"/>
 		
 		<c:set var = "read" value = "false"/>
 		
@@ -27,8 +29,12 @@
 		<c:choose>
         	<c:when test="${freeAgent}">
 				<c:set var = "freeOrNotFree" value = "${free}"/>
+					<c:if test="${iHaveCoach}">
+						<c:set var = "toPays" value = "${toPay}"/>
+            			<c:set var = "toPaysValue" value = "${toPayValue}"/>
+					</c:if>
 			</c:when>
-            <c:otherwise>
+            <c:otherwise>     	
             	<c:set var = "freeOrNotFree" value = "${notFree}"/>
             	<c:set var = "toPays" value = "${toPay}"/>
             	<c:set var = "toPaysValue" value = "${toPayValue}"/>
@@ -73,7 +79,11 @@
                         <c:if test="${freeAgent == false}">
 							<h2 class="th-center">${andS}</h2>	
 							<h2 class="th-center" style="color:#d20000; font-size:16px; padding-bottom: 15px" >${myCoachFirstName}<c:out value=" "></c:out>${myCoachLastName} ${freeOrNotFree} ${clubName}, ${firmaPor} ${clubCoach}</h2>	  
-						</c:if>    
+						</c:if>
+						<c:if test="${iHaveCoach == true && freeAgent == true}">
+							<h2 class="th-center">${andS}</h2>	
+							<h2 class="th-center" style="color:#d20000; font-size:16px; padding-bottom: 15px" >${myCoachFirstName}<c:out value=" "></c:out>${myCoachLastName}<c:out value=" "></c:out>${isNowFreeAgent}</h2>	  
+						</c:if>     
                     </c:if>
                     
   		<h2 class="th-center" style="padding-bottom: 15px">${dataCoach}</h2>
@@ -100,8 +110,16 @@
         </div>
         
         <div class="form-group">
-            <div class="col-sm-offset-2 col-sm-10">             
-                        <button class="btn btn-default" type="submit">${register}</button>                 
+            <div class="col-sm-offset-2 col-sm-10">    
+            	<c:choose>
+        			<c:when test="${regs}">
+						<button class="btn btn-default" type="submit">${register}</button> 
+					</c:when>
+            	<c:otherwise>     	
+            			<button class="btn btn-default" type="submit">${sign}</button> 
+				</c:otherwise>
+        			</c:choose>	         
+                                        
             </div>
         </div>
         

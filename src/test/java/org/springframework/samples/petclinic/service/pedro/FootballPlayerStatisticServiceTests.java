@@ -1,5 +1,5 @@
 
-package org.springframework.samples.petclinic.service;
+package org.springframework.samples.petclinic.service.pedro;
 
 import javax.validation.ConstraintViolationException;
 
@@ -12,6 +12,9 @@ import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.samples.petclinic.model.FootballPlayer;
 import org.springframework.samples.petclinic.model.FootballPlayerStatistic;
 import org.springframework.samples.petclinic.model.FootballPlayerStatistics;
+import org.springframework.samples.petclinic.service.FootballPlayerService;
+import org.springframework.samples.petclinic.service.FootballPlayerStatisticService;
+import org.springframework.samples.petclinic.service.MatchService;
 import org.springframework.stereotype.Service;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))

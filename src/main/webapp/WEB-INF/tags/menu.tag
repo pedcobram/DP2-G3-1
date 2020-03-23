@@ -17,6 +17,7 @@
 	<fmt:message key="code.title.contractsPlayers" var="contracts"/>
 	<fmt:message key="code.list.myPlayerList" var="playerList"/>
 	<fmt:message key="code.list.coachList" var="coachList"/>
+	<fmt:message key="code.crud.transfers" var="Transfers"/>
 
 <nav class="navbar navbar-default" role="navigation">
 	<div class="container">
@@ -45,7 +46,7 @@
 					<span><fmt:message key="tournaments"/></span>
 				</petclinic:menuItem>
 
-				<petclinic:menuItem active="${name eq 'footballClubs'}" url="/footballClub"
+				<petclinic:menuItem active="${name eq 'footballClubs'}" url="/footballClubs/list"
 					title="registered teams">
 					<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
 					<span><fmt:message key="teams"/></span>
@@ -68,7 +69,7 @@
 			<ul class="nav navbar-nav navbar-right">
 						
 				<sec:authorize access="hasAnyAuthority('president')">	
-					<petclinic:menuItem active="${name eq 'footballClubs'}" url="/myfootballClub/${principalUsername}"
+					<petclinic:menuItem active="${name eq 'footballClubs'}" url="/footballClubs/myClub/${principalUsername}"
 						title="club page">
 						<span style="color:#ffc800" class="glyphicon glyphicon-bookmark" aria-hidden="true"></span>
 						<span><fmt:message key="myClub"/></span>
@@ -89,7 +90,7 @@
 						<ul class="dropdown-menu">
 						
 						<sec:authorize access="!hasAnyAuthority('president', 'competitionAdmin', 'admin', 'referee')">
-							<li><a href="<c:url value="/createPresident" />"><fmt:message key="becPresident"/></a></li>
+							<li><a href="<c:url value="/presidents/new" />"><fmt:message key="becPresident"/></a></li>
 						</sec:authorize>
 						
 						<sec:authorize access="!hasAnyAuthority('president', 'competitionAdmin', 'admin', 'referee')">
@@ -111,7 +112,14 @@
 												<span><fmt:message key="myProfile"/></span>
 											</petclinic:menuItem>
 										</sec:authorize>
-											
+										
+										<sec:authorize access="hasAuthority('president')">	
+											<petclinic:menuItem active="${name eq 'presidents'}" url="/presidents/${principalUsername}"
+												title="personal space">
+												<span><fmt:message key="myProfile"/></span>
+											</petclinic:menuItem>
+										</sec:authorize>								
+
 										<sec:authorize access="hasAuthority('president')">	
 											<petclinic:menuItem active="${name eq 'presidents'}" url="/matchRequests/sent/${principalUsername}"
 												title="sent match requests">
@@ -123,13 +131,6 @@
 											<petclinic:menuItem active="${name eq 'presidents'}" url="/matchRequests/received/${principalUsername}"
 												title="received match requests">
 												<span><fmt:message key="code.tag.menu.receivedMatchRequests"/></span>
-											</petclinic:menuItem>
-										</sec:authorize>
-										
-										<sec:authorize access="hasAuthority('president')">	
-											<petclinic:menuItem active="${name eq 'presidents'}" url="/myPresidentProfile/${principalUsername}"
-												title="personal space">
-												<span><fmt:message key="myProfile"/></span>
 											</petclinic:menuItem>
 										</sec:authorize>
 										
@@ -198,30 +199,21 @@
 <nav style="border-color:grey" class="navbar2 navbar2-default">		
 		<div class="th-center">		
 		
-    		<spring:url value="/myfootballClub/footballPlayers" var="footballPlayersUrl"></spring:url>
+    		<spring:url value="/footballClubs/myClub/footballPlayers" var="footballPlayersUrl"></spring:url>
     		<a   href="${fn:escapeXml(footballPlayersUrl)}" class="btn btn-default3"><span class="glyphicon glyphicon-user"></span> ${playerList}</a>
     		
     		<spring:url value="/contractPlayer/list" var="contractPlayersUrl"></spring:url>
     		<a   href="${fn:escapeXml(contractPlayersUrl)}" class="btn btn-default3"><span class="glyphicon glyphicon-inbox"></span> ${contracts}</a>
     		
-    		<spring:url value="/coachs" var="coachsUrl"></spring:url>
-    		<a   href="${fn:escapeXml(coachsUrl)}" class="btn btn-default3"><span class="glyphicon glyphicon-th-list"></span> ${coachList}</a>
-    		
     		<spring:url value="/contractPlayer/list" var="contractPlayersUrl"></spring:url>
     		<a   href="${fn:escapeXml(contractPlayersUrl)}" class="btn btn-default3"><span class="glyphicon glyphicon-inbox"></span> Contratos Publicitarios</a>
     		
-    		<spring:url value="/contractPlayer/list" var="contractPlayersUrl"></spring:url>
-    		<a   href="${fn:escapeXml(contractPlayersUrl)}" class="btn btn-default3"><span class="glyphicon glyphicon-sort"></span> Fichajes</a>
+    		<spring:url value="/transfers/panel" var="transfersUrl"></spring:url>
+    		<a   href="${fn:escapeXml(transfersUrl)}" class="btn btn-default3"><span class="glyphicon glyphicon-sort"></span> ${Transfers}</a>
     		
     		<spring:url value="/matches/list" var="matchesUrl"></spring:url>
     		<a   href="${fn:escapeXml(matchesUrl)}" class="btn btn-default3"><span class="glyphicon glyphicon-list-alt"></span> <fmt:message key="code.tag.menu.matchList"/></a>
     		
-    		
-    		
-									
-										
-    		
-    
     	</div> 
 	</nav>
 </sec:authorize>

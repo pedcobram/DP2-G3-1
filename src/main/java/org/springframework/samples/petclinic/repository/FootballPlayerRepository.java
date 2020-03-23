@@ -19,7 +19,6 @@ package org.springframework.samples.petclinic.repository;
 import java.util.Collection;
 
 import org.springframework.dao.DataAccessException;
-import org.springframework.samples.petclinic.model.FootballClub;
 import org.springframework.samples.petclinic.model.FootballPlayer;
 
 public interface FootballPlayerRepository {
@@ -35,9 +34,6 @@ public interface FootballPlayerRepository {
 
 	//Búsqueda de jugador por Id
 	FootballPlayer findById(int id) throws DataAccessException;
-
-	//Búsqueda de equipo por id de jugador
-	FootballClub findClubByPlayerId(int id) throws DataAccessException;
 
 	//Guardar jugador
 	void save(FootballPlayer footballPlayer) throws DataAccessException;

@@ -16,16 +16,23 @@
 
 package org.springframework.samples.petclinic.service;
 
+import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
-import org.springframework.samples.petclinic.model.FootballClub;
+import org.springframework.samples.petclinic.model.ContractPlayer;
 import org.springframework.samples.petclinic.model.FootballPlayer;
 import org.springframework.samples.petclinic.repository.FootballPlayerRepository;
+import org.springframework.samples.petclinic.service.exceptions.DateException;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedNameException;
+import org.springframework.samples.petclinic.service.exceptions.MoneyClubException;
+import org.springframework.samples.petclinic.service.exceptions.NumberOfPlayersAndCoachException;
+import org.springframework.samples.petclinic.service.exceptions.SalaryException;
+import org.springframework.samples.petclinic.service.exceptions.StatusException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -34,7 +41,10 @@ import org.springframework.util.StringUtils;
 public class FootballPlayerService {
 
 	@Autowired
-	private FootballPlayerRepository footRepository;
+	private FootballPlayerRepository	footRepository;
+
+	@Autowired
+	private ContractPlayerService				contractService;
 
 
 	@Autowired
@@ -43,38 +53,35 @@ public class FootballPlayerService {
 	}
 
 	//Buscar todos los jugadores
-
+	@Transactional(readOnly = true)
 	public Collection<FootballPlayer> findAllFootballPlayers() throws DataAccessException {
 		return this.footRepository.findAll();
 	}
 
 	//Buscar todos los jugadores libres
-
+	@Transactional(readOnly = true)
 	public Collection<FootballPlayer> findAllFootballPlayersFA() throws DataAccessException {
 		return this.footRepository.findAllFreeAgents();
 	}
 
 	//Buscar todos los jugadores de un club
-
+	@Transactional(readOnly = true)
 	public Collection<FootballPlayer> findAllClubFootballPlayers(final int id) throws DataAccessException {
 		return this.footRepository.findPlayersByClubId(id);
 	}
 
 	//Buscar jugador por id
-
+	@Transactional(readOnly = true)
 	public FootballPlayer findFootballPlayerById(final int id) throws DataAccessException {
 		return this.footRepository.findById(id);
 	}
 
-	//Buscar equipo por id de jugador
-
-	public FootballClub findFootballClubByFootballPlayerId(final int id) throws DataAccessException {
-		return this.footRepository.findClubByPlayerId(id);
-	}
-
 	//Guardar jugador con validación de nombre duplicado
-	@Transactional(rollbackFor = DuplicatedNameException.class)
-	public void saveFootballPlayer(@Valid final FootballPlayer footballPlayer) throws DataAccessException, DuplicatedNameException {
+	@Transactional(rollbackFor = {
+		DuplicatedNameException.class, NumberOfPlayersAndCoachException.class, DateException.class, StatusException.class, SalaryException.class, MoneyClubException.class
+	})
+	public void saveFootballPlayer(@Valid final FootballPlayer footballPlayer, @Valid final ContractPlayer newContract)
+		throws DataAccessException, DuplicatedNameException, NumberOfPlayersAndCoachException, MoneyClubException, StatusException, DateException, SalaryException {
 
 		String firstname = footballPlayer.getFirstName().toLowerCase();
 		String lastname = footballPlayer.getLastName().toLowerCase();
@@ -91,18 +98,42 @@ public class FootballPlayerService {
 			}
 		}
 
-		//Si el campo de nombre tiene contenido y el "otherFootClub" existe y no coincide el id con el actual lanzamos excepción
+		//RN: Nombre Duplicado
 		if (StringUtils.hasLength(footballPlayer.getFirstName()) && StringUtils.hasLength(footballPlayer.getLastName()) && otherPlayer != null && otherPlayer.getId() != footballPlayer.getId()) {
 			throw new DuplicatedNameException();
-		} else {
-			this.footRepository.save(footballPlayer);
-
 		}
+
+		Date now = new Date(System.currentTimeMillis() - 1);
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(now);
+		cal.add(Calendar.YEAR, -16);
+		now = cal.getTime();
+
+		//RN: Debe tener al menos 16 años
+		if (footballPlayer.getBirthDate().after(now)) {
+			throw new DateException();
+		}
+
+		Collection<FootballPlayer> cp = this.findAllClubFootballPlayers(footballPlayer.getClub().getId());
+
+		//RN: Solo se pueden registrar jugadores hasta que se tengan 7
+		if (cp.size() >= 7 && footballPlayer.getClub().getStatus() == false) {
+			throw new NumberOfPlayersAndCoachException();
+		}
+
+		//RN: El salario no puede ser superior a los fondos del equipo
+		if (newContract.getClub().getMoney() < newContract.getSalary()) {
+			throw new MoneyClubException();
+		}
+
+		//RN: Si el club es público no puede registrar a un jugador
+		if (footballPlayer.getClub().getStatus() == true) {
+			throw new StatusException();
+		}
+
+		newContract.getClub().setMoney(newContract.getClub().getMoney() - newContract.getSalary());
+		this.footRepository.save(footballPlayer);
+		this.contractService.saveContractPlayer(newContract);
+
 	}
-
-	public void delete(final FootballPlayer a) {
-		this.footRepository.delete(a);
-
-	}
-
 }

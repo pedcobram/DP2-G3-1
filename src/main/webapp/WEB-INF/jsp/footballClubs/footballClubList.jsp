@@ -32,7 +32,7 @@
         <c:forEach items="${footballClubs}" var="footballClub">
             <tr>              		
                 <td>
-                <spring:url value="/footballClub/{footballClubId}" var="footballClubUrl">
+                <spring:url value="/footballClubs/list/{footballClubId}" var="footballClubUrl">
                         <spring:param name="footballClubId" value="${footballClub.id}"/>
                 </spring:url>
                 <img width=30px height= auto hspace="20"; src="${footballClub.crest}"/>

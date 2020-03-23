@@ -1,9 +1,6 @@
 
 package org.springframework.samples.petclinic.web.validators;
 
-import java.util.Calendar;
-import java.util.Date;
-
 import org.springframework.samples.petclinic.model.FootballPlayer;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
@@ -19,14 +16,6 @@ public class FootballPlayerValidator implements Validator {
 		FootballPlayer footballPlayer = (FootballPlayer) obj;
 		String firstName = footballPlayer.getFirstName();
 		String lastName = footballPlayer.getLastName();
-
-		Date now = new Date(System.currentTimeMillis() - 1);
-
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(now);
-		cal.add(Calendar.YEAR, -16);
-
-		now = cal.getTime();
 
 		// First Name Validation
 		if (!StringUtils.hasLength(firstName) || firstName.length() > 50 || firstName.length() < 2) {
@@ -44,8 +33,8 @@ public class FootballPlayerValidator implements Validator {
 		}
 
 		// Birth Date Validation
-		if (footballPlayer.getBirthDate() == null || footballPlayer.getBirthDate().after(now)) {
-			errors.rejectValue("birthDate", "code.error.validator.requiredAnd16Years", FootballPlayerValidator.REQUIRED);
+		if (footballPlayer.getBirthDate() == null) {
+			errors.rejectValue("birthDate", "code.error.validator.required", FootballPlayerValidator.REQUIRED);
 		}
 
 	}

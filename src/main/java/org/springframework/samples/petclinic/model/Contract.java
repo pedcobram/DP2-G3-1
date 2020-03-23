@@ -41,7 +41,6 @@ public class Contract extends BaseEntity {
 	@NotNull
 	private Date			endDate;
 
-	//Automático
 	@Column(name = "end_contract_clause")
 	@NotNull
 	private Integer			clause;

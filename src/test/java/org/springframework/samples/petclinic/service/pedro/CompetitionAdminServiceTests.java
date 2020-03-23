@@ -1,5 +1,5 @@
 
-package org.springframework.samples.petclinic.service;
+package org.springframework.samples.petclinic.service.pedro;
 
 import javax.security.auth.login.CredentialException;
 import javax.validation.ConstraintViolationException;
@@ -12,6 +12,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.CompetitionAdmin;
 import org.springframework.samples.petclinic.model.User;
+import org.springframework.samples.petclinic.service.AuthoritiesService;
+import org.springframework.samples.petclinic.service.CompetitionAdminService;
 import org.springframework.stereotype.Service;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
