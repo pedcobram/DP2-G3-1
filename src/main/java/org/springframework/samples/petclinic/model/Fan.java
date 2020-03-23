@@ -22,6 +22,7 @@ public class Fan extends BaseEntity {
 
 	@OneToOne
 	@JoinColumn(name = "user_id", referencedColumnName = "id")
+	@Valid
 	private Authenticated	user;
 
 	@NotNull
