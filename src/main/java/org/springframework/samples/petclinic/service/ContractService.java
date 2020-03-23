@@ -74,6 +74,11 @@ public class ContractService {
 		return this.contractRepository.findContractCommercialById(id);
 	}
 
+	@Transactional(readOnly = true)
+	public Collection<ContractCommercial> findAllCommercialContractsByClubId(final int id) throws DataAccessException {
+		return this.contractRepository.findAllCommercialContractsByClubId(id);
+	}
+
 	@Transactional
 	public void saveContractCommercial(final ContractCommercial contractCommercial) throws DataAccessException {
 		this.contractRepository.save(contractCommercial);

@@ -50,18 +50,35 @@
             <td><c:out value="${contractCommercial.clause}"/></td>
         </tr>    
     </table>
+ 
     <c:choose>
 		<c:when test="${not empty footballClub}">
-			<spring:url value="/contractsCommercial/{contractCommercialId}/addToMyClub" var="addContractToClubURL">
-		   		<spring:param name="contractCommercialId" value="${contractCommercial.id}"/>
-		   	</spring:url>	
-		   		<a data-toggle="tooltip" href="${fn:escapeXml(addContractToClubURL)}" class="btn btn-default">Añadir Contrato Publicitario</a>
+			<c:choose>
+				<c:when test="${empty contractCommercial.club}">
+					<spring:url value="/contractsCommercial/{contractCommercialId}/addToMyClub" var="addContractToClubURL">
+				   		<spring:param name="contractCommercialId" value="${contractCommercial.id}"/>
+				   	</spring:url>	
+				   		<a data-toggle="tooltip" href="${fn:escapeXml(addContractToClubURL)}" class="btn btn-default">Añadir Contrato Publicitario</a>
+				</c:when>
+				<c:otherwise>
+					<c:choose>
+						<c:when test="${footballClub.id eq contractCommercial.club.id}">
+							<spring:url value="/contractsCommercial/{contractCommercialId}/removeFromMyClub" var="removeContractFromClubURL">
+					   			<spring:param name="contractCommercialId" value="${contractCommercial.id}"/>
+					   		</spring:url>	
+					   			<a data-toggle="tooltip" href="${fn:escapeXml(removeContractFromClubURL)}" class="btn btn-default">Eliminar Contrato Publicitario</a>
+						</c:when>
+						<c:otherwise>
+							<p style="color:red">Este contrato publicitario ya esta comprado</p>
+						</c:otherwise>
+					</c:choose>
+				</c:otherwise>
+			</c:choose>
 		</c:when>    
 		<c:otherwise>
 			<p style="color:red">Para poder adquirir un contrato publicitario primero necesitas un Club</p>
 		</c:otherwise>
 	</c:choose>
-       	
     
     <br/>
     <br/>

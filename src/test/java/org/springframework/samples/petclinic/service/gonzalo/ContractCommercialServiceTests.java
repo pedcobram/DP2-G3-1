@@ -1,5 +1,5 @@
 
-package org.springframework.samples.petclinic.service;
+package org.springframework.samples.petclinic.service.gonzalo;
 
 import java.util.Collection;
 
@@ -11,10 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.samples.petclinic.model.ContractCommercial;
+import org.springframework.samples.petclinic.service.ContractService;
 import org.springframework.stereotype.Service;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
-class ContractTests {
+class ContractCommercialServiceTests {
 
 	@Autowired
 	protected ContractService contractService;
@@ -24,6 +25,12 @@ class ContractTests {
 	void shouldFindAllCommercialContracts() {
 		Collection<ContractCommercial> contracts = this.contractService.findAllCommercialContracts();
 		Assertions.assertThat(contracts.size()).isEqualTo(2);
+	}
+
+	@Test
+	void shouldFindAllCommercialContractsByClub() {
+		Collection<ContractCommercial> contracts = this.contractService.findAllCommercialContractsByClubId(1);
+		Assertions.assertThat(contracts.size()).isEqualTo(0);
 	}
 
 	@Test
