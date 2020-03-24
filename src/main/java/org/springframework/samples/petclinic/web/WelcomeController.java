@@ -5,10 +5,12 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.model.Authenticated;
+import org.springframework.samples.petclinic.model.Fan;
 import org.springframework.samples.petclinic.service.AuthenticatedService;
 import org.springframework.samples.petclinic.service.AuthoritiesService;
 import org.springframework.samples.petclinic.service.FanService;
 import org.springframework.samples.petclinic.service.FootballClubService;
+import org.springframework.samples.petclinic.service.MatchRecordService;
 import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,15 +23,17 @@ public class WelcomeController {
 	private final AuthenticatedService	authenticatedService;
 	@SuppressWarnings("unused")
 	private final FootballClubService	footballClubService;
+	private final MatchRecordService	matchService;
 	private final FanService			fanService;
 
 
 	@Autowired
-	public WelcomeController(final FootballClubService footballClubService, final AuthenticatedService authenticatedService, final FanService fanService, final UserService userService, final AuthoritiesService authoritiesService) {
+	public WelcomeController(final MatchRecordService matchService, final FootballClubService footballClubService, final AuthenticatedService authenticatedService, final FanService fanService, final UserService userService,
+		final AuthoritiesService authoritiesService) {
 		this.fanService = fanService;
 		this.authenticatedService = authenticatedService;
 		this.footballClubService = footballClubService;
-
+		this.matchService = matchService;
 	}
 
 	@GetMapping({
@@ -48,11 +52,13 @@ public class WelcomeController {
 				Authenticated thisUser = this.authenticatedService.findAuthenticatedByUsername(currentPrincipalName);
 				//Comprobamos si es Fan y si es asi comprobamos si es VIP
 				if (this.fanService.existFan(thisUser.getId())) {
-					boolean VIP = this.fanService.findByUserId(thisUser.getId()).isVip();
+					Fan f = this.fanService.findByUserId(thisUser.getId());
+					boolean VIP = f.isVip();
 					model.put("isVip", VIP);
 					model.put("isFan", true);
 					//info, sobre el club que es fan, que queramos mostrar en inicio
-
+					model.put("club", f.getClub());
+					//model.put("lastMatch", this.matchService.findMatchRecordById(id));
 				}
 			}
 			return "welcome";

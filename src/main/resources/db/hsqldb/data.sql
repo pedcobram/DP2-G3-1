@@ -294,3 +294,7 @@ INSERT INTO match_record(id, title, status, season_end, season_start, result, ma
 
 -- Football Player Match Statistics
 INSERT INTO football_player_match_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id, match_record) VALUES (1, 0, 0, 0, 0, null, 2019, 2020, 1, 1);
+
+--Fan Records
+INSERT INTO fan VALUES ( 1, null, null, null, false, 1, 3 );
+
