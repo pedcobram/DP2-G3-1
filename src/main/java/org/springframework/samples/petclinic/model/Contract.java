@@ -26,7 +26,6 @@ public class Contract extends BaseEntity {
 
 	@ManyToOne(optional = true)
 	@JoinColumn(name = "football_Clubs_id")
-	@NotNull
 	private FootballClub	club;
 
 	@Temporal(TemporalType.DATE)

@@ -8,7 +8,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.model.ContractCommercial;
 import org.springframework.samples.petclinic.model.FootballClub;
-import org.springframework.samples.petclinic.service.ContractService;
+import org.springframework.samples.petclinic.service.ContractCommercialService;
 import org.springframework.samples.petclinic.service.FootballClubService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,12 +24,12 @@ public class ContractCommercialController {
 
 	private static final String			VIEWS_CONTRACT_COMMERCIAL_CREATE_OR_UPDATE_FORM	= "contracts/createOrUpdateContractCommercialForm";
 
-	private final ContractService		contractService;
+	private final ContractCommercialService		contractService;
 	private final FootballClubService	footballClubService;
 
 
 	@Autowired
-	public ContractCommercialController(final ContractService contractService, final FootballClubService footballClubService) {
+	public ContractCommercialController(final ContractCommercialService contractService, final FootballClubService footballClubService) {
 		this.contractService = contractService;
 		this.footballClubService = footballClubService;
 

@@ -48,8 +48,4 @@ public interface ContractRepository {
 	ContractPlayer findContractPlayerByPlayerId(int playerId) throws DataAccessException;
 
 	Collection<ContractPlayer> findAllPlayerContractsByClubId(int clubId) throws DataAccessException;
-
-	void delete(Contract contractPlayer) throws DataAccessException;
-
-	void save(ContractPlayer contractPlayer) throws DataAccessException;
 }
