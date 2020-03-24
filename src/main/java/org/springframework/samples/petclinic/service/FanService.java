@@ -6,6 +6,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Fan;
+import org.springframework.samples.petclinic.model.FootballClub;
 import org.springframework.samples.petclinic.repository.FanRepository;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedFanUserException;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedNameException;
@@ -15,16 +16,12 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class FanService {
 
-	private FanRepository		fanRepository;
-
-	@Autowired
-	private FootballClubService	clubService;
+	private FanRepository fanRepository;
 
 
 	@Autowired
-	public FanService(final FanRepository fanRepository, final FootballClubService clubService) {
+	public FanService(final FanRepository fanRepository) {
 		this.fanRepository = fanRepository;
-		this.clubService = clubService;
 
 	}
 
@@ -38,9 +35,9 @@ public class FanService {
 				this.fanRepository.save(f);
 			}
 		} else {
-			//			FootballClub c = f.getClub();
-			//			c.setFans(c.getFans() + 1);
-			//			this.clubService.saveFootballClub(c);
+			FootballClub c = f.getClub();
+			c.setFans(c.getFans() + 1);
+
 			this.fanRepository.save(f);
 		}
 
@@ -57,11 +54,10 @@ public class FanService {
 	}
 
 	@Transactional()
-	public void delete(@Valid final Fan f) throws DataAccessException, DuplicatedNameException {
+	public void delete(@Valid final Fan f) throws DataAccessException {
 
-		//		FootballClub c = f.getClub();
-		//		c.setFans(c.getFans() - 1);
-		//		this.clubService.saveFootballClub(c);
+		FootballClub c = f.getClub();
+		c.setFans(c.getFans() - 1);
 
 		this.fanRepository.delete(f);
 
