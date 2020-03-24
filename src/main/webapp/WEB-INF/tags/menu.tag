@@ -16,6 +16,7 @@
 	
 	<fmt:message key="code.title.contractsPlayers" var="contracts"/>
 	<fmt:message key="code.list.myPlayerList" var="playerList"/>
+	<fmt:message key="code.list.contractsCommercial" var="publicities"/>
 	<fmt:message key="code.list.coachList" var="coachList"/>
 	<fmt:message key="code.crud.transfers" var="Transfers"/>
 
@@ -205,8 +206,8 @@
     		<spring:url value="/contractPlayer/list" var="contractPlayersUrl"></spring:url>
     		<a   href="${fn:escapeXml(contractPlayersUrl)}" class="btn btn-default3"><span class="glyphicon glyphicon-inbox"></span> ${contracts}</a>
     		
-    		<spring:url value="/contractPlayer/list" var="contractPlayersUrl"></spring:url>
-    		<a   href="${fn:escapeXml(contractPlayersUrl)}" class="btn btn-default3"><span class="glyphicon glyphicon-inbox"></span> Contratos Publicitarios</a>
+    		<spring:url value="/contractsCommercial" var="contractsCommercial"></spring:url>
+    		<a   href="${fn:escapeXml(contractsCommercial)}" class="btn btn-default3"><span class="glyphicon glyphicon-inbox"></span> ${publicities}</a>
     		
     		<spring:url value="/transfers/panel" var="transfersUrl"></spring:url>
     		<a   href="${fn:escapeXml(transfersUrl)}" class="btn btn-default3"><span class="glyphicon glyphicon-sort"></span> ${Transfers}</a>

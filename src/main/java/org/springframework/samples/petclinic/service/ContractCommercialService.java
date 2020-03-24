@@ -17,12 +17,14 @@
 package org.springframework.samples.petclinic.service;
 
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
-import org.springframework.samples.petclinic.model.Contract;
 import org.springframework.samples.petclinic.model.ContractCommercial;
 import org.springframework.samples.petclinic.repository.ContractRepository;
+import org.springframework.samples.petclinic.service.exceptions.NoMultipleContractCommercialException;
+import org.springframework.samples.petclinic.service.exceptions.NoStealContractCommercialException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -51,17 +53,35 @@ public class ContractCommercialService {
 	}
 
 	@Transactional(readOnly = true)
-	public Collection<ContractCommercial> findAllCommercialContractsByClubId(final int id) throws DataAccessException {
-		return this.contractRepository.findAllCommercialContractsByClubId(id);
+	public ContractCommercial findCommercialContractByClubId(final int id) throws DataAccessException {
+		return this.contractRepository.findCommercialContractByClubId(id);
 	}
 
-	@Transactional
-	public void saveContractCommercial(final ContractCommercial contractCommercial) throws DataAccessException {
-		this.contractRepository.save(contractCommercial);
-	}
+	@Transactional(rollbackFor = {
+		NoMultipleContractCommercialException.class, NoStealContractCommercialException.class
+	})
+	public void saveContractCommercial(final ContractCommercial contractCommercial) throws DataAccessException, NoMultipleContractCommercialException, NoStealContractCommercialException {
+		//Existe contrato commercial con este club
+		Collection<ContractCommercial> contracts = this.contractRepository.findAllCommercialContracts();
 
-	@Transactional
-	public void deleteContract(final Contract contract) throws DataAccessException {
-		this.contractRepository.delete(contract);
+		//Si se encuentra un contrato diferente con el mismo club(no null) .... Exception
+		if (!contracts.stream().filter(x -> x.getClub() != null && x.getId() != contractCommercial.getId() && x.getClub() == contractCommercial.getClub()).collect(Collectors.toList()).isEmpty()) {
+			throw new NoMultipleContractCommercialException();
+		}
+
+		//Si el contrato commercial ya existe
+		try {
+			ContractCommercial cAhora = this.contractRepository.findContractCommercialById(contractCommercial.getId());
+
+			//Si el contrato no pasa de null a NoNull, de NoNull a null o de null a null significa que ha cambiado de club sin que termine el contrato....Exception
+			if (cAhora.getClub() != null && contractCommercial.getClub() != null && cAhora.getClub() != contractCommercial.getClub()) {
+				throw new NoStealContractCommercialException();
+			}
+		} catch (NullPointerException e) {
+			//Si captura un null pointer exception significa que el contrato es nuevo
+			// y como ha superado el NoMultipleContractException es seguro guardarlo
+			this.contractRepository.save(contractCommercial);
+		}
+
 	}
 }
