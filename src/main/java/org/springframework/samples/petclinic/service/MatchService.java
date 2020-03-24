@@ -13,8 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class MatchService {
 
-	@Autowired
-	MatchRepository matchRepository;
+	private MatchRepository matchRepository;
 
 
 	@Autowired
@@ -28,8 +27,8 @@ public class MatchService {
 	}
 
 	@Transactional(readOnly = true)
-	public Collection<Match> findAllMatchRequestsByReferee(final String currentPrincipalName) throws DataAccessException {
-		return this.matchRepository.findAllMatchRequestsByReferee(currentPrincipalName);
+	public Collection<Match> findAllMatchesByReferee(final String currentPrincipalName) throws DataAccessException {
+		return this.matchRepository.findAllMatchesByReferee(currentPrincipalName);
 	}
 
 	@Transactional(readOnly = true)
@@ -40,16 +39,6 @@ public class MatchService {
 	@Transactional(readOnly = true)
 	public Match findMatchById(final int id) throws DataAccessException {
 		return this.matchRepository.findMatchById(id);
-	}
-
-	@Transactional(readOnly = true)
-	public Match findMatchByFootballClubName1(final String footballClubName1) throws DataAccessException {
-		return this.matchRepository.findMatchByFootballClubName1(footballClubName1);
-	}
-
-	@Transactional(readOnly = true)
-	public Match findMatchByFootballClubName2(final String footballClubName2) throws DataAccessException {
-		return this.matchRepository.findMatchByFootballClubName2(footballClubName2);
 	}
 
 	@Transactional()

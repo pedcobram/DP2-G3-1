@@ -12,13 +12,9 @@ public interface MatchRepository {
 
 	Collection<Match> findAllMyMatches(String currentPrincipalName);
 
-	Collection<Match> findAllMatchRequestsByReferee(String currentPrincipalName);
+	Collection<Match> findAllMatchesByReferee(String currentPrincipalName);
 
 	Match findMatchById(int id) throws DataAccessException;
-
-	Match findMatchByFootballClubName1(String footballClubName1) throws DataAccessException;
-
-	Match findMatchByFootballClubName2(String footballClubName2) throws DataAccessException;
 
 	void save(Match match) throws DataAccessException;
 

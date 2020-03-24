@@ -14,11 +14,14 @@ import org.springframework.samples.petclinic.model.FootballPlayerStatistic;
 import org.springframework.samples.petclinic.model.Match;
 import org.springframework.samples.petclinic.model.MatchRecord;
 import org.springframework.samples.petclinic.model.Enum.MatchRecordStatus;
+import org.springframework.samples.petclinic.model.Enum.MatchStatus;
 import org.springframework.samples.petclinic.service.FootballPlayerMatchStatisticService;
 import org.springframework.samples.petclinic.service.FootballPlayerStatisticService;
 import org.springframework.samples.petclinic.service.MatchRecordService;
 import org.springframework.samples.petclinic.service.MatchService;
 import org.springframework.samples.petclinic.service.UserService;
+import org.springframework.samples.petclinic.service.exceptions.IllegalDateException;
+import org.springframework.samples.petclinic.service.exceptions.MatchRecordResultException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -76,7 +79,7 @@ public class MatchRecordController {
 	}
 
 	@PostMapping(value = "/matches/matchRecord/{matchId}/new")
-	public String processCreationForm(@Valid final MatchRecord matchRecord, final BindingResult result, final ModelMap model, @PathVariable("matchId") final int matchId) throws DataAccessException {
+	public String processCreationForm(@Valid final MatchRecord matchRecord, final BindingResult result, final ModelMap model, @PathVariable("matchId") final int matchId) throws DataAccessException, MatchRecordResultException {
 
 		List<MatchRecordStatus> matchStatus = new ArrayList<MatchRecordStatus>();
 
@@ -88,12 +91,21 @@ public class MatchRecordController {
 		if (result.hasErrors()) {
 			return MatchRecordController.VIEWS_CREATE_OR_UPDATE_MATCH_RECORD_FORM;
 		} else {
+			try {
 
-			Match m = this.matchService.findMatchById(matchId);
+				Match m = this.matchService.findMatchById(matchId);
 
-			matchRecord.setMatch(m);
+				matchRecord.setMatch(m);
 
-			this.matchRecordService.saveMatchRecord(matchRecord);
+				this.matchRecordService.saveMatchRecord(matchRecord);
+
+			} catch (IllegalDateException ide) {
+				result.rejectValue("season_start", "code.error.validator.illegalStartEndDate", "Season end must be grater than season start");
+				return MatchRecordController.VIEWS_CREATE_OR_UPDATE_MATCH_RECORD_FORM;
+			} catch (MatchRecordResultException mrre) {
+				result.rejectValue("result", "code.error.validator.MatchRecordResultException", "Published match records must have a result");
+				return MatchRecordController.VIEWS_CREATE_OR_UPDATE_MATCH_RECORD_FORM;
+			}
 		}
 
 		return "redirect:/myfootballClub/";
@@ -110,13 +122,13 @@ public class MatchRecordController {
 		matchStatus.add(MatchRecordStatus.PUBLISHED);
 
 		model.addAttribute("matchStatus", matchStatus);
-		model.addAttribute(mr);
+		model.addAttribute("matchRecord", mr);
 
 		return MatchRecordController.VIEWS_CREATE_OR_UPDATE_MATCH_RECORD_FORM;
 	}
 
 	@PostMapping(value = "/matches/matchRecord/{matchId}/edit")
-	public String processUpdateMatchRecordForm(@Valid final MatchRecord matchRecord, final BindingResult result, final ModelMap model, @PathVariable("matchId") final int matchId) {
+	public String processUpdateMatchRecordForm(@Valid final MatchRecord matchRecord, final BindingResult result, final ModelMap model, @PathVariable("matchId") final int matchId) throws IllegalDateException {
 
 		List<MatchRecordStatus> matchStatus = new ArrayList<MatchRecordStatus>();
 
@@ -129,35 +141,53 @@ public class MatchRecordController {
 			return MatchRecordController.VIEWS_CREATE_OR_UPDATE_MATCH_RECORD_FORM;
 		} else {
 
-			MatchRecord mr = this.matchRecordService.findMatchRecordByMatchId(matchId);
+			try {
 
-			matchRecord.setId(mr.getId());
-			matchRecord.setMatch(mr.getMatch());
+				MatchRecord mr = this.matchRecordService.findMatchRecordByMatchId(matchId);
 
-			this.matchRecordService.saveMatchRecord(matchRecord);
-
-			if (mr.getStatus() == MatchRecordStatus.PUBLISHED) {
-
-				FootballPlayerMatchStatistics fpmss = new FootballPlayerMatchStatistics();
-				fpmss.getFootballPlayerStatisticsList().addAll(this.footballPlayerMatchStatisticService.findFootballPlayerMatchStatisticByMatchId(mr.getId()));
-
-				for (FootballPlayerMatchStatistic fpms : fpmss.getFootballPlayerStatisticsList()) {
-					FootballPlayerStatistic fps = this.footballPlayerStatisticService.findFootballPlayerStatisticByPlayerId(fpms.getPlayer().getId());
-					if (fpms.getPlayer().getId() == fps.getId()) {
-						fps.setId(fps.getId());
-						fps.setAssists(fpms.getAssists());
-						fps.setGoals(fpms.getGoals());
-						fps.setPlayer(fpms.getPlayer());
-						fps.setReceived_goals(fpms.getReceived_goals());
-						fps.setRed_cards(fpms.getRed_cards());
-						fps.setSeason_end(fpms.getSeason_end());
-						fps.setSeason_start(fpms.getSeason_start());
-						fps.setYellow_cards(fpms.getYellow_cards());
-
-						this.footballPlayerStatisticService.saveFootballPlayerStatistic(fps);
-					}
+				matchRecord.setId(mr.getId());
+				matchRecord.setMatch(mr.getMatch());
+				if (matchRecord.getSeason_start() != null && !matchRecord.getSeason_start().isEmpty()) {
+					Integer i = Integer.parseInt(matchRecord.getSeason_start()) + 1;
+					matchRecord.setSeason_end(i.toString());
 				}
 
+				this.matchRecordService.saveMatchRecord(matchRecord);
+
+				if (mr.getStatus() == MatchRecordStatus.PUBLISHED) {
+
+					//Cambiamos el estado del partido a finalizado una vez se cierre el acta
+					Match m = this.matchService.findMatchById(matchId);
+					m.setMatchStatus(MatchStatus.FINISHED);
+
+					//Añadimos las estadísticas del partido a la personal de los jugadores
+					FootballPlayerMatchStatistics fpmss = new FootballPlayerMatchStatistics();
+					fpmss.getFootballPlayerStatisticsList().addAll(this.footballPlayerMatchStatisticService.findFootballPlayerMatchStatisticByMatchRecordId(mr.getId()));
+
+					for (FootballPlayerMatchStatistic fpms : fpmss.getFootballPlayerStatisticsList()) {
+						FootballPlayerStatistic fps = this.footballPlayerStatisticService.findFootballPlayerStatisticByPlayerId(fpms.getPlayer().getId());
+						if (fpms.getPlayer().getId() == fps.getId()) {
+
+							fps.setId(fps.getId());
+							fps.setReceived_goals(fpms.getReceived_goals() + fps.getReceived_goals());
+							fps.setRed_cards(fpms.getRed_cards() + fps.getRed_cards());
+							fps.setYellow_cards(fpms.getYellow_cards() + fps.getYellow_cards());
+							fps.setAssists(fpms.getAssists() + fps.getAssists());
+							fps.setGoals(fpms.getGoals() + fps.getGoals());
+							fps.setPlayer(fpms.getPlayer());
+							fps.setSeason_end(fpms.getSeason_end());
+							fps.setSeason_start(fpms.getSeason_start());
+
+							this.footballPlayerStatisticService.saveFootballPlayerStatistic(fps);
+						}
+					}
+				}
+			} catch (IllegalDateException ide) {
+				result.rejectValue("season_start", "code.error.validator.IllegalStartEndDate", "Season end must be grater than season start");
+				return MatchRecordController.VIEWS_CREATE_OR_UPDATE_MATCH_RECORD_FORM;
+			} catch (MatchRecordResultException mrre) {
+				result.rejectValue("result", "code.error.validator.MatchRecordResultException", "Published match records must have a result");
+				return MatchRecordController.VIEWS_CREATE_OR_UPDATE_MATCH_RECORD_FORM;
 			}
 
 			return "redirect:/matches/referee/list/";
@@ -169,8 +199,13 @@ public class MatchRecordController {
 
 		MatchRecord mr = this.matchRecordService.findMatchRecordByMatchId(matchId);
 
+		// Si se intenta acceder a un match record que no existe, devuelve al inicio
+		if (this.matchRecordService.findMatchRecordByMatchId(matchId) == null) {
+			return "redirect:/";
+		}
+
 		FootballPlayerMatchStatistics fpms = new FootballPlayerMatchStatistics();
-		fpms.getFootballPlayerStatisticsList().addAll(this.footballPlayerMatchStatisticService.findFootballPlayerMatchStatisticByMatchId(matchId));
+		fpms.getFootballPlayerStatisticsList().addAll(this.footballPlayerMatchStatisticService.findFootballPlayerMatchStatisticByMatchRecordId(mr.getId()));
 
 		model.addAttribute("matchRecord", mr);
 		model.addAttribute("footballPlayers", fpms);
@@ -187,7 +222,7 @@ public class MatchRecordController {
 
 		this.footballPlayerMatchStatisticService.saveFootballPlayerStatistic(fpms);
 
-		return "redirect:/matches/matchRecord/" + fpms.getMatchRecord().getId() + "/view";
+		return "redirect:/matches/matchRecord/" + fpms.getMatchRecord().getMatch().getId() + "/view";
 	}
 
 	@RequestMapping(value = "/matches/matchRecord/goal/substract/{matchRecordId}/{playerId}")
@@ -203,7 +238,7 @@ public class MatchRecordController {
 
 		this.footballPlayerMatchStatisticService.saveFootballPlayerStatistic(fpms);
 
-		return "redirect:/matches/matchRecord/" + fpms.getMatchRecord().getId() + "/view";
+		return "redirect:/matches/matchRecord/" + fpms.getMatchRecord().getMatch().getId() + "/view";
 	}
 
 	@RequestMapping(value = "/matches/matchRecord/assist/add/{matchRecordId}/{playerId}")
@@ -215,7 +250,7 @@ public class MatchRecordController {
 
 		this.footballPlayerMatchStatisticService.saveFootballPlayerStatistic(fpms);
 
-		return "redirect:/matches/matchRecord/" + fpms.getMatchRecord().getId() + "/view";
+		return "redirect:/matches/matchRecord/" + fpms.getMatchRecord().getMatch().getId() + "/view";
 	}
 
 	@RequestMapping(value = "/matches/matchRecord/assist/substract/{matchRecordId}/{playerId}")
@@ -231,7 +266,7 @@ public class MatchRecordController {
 
 		this.footballPlayerMatchStatisticService.saveFootballPlayerStatistic(fpms);
 
-		return "redirect:/matches/matchRecord/" + fpms.getMatchRecord().getId() + "/view";
+		return "redirect:/matches/matchRecord/" + fpms.getMatchRecord().getMatch().getId() + "/view";
 	}
 
 	@RequestMapping(value = "/matches/matchRecord/redCard/add/{matchRecordId}/{playerId}")
@@ -243,7 +278,7 @@ public class MatchRecordController {
 
 		this.footballPlayerMatchStatisticService.saveFootballPlayerStatistic(fpms);
 
-		return "redirect:/matches/matchRecord/" + fpms.getMatchRecord().getId() + "/view";
+		return "redirect:/matches/matchRecord/" + fpms.getMatchRecord().getMatch().getId() + "/view";
 	}
 
 	@RequestMapping(value = "/matches/matchRecord/redCard/substract/{matchRecordId}/{playerId}")
@@ -259,7 +294,7 @@ public class MatchRecordController {
 
 		this.footballPlayerMatchStatisticService.saveFootballPlayerStatistic(fpms);
 
-		return "redirect:/matches/matchRecord/" + fpms.getMatchRecord().getId() + "/view";
+		return "redirect:/matches/matchRecord/" + fpms.getMatchRecord().getMatch().getId() + "/view";
 	}
 
 	@RequestMapping(value = "/matches/matchRecord/yellowCard/add/{matchRecordId}/{playerId}")
@@ -271,7 +306,7 @@ public class MatchRecordController {
 
 		this.footballPlayerMatchStatisticService.saveFootballPlayerStatistic(fpms);
 
-		return "redirect:/matches/matchRecord/" + fpms.getMatchRecord().getId() + "/view";
+		return "redirect:/matches/matchRecord/" + fpms.getMatchRecord().getMatch().getId() + "/view";
 	}
 
 	@RequestMapping(value = "/matches/matchRecord/yellowCard/substract/{matchRecordId}/{playerId}")
@@ -287,7 +322,7 @@ public class MatchRecordController {
 
 		this.footballPlayerMatchStatisticService.saveFootballPlayerStatistic(fpms);
 
-		return "redirect:/matches/matchRecord/" + fpms.getMatchRecord().getId() + "/view";
+		return "redirect:/matches/matchRecord/" + fpms.getMatchRecord().getMatch().getId() + "/view";
 	}
 
 	@RequestMapping(value = "/matches/matchRecord/receivedGoals/add/{matchRecordId}/{playerId}")
@@ -299,7 +334,7 @@ public class MatchRecordController {
 
 		this.footballPlayerMatchStatisticService.saveFootballPlayerStatistic(fpms);
 
-		return "redirect:/matches/matchRecord/" + fpms.getMatchRecord().getId() + "/view";
+		return "redirect:/matches/matchRecord/" + fpms.getMatchRecord().getMatch().getId() + "/view";
 	}
 
 	@RequestMapping(value = "/matches/matchRecord/receivedGoals/substract/{matchRecordId}/{playerId}")
@@ -315,7 +350,7 @@ public class MatchRecordController {
 
 		this.footballPlayerMatchStatisticService.saveFootballPlayerStatistic(fpms);
 
-		return "redirect:/matches/matchRecord/" + fpms.getMatchRecord().getId() + "/view";
+		return "redirect:/matches/matchRecord/" + fpms.getMatchRecord().getMatch().getId() + "/view";
 	}
 
 }

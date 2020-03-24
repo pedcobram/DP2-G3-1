@@ -10,24 +10,24 @@
 
 <petclinic:layout pageName="compAdminRequests">
    	<h2>
-        <c:if test="${compAdminRequests['new']}"><fmt:message key="newCompAdminRequestForm"/> </c:if>
-        <c:if test="${!compAdminRequests['new']}"><fmt:message key="notNewCompAdminRequestForm"/> </c:if>
+        <c:if test="${compAdminRequests['new']}"><fmt:message key="code.title.createorupdatecompadminrequestform.new"/> </c:if>
+        <c:if test="${!compAdminRequests['new']}"><fmt:message key="code.title.createorupdatecompadminrequestform.notnew"/> </c:if>
     </h2>
     
     <form:form modelAttribute="compAdminRequest" class="form-horizontal" id="add-competition-admin-request-form">
       
        		<div class="form-group has-feedback">
-            <petclinic:inputField label="Title" name="title"/>
-            <petclinic:inputField label="Description" name="description"/>
+            <petclinic:inputField label="code.label.createorupdatecompadminrequestform.title" name="title"/>
+            <petclinic:inputField label="code.label.createorupdatecompadminrequestform.description" name="description"/>
         	</div>
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
                 <c:choose>
                     <c:when test="${compAdminRequests['new']}">
-                        <button class="btn btn-default" type="submit"><fmt:message key="submitCompAdminRequestForm"/></button>
+                        <button class="btn btn-default" type="submit"><fmt:message key="code.button.createorupdatecompadminrequestform.submit"/></button>
                     </c:when>
                     <c:otherwise>
-                        <button class="btn btn-default" type="submit"><fmt:message key="updateCompAdminRequestForm"/></button>
+                        <button class="btn btn-default" type="submit"><fmt:message key="code.button.createorupdatecompadminrequestform.update"/></button>
                     </c:otherwise>
                 </c:choose>
             </div>

@@ -13,19 +13,19 @@
    		<security:authentication var="principalUsername" property="principal.username" /> 
 	</security:authorize>
 	
-	<h2 style="color:black"><fmt:message key="matchList"/></h2>
+	<h2 style="color:black"><fmt:message key="code.title.matchlist"/></h2>
 
  	<table id="matchesTable" class="table table-striped">
 			<thead>
        			<tr>
-           			<th><fmt:message key="titleMatchList"/></th>
-           			<th><fmt:message key="matchDateMatchList"/></th>
-           			<th><fmt:message key="statusMatchList"/></th>
-           			<th><fmt:message key="stadiumMatchList"/></th>
-           			<th><fmt:message key="footballClub1MatchList"/></th>
-           			<th><fmt:message key="footballClub2MatchList"/></th>
-           			<th><fmt:message key="refereeMatchList"/></th>
-           			<th><fmt:message key="actionsMatchList"/></th>
+           			<th><fmt:message key="code.label.matchlist.title"/></th>
+           			<th><fmt:message key="code.label.matchlist.matchdate"/></th>
+           			<th><fmt:message key="code.label.matchlist.status"/></th>
+           			<th><fmt:message key="code.label.matchlist.stadium"/></th>
+           			<th><fmt:message key="code.label.matchlist.footballclub.one"/></th>
+           			<th><fmt:message key="code.label.matchlist.footballclub.two"/></th>
+           			<th><fmt:message key="code.label.matchlist.referee"/></th>
+           			<th><fmt:message key="code.label.matchlist.actions"/></th>
  				</tr>
         	</thead>
         	<tbody>
@@ -60,16 +60,20 @@
         		</c:choose>	
                 </td> 
                 <td>
-                  	<spring:url value="/matches/${matches.id}" var='matchStatus'></spring:url>
-                	<a href="${fn:escapeXml(matchStatus)}" class="btn btn-default">Data</a>
+                	<c:if test="${matches.referee.user.username != principalUsername}">
+                  		<spring:url value="/matches/${matches.id}" var='matchStatus'></spring:url>
+                		<a href="${fn:escapeXml(matchStatus)}" class="btn btn-default"><fmt:message key="code.button.matchlist.data"/></a>
+                	</c:if>     
                 	
                 	<c:if test="${matches.referee == null}">
                 		<spring:url value="/matches/refereeRequest/refereeList/${matches.id}" var='editMatchStatus'></spring:url>
-                		<a href="${fn:escapeXml(editMatchStatus)}" class="btn btn-default"><fmt:message key="addRefereeMatch"/></a>    
+                		<a href="${fn:escapeXml(editMatchStatus)}" class="btn btn-default"><fmt:message key="code.button.matchlist.addreferee"/></a>    
                 	</c:if>             
                 	
-                    <spring:url value="/matches/matchRecord/${matches.id}/view" var='viewMatchRecord'></spring:url>
-                	<a href="${fn:escapeXml(viewMatchRecord)}" class="btn btn-default"><fmt:message key="viewMatchRecord"/></a>                 	         	
+                	<c:if test="${matches.referee != null}">
+                    	<spring:url value="/matches/matchRecord/${matches.id}/view" var='viewMatchRecord'></spring:url>
+                		<a href="${fn:escapeXml(viewMatchRecord)}" class="btn btn-default"><fmt:message key="code.button.matchlist.matchrecord"/></a>   
+                	</c:if>              	         	
                 </td>
             </tr>
         </c:forEach>

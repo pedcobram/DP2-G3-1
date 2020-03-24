@@ -40,9 +40,11 @@ public class Coach extends Person {
 	private Date			birthDate;
 
 	@Column(name = "salary")
+	@NotNull
 	private Integer			salary;
 
 	@Column(name = "clause")
+	@NotNull
 	private Integer			clause;
 
 

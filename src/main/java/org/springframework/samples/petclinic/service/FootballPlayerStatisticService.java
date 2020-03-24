@@ -41,11 +41,18 @@ public class FootballPlayerStatisticService {
 		return this.footballPlayerStatisticRepository.findFootballPlayerStatisticByPlayerId(player_id);
 	}
 
+	@Transactional
 	public void saveFootballPlayerStatistic(final FootballPlayerStatistic footballPlayerStatistic) throws DataAccessException {
 		this.footballPlayerStatisticRepository.save(footballPlayerStatistic);
 	}
 
+	@Transactional
 	public void deleteFootballPlayerStatistic(final FootballPlayerStatistic footballPlayerStatistic) throws DataAccessException {
 		this.footballPlayerStatisticRepository.delete(footballPlayerStatistic);
+	}
+
+	@Transactional()
+	public int count() {
+		return this.footballPlayerStatisticRepository.count();
 	}
 }

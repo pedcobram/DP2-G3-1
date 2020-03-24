@@ -12,7 +12,7 @@ public interface FootballPlayerMatchStatisticRepository {
 
 	Collection<FootballPlayerMatchStatistic> findAllFootballPlayerMatchStatisticsBySeason(String season_start, String season_end) throws DataAccessException;
 
-	Collection<FootballPlayerMatchStatistic> findFootballPlayerMatchStatisticByMatchId(int match_id) throws DataAccessException;
+	Collection<FootballPlayerMatchStatistic> findFootballPlayerMatchStatisticByMatchRecordId(int match_record_id) throws DataAccessException;
 
 	FootballPlayerMatchStatistic findFootballPlayerMatchStatisticById(int id) throws DataAccessException;
 

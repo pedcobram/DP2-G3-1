@@ -13,18 +13,18 @@
    		<security:authentication var="principalUsername" property="principal.username" /> 
 	</security:authorize>
 	
-	<h2 style="color:black"><fmt:message key="refereeList"/></h2>
+	<h2 style="color:black"><fmt:message key="code.title.refereelist"/></h2>
 	<h2>Match ID: <c:out value="${matchId}" /> </h2>
 
  	<table id="matchRefereeRequestTable" class="table table-striped">
 			<thead>
        			<tr>
-           			<th><fmt:message key="nameRefereeList"/></th>
-           			<th><fmt:message key="dniRefereeList"/></th>
-           			<th><fmt:message key="emailRefereeList"/></th>
-           			<th><fmt:message key="tlfhRefereeList"/></th>
-           			<th><fmt:message key="usernameRefereeList"/></th>
-           			<th><fmt:message key="actionsRefereeList"/></th>
+           			<th><fmt:message key="code.label.refereelist.name"/></th>
+           			<th><fmt:message key="code.label.refereelist.dni"/></th>
+           			<th><fmt:message key="code.label.refereelist.email"/></th>
+           			<th><fmt:message key="code.label.refereelist.telephone"/></th>
+           			<th><fmt:message key="code.label.refereelist.username"/></th>
+           			<th><fmt:message key="code.label.refereelist.actions"/></th>
  				</tr>
         	</thead>
         	<tbody>
@@ -46,10 +46,8 @@
                     <c:out value="${referees.user.username}"/> 
                 </td>
                 <td>
-                	
-                  		<spring:url value="/matches/refereeRequest/new/${matchId}/${referees.id}" var='requestRefereeList'></spring:url>
-                		<a href="${fn:escapeXml(requestRefereeList)}" class="btn btn-default"><fmt:message key="requestRefereeList"/></a>
-                	
+                  	<spring:url value="/matches/refereeRequest/new/${matchId}/${referees.id}" var='requestRefereeList'></spring:url>
+                	<a href="${fn:escapeXml(requestRefereeList)}" class="btn btn-default"><fmt:message key="code.button.refereelist.request"/></a>
                 </td>
             </tr>
         </c:forEach>

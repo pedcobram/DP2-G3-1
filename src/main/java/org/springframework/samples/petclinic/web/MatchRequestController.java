@@ -4,7 +4,6 @@ package org.springframework.samples.petclinic.web;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +23,8 @@ import org.springframework.samples.petclinic.service.MatchRequestService;
 import org.springframework.samples.petclinic.service.MatchService;
 import org.springframework.samples.petclinic.service.RefereeService;
 import org.springframework.samples.petclinic.service.UserService;
+import org.springframework.samples.petclinic.service.exceptions.DateException;
+import org.springframework.samples.petclinic.service.exceptions.IllegalDateException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -123,8 +124,15 @@ public class MatchRequestController {
 		MatchRequest matchRequest = new MatchRequest();
 		List<String> stadiums = new ArrayList<String>();
 
+		String title = footballClub1.getName() + " vs " + footballClub2.getName() + " ";
+
+		model.put("titleMatch", title);
+
 		matchRequest.setFootballClub1(footballClub1);
 		matchRequest.setFootballClub2(footballClub2);
+		matchRequest.setTitle(title);
+		matchRequest.setCreator(currentPrincipalName);
+		matchRequest.setStatus(RequestStatus.ON_HOLD);
 
 		LocalDateTime now = LocalDateTime.now();
 		Date now_date = Date.from(now.atZone(ZoneId.systemDefault()).toInstant());
@@ -136,17 +144,13 @@ public class MatchRequestController {
 		model.put("stadiums", stadiums);
 		model.put("matchRequest", matchRequest);
 
-		String title = footballClub1.getName() + " vs " + footballClub2.getName() + " ";
-
-		model.put("titleMatch", title);
-
 		matchRequest.setTitle(title);
 
 		return MatchRequestController.VIEWS_MATCH_REQUEST_CREATE_OR_UPDATE_FORM;
 	}
 
 	@PostMapping(value = "/matchRequests/{presidentName}/new")
-	public String createMatchRequest(@Valid final MatchRequest matchRequest, final BindingResult result, @PathVariable("presidentName") final String presidentName, final ModelMap model) throws DataAccessException {
+	public String createMatchRequest(@Valid final MatchRequest matchRequest, final BindingResult result, @PathVariable("presidentName") final String presidentName, final ModelMap model) throws DataAccessException, IllegalDateException, DateException {
 
 		//Obtenemos el username actual conectado
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -160,40 +164,34 @@ public class MatchRequestController {
 		stadiums.add(footballClub1.getStadium());
 		stadiums.add(footballClub2.getStadium());
 
-		Date date = matchRequest.getMatchDate();
-
 		String title = footballClub1.getName() + " vs " + footballClub2.getName() + " ";
 
 		model.put("stadiums", stadiums);
 		model.put("titleMatch", title);
 
-		Date now = new Date(System.currentTimeMillis() - 1);
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(now);
-		cal.add(Calendar.DAY_OF_MONTH, 29);
-		now = cal.getTime();
-
 		if (result.hasErrors()) {
-			return MatchRequestController.VIEWS_MATCH_REQUEST_CREATE_OR_UPDATE_FORM;
-		}
-
-		if (date.toString().isEmpty() || date == null) {
-			result.rejectValue("matchDate", "errorMatchDate");
-			return MatchRequestController.VIEWS_MATCH_REQUEST_CREATE_OR_UPDATE_FORM;
-		} else if (date.before(now)) {
-			result.rejectValue("matchDate", "code.error.validator.requiredAtLeast1MonthMatchDate", "required");
 			return MatchRequestController.VIEWS_MATCH_REQUEST_CREATE_OR_UPDATE_FORM;
 		} else {
 
-			matchRequest.setStatus(RequestStatus.ON_HOLD);
 			matchRequest.setTitle(title);
+			matchRequest.setStatus(RequestStatus.ON_HOLD);
+			matchRequest.setStadium(matchRequest.getStadium());
+			matchRequest.setMatchDate(matchRequest.getMatchDate());
 			matchRequest.setFootballClub1(footballClub1);
 			matchRequest.setFootballClub2(footballClub2);
-			matchRequest.setCreator(currentPrincipalName); //Creador del Request
+			matchRequest.setCreator(currentPrincipalName);
+			matchRequest.setReferee(null);
 
 			model.put("matchRequest", matchRequest);
 
-			this.matchRequestService.saveMatchRequest(matchRequest);
+			try {
+
+				this.matchRequestService.saveMatchRequest(matchRequest);
+
+			} catch (IllegalDateException ide) {
+				result.rejectValue("matchDate", "code.error.validator.atleast1monthinadvance", "Match date must be at least one month from now");
+				return MatchRequestController.VIEWS_MATCH_REQUEST_CREATE_OR_UPDATE_FORM;
+			}
 
 			return MatchRequestController.VIEWS_MATCH_REQUEST_LIST;
 		}
@@ -221,7 +219,7 @@ public class MatchRequestController {
 	}
 
 	@RequestMapping(value = "/matchRequests/accept/{id}/{presidentName}")
-	public String processAcceptMatchRequest(@PathVariable("id") final int matchRequestId, @PathVariable("presidentName") final String presidentName, final ModelMap model) {
+	public String processAcceptMatchRequest(@PathVariable("id") final int matchRequestId, @PathVariable("presidentName") final String presidentName, final ModelMap model) throws DataAccessException, IllegalDateException, DateException {
 
 		List<MatchRequest> matchRequests = new ArrayList<>();
 
@@ -254,7 +252,7 @@ public class MatchRequestController {
 	}
 
 	@RequestMapping(value = "/matchRequests/reject/{id}/{presidentName}")
-	public String processRejectMatchRequest(@PathVariable("id") final int matchRequestId, @PathVariable("presidentName") final String presidentName, final ModelMap model) {
+	public String processRejectMatchRequest(@PathVariable("id") final int matchRequestId, @PathVariable("presidentName") final String presidentName, final ModelMap model) throws DataAccessException, IllegalDateException, DateException {
 
 		List<MatchRequest> matchRequests = new ArrayList<>();
 

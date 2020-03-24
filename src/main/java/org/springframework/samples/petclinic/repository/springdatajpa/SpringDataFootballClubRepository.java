@@ -22,7 +22,6 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 import org.springframework.data.repository.query.Param;
-import org.springframework.samples.petclinic.model.Coach;
 import org.springframework.samples.petclinic.model.FootballClub;
 import org.springframework.samples.petclinic.model.President;
 import org.springframework.samples.petclinic.repository.FootballClubRepository;
@@ -44,13 +43,5 @@ public interface SpringDataFootballClubRepository extends FootballClubRepository
 	@Override
 	@Query("SELECT f FROM FootballClub f WHERE f.status = true")
 	Collection<FootballClub> findAllPublished() throws DataAccessException;
-
-	@Override
-	@Query("SELECT f FROM FootballClub f WHERE f.name = name")
-	FootballClub findFootballClubByName(@Param("name") String name);
-
-	@Override
-	@Query("select c from Coach c where c.club.id = ?1")
-	Coach findCoachByClubId(int clubId) throws DataAccessException;
 
 }

@@ -9,6 +9,8 @@ import org.springframework.samples.petclinic.model.MatchRefereeRequest;
 
 public interface MatchRefereeRequestRepository {
 
+	Collection<MatchRefereeRequest> findAllMatchRefereeRequests() throws DataAccessException;
+
 	Collection<MatchRefereeRequest> findAllOnHoldMatchRefereeRequests() throws DataAccessException;
 
 	Collection<MatchRefereeRequest> findOnHoldMatchRefereeRequests(String refereeName) throws DataAccessException;

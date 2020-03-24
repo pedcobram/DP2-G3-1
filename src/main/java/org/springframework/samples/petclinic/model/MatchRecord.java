@@ -19,7 +19,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Entity
-@Table(name = "Match_Record")
+@Table(name = "match_record")
 public class MatchRecord extends BaseEntity {
 
 	@Column(name = "title")
@@ -31,11 +31,11 @@ public class MatchRecord extends BaseEntity {
 	private MatchRecordStatus	status;
 
 	@Column(name = "season_start")
-	@Pattern(regexp = "^\\d{4}$|^$")
+	@Pattern(regexp = "^\\d{4}$|^$", message = "Must be a four digit number")
 	private String				season_start;
 
 	@Column(name = "season_end")
-	@Pattern(regexp = "^\\d{4}$|^$")
+	@Pattern(regexp = "^\\d{4}$|^$", message = "Must be a four digit number")
 	private String				season_end;
 
 	@Column(name = "result")

@@ -14,6 +14,7 @@
 	<fmt:message key="code.label.startDate" var="startfecha"/> 
 	<fmt:message key="code.label.endDate" var="endfecha"/> 
 	<fmt:message key="code.label.clause" var="clausula"/> 
+	<fmt:message key="code.label.value" var="Value"/> 
 	<fmt:message key="code.title.contractInformation" var="contractInfo"/> 
 	<fmt:message key="code.title.contractMoreInfo" var="moreInfo"/> 
 
@@ -35,20 +36,23 @@
             <petclinic:inputField label="code.label.firstName" name="firstName"/>
             <petclinic:inputField label="code.label.lastName" name="lastName"/>
             <petclinic:inputField label="code.label.birthDate" name="birthDate" placeholder="yyyy/MM/dd"/>
+            <div class="form-group">
+				<label class="col-sm-2 control-label">${Value}</label>
+				<div class="col-sm-10">
+					<div class="form-control" style="background-color: #f1f1f1"> 
+						10.000.00,00 €
+					</div>
+				</div>	
+			</div>
             <div class="control-group">
                     <petclinic:selectField label="code.label.position" name="position" names="${positions}" size="4"/>
                 </div>
         </div>
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
-                <c:choose>
-                    <c:when test="${!footballPlayer['new']}">
-                        <button class="btn btn-default" type="submit">${update}</button>
-                    </c:when>
-                    <c:otherwise>
+                
                         <button class="btn btn-default" type="submit">${register}</button>
-                    </c:otherwise>
-                </c:choose>
+                    
             </div>
         </div>
         

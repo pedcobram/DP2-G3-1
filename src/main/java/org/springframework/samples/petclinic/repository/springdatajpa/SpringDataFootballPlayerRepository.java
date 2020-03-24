@@ -21,7 +21,6 @@ import java.util.Collection;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
-import org.springframework.samples.petclinic.model.FootballClub;
 import org.springframework.samples.petclinic.model.FootballPlayer;
 import org.springframework.samples.petclinic.repository.FootballPlayerRepository;
 
@@ -34,7 +33,7 @@ import org.springframework.samples.petclinic.repository.FootballPlayerRepository
 public interface SpringDataFootballPlayerRepository extends FootballPlayerRepository, Repository<FootballPlayer, Integer> {
 
 	@Override
-	@Query("select fp from FootballPlayer fp order by fp.club.name asc")
+	@Query("select fp from FootballPlayer fp")
 	Collection<FootballPlayer> findAll() throws DataAccessException;
 
 	@Override
@@ -48,8 +47,4 @@ public interface SpringDataFootballPlayerRepository extends FootballPlayerReposi
 	@Override
 	@Query("select fp from FootballPlayer fp where fp.id = ?1")
 	FootballPlayer findById(int id) throws DataAccessException;
-
-	@Override
-	@Query("select fc from FootballClub fc where fc.id = ?1")
-	FootballClub findClubByPlayerId(int id) throws DataAccessException;
 }

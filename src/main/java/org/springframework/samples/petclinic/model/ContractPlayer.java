@@ -8,6 +8,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import com.sun.xml.bind.annotation.OverrideAnnotationOf;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,6 +19,10 @@ import lombok.Setter;
 @Entity
 @Table(name = "contract_player")
 public class ContractPlayer extends Contract {
+
+	@OverrideAnnotationOf
+	@NotNull
+	private FootballClub	club;
 
 	@OneToOne(optional = false)
 	@JoinColumn(name = "football_Players_id")

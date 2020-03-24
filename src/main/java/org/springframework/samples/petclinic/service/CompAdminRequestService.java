@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.CompAdminRequest;
 import org.springframework.samples.petclinic.repository.CompAdminRequestRepository;
+import org.springframework.samples.petclinic.service.exceptions.PendingRequestException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,10 +43,17 @@ public class CompAdminRequestService {
 	}
 
 	public void deleteCompAdminRequest(final CompAdminRequest compAdminRequest) throws DataAccessException {
+		compAdminRequest.setUser(null);
 		this.compAdminRequestRepository.delete(compAdminRequest);
 	}
 
-	public int countCompAdminRequestByUsername(final String username) throws DataAccessException {
+	public int countCompAdminRequestByUsername(final String username) throws DataAccessException, PendingRequestException {
+
+		//RN: Solo una petición pendiente de ser aceptada o rechazada
+		if (this.compAdminRequestRepository.countByUsername(username) > 0) {
+			throw new PendingRequestException();
+		}
+
 		return this.compAdminRequestRepository.countByUsername(username);
 	}
 

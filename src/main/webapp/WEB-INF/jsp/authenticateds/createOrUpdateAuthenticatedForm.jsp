@@ -24,8 +24,8 @@
             <petclinic:inputField label="code.label.dni" name="dni"/>
             <petclinic:inputField label="code.label.email" name="email"/>
             <petclinic:inputField label="code.label.telephone" name="telephone"/>
-            <petclinic:inputField label="Username" name="user.username" readonly="true"/>
-            <petclinic:inputField label="Password" name="user.password" readonly="true"/>
+            <petclinic:inputField label="Username" name="user.username" readonly="${!authenticated['new']}"/>
+            <petclinic:inputField label="Password" name="user.password" readonly="${!authenticated['new']}"/>
           
         </div>
         <div class="form-group">

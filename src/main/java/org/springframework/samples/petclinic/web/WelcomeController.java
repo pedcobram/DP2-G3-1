@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class WelcomeController {
 
 	private final AuthenticatedService	authenticatedService;
+	@SuppressWarnings("unused")
 	private final FootballClubService	footballClubService;
 	private final MatchRecordService	matchService;
 	private final FanService			fanService;

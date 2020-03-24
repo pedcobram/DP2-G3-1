@@ -30,6 +30,11 @@ public class MatchRefereeRequestService {
 	}
 
 	@Transactional(readOnly = true)
+	public Collection<MatchRefereeRequest> findAllMatchRefereeRequests() throws DataAccessException {
+		return this.matchRefereeRequestRepository.findAllMatchRefereeRequests();
+	}
+
+	@Transactional(readOnly = true)
 	public MatchRefereeRequest findMatchRefereeRequestById(final int id) throws DataAccessException {
 		return this.matchRefereeRequestRepository.findById(id);
 	}

@@ -3,11 +3,11 @@ package org.springframework.samples.petclinic.web;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import javax.security.auth.login.CredentialException;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +15,14 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.ContractPlayer;
 import org.springframework.samples.petclinic.model.FootballClub;
 import org.springframework.samples.petclinic.model.FootballPlayer;
-import org.springframework.samples.petclinic.service.ContractService;
+import org.springframework.samples.petclinic.service.ContractPlayerService;
 import org.springframework.samples.petclinic.service.FootballClubService;
 import org.springframework.samples.petclinic.service.FootballPlayerService;
+import org.springframework.samples.petclinic.service.exceptions.DateException;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedNameException;
+import org.springframework.samples.petclinic.service.exceptions.MoneyClubException;
+import org.springframework.samples.petclinic.service.exceptions.NumberOfPlayersAndCoachException;
+import org.springframework.samples.petclinic.service.exceptions.SalaryException;
 import org.springframework.samples.petclinic.web.validators.ContractPlayerValidator;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -34,12 +38,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-public class ContractController {
+public class ContractPlayerController {
 
 	private static final String			VIEWS_CONTRACT_PLAYER_CREATE_OR_UPDATE_FORM	= "contracts/createOrUpdateContractPlayerForm";
 
 	@Autowired
-	private final ContractService		contractService;
+	private final ContractPlayerService		contractService;
 
 	@Autowired
 	private final FootballPlayerService	footballPlayerService;
@@ -49,7 +53,7 @@ public class ContractController {
 
 
 	@Autowired
-	public ContractController(final ContractService contractService, final FootballPlayerService footballPlayerService, final FootballClubService footballClubService) {
+	public ContractPlayerController(final ContractPlayerService contractService, final FootballPlayerService footballPlayerService, final FootballClubService footballClubService) {
 		this.contractService = contractService;
 		this.footballPlayerService = footballPlayerService;
 		this.footballClubService = footballClubService;
@@ -66,8 +70,7 @@ public class ContractController {
 		dataBinder.setDisallowedFields("id");
 	}
 
-	//Vista de la lista de contratos
-	@GetMapping(value = "/contractPlayer/list")
+	@GetMapping(value = "/contractPlayer/list") //LISTA DE MIS CONTRATOS DE JUGADORES
 	public String showContractPlayerList(final Map<String, Object> model) {
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -79,9 +82,7 @@ public class ContractController {
 		}
 
 		List<ContractPlayer> contracts = new ArrayList<>();
-
 		contracts.addAll(this.contractService.findAllPlayerContractsByClubId(footballClub.getId()));
-
 		model.put("contractPlayers", contracts);
 
 		return "contracts/contractPlayerList";
@@ -89,17 +90,24 @@ public class ContractController {
 
 	//Vista de Contrato Detallada de un jugador
 	@GetMapping("/contractPlayer/{footballPlayerId}")
-	public ModelAndView showContractPlayer(@PathVariable("footballPlayerId") final int footballPlayerId) {
+	public ModelAndView showContractPlayer(@PathVariable("footballPlayerId") final int footballPlayerId) throws CredentialException {
+
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
+		FootballClub footballClub = this.footballClubService.findFootballClubByPresident(currentPrincipalName);
+		ContractPlayer contract = this.contractService.findContractPlayerByPlayerId(footballPlayerId);
+
+		if (!contract.getClub().equals(footballClub)) { //SEGURIDAD
+			throw new CredentialException();
+		}
 
 		ModelAndView mav = new ModelAndView("contracts/contractPlayerDetails");
-
 		mav.addObject(this.contractService.findContractPlayerByPlayerId(footballPlayerId));
 
 		return mav;
 	}
 
-	//Crear Contrato de Jugador - Get
-	@GetMapping(value = "/contractPlayer/{footballPlayerId}/new")
+	@GetMapping(value = "/contractPlayer/{footballPlayerId}/new") //FICHAR JUGADOR AGENTE LIBRE - GET
 	public String initCreationForm(final Model model, @PathVariable("footballPlayerId") final int footballPlayerId) throws DataAccessException, DuplicatedNameException {
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -127,12 +135,12 @@ public class ContractController {
 
 		model.addAttribute("startDate", date);
 
-		return ContractController.VIEWS_CONTRACT_PLAYER_CREATE_OR_UPDATE_FORM;
+		return ContractPlayerController.VIEWS_CONTRACT_PLAYER_CREATE_OR_UPDATE_FORM;
 	}
 
-	//Crear Contrato de Jugador - Post
-	@PostMapping(value = "/contractPlayer/{footballPlayerId}/new")
-	public String processCreationForm(@Valid final ContractPlayer contractPlayer, final BindingResult result, @PathVariable("footballPlayerId") final int footballPlayerId, final Model model) throws DataAccessException, DuplicatedNameException {
+	@PostMapping(value = "/contractPlayer/{footballPlayerId}/new") //FICHAR JUGADOR AGENTE LIBRE - POST
+	public String processCreationForm(@Valid final ContractPlayer contractPlayer, final BindingResult result, @PathVariable("footballPlayerId") final int footballPlayerId, final Model model)
+		throws DataAccessException, DuplicatedNameException, MoneyClubException {
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String currentPrincipalName = authentication.getName();
@@ -154,44 +162,33 @@ public class ContractController {
 		model.addAttribute("valor", valor);
 		model.addAttribute("playerName", footballPlayer.getFirstName().toUpperCase() + " " + footballPlayer.getLastName().toUpperCase());
 		model.addAttribute("clubName", thisClub.getName().toUpperCase());
-
-		//Validación número de jugadores
-
-		Collection<FootballPlayer> cp = this.footballPlayerService.findAllClubFootballPlayers(thisClub.getId());
-
-		if (cp.size() >= 7) {
-			result.rejectValue("position", "max7players");
-			return ContractController.VIEWS_CONTRACT_PLAYER_CREATE_OR_UPDATE_FORM;
-		}
+		model.addAttribute("contractPlayer", contractPlayer);
 
 		if (result.hasErrors()) {
-			model.addAttribute("contractPlayer", contractPlayer);
-			return ContractController.VIEWS_CONTRACT_PLAYER_CREATE_OR_UPDATE_FORM;
+			return ContractPlayerController.VIEWS_CONTRACT_PLAYER_CREATE_OR_UPDATE_FORM;
 		} else {
+			try {
 
-			//Validación de salario del jugador
-			if (contractPlayer.getSalary() < salario) {
-				result.rejectValue("salary", "code.error.validator.salaryMin", "required");
-				model.addAttribute("contractPlayer", contractPlayer);
-				return ContractController.VIEWS_CONTRACT_PLAYER_CREATE_OR_UPDATE_FORM;
+				Date moment = new Date(System.currentTimeMillis() - 1);
+				contractPlayer.setClub(thisClub);
+				contractPlayer.setPlayer(footballPlayer);
+				contractPlayer.setStartDate(moment);
+				contractPlayer.setClause(clausula);
+
+				this.contractService.saveContractPlayer(contractPlayer);
+			} catch (NumberOfPlayersAndCoachException e) {
+				result.rejectValue("clause", "max7players", "required");
+				return ContractPlayerController.VIEWS_CONTRACT_PLAYER_CREATE_OR_UPDATE_FORM;
+			} catch (MoneyClubException e) {
+				result.rejectValue("salary", "code.error.validator.salary", "required");
+				return ContractPlayerController.VIEWS_CONTRACT_PLAYER_CREATE_OR_UPDATE_FORM;
+			} catch (SalaryException e) {
+				result.rejectValue("salary", "code.error.validator.salaryPlayer", "required");
+				return ContractPlayerController.VIEWS_CONTRACT_PLAYER_CREATE_OR_UPDATE_FORM;
+			} catch (DateException e) {
+				result.rejectValue("endDate", "code.error.validator.1YearContract", "required");
+				return ContractPlayerController.VIEWS_CONTRACT_PLAYER_CREATE_OR_UPDATE_FORM;
 			}
-
-			//Validación de salario del jugador
-			if (contractPlayer.getSalary() > valor) {
-				result.rejectValue("salary", "code.error.validator.salaryMax", "required");
-				model.addAttribute("contractPlayer", contractPlayer);
-				return ContractController.VIEWS_CONTRACT_PLAYER_CREATE_OR_UPDATE_FORM;
-			}
-
-			footballPlayer.setClub(thisClub);
-
-			Date moment = new Date(System.currentTimeMillis() - 1);
-			contractPlayer.setClub(thisClub);
-			contractPlayer.setPlayer(footballPlayer);
-			contractPlayer.setStartDate(moment);
-			contractPlayer.setClause(clausula);
-
-			this.contractService.saveContractPlayer(contractPlayer);
 
 			//Si todo sale bien vamos a la vista de mi club
 			return "redirect:/contractPlayer/" + footballPlayer.getId();
@@ -200,22 +197,26 @@ public class ContractController {
 
 	//DESPEDIR JUGADOR (BORRAR CONTRATO)
 	@RequestMapping(value = "/contractPlayer/{footballPlayerId}/delete")
-	public String processDeleteForm(@PathVariable("footballPlayerId") final int footballPlayerId) {
+	public String processDeleteForm(@PathVariable("footballPlayerId") final int footballPlayerId) throws CredentialException, DataAccessException, MoneyClubException {
 
 		//Obtenemos el username del usuario actual conectado
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String currentPrincipalName = authentication.getName();
 
-		FootballPlayer thisPlayer = this.footballPlayerService.findFootballPlayerById(footballPlayerId);
-
-		thisPlayer.setClub(null);
-
 		ContractPlayer thisContract = this.contractService.findContractPlayerByPlayerId(footballPlayerId);
 
-		this.contractService.deleteContract(thisContract);
+		if (thisContract.getClub().getPresident().getUser().getUsername() != currentPrincipalName) { //SEGURIDAD
+			throw new CredentialException();
+		}
+
+		try {
+			this.contractService.deleteContract(thisContract);
+		} catch (MoneyClubException e) {
+			return "redirect:/contractPlayer/" + footballPlayerId;
+		}
 
 		//Volvemos a la vista de mi club, en este caso sería la de "club empty"
-		return "redirect:/myfootballClub/" + currentPrincipalName;
+		return "redirect:/footballClubs/myClub/" + currentPrincipalName;
 	}
 
 }

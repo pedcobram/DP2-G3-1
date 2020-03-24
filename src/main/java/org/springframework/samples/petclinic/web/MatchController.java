@@ -140,7 +140,6 @@ public class MatchController {
 		}
 	}
 
-	// TODO: Hacer que se vea create o edit cuando corresponde
 	@GetMapping(value = "/matches/referee/list")
 	public String showReceivedMatchRequestList(final Map<String, Object> model) {
 
@@ -149,7 +148,7 @@ public class MatchController {
 
 		List<Match> matches = new ArrayList<>();
 
-		matches.addAll(this.matchService.findAllMatchRequestsByReferee(currentPrincipalName));
+		matches.addAll(this.matchService.findAllMatchesByReferee(currentPrincipalName));
 
 		model.put("matches", matches);
 

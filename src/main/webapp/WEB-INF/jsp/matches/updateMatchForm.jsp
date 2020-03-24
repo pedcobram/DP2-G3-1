@@ -16,27 +16,27 @@
     <form:form modelAttribute="match" class="form-horizontal" id="add-match-form">
       
        		<div class="form-group has-feedback">
-            <petclinic:inputField label="Title" name="title" readonly="true"/>
-            <petclinic:inputField label="Match Date" name="matchDate"/>
+            <petclinic:inputField label="code.label.matchupdateform.title" name="title" readonly="true"/>
+            <petclinic:inputField label="code.label.matchupdateform.matchdate" name="matchDate"/>
            	<div class="control-group">
-            	<petclinic:selectField label="Stadium;" name="stadium" names="${stadiums}" size="2"/>
+            	<petclinic:selectField label="code.label.matchupdateform.stadium" name="stadium" names="${stadiums}" size="2"/>
             </div>
-            <petclinic:inputField label="Football Club 1" name="footballClub1.name" readonly="true"/>
-            <petclinic:inputField label="Football Club 2" name="footballClub2.name" readonly="true"/>
+            <petclinic:inputField label="code.label.matchupdateform.footballclub.one" name="footballClub1.name" readonly="true"/>
+            <petclinic:inputField label="code.label.matchupdateform.footballclub.two" name="footballClub2.name" readonly="true"/>
             <div class="form-group">
-				<label class="col-sm-2 control-label">Referee:</label>
+				<label class="col-sm-2 control-label"><fmt:message key="code.label.matchupdateform.referee"/></label>
 				<div class="col-sm-10">
 					<div class="form-control" style="background-color: #f1f1f1"> 
 						<c:out value="${match.referee.firstName} ${match.referee.lastName}"/>
 					</div>
 				</div>	
 			</div>
-            <petclinic:inputField label="Status:" name="matchStatus" readonly="true"/>
+            <petclinic:inputField label="code.label.matchupdateform.status" name="matchStatus" readonly="true"/>
             
         	</div>
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
-				<button class="btn btn-default" type="submit"><fmt:message key="submitUpdateMatchForm"/></button>
+				<button class="btn btn-default" type="submit"><fmt:message key="code.button.matchdetails.submit"/></button>
             </div>
         </div>
     </form:form>

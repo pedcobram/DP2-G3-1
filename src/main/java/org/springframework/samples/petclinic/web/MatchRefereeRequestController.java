@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.FootballPlayer;
 import org.springframework.samples.petclinic.model.FootballPlayerMatchStatistic;
-import org.springframework.samples.petclinic.model.FootballPlayers;
 import org.springframework.samples.petclinic.model.Match;
 import org.springframework.samples.petclinic.model.MatchRecord;
 import org.springframework.samples.petclinic.model.MatchRefereeRequest;
@@ -25,6 +24,8 @@ import org.springframework.samples.petclinic.service.MatchRefereeRequestService;
 import org.springframework.samples.petclinic.service.MatchService;
 import org.springframework.samples.petclinic.service.RefereeService;
 import org.springframework.samples.petclinic.service.UserService;
+import org.springframework.samples.petclinic.service.exceptions.IllegalDateException;
+import org.springframework.samples.petclinic.service.exceptions.MatchRecordResultException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -176,7 +177,8 @@ public class MatchRefereeRequestController {
 	}
 
 	@GetMapping(value = "/matchRefereeRequest/list/accept/{username}/{matchId}")
-	public String acceptMatchRefereeRequest(@Valid final MatchRefereeRequest matchRefereeRequest, final BindingResult result, @PathVariable("username") final String username, @PathVariable("matchId") final int matchId) throws DataAccessException {
+	public String acceptMatchRefereeRequest(@Valid final MatchRefereeRequest matchRefereeRequest, final BindingResult result, @PathVariable("username") final String username, @PathVariable("matchId") final int matchId)
+		throws DataAccessException, IllegalDateException, MatchRecordResultException {
 
 		Referee ref = this.refereeService.findRefereeByUsername(username);
 		Match match = this.matchService.findMatchById(matchId);
@@ -199,8 +201,15 @@ public class MatchRefereeRequestController {
 		matchRefereeRequests.addAll(this.matchRefereeRequestService.findAllOnHoldMatchRefereeRequests());
 
 		for (MatchRefereeRequest m : matchRefereeRequests) {
-			if (m.getMatch().getId() == matchId) {
-				this.matchRefereeRequestService.deleteMatchRefereeRequest(m);
+			if (m.getMatch().getId() == matchId && m.getReferee() != ref) {
+
+				m.setId(m.getId());
+				m.setTitle(m.getTitle());
+				m.setStatus(RequestStatus.REFUSE);
+				m.setReferee(m.getReferee());
+				m.setMatch(m.getMatch());
+
+				this.matchRefereeRequestService.saveMatchRefereeRequest(m);
 			}
 		}
 
@@ -214,12 +223,13 @@ public class MatchRefereeRequestController {
 		this.matchRecordService.saveMatchRecord(mr);
 
 		// Añadimos los jugadores al acta
-		FootballPlayers fps = new FootballPlayers();
 
-		fps.getFootballPlayersList().addAll(this.footballPlayerService.findAllClubFootballPlayers(match.getFootballClub1().getId()));
-		fps.getFootballPlayersList().addAll(this.footballPlayerService.findAllClubFootballPlayers(match.getFootballClub2().getId()));
+		List<FootballPlayer> fps = new ArrayList<>();
 
-		for (FootballPlayer fp : fps.getFootballPlayersList()) {
+		fps.addAll(this.footballPlayerService.findAllClubFootballPlayers(match.getFootballClub1().getId()));
+		fps.addAll(this.footballPlayerService.findAllClubFootballPlayers(match.getFootballClub2().getId()));
+
+		for (FootballPlayer fp : fps) {
 			FootballPlayerMatchStatistic fpms = new FootballPlayerMatchStatistic();
 
 			fpms.setAssists(0);
@@ -233,6 +243,7 @@ public class MatchRefereeRequestController {
 
 			this.footballPlayerMatchStatisticService.saveFootballPlayerStatistic(fpms);
 		}
+
 		//
 		return "redirect:/matchRefereeRequest/list/" + username;
 

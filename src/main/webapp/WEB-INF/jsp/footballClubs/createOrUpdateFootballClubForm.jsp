@@ -41,11 +41,19 @@
             <petclinic:inputField label="code.label.stadium" name="stadium"/>
             <petclinic:inputField label="code.label.foundationDate" name="foundationDate" placeholder="yyyy/MM/dd"/>
             
-           <h2> ${Money}</h2> <form:input class="form-control"  value ="100000000" path="money" readonly="true"/>
-           <c:if test="${news}">
+       		<div class="form-group">
+				<label class="col-sm-2 control-label">${Money}</label>
+				<div class="col-sm-10">
+					<div class="form-control" style="background-color: #f1f1f1"> 
+						100.000.000,00 €
+					</div>
+				</div>	
+			</div> 
+           
+           <c:if test="${isNew}">
            ${MoneyInfo}                        
            </c:if>   
-        <c:if test="${footballClub.status == false || publish}"> 
+        <c:if test="${isEditing}"> 
         	<div class="control-group" style="padding: 10px">
             	<petclinic:selectField name="status" label="code.label.status" names="${status}" size="2"/>
             </div>
@@ -56,7 +64,7 @@
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
                 <c:choose>
-                    <c:when test="${news}">
+                    <c:when test="${isNew}">
                         <button class="btn btn-default" type="submit">${createClub}</button>
                     </c:when>
                     <c:otherwise>

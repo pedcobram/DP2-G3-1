@@ -16,6 +16,8 @@ public interface FootballPlayerStatisticRepository {
 
 	FootballPlayerStatistic findFootballPlayerStatisticByPlayerId(int player_id) throws DataAccessException;
 
+	int count() throws DataAccessException;
+
 	void save(FootballPlayerStatistic footballPlayerStatistics) throws DataAccessException;
 
 	void delete(FootballPlayerStatistic footballPlayerStatistics) throws DataAccessException;

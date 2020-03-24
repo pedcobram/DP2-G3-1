@@ -21,8 +21,8 @@ public interface SpringDataFootballPlayerMatchStatisticsRepository extends Footb
 	Collection<FootballPlayerMatchStatistic> findAllFootballPlayerMatchStatisticsBySeason(@Param("season_start") String season_start, @Param("season_end") String season_end) throws DataAccessException;
 
 	@Override
-	@Query("SELECT a FROM FootballPlayerMatchStatistic a WHERE a.matchRecord.id =:match_id")
-	Collection<FootballPlayerMatchStatistic> findFootballPlayerMatchStatisticByMatchId(@Param("match_id") int match_id) throws DataAccessException;
+	@Query("SELECT a FROM FootballPlayerMatchStatistic a WHERE a.matchRecord.id =:match_record_id")
+	Collection<FootballPlayerMatchStatistic> findFootballPlayerMatchStatisticByMatchRecordId(@Param("match_record_id") int match_record_id) throws DataAccessException;
 
 	@Override
 	@Query("SELECT a FROM FootballPlayerMatchStatistic a WHERE a.id =:id")
