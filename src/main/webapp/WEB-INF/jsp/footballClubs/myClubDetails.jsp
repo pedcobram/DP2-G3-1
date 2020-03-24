@@ -117,7 +117,10 @@
     		<p style="margin-top:0.5%; margin-left: 28%">${RegisterCoachInfo}</p>
     	</c:if>    
     	
-    	
+    
+    <security:authorize access="hasAnyAuthority('president')">
+        <spring:url value="/myfootballClub/delete" var="addUrl"></spring:url>
+    	<a href="${fn:escapeXml(addUrl)}" onclick="return confirm('ARE YOU SURE?')" class="btn btn-default2"><fmt:message key="deleteClub"/></a>
     </security:authorize>
 
     <br/>

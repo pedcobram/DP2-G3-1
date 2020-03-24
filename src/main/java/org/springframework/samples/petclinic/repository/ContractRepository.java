@@ -20,6 +20,7 @@ import java.util.Collection;
 
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Contract;
+import org.springframework.samples.petclinic.model.ContractCommercial;
 import org.springframework.samples.petclinic.model.ContractPlayer;
 
 public interface ContractRepository {
@@ -27,6 +28,20 @@ public interface ContractRepository {
 	Collection<Contract> findAll() throws DataAccessException;
 
 	Contract findById(int id) throws DataAccessException;
+
+	void save(ContractCommercial contractCommercial) throws DataAccessException;
+
+	void delete(Contract contract) throws DataAccessException;
+
+	Collection<ContractCommercial> findAllCommercialContracts() throws DataAccessException;
+
+	Collection<ContractCommercial> findAllCommercialContractsByClubId(int id) throws DataAccessException;
+
+	ContractCommercial findContractCommercialById(int id) throws DataAccessException;
+
+	void save(ContractPlayer contractPlayer) throws DataAccessException;
+
+	Collection<ContractPlayer> findAllPlayerContracts() throws DataAccessException;
 
 	ContractPlayer findContractPlayerById(int id) throws DataAccessException;
 

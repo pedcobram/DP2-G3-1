@@ -65,6 +65,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
       .antMatchers("/myfootballClub/**").hasAnyAuthority("president")
       .antMatchers("/footballPlayer/new").hasAnyAuthority("president")
       .antMatchers("/contractPlayer/**").hasAnyAuthority("president")
+      .antMatchers("/contractsCommercial/**").hasAnyAuthority("president")
       .anyRequest().denyAll().and().formLogin()
 			/* .loginPage("/login") */
 			.failureUrl("/login-error").and().logout().logoutSuccessUrl("/")

@@ -104,6 +104,10 @@ INSERT INTO matches(id, title, match_date, match_status, stadium, football_Club1
 INSERT INTO match_referee_request(id, title, status, username, match_id) VALUES(1, 'Test title 1', 0, 'referee1', 3);
 INSERT INTO match_referee_request(id, title, status, username, match_id) VALUES(2, 'Test title 2', 0, 'referee2', 3);    
 
+-- Contract Commercial
+INSERT INTO contract_Commercial(id,end_contract_clause,end_date,start_date,money,publicity) VALUES (1, 1000,'2023-01-01','2013-01-01',100000,'https://e00-marca.uecdn.es/assets/sports/logos/football/png/144x144/179.png');
+INSERT INTO contract_Commercial(id,end_contract_clause,end_date,start_date,money,publicity) VALUES (2, 1000,'2020-01-01','2010-01-01',100000,'https://e00-marca.uecdn.es/assets/sports/logos/football/png/144x144/186.png');
+
 -- Coachs
 INSERT INTO coachs(id, first_name, last_name, football_Clubs_id, salary, clause, birth_date) VALUES (1, 'Julen', 'Lopetegui', 1, '3000000', '6000000', '1968-03-29' );
 INSERT INTO coachs(id, first_name, last_name, football_Clubs_id, salary, clause, birth_date) VALUES (2, 'Zinedine', 'Zidane', 2, '6000000', '10000000', '1970-03-27' );
