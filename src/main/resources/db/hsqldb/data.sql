@@ -265,3 +265,6 @@ INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_card
 INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(62, 0, 0, 0, 0, null, 2019, 2020, 62);
 INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(63, 0, 0, 0, 0, null, 2019, 2020, 63);
 INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(64, 0, 0, 0, 0, null, 2019, 2020, 64);
+
+
+INSERT INTO fan VALUES ( 1, null, null, null, false, 1, 3 );

@@ -17,6 +17,7 @@ import org.springframework.samples.petclinic.service.FanService;
 import org.springframework.samples.petclinic.service.FootballClubService;
 import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedFanUserException;
+import org.springframework.samples.petclinic.service.exceptions.DuplicatedNameException;
 import org.springframework.samples.petclinic.web.validators.CreditCardValidator;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -46,7 +47,7 @@ public class FanController {
 	}
 
 	@GetMapping(value = "/footballClub/{clubId}/fan/new")
-	public String initCreationForm(@PathVariable final Integer clubId, final Map<String, Object> model) {
+	public String initCreationForm(@PathVariable final Integer clubId, final Map<String, Object> model) throws DataAccessException, DuplicatedNameException {
 		model.put("isNew", true);
 
 		//Obtenemos el username actual conectado
@@ -79,7 +80,7 @@ public class FanController {
 	//NUEVO VIP
 
 	@PostMapping(value = "/footballClub/{clubId}/fan/new")
-	public String processCreationForm(@PathVariable final Integer clubId, @Valid final Fan f, final BindingResult result, final Map<String, Object> model) throws DataAccessException {
+	public String processCreationForm(@PathVariable final Integer clubId, @Valid final Fan f, final BindingResult result, final Map<String, Object> model) throws DataAccessException, DuplicatedNameException {
 
 		//Validamos tarjeta
 		CreditCardValidator ccValid = new CreditCardValidator();
@@ -172,7 +173,8 @@ public class FanController {
 	}
 
 	@PostMapping(value = "/footballClub/noVip")
-	public String processUpdateFanForm(@Valid final Fan f, @PathParam("userId") final int userId, @PathParam("clubId") final int clubId, final BindingResult result, final Map<String, Object> model) throws DataAccessException, DuplicatedFanUserException {
+	public String processUpdateFanForm(@Valid final Fan f, @PathParam("userId") final int userId, @PathParam("clubId") final int clubId, final BindingResult result, final Map<String, Object> model)
+		throws DataAccessException, DuplicatedFanUserException, DuplicatedNameException {
 
 		//Validamos tarjeta
 		CreditCardValidator ccValid = new CreditCardValidator();
@@ -202,7 +204,7 @@ public class FanController {
 	}
 	//Borrar Club
 	@RequestMapping(value = "/footballClub/fan/delete")
-	public String processDeleteForm() {
+	public String processDeleteForm() throws DataAccessException, DuplicatedNameException {
 
 		//Obtenemos el username actual conectado
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

@@ -10,8 +10,10 @@ import javax.validation.constraints.NotNull;
 import org.springframework.samples.petclinic.datatypes.CreditCard;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
+@EqualsAndHashCode(callSuper = false)
 @Entity
 public class Fan extends BaseEntity {
 
