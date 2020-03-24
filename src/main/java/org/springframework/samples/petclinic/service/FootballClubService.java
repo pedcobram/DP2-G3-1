@@ -39,14 +39,13 @@ import org.springframework.util.StringUtils;
 @Service
 public class FootballClubService {
 
-	@Autowired
 	private FootballClubRepository	footRepository;
 
 	@Autowired
 	private FootballPlayerService	footballPlayerService;
 
 	@Autowired
-	private ContractPlayerService			contractService;
+	private ContractPlayerService	contractService;
 
 	@Autowired
 	private CoachService			coachService;

@@ -34,7 +34,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class PresidentService {
 
-	@Autowired
 	private PresidentRepository		presidentRepository;
 
 	@Autowired

@@ -26,7 +26,6 @@ import org.springframework.util.StringUtils;
 @Service
 public class CoachService {
 
-	@Autowired
 	private CoachRepository coachRepository;
 
 
