@@ -115,7 +115,9 @@
     		<spring:url value="/coachs/new" var="coachsNewUrl"></spring:url>
     		<a style="margin-left: 5%" href="${fn:escapeXml(coachsNewUrl)}" class="btn btn-default">${RegisterCoach}</a>
     		<p style="margin-top:0.5%; margin-left: 28%">${RegisterCoachInfo}</p>
-    	</c:if>    
+    	</c:if>   
+    	
+    </security:authorize>
     	
     
     <security:authorize access="hasAnyAuthority('president')">

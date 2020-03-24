@@ -22,44 +22,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Contract;
 import org.springframework.samples.petclinic.model.ContractCommercial;
-import org.springframework.samples.petclinic.model.ContractPlayer;
 import org.springframework.samples.petclinic.repository.ContractRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class ContractService {
+public class ContractCommercialService {
 
 	private ContractRepository contractRepository;
 
 
 	@Autowired
-	public ContractService(final ContractRepository contractRepository) {
+	public ContractCommercialService(final ContractRepository contractRepository) {
 		this.contractRepository = contractRepository;
 
-	}
-
-	//Buscar todos los contratos de jugadores
-	@Transactional(readOnly = true)
-	public Collection<ContractPlayer> findAllPlayerContracts() throws DataAccessException {
-		return this.contractRepository.findAllPlayerContracts();
-	}
-
-	//Buscar contrato de jugador por id
-	@Transactional(readOnly = true)
-	public ContractPlayer findContractPlayerById(final int id) throws DataAccessException {
-		return this.contractRepository.findContractPlayerById(id);
-	}
-
-	//Buscar contrato de jugador por id del jugador
-	@Transactional(readOnly = true)
-	public ContractPlayer findContractPlayerByPlayerId(final int playerId) throws DataAccessException {
-		return this.contractRepository.findContractPlayerByPlayerId(playerId);
-	}
-
-	@Transactional
-	public void saveContractPlayer(final ContractPlayer contractPlayer) {
-		this.contractRepository.save(contractPlayer);
 	}
 
 	//Buscar todos los contratos de comerciales
@@ -84,6 +60,7 @@ public class ContractService {
 		this.contractRepository.save(contractCommercial);
 	}
 
+	@Transactional
 	public void deleteContract(final Contract contract) throws DataAccessException {
 		this.contractRepository.delete(contract);
 	}
