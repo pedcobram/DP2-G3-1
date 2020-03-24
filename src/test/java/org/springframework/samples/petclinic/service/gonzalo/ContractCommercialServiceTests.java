@@ -18,6 +18,8 @@ import org.springframework.samples.petclinic.model.ContractCommercial;
 import org.springframework.samples.petclinic.model.FootballClub;
 import org.springframework.samples.petclinic.service.ContractCommercialService;
 import org.springframework.samples.petclinic.service.FootballClubService;
+import org.springframework.samples.petclinic.service.exceptions.NoMultipleContractCommercialException;
+import org.springframework.samples.petclinic.service.exceptions.NoStealContractCommercialException;
 import org.springframework.stereotype.Service;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
@@ -37,9 +39,9 @@ class ContractCommercialServiceTests {
 	}
 
 	@Test
-	void shouldFindAllCommercialContractsByClub() {
-		Collection<ContractCommercial> contracts = this.contractService.findAllCommercialContractsByClubId(1);
-		Assertions.assertTrue(contracts.isEmpty());
+	void shouldFindCommercialContractByClubId() {
+		ContractCommercial contract = this.contractService.findCommercialContractByClubId(1);
+		Assertions.assertTrue(contract == null);
 	}
 
 	@Test //CASO POSITIVO - Encontrar contrato commercial
@@ -61,7 +63,7 @@ class ContractCommercialServiceTests {
 	}
 
 	@Test //CASO POSITIVO - Guardar contrato commercial
-	void shouldSaveContractCommercial() {
+	void shouldSaveContractCommercial() throws NoMultipleContractCommercialException, DataAccessException, NoStealContractCommercialException {
 		Collection<ContractCommercial> contracts = this.contractService.findAllCommercialContracts();
 		int cantidadIni = contracts.size();
 
@@ -83,7 +85,7 @@ class ContractCommercialServiceTests {
 	}
 
 	@Test //CASO NEGATIVO - Guardar contrato commercial
-	void should_NOT_SaveContractCommercial() {
+	void should_NOT_SaveContractCommercial_1() {
 		//New contract
 		Date date = new Date(System.currentTimeMillis() - 1);
 		LocaleContextHolder.setLocale(Locale.ENGLISH);
@@ -100,20 +102,28 @@ class ContractCommercialServiceTests {
 		});
 	}
 
-	@Test //CASO POSITIVO - Eliminar contrato commercial
-	void shouldDeleteContractCommercial() {
-		ContractCommercial contract = this.contractService.findContractCommercialById(1);
-		Assertions.assertTrue(contract != null);
+	@Test //CASO NEGATIVO - Guardar contrato commercial
+	void should_NOT_SaveContractCommercial_2() {
+		//New contract
+		Date date = new Date(System.currentTimeMillis() - 1);
+		LocaleContextHolder.setLocale(Locale.ENGLISH);
+		ContractCommercial cc = new ContractCommercial();
 
-		//Eliminamos
-		this.contractService.deleteContract(contract);
+		FootballClub myClub = this.footballClubService.findFootballClubById(1);
 
-		ContractCommercial contractAfter = this.contractService.findContractCommercialById(1);
-		Assertions.assertTrue(contractAfter == null);
+		cc.setClub(myClub);
+		cc.setClause(100000);
+		cc.setStartDate(date);
+		cc.setEndDate(date);
+		cc.setPublicity("https://www.imagen.com.mx/assets/img/imagen_share.png");
+
+		Assertions.assertThrows(ConstraintViolationException.class, () -> {
+			this.contractService.saveContractCommercial(cc);
+		});
 	}
 
 	@Test //CASO POSITIVO - Eliminar un club deberia dejar todos los contractos commerciales con Club_id == null
-	void shouldNullifyClubIDWhileDeletingAClub() throws DataAccessException {
+	void shouldNullifyClubIDWhileDeletingAClub() throws NoMultipleContractCommercialException, DataAccessException, NoStealContractCommercialException {
 
 		FootballClub myClub = this.footballClubService.findFootballClubById(1);
 		Assertions.assertTrue(myClub != null); //Vemos que existe
@@ -132,10 +142,10 @@ class ContractCommercialServiceTests {
 
 		this.footballClubService.deleteFootballClub(myClub); //Eliminamos el club
 
-		Collection<ContractCommercial> contractsAfterDeleteClub = this.contractService.findAllCommercialContractsByClubId(myClub.getId());
+		ContractCommercial contractAfterDeleteClub = this.contractService.findContractCommercialById(1);
 
 		//Comprobamos que el club_id es null despues de elimnar el club
-		Assertions.assertTrue(contractsAfterDeleteClub.isEmpty());
+		Assertions.assertTrue(contractAfterDeleteClub.getClub() == null);
 	}
 
 }

@@ -35,7 +35,7 @@ public interface ContractRepository {
 
 	Collection<ContractCommercial> findAllCommercialContracts() throws DataAccessException;
 
-	Collection<ContractCommercial> findAllCommercialContractsByClubId(int id) throws DataAccessException;
+	ContractCommercial findCommercialContractByClubId(int id) throws DataAccessException;
 
 	ContractCommercial findContractCommercialById(int id) throws DataAccessException;
 

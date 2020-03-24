@@ -42,57 +42,55 @@ class ContractCommercialValidatorTests {
 
 		Assertions.assertTrue(constraintViolations.size() == 1);
 		ConstraintViolation<ContractCommercial> violation = constraintViolations.iterator().next();
-		Assertions.assertTrue(violation.getPropertyPath().toString() == "startDate");
-		Assertions.assertTrue(violation.getMessage() == "must not be null");
+		Assertions.assertTrue(violation.getPropertyPath().toString().equals("startDate"));
+		Assertions.assertTrue(violation.getMessage().equals("must not be null"));
 	}
 
-	/*
-	 * @Test
-	 * void shouldNotValidateWhenEndDateNull() {
-	 *
-	 * Date date = new Date(System.currentTimeMillis() - 1);
-	 * //Testing Contract
-	 * LocaleContextHolder.setLocale(Locale.ENGLISH);
-	 * ContractCommercial cc = new ContractCommercial();
-	 *
-	 * cc.setClause(100000);
-	 * cc.setMoney(10000);
-	 * cc.setStartDate(date);
-	 * cc.setEndDate(null);
-	 * cc.setPublicity("https://www.imagen.com.mx/assets/img/imagen_share.png");
-	 *
-	 * Validator validator = this.createValidator();
-	 * Set<ConstraintViolation<ContractCommercial>> constraintViolations = validator.validate(cc);
-	 *
-	 * Assertions.assertTrue(constraintViolations.size()).isEqualTo(1);
-	 * ConstraintViolation<ContractCommercial> violation = constraintViolations.iterator().next();
-	 * Assertions.assertTrue(violation.getPropertyPath().toString()).isEqualTo("endDate");
-	 * Assertions.assertTrue(violation.getMessage()).isEqualTo("must not be null");
-	 * }
-	 *
-	 * @Test
-	 * void shouldNotValidateWhenClauseNull() {
-	 *
-	 * Date date = new Date(System.currentTimeMillis() - 1);
-	 * //Testing Contract
-	 * LocaleContextHolder.setLocale(Locale.ENGLISH);
-	 * ContractCommercial cc = new ContractCommercial();
-	 *
-	 * cc.setClause(null);
-	 * cc.setMoney(10000);
-	 * cc.setStartDate(date);
-	 * cc.setEndDate(date);
-	 * cc.setPublicity("https://www.imagen.com.mx/assets/img/imagen_share.png");
-	 *
-	 * Validator validator = this.createValidator();
-	 * Set<ConstraintViolation<ContractCommercial>> constraintViolations = validator.validate(cc);
-	 *
-	 * Assertions.assertTrue(constraintViolations.size()).isEqualTo(1);
-	 * ConstraintViolation<ContractCommercial> violation = constraintViolations.iterator().next();
-	 * Assertions.assertTrue(violation.getPropertyPath().toString()).isEqualTo("clause");
-	 * Assertions.assertTrue(violation.getMessage()).isEqualTo("must not be null");
-	 * }
-	 */
+	@Test
+	void shouldNotValidateWhenEndDateNull() {
+
+		Date date = new Date(System.currentTimeMillis() - 1);
+		//Testing Contract
+		LocaleContextHolder.setLocale(Locale.ENGLISH);
+		ContractCommercial cc = new ContractCommercial();
+
+		cc.setClause(100000);
+		cc.setMoney(10000);
+		cc.setStartDate(date);
+		cc.setEndDate(null);
+		cc.setPublicity("https://www.imagen.com.mx/assets/img/imagen_share.png");
+
+		Validator validator = this.createValidator();
+		Set<ConstraintViolation<ContractCommercial>> constraintViolations = validator.validate(cc);
+
+		Assertions.assertTrue(constraintViolations.size() == 1);
+		ConstraintViolation<ContractCommercial> violation = constraintViolations.iterator().next();
+		Assertions.assertTrue(violation.getPropertyPath().toString().equals("endDate"));
+		Assertions.assertTrue(violation.getMessage().equals("must not be null"));
+	}
+
+	@Test
+	void shouldNotValidateWhenClauseNull() {
+
+		Date date = new Date(System.currentTimeMillis() - 1);
+		//Testing Contract
+		LocaleContextHolder.setLocale(Locale.ENGLISH);
+		ContractCommercial cc = new ContractCommercial();
+
+		cc.setClause(null);
+		cc.setMoney(10000);
+		cc.setStartDate(date);
+		cc.setEndDate(date);
+		cc.setPublicity("https://www.imagen.com.mx/assets/img/imagen_share.png");
+
+		Validator validator = this.createValidator();
+		Set<ConstraintViolation<ContractCommercial>> constraintViolations = validator.validate(cc);
+
+		Assertions.assertTrue(constraintViolations.size() == 1);
+		ConstraintViolation<ContractCommercial> violation = constraintViolations.iterator().next();
+		Assertions.assertTrue(violation.getPropertyPath().toString().equals("clause"));
+		Assertions.assertTrue(violation.getMessage().equals("must not be null"));
+	}
 
 	@Test
 	void shouldNotValidateWhenMoneyNull() {
@@ -113,34 +111,32 @@ class ContractCommercialValidatorTests {
 
 		Assertions.assertTrue(constraintViolations.size() == 1);
 		ConstraintViolation<ContractCommercial> violation = constraintViolations.iterator().next();
-		Assertions.assertTrue(violation.getPropertyPath().toString() == "money");
-		Assertions.assertTrue(violation.getMessage() == "must not be null");
+		Assertions.assertTrue(violation.getPropertyPath().toString().equals("money"));
+		Assertions.assertTrue(violation.getMessage().equals("must not be null"));
 	}
 
-	/*
-	 * @Test
-	 * void shouldNotValidateWhenPublicityNull() {
-	 *
-	 * Date date = new Date(System.currentTimeMillis() - 1);
-	 * //Testing Contract
-	 * LocaleContextHolder.setLocale(Locale.ENGLISH);
-	 * ContractCommercial cc = new ContractCommercial();
-	 *
-	 * cc.setClause(100000);
-	 * cc.setMoney(10000);
-	 * cc.setStartDate(date);
-	 * cc.setEndDate(date);
-	 * cc.setPublicity(null);
-	 *
-	 * Validator validator = this.createValidator();
-	 * Set<ConstraintViolation<ContractCommercial>> constraintViolations = validator.validate(cc);
-	 *
-	 * Assertions.assertTrue(constraintViolations.size()).isEqualTo(1);
-	 * ConstraintViolation<ContractCommercial> violation = constraintViolations.iterator().next();
-	 * Assertions.assertTrue(violation.getPropertyPath().toString()).isEqualTo("publicity");
-	 * Assertions.assertTrue(violation.getMessage()).isEqualTo("must not be null");
-	 * }
-	 */
+	@Test
+	void shouldNotValidateWhenPublicityNull() {
+
+		Date date = new Date(System.currentTimeMillis() - 1);
+		//Testing Contract
+		LocaleContextHolder.setLocale(Locale.ENGLISH);
+		ContractCommercial cc = new ContractCommercial();
+
+		cc.setClause(100000);
+		cc.setMoney(10000);
+		cc.setStartDate(date);
+		cc.setEndDate(date);
+		cc.setPublicity(null);
+
+		Validator validator = this.createValidator();
+		Set<ConstraintViolation<ContractCommercial>> constraintViolations = validator.validate(cc);
+
+		Assertions.assertTrue(constraintViolations.size() == 1);
+		ConstraintViolation<ContractCommercial> violation = constraintViolations.iterator().next();
+		Assertions.assertTrue(violation.getPropertyPath().toString().equals("publicity"));
+		Assertions.assertTrue(violation.getMessage().equals("must not be null"));
+	}
 
 	@Test
 	void shouldValidateWell() {

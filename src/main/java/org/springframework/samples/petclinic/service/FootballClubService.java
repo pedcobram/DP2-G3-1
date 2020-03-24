@@ -153,10 +153,11 @@ public class FootballClubService {
 				this.contractPlayerService.deleteContractDeletingClub(a);
 			}
 
-			Collection<ContractCommercial> contractsCommercial = this.contractCommercialService.findAllCommercialContractsByClubId(footballClub.getId());
-			for (ContractCommercial a : contractsCommercial) {
-				a.setClub(null);
-				this.contractCommercialService.saveContractCommercial(a);
+			try {
+				ContractCommercial cc = this.contractCommercialService.findCommercialContractByClubId(footballClub.getId());
+				cc.setClub(null);
+				this.contractCommercialService.saveContractCommercial(cc);
+			} catch (Exception e) {
 			}
 
 			Collection<FootballPlayer> players = this.footballPlayerService.findAllClubFootballPlayers(footballClub.getId());
