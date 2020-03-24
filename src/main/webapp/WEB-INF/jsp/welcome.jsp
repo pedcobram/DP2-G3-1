@@ -25,6 +25,8 @@
     <c:if test="${isFan}"> 
     <a href="/footballClub/fan/delete" class="btn btn-default">
     					 <fmt:message key="deleteVip"/></a>
+    					 
+    
     </c:if>
     
 </petclinic:layout>

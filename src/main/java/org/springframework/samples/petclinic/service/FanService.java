@@ -17,6 +17,7 @@ public class FanService {
 
 	private FanRepository		fanRepository;
 
+	@Autowired
 	private FootballClubService	clubService;
 
 
@@ -37,9 +38,9 @@ public class FanService {
 				this.fanRepository.save(f);
 			}
 		} else {
-			//FootballClub c = this.clubService.findFootballClubById(f.getClub().getId());
-			//c.setFans(c.getFans() + 1);
-			//this.clubService.saveFootballClub(c);
+			//			FootballClub c = f.getClub();
+			//			c.setFans(c.getFans() + 1);
+			//			this.clubService.saveFootballClub(c);
 			this.fanRepository.save(f);
 		}
 
@@ -49,14 +50,16 @@ public class FanService {
 		return this.fanRepository.existsByUserId(auId);
 	}
 
+	@Transactional()
 	public Fan findByUserId(final Integer id) {
 
 		return this.fanRepository.findByUserId(id);
 	}
 
-	public void delete(final Fan f) throws DataAccessException, DuplicatedNameException {
+	@Transactional()
+	public void delete(@Valid final Fan f) throws DataAccessException, DuplicatedNameException {
 
-		//		FootballClub c = this.clubService.findFootballClubById(f.getClub().getId());
+		//		FootballClub c = f.getClub();
 		//		c.setFans(c.getFans() - 1);
 		//		this.clubService.saveFootballClub(c);
 
