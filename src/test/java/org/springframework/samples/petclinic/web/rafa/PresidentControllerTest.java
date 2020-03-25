@@ -50,7 +50,7 @@ public class PresidentControllerTest {
 		user.setEnabled(true);
 
 		this.rufus = new President();
-		this.rufus.setId(99);
+		this.rufus.setId(1);
 		this.rufus.setFirstName("Rufus");
 		this.rufus.setLastName("Shinra");
 		this.rufus.setDni("12345678H");
@@ -60,56 +60,128 @@ public class PresidentControllerTest {
 		BDDMockito.given(this.presidentService.findPresidentByUsername("rufus")).willReturn(this.rufus);
 	}
 
-	@WithMockUser(username = "ignacio", authorities = {
-		"authenticated"
-	})
+	@WithMockUser(username = "rufus")
+	
 	@Test //CASO POSITIVO - LA CREACIÓN DE UN PRESIDENTE NO TIENE GET
 	void testCreationFormSuccess() throws Exception {
 		this.mockMvc.perform(MockMvcRequestBuilders.post("/presidents/new")
-			.param("firstName", "Rufus").param("lastName", "Shinra")
 			.with(SecurityMockMvcRequestPostProcessors.csrf())
-			.param("email", "rufus@shinra.com").param("dni", "12345678H").param("telephone", "600766899"))
+			.param("firstName", "Rufus")
+			.param("lastName", "Shinra")
+			.param("email", "rufus@shinra.com")
+			.param("dni", "12345678H")
+			.param("telephone", "600766899"))
 		.andExpect(MockMvcResultMatchers.status().isOk());
 	}
-	/**
-	 * @WithMockUser(username = "rafa", authorities = {
-	 *                        "authenticated"
-	 *                        })
-	 * 
-	 * @Test //LA CREACIÓN DE UN PRESIDENTE NO TIENE GET
-	 *       void testCreationFormHasErrors() throws Exception {
-	 *       this.mockMvc.perform(
-	 *       post("/presidents/new").param("firstName", "Rufus").param("lastName", "Shinra").with(csrf())
-	 *       .param("dni", "12345678H"))
-	 *       .andExpect(status().isOk())
-	 *       .andExpect(model().attributeHasErrors("president"))
-	 *       .andExpect(model().attributeHasFieldErrors("president", "email"))
-	 *       .andExpect(model().attributeHasFieldErrors("president", "telephone"));
-	 *       }
-	 * 
-	 **/
-	@WithMockUser(username = "rafa", authorities = {
-		"president"
-	})
-
-	@Test
-	void testShowPresident() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/presidents/{presidentUsername}", "rafa")).andExpect(MockMvcResultMatchers.status().isOk())
-			.andExpect(MockMvcResultMatchers.model().attribute("president", Matchers.hasProperty("lastName", Matchers.is("Liébana Fuentes"))))
-			.andExpect(MockMvcResultMatchers.model().attribute("president", Matchers.hasProperty("firstName", Matchers.is("Rafael")))).andExpect(MockMvcResultMatchers.model().attribute("president", Matchers.hasProperty("dni", Matchers.is("11111111A"))))
-			.andExpect(MockMvcResultMatchers.model().attribute("president", Matchers.hasProperty("email", Matchers.is("rafliefue@alum.us.es"))))
-			.andExpect(MockMvcResultMatchers.model().attribute("president", Matchers.hasProperty("telephone", Matchers.is("600111222")))).andExpect(MockMvcResultMatchers.view().name("presidents/presidentDetails"));
+	
+	@Test //CASO NEGATIVO - CREAR PRESIDENTE sin user conectado
+	void testCreationFormSuccessError() throws Exception {
+		this.mockMvc.perform(MockMvcRequestBuilders.post("/presidents/new")
+			.with(SecurityMockMvcRequestPostProcessors.csrf())
+			.param("firstName", "Rufus")
+			.param("lastName", "Shinra")
+			.param("email", "rufus@shinra.com")
+			.param("dni", "12345678H")
+			.param("telephone", "600766899"))
+		.andExpect(MockMvcResultMatchers.status().is4xxClientError());
 	}
-
-	@WithMockUser(username = "rafa", authorities = {
-		"president"
-	})
-	@Test
+	
+	@WithMockUser(username = "rufus")
+	
+	@Test //CASO POSITIVO - GET - EDITAR PRESIDENTE
 	void testInitUpdatePresidentForm() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/presidents/{presidentUsername}/edit", "rafa")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("president"))
-			.andExpect(MockMvcResultMatchers.model().attribute("president", Matchers.hasProperty("lastName", Matchers.is("Liébana Fuentes"))))
-			.andExpect(MockMvcResultMatchers.model().attribute("president", Matchers.hasProperty("firstName", Matchers.is("Rafael")))).andExpect(MockMvcResultMatchers.model().attribute("president", Matchers.hasProperty("dni", Matchers.is("11111111A"))))
-			.andExpect(MockMvcResultMatchers.model().attribute("president", Matchers.hasProperty("email", Matchers.is("rafliefue@alum.us.es"))))
-			.andExpect(MockMvcResultMatchers.model().attribute("president", Matchers.hasProperty("telephone", Matchers.is("600111222")))).andExpect(MockMvcResultMatchers.view().name("presidents/createOrUpdatePresidentForm"));
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/presidents/{presidentUsername}/edit", "rufus"))
+			.andExpect(MockMvcResultMatchers.status().isOk())
+			.andExpect(MockMvcResultMatchers.model().attributeExists("president"))
+			.andExpect(MockMvcResultMatchers.model().attribute("president", Matchers.hasProperty("id", Matchers.is(1))))
+			.andExpect(MockMvcResultMatchers.model().attribute("president", Matchers.hasProperty("lastName", Matchers.is("Shinra"))))
+			.andExpect(MockMvcResultMatchers.model().attribute("president", Matchers.hasProperty("firstName", Matchers.is("Rufus"))))
+			.andExpect(MockMvcResultMatchers.model().attribute("president", Matchers.hasProperty("dni", Matchers.is("12345678H"))))
+			.andExpect(MockMvcResultMatchers.model().attribute("president", Matchers.hasProperty("email", Matchers.is("rufus@shinra.com"))))
+			.andExpect(MockMvcResultMatchers.model().attribute("president", Matchers.hasProperty("telephone", Matchers.is("608551023"))))
+			.andExpect(MockMvcResultMatchers.view().name("presidents/createOrUpdatePresidentForm"))
+			.andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/presidents/createOrUpdatePresidentForm.jsp"));
 	}
+	
+	@Test //CASO NEGATIVO - GET - EDITAR PRESIDENTE sin user
+	void testInitUpdatePresidentFormError() throws Exception {
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/presidents/{presidentUsername}/edit", "rufus"))
+		.andExpect(MockMvcResultMatchers.status().is4xxClientError());
+	}
+	 
+	@WithMockUser(username = "rufus")
+	
+	 @Test //CASO POSITIVO - POST - EDITAR PRESIDENTE
+		void testProcessUpdateFormSuccess() throws Exception {
+			mockMvc.perform(MockMvcRequestBuilders.post("/presidents/{presidentUsername}/edit", "rufus")
+								.with(SecurityMockMvcRequestPostProcessors.csrf())
+								.param("firstName", "RufusEdit")
+								.param("lastName", "ShinraEdit")
+								.param("dni", "88888888H")
+								.param("email", "rufusEdit@shinra.com")
+								.param("telephone", "888888888")
+								.param("user.username", "rufus")
+								.param("user.password", "shinraEdit"))
+					.andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+					.andExpect(MockMvcResultMatchers.view().name("redirect:/presidents/rufus"));
+		}
+	
+	@WithMockUser(username = "rufus")	
+	
+	@Test //CASO NEGATIVO - POST - EDITAR PRESIDENTE quitando el parámetro del nombre
+	void testProcessUpdateFormHasErrors() throws Exception {
+		mockMvc.perform(MockMvcRequestBuilders.post("/presidents/{presidentUsername}/edit", "rufus")
+							.with(SecurityMockMvcRequestPostProcessors.csrf())
+							.param("lastName", "ShinraEdit")
+							.param("dni", "88888888H")
+							.param("email", "rufusEdit@shinra.com")
+							.param("telephone", "888888888")
+							.param("user.username", "rufus")
+							.param("user.password", "shinraEdit"))
+				.andExpect(MockMvcResultMatchers.model().attributeHasErrors("president"))
+				.andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(MockMvcResultMatchers.view().name("presidents/createOrUpdatePresidentForm"))
+				.andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/presidents/createOrUpdatePresidentForm.jsp"));
+		}
+	
+	@WithMockUser(username = "rufus")
+	
+	@Test //CASO POSITIVO - BORRAR PRESIDENTE
+	void testDeletePresident() throws Exception {
+		mockMvc.perform(MockMvcRequestBuilders.get("/presidents/delete"))
+				.andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+				.andExpect(MockMvcResultMatchers.view().name("redirect:/myProfile/rufus"));			
+	}
+	
+	@Test //CASO NEGATIVO - BORRAR PRESIDENTE
+	void testDeletePresidentError() throws Exception {
+		mockMvc.perform(MockMvcRequestBuilders.get("/presidents/delete"))
+		.andExpect(MockMvcResultMatchers.status().is4xxClientError());			
+	}
+		
+	@WithMockUser(username = "rufus")
+
+	@Test // CASO POSITIVO - VER PRESIDENTE DETALLADAMENTE
+	void testShowPresident() throws Exception {
+	
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/presidents/{presidentUsername}", "rufus"))
+			.andExpect(MockMvcResultMatchers.status().isOk())
+			.andExpect(MockMvcResultMatchers.model().attribute("president", Matchers.hasProperty("id", Matchers.is(1))))
+			.andExpect(MockMvcResultMatchers.model().attribute("president", Matchers.hasProperty("lastName", Matchers.is("Shinra"))))
+			.andExpect(MockMvcResultMatchers.model().attribute("president", Matchers.hasProperty("firstName", Matchers.is("Rufus"))))
+			.andExpect(MockMvcResultMatchers.model().attribute("president", Matchers.hasProperty("dni", Matchers.is("12345678H"))))
+			.andExpect(MockMvcResultMatchers.model().attribute("president", Matchers.hasProperty("email", Matchers.is("rufus@shinra.com"))))
+			.andExpect(MockMvcResultMatchers.model().attribute("president", Matchers.hasProperty("telephone", Matchers.is("608551023"))))
+			.andExpect(MockMvcResultMatchers.view().name("presidents/presidentDetails"))
+			.andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/presidents/presidentDetails.jsp"));
+	}
+	
+	@Test //CASO NEGATIVO - VER PRESIDENTE DETALLADAMENTE
+	void testShowPresidentError() throws Exception {
+			 mockMvc.perform(MockMvcRequestBuilders.get("/presidents/{presidentUsername}", "rufus"))
+			.andExpect(MockMvcResultMatchers.status().is4xxClientError());
+				
+	}
+
+	
 }

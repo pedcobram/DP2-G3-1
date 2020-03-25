@@ -95,15 +95,14 @@ public class FootballClubController {
 	@GetMapping("/footballClubs/list/{footballClubId}") //VISTA DETALLADA DE EQUIPO
 	public ModelAndView showFootballClub(@PathVariable("footballClubId") final int footballClubId) {
 
-		ModelAndView mav = new ModelAndView("footballClubs/footballClubDetails");
-
-		mav.addObject(this.footballClubService.findFootballClubById(footballClubId));
-		mav.addObject(this.footballClubService.findCoachByClubId(footballClubId));
-
 		//Quitamos el botón si no tiene equipo o no está público no puede hacer peticiones de partidos
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String currentPrincipalName = authentication.getName();
 		FootballClub footballClub1 = this.footballClubService.findFootballClubByPresident(currentPrincipalName);
+
+		ModelAndView mav = new ModelAndView("footballClubs/footballClubDetails");
+		mav.addObject(this.footballClubService.findCoachByClubId(footballClubId));
+		mav.addObject(this.footballClubService.findFootballClubById(footballClubId));
 
 		if (footballClub1 == null || footballClub1.getStatus() == false) {
 			mav.addObject("notHasAPublishedTeam", true);
