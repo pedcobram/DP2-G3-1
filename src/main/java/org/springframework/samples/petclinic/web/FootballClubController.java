@@ -185,11 +185,12 @@ public class FootballClubController {
 	}
 
 	@GetMapping(value = "/footballClubs/myClub/{principalUsername}/edit") //EDITAR CLUB - GET
-	public String initUpdateFootballClubForm(@PathVariable("principalUsername") final String principalUsername, final Model model) throws CredentialException {
+	public String initUpdateFootballClubForm(@PathVariable("principalUsername") final String principalUsername, final Map<String, Object> model) throws CredentialException {
 
 		FootballClub footballClub = this.footballClubService.findFootballClubByPresident(principalUsername);
-		model.addAttribute(footballClub);
-		model.addAttribute("isEditing", true);
+
+		model.put("footballClub", footballClub);
+		model.put("isEditing", true);
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String currentPrincipalName = authentication.getName();

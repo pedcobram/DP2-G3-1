@@ -43,7 +43,7 @@ public class ContractPlayerController {
 	private static final String			VIEWS_CONTRACT_PLAYER_CREATE_OR_UPDATE_FORM	= "contracts/createOrUpdateContractPlayerForm";
 
 	@Autowired
-	private final ContractPlayerService		contractService;
+	private final ContractPlayerService	contractService;
 
 	@Autowired
 	private final FootballPlayerService	footballPlayerService;

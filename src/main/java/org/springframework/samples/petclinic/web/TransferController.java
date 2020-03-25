@@ -24,13 +24,10 @@ import org.springframework.web.bind.annotation.InitBinder;
 @Controller
 public class TransferController {
 
-	@Autowired
 	private final FootballClubService	footballClubService;
 
-	@Autowired
 	private final FootballPlayerService	footballPlayerService;
 
-	@Autowired
 	private final CoachService			coachService;
 
 
