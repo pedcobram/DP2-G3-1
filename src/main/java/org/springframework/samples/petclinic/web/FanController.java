@@ -46,7 +46,7 @@ public class FanController {
 
 	}
 
-	@GetMapping(value = "/footballClub/{clubId}/fan/new")
+	@GetMapping(value = "/fan/{clubId}/new")
 	public String initCreationForm(@PathVariable final Integer clubId, final Map<String, Object> model) throws DataAccessException, DuplicatedNameException {
 		model.put("isNew", true);
 
@@ -79,7 +79,7 @@ public class FanController {
 
 	//NUEVO VIP
 
-	@PostMapping(value = "/footballClub/{clubId}/fan/new")
+	@PostMapping(value = "/fan/{clubId}/new")
 	public String processCreationForm(@PathVariable final Integer clubId, @Valid final Fan f, final BindingResult result, final Map<String, Object> model) throws DataAccessException, DuplicatedNameException {
 
 		//Validamos tarjeta
@@ -119,38 +119,9 @@ public class FanController {
 		}
 	}
 
-	//NUEVO NO VIP
-
-	//	@GetMapping(value = "/footballClub/{clubId}/createFanNoVip")
-	//	public String createFanNoVip(@PathVariable final Integer clubId) throws DataAccessException, DuplicatedFanUserException {
-	//
-	//		//Obtenemos el username actual conectado
-	//		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-	//		String currentPrincipalName = authentication.getName();
-	//
-	//		//Creamos el fan
-	//		Fan f = new Fan();
-	//
-	//		//Obtenemos el authenticated actual conectado
-	//		Authenticated thisUser = this.authenticatedService.findAuthenticatedByUsername(currentPrincipalName);
-	//
-	//		//Obtenemos el club del que quiere ser fan
-	//		FootballClub club = this.footballClubService.findFootballClubById(clubId);
-	//
-	//		//Añadimos los datos del user y el club al fan
-	//		f.setClub(club);
-	//		f.setUser(thisUser);
-	//
-	//		//Guardamos en la db el nuevo presidente
-	//		this.fanService.saveFan(f);
-	//
-	//		//Redirigimos a la vista welcome
-	//		return "redirect:/";
-	//	}
-
 	//EDIT TO VIP
 
-	@GetMapping(value = "/footballClub/noVip")
+	@GetMapping(value = "/fan/noVip")
 	public String initUpdateFanForm(final Map<String, Object> model) {
 		model.put("isNew", false);
 
@@ -172,7 +143,7 @@ public class FanController {
 		return FanController.VIEWS_FAN_CREATE_OR_UPDATE_FORM;
 	}
 
-	@PostMapping(value = "/footballClub/noVip")
+	@PostMapping(value = "/fan/noVip")
 	public String processUpdateFanForm(@Valid final Fan f, @PathParam("userId") final int userId, @PathParam("clubId") final int clubId, final BindingResult result, final Map<String, Object> model)
 		throws DataAccessException, DuplicatedFanUserException, DuplicatedNameException {
 
@@ -203,7 +174,7 @@ public class FanController {
 		}
 	}
 	//Borrar Club
-	@RequestMapping(value = "/footballClub/fan/delete")
+	@RequestMapping(value = "/fan/delete")
 	public String processDeleteForm() throws DataAccessException, DuplicatedNameException {
 
 		//Obtenemos el username actual conectado

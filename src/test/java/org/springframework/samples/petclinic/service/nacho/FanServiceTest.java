@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.dao.DataAccessException;
-import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.samples.petclinic.datatypes.CreditCard;
 import org.springframework.samples.petclinic.model.Authenticated;
 import org.springframework.samples.petclinic.model.Fan;
@@ -33,14 +32,14 @@ public class FanServiceTest {
 	@Test //CASO POSITIVO
 	void shouldExistFan() {
 
-		Boolean b = this.fanService.existFan(3);
+		Boolean b = this.fanService.existFan(1);
 
 		Assertions.assertTrue(b);
 	}
 	@Test //CASO NEGATIVO
 	void shouldNotExistFan() {
 
-		Boolean b = this.fanService.existFan(1);
+		Boolean b = this.fanService.existFan(3);
 
 		Assertions.assertFalse(b);
 	}
@@ -51,7 +50,7 @@ public class FanServiceTest {
 		Fan f = new Fan();
 
 		FootballClub c = this.footballClubService.findFootballClubById(1);
-		Authenticated au = this.authenticathedService.findAuthenticatedById(1);
+		Authenticated au = this.authenticathedService.findAuthenticatedById(3);
 
 		f.setClub(c);
 		f.setUser(au);
@@ -68,8 +67,8 @@ public class FanServiceTest {
 
 		Fan f = new Fan();
 
-		FootballClub c = this.footballClubService.findFootballClubById(1);
-		Authenticated au = this.authenticathedService.findAuthenticatedById(1);
+		FootballClub c = this.footballClubService.findFootballClubById(2);
+		Authenticated au = this.authenticathedService.findAuthenticatedById(3);
 		CreditCard cc = new CreditCard();
 		cc.setCvv("325");
 		cc.setCreditCardNumber("5789456123547854");
@@ -100,8 +99,8 @@ public class FanServiceTest {
 
 		Fan f = new Fan();
 
-		FootballClub c = this.footballClubService.findFootballClubById(2);
-		Authenticated au = this.authenticathedService.findAuthenticatedById(3);
+		FootballClub c = this.footballClubService.findFootballClubById(1);
+		Authenticated au = this.authenticathedService.findAuthenticatedById(1);
 
 		f.setClub(c);
 		f.setUser(au);
@@ -114,7 +113,7 @@ public class FanServiceTest {
 	@Test //CASO POSITIVO
 	void shouldFindFanByUserId() {
 
-		Fan f = this.fanService.findByUserId(3);
+		Fan f = this.fanService.findByUserId(1);
 
 		Assertions.assertTrue(f != null);
 	}
@@ -129,7 +128,7 @@ public class FanServiceTest {
 	@Test //CASO POSITIVO
 	void shouldDeleteFan() throws DataAccessException, DuplicatedNameException {
 
-		Fan f = this.fanService.findByUserId(3);
+		Fan f = this.fanService.findByUserId(1);
 		this.fanService.delete(f);
 
 		boolean b = this.fanService.existFan(f.getUser().getId());
@@ -138,9 +137,9 @@ public class FanServiceTest {
 	@Test //CASO NEGATIVO
 	void shouldNotDeleteFan() throws DataAccessException, DuplicatedNameException {
 
-		Fan f = this.fanService.findByUserId(6);
+		Fan f = new Fan();
 
-		Assertions.assertThrows(InvalidDataAccessApiUsageException.class, () -> {
+		Assertions.assertThrows(NullPointerException.class, () -> {
 			this.fanService.delete(f);
 		});
 	}

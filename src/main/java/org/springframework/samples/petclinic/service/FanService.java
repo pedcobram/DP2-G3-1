@@ -28,16 +28,21 @@ public class FanService {
 	@Transactional(rollbackFor = DuplicatedFanUserException.class)
 	public void saveFan(@Valid final Fan f) throws DataAccessException, DuplicatedFanUserException, DuplicatedNameException {
 		Fan otherf = this.findByUserId(f.getUser().getId());
+		FootballClub c = f.getClub();
 		if (otherf != null) {
 			if (this.existFan(f.getUser().getId()) && f.getId() != otherf.getId()) {
 				throw new DuplicatedFanUserException();
 			} else {
+				if (f.isVip()) {
+					c.setMoney(c.getMoney() + 500);
+				}
 				this.fanRepository.save(f);
 			}
 		} else {
-			FootballClub c = f.getClub();
 			c.setFans(c.getFans() + 1);
-
+			if (f.isVip()) {
+				c.setMoney(c.getMoney() + 500);
+			}
 			this.fanRepository.save(f);
 		}
 
