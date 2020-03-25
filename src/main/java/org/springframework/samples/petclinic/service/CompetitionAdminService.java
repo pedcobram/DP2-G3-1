@@ -8,6 +8,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Authenticated;
 import org.springframework.samples.petclinic.model.CompetitionAdmin;
 import org.springframework.samples.petclinic.repository.CompetitionAdminRepository;
+import org.springframework.samples.petclinic.service.exceptions.DuplicatedNameException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -58,7 +59,7 @@ public class CompetitionAdminService {
 	}
 
 	@Transactional()
-	public void deleteCompetitionAdmin(final CompetitionAdmin competitionAdmin) throws DataAccessException {
+	public void deleteCompetitionAdmin(final CompetitionAdmin competitionAdmin) throws DataAccessException, DuplicatedNameException {
 
 		Authenticated newAuth = new Authenticated();
 

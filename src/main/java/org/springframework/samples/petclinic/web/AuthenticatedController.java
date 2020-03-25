@@ -22,10 +22,12 @@ import java.util.Map;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Authenticated;
 import org.springframework.samples.petclinic.service.AuthenticatedService;
 import org.springframework.samples.petclinic.service.AuthoritiesService;
 import org.springframework.samples.petclinic.service.UserService;
+import org.springframework.samples.petclinic.service.exceptions.DuplicatedNameException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -66,12 +68,19 @@ public class AuthenticatedController {
 	@PostMapping(value = "/authenticateds/new")
 	public String processCreationForm(@Valid final Authenticated authenticated, final BindingResult result) {
 		if (result.hasErrors()) {
+
 			return AuthenticatedController.VIEWS_AUTHENTICATED_CREATE_OR_UPDATE_FORM;
 		} else {
 			//creating authenticated, user and authorities
-			this.authenticatedService.saveAuthenticated(authenticated);
+			try {
+				this.authenticatedService.saveAuthenticated(authenticated);
+				return "redirect:/authenticateds/" + authenticated.getId();
+			} catch (DataAccessException | DuplicatedNameException e) {
+				result.rejectValue("user.username", "duplicate");
 
-			return "redirect:/authenticateds/" + authenticated.getId();
+				return AuthenticatedController.VIEWS_AUTHENTICATED_CREATE_OR_UPDATE_FORM;
+			}
+
 		}
 	}
 
@@ -124,7 +133,11 @@ public class AuthenticatedController {
 			authenticated.setId(authenticatedId);
 			authenticated.getUser().setEnabled(true);
 
-			this.authenticatedService.saveAuthenticated(authenticated);
+			try {
+				this.authenticatedService.saveAuthenticated(authenticated);
+			} catch (DataAccessException | DuplicatedNameException e) {
+				result.rejectValue("username", "duplicate");
+			}
 			return "redirect:/myProfile/" + currentPrincipalName;
 		}
 	}

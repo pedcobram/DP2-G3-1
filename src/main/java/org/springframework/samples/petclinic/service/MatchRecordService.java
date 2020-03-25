@@ -1,6 +1,8 @@
 
 package org.springframework.samples.petclinic.service;
 
+import java.util.Collection;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.MatchRecord;
@@ -36,10 +38,7 @@ public class MatchRecordService {
 	public void saveMatchRecord(final MatchRecord matchRecord) throws IllegalDateException, MatchRecordResultException {
 
 		// RN: Fecha de inicio de temporada menor que fecha de finalizacion
-		if (matchRecord.getSeason_start() != null 
-			&& matchRecord.getSeason_end() != null 
-			&& !matchRecord.getSeason_start().isEmpty() 
-			&& !matchRecord.getSeason_end().isEmpty()
+		if (matchRecord.getSeason_start() != null && matchRecord.getSeason_end() != null && !matchRecord.getSeason_start().isEmpty() && !matchRecord.getSeason_end().isEmpty()
 			&& Integer.parseInt(matchRecord.getSeason_end()) <= Integer.parseInt(matchRecord.getSeason_start())) {
 			throw new IllegalDateException();
 		}
@@ -55,6 +54,10 @@ public class MatchRecordService {
 	@Transactional()
 	public void deleteMatchRecord(final MatchRecord matchRecord) {
 		this.matchRecordRepository.delete(matchRecord);
+	}
+	public Collection<MatchRecord> findLastMatches(final int id) {
+
+		return this.matchRecordRepository.findLastMatches(id);
 	}
 
 }
