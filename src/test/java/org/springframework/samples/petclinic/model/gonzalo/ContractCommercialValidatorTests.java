@@ -24,7 +24,7 @@ class ContractCommercialValidatorTests {
 	}
 
 	@Test
-	void shouldNotValidateWhenStartDateNull() {
+	void should_NOT_ValidateWhenStartDateNull() {
 
 		Date date = new Date(System.currentTimeMillis() - 1);
 		//Testing Contract
@@ -47,7 +47,7 @@ class ContractCommercialValidatorTests {
 	}
 
 	@Test
-	void shouldNotValidateWhenEndDateNull() {
+	void should_NOT_ValidateWhenEndDateNull() {
 
 		Date date = new Date(System.currentTimeMillis() - 1);
 		//Testing Contract
@@ -70,7 +70,7 @@ class ContractCommercialValidatorTests {
 	}
 
 	@Test
-	void shouldNotValidateWhenClauseNull() {
+	void should_NOT_ValidateWhenClauseNull() {
 
 		Date date = new Date(System.currentTimeMillis() - 1);
 		//Testing Contract
@@ -93,7 +93,7 @@ class ContractCommercialValidatorTests {
 	}
 
 	@Test
-	void shouldNotValidateWhenMoneyNull() {
+	void should_NOT_ValidateWhenMoneyNull() {
 
 		Date date = new Date(System.currentTimeMillis() - 1);
 		//Testing Contract
@@ -116,7 +116,7 @@ class ContractCommercialValidatorTests {
 	}
 
 	@Test
-	void shouldNotValidateWhenPublicityNull() {
+	void should_NOT_ValidateWhenPublicityNull() {
 
 		Date date = new Date(System.currentTimeMillis() - 1);
 		//Testing Contract

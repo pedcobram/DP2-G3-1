@@ -31,6 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class ContractCommercialService {
 
+	@Autowired
 	private ContractRepository contractRepository;
 
 
@@ -63,20 +64,23 @@ public class ContractCommercialService {
 	public void saveContractCommercial(final ContractCommercial contractCommercial) throws DataAccessException, NoMultipleContractCommercialException, NoStealContractCommercialException {
 		//Existe contrato commercial con este club
 		Collection<ContractCommercial> contracts = this.contractRepository.findAllCommercialContracts();
-
 		//Si se encuentra un contrato diferente con el mismo club(no null) .... Exception
 		if (!contracts.stream().filter(x -> x.getClub() != null && x.getId() != contractCommercial.getId() && x.getClub() == contractCommercial.getClub()).collect(Collectors.toList()).isEmpty()) {
 			throw new NoMultipleContractCommercialException();
 		}
 
-		//Si el contrato commercial ya existe
 		try {
-			ContractCommercial cAhora = this.contractRepository.findContractCommercialById(contractCommercial.getId());
-
-			//Si el contrato no pasa de null a NoNull, de NoNull a null o de null a null significa que ha cambiado de club sin que termine el contrato....Exception
-			if (cAhora.getClub() != null && contractCommercial.getClub() != null && cAhora.getClub() != contractCommercial.getClub()) {
+			//Si el el nuevo no tiene club NullPointerException
+			int idClubNuevo = contractCommercial.getClub().getId();
+			//Si el el viejo no tiene club o el contrato es nuevo NullPointerException
+			int idClubViejo = this.contractRepository.findContractCommercialById(contractCommercial.getId()).getClub().getId();
+			//Si no son nulos y son diferentes significa que intentan cambiar de club sin terminar contrato
+			if (idClubNuevo != idClubViejo) {
 				throw new NoStealContractCommercialException();
+			} else { //Si el contrato no es nuevo y tiene el mismo Club no null significa que ha cambiado otra cosa y eso esta permitido
+				this.contractRepository.save(contractCommercial);
 			}
+
 		} catch (NullPointerException e) {
 			//Si captura un null pointer exception significa que el contrato es nuevo
 			// y como ha superado el NoMultipleContractException es seguro guardarlo

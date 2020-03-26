@@ -5,8 +5,6 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Locale;
 
-import javax.validation.ConstraintViolationException;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,25 +36,30 @@ class ContractCommercialServiceTests {
 		Assertions.assertTrue(contracts.size() == 2);
 	}
 
-	@Test
-	void shouldFindCommercialContractByClubId() {
+	@Test //CASO POSITIVO - Encontrar contrato commercial por id de club
+	void shouldFindCommercialContractByClubId() throws DataAccessException, NoMultipleContractCommercialException, NoStealContractCommercialException {
+		FootballClub myClub = this.footballClubService.findFootballClubById(1);
+		ContractCommercial cc = this.contractService.findContractCommercialById(1);
+		cc.setClub(myClub);
+		this.contractService.saveContractCommercial(cc);
+
 		ContractCommercial contract = this.contractService.findCommercialContractByClubId(1);
-		Assertions.assertTrue(contract == null);
+		Assertions.assertTrue(contract != null);
 	}
 
-	@Test //CASO POSITIVO - Encontrar contrato commercial
-	void shouldFindContractCommercialById_1() {
+	@Test //CASO NEGATIVO - Encontrar contrato commercial por id de club
+	void should_NOT_FindCommercialContractByClubId() {
+		ContractCommercial contract = this.contractService.findCommercialContractByClubId(1);
+		Assertions.assertFalse(contract != null);
+	}
+
+	@Test //CASO POSITIVO - Encontrar contrato commercial por id
+	void shouldFindContractCommercialById() {
 		ContractCommercial c1 = this.contractService.findContractCommercialById(1);
 		Assertions.assertTrue(c1 != null);
 	}
 
-	@Test //CASO POSITIVO - Encontrar contrato commercial
-	void shouldFindContractCommercialById_2() {
-		ContractCommercial c1 = this.contractService.findContractCommercialById(2);
-		Assertions.assertTrue(c1 != null);
-	}
-
-	@Test //CASO NEGATIVO - Encontrar contrato commercial
+	@Test //CASO NEGATIVO - Encontrar contrato commercial por id
 	void should_NOT_FindContractCommercialById() {
 		ContractCommercial c1 = this.contractService.findContractCommercialById(50);
 		Assertions.assertFalse(c1 != null);
@@ -84,26 +87,39 @@ class ContractCommercialServiceTests {
 		Assertions.assertTrue(contracts.size() == cantidadIni + 1);
 	}
 
-	@Test //CASO NEGATIVO - Guardar contrato commercial
-	void should_NOT_SaveContractCommercial_1() {
-		//New contract
+	@Test //CASO NEGATIVO - Guardar segundo contrato commercial de un mismo club
+	void should_NOT_SaveContractCommercial_1() throws DataAccessException, NoMultipleContractCommercialException, NoStealContractCommercialException {
 		Date date = new Date(System.currentTimeMillis() - 1);
 		LocaleContextHolder.setLocale(Locale.ENGLISH);
-		ContractCommercial cc = new ContractCommercial();
+		ContractCommercial cc1 = new ContractCommercial();
 
-		cc.setClause(null);
-		cc.setMoney(10000);
-		cc.setStartDate(date);
-		cc.setEndDate(date);
-		cc.setPublicity("https://www.imagen.com.mx/assets/img/imagen_share.png");
+		FootballClub myClub = this.footballClubService.findFootballClubById(1);
 
-		Assertions.assertThrows(ConstraintViolationException.class, () -> {
-			this.contractService.saveContractCommercial(cc);
+		cc1.setClub(myClub);
+		cc1.setClause(100000);
+		cc1.setMoney(10000);
+		cc1.setStartDate(date);
+		cc1.setEndDate(date);
+		cc1.setPublicity("https://www.imagen.com.mx/assets/img/imagen_share.png");
+
+		this.contractService.saveContractCommercial(cc1);
+
+		ContractCommercial cc2 = new ContractCommercial();
+
+		cc2.setClub(myClub);
+		cc2.setClause(100000);
+		cc2.setMoney(10000);
+		cc2.setStartDate(date);
+		cc2.setEndDate(date);
+		cc2.setPublicity("https://www.imagen.com.mx/assets/img/imagen_share.png");
+
+		Assertions.assertThrows(NoMultipleContractCommercialException.class, () -> {
+			this.contractService.saveContractCommercial(cc2);
 		});
 	}
 
-	@Test //CASO NEGATIVO - Guardar contrato commercial
-	void should_NOT_SaveContractCommercial_2() {
+	@Test //CASO NEGATIVO - Guardar otro club en el contrato sin que el primero haya terminado el contrato (null)
+	void should_NOT_SaveContractCommercial_2() throws DataAccessException, NoMultipleContractCommercialException, NoStealContractCommercialException {
 		//New contract
 		Date date = new Date(System.currentTimeMillis() - 1);
 		LocaleContextHolder.setLocale(Locale.ENGLISH);
@@ -113,12 +129,25 @@ class ContractCommercialServiceTests {
 
 		cc.setClub(myClub);
 		cc.setClause(100000);
+		cc.setMoney(10000);
 		cc.setStartDate(date);
 		cc.setEndDate(date);
 		cc.setPublicity("https://www.imagen.com.mx/assets/img/imagen_share.png");
 
-		Assertions.assertThrows(ConstraintViolationException.class, () -> {
-			this.contractService.saveContractCommercial(cc);
+		this.contractService.saveContractCommercial(cc);
+
+		ContractCommercial ccclone = new ContractCommercial();
+		FootballClub myClub2 = this.footballClubService.findFootballClubById(2);
+		ccclone.setId(cc.getId());
+		ccclone.setClub(myClub2);
+		ccclone.setClause(100000);
+		ccclone.setMoney(10000);
+		ccclone.setStartDate(date);
+		ccclone.setEndDate(date);
+		ccclone.setPublicity("https://www.imagen.com.mx/assets/img/imagen_share.png");
+
+		Assertions.assertThrows(NoStealContractCommercialException.class, () -> {
+			this.contractService.saveContractCommercial(ccclone);
 		});
 	}
 
