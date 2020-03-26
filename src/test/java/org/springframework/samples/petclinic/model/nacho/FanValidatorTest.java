@@ -21,7 +21,7 @@ class FanValidatorTest {
 		return localValidatorFactoryBean;
 	}
 	@Test
-	void shouldNotValidateWhenVIPNull() {
+	void shouldValidate() {
 
 		LocaleContextHolder.setLocale(Locale.ENGLISH);
 		Fan f = new Fan();
@@ -29,10 +29,10 @@ class FanValidatorTest {
 		Validator validator = this.createValidator();
 		Set<ConstraintViolation<Fan>> constraintViolations = validator.validate(f);
 
-		Assertions.assertThat(constraintViolations.size()).isEqualTo(5);
-		ConstraintViolation<Fan> violation = constraintViolations.iterator().next();
-		Assertions.assertThat(violation.getPropertyPath().toString()).isEqualTo("vip");
-		Assertions.assertThat(violation.getMessage()).isEqualTo("must not be null");
+		Assertions.assertThat(constraintViolations.size()).isEqualTo(0);
+		//		ConstraintViolation<Fan> violation = constraintViolations.iterator().next();
+		//		Assertions.assertThat(violation.getPropertyPath().toString()).isEqualTo("vip");
+		//		Assertions.assertThat(violation.getMessage()).isEqualTo("must not be null");
 	}
 
 }
