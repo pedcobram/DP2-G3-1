@@ -20,7 +20,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
  * and open the template in the editor.
  */
 
-
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
@@ -70,8 +69,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
       .antMatchers("/contractsCommercial/**").hasAnyAuthority("president")
       .anyRequest().denyAll().and().formLogin()
 			/* .loginPage("/login") */
-			.failureUrl("/login-error").and().logout().logoutSuccessUrl("/")
-			.and().exceptionHandling().accessDeniedPage("/exception/forbidden");
+			.failureUrl("/login-error").and().logout().logoutSuccessUrl("/").and().exceptionHandling().accessDeniedPage("/exception/forbidden");
 		// Configuración para que funcione la consola de administración
 		// de la BD H2 (deshabilitar las cabeceras de protección contra
 		// ataques de tipo csrf y habilitar los framesets si su contenido

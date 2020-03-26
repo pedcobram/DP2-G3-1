@@ -36,10 +36,10 @@ public class CreditCardValidator implements Validator {
 			//Expirated
 			String[] exdate = ccDate.split("/");
 
-			LocalDate date = LocalDate.of(Integer.parseInt(exdate[1]), Integer.parseInt(exdate[0]), 01);
+			LocalDate date = LocalDate.of(2000 + Integer.parseInt(exdate[1]), Integer.parseInt(exdate[0]), 01);
 			LocalDate today = LocalDate.now();
 
-			if (date.isAfter(today)) {
+			if (date.isBefore(today)) {
 				errors.rejectValue("creditCard.expirationDate", "code.validator.creditCard.datePast");
 			}
 		}

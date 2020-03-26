@@ -38,7 +38,7 @@ public interface SpringDataContractRepository extends ContractRepository, Reposi
 
 	@Override
 	@Query("Select c from ContractCommercial c where c.club.id = ?1")
-	Collection<ContractCommercial> findAllCommercialContractsByClubId(int id) throws DataAccessException;
+	ContractCommercial findCommercialContractByClubId(int id) throws DataAccessException;
 
 	@Override
 	@Query("Select c from ContractPlayer c")

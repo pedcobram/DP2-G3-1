@@ -6,10 +6,13 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.ContractCommercial;
 import org.springframework.samples.petclinic.model.FootballClub;
 import org.springframework.samples.petclinic.service.ContractCommercialService;
 import org.springframework.samples.petclinic.service.FootballClubService;
+import org.springframework.samples.petclinic.service.exceptions.NoMultipleContractCommercialException;
+import org.springframework.samples.petclinic.service.exceptions.NoStealContractCommercialException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -22,10 +25,8 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class ContractCommercialController {
 
-	private static final String			VIEWS_CONTRACT_COMMERCIAL_CREATE_OR_UPDATE_FORM	= "contracts/createOrUpdateContractCommercialForm";
-
-	private final ContractCommercialService		contractService;
-	private final FootballClubService	footballClubService;
+	private final ContractCommercialService	contractService;
+	private final FootballClubService		footballClubService;
 
 
 	@Autowired
@@ -57,23 +58,6 @@ public class ContractCommercialController {
 		return "contracts/contractCommercialList";
 	}
 
-	//Vista de la lista de jugadores
-	@GetMapping(value = "/footballClub/{footballClubId}/contractsCommercial")
-	public String showContractCommercialByClub(@PathVariable("footballClubId") final int footballClubId, final Map<String, Object> model) {
-
-		//Creamos una colección de jugadores
-		List<ContractCommercial> contracts = new ArrayList<>();
-
-		//La llenamos con todos los equipos de la db
-		contracts.addAll(this.contractService.findAllCommercialContractsByClubId(footballClubId));
-
-		//Ponemos en el modelo la colección de equipos
-		model.put("contractsCommercial", contracts);
-
-		//Mandamos a la vista de listado de equipos
-		return "contracts/contractCommercialList";
-	}
-
 	//Vista de Contrato Detallada de un commercial
 	@GetMapping(value = "/contractsCommercial/{contractCommercialId}")
 	public ModelAndView showContractCommercial(@PathVariable("contractCommercialId") final int contractCommercialId) {
@@ -96,7 +80,7 @@ public class ContractCommercialController {
 
 	//Crear Contrato de Comercial - Get
 	@GetMapping(value = "/contractsCommercial/{contractCommercialId}/addToMyClub")
-	public String addContractToMyClub(@PathVariable("contractCommercialId") final int contractCommercialId) {
+	public String addContractToMyClub(@PathVariable("contractCommercialId") final int contractCommercialId) throws DataAccessException, NoMultipleContractCommercialException, NoStealContractCommercialException {
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String currentPrincipalName = authentication.getName();
@@ -108,11 +92,11 @@ public class ContractCommercialController {
 
 		this.contractService.saveContractCommercial(contractCommercial);
 
-		return "redirect:/myfootballClub/" + currentPrincipalName;
+		return "redirect:/footballClubs/myClub/" + currentPrincipalName;
 	}
 
 	@GetMapping(value = "/contractsCommercial/{contractCommercialId}/removeFromMyClub")
-	public String removeContractFromMyClub(@PathVariable("contractCommercialId") final int contractCommercialId) {
+	public String removeContractFromMyClub(@PathVariable("contractCommercialId") final int contractCommercialId) throws DataAccessException, NoMultipleContractCommercialException, NoStealContractCommercialException {
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String currentPrincipalName = authentication.getName();
@@ -123,7 +107,7 @@ public class ContractCommercialController {
 
 		this.contractService.saveContractCommercial(contractCommercial);
 
-		return "redirect:/myfootballClub/" + currentPrincipalName;
+		return "redirect:/footballClubs/myClub/" + currentPrincipalName;
 	}
 
 }
