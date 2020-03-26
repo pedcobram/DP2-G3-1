@@ -25,6 +25,7 @@ import org.springframework.samples.petclinic.model.Authenticated;
 import org.springframework.samples.petclinic.model.President;
 import org.springframework.samples.petclinic.service.AuthenticatedService;
 import org.springframework.samples.petclinic.service.PresidentService;
+import org.springframework.samples.petclinic.service.exceptions.DuplicatedNameException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -87,7 +88,7 @@ public class PresidentController {
 	}
 
 	@RequestMapping(value = "/presidents/delete") //BORRAR PRESIDENTE
-	public String deletePresident() throws DataAccessException, CredentialException {
+	public String deletePresident() throws DataAccessException, CredentialException, DuplicatedNameException {
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String currentPrincipalName = authentication.getName();

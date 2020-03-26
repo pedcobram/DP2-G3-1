@@ -8,10 +8,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Authenticated;
 import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.service.AuthenticatedService;
+import org.springframework.samples.petclinic.service.exceptions.DuplicatedNameException;
 import org.springframework.stereotype.Service;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
@@ -66,7 +67,7 @@ public class AuthenticatedServiceTest {
 	}
 
 	@Test //CASO POSITIVO
-	void shouldSaveAutheticated() {
+	void shouldSaveAutheticated() throws DataAccessException, DuplicatedNameException {
 
 		Authenticated au = new Authenticated();
 		User us = new User();
@@ -106,13 +107,9 @@ public class AuthenticatedServiceTest {
 
 	@Test //CASO NEGATIVO
 	void shouldNotSaveAutheticatedUser() {
-
+		Authenticated au1 = this.authenticathedService.findAuthenticatedByUsername("ignacio");
 		Authenticated au = new Authenticated();
-		User us = new User();
-
-		us.setUsername("ignacio");
-		us.setPassword("ignacio");
-		us.setEnabled(true);
+		User us = au1.getUser();
 
 		au.setUser(us);
 		au.setDni("30246584T");
@@ -121,18 +118,27 @@ public class AuthenticatedServiceTest {
 		au.setLastName("Muñoz");
 		au.setTelephone("954789568");
 
-		Assertions.assertThrows(DataIntegrityViolationException.class, () -> {
+		Assertions.assertThrows(DuplicatedNameException.class, () -> {
 			this.authenticathedService.saveAuthenticated(au);
 		});
 	}
-	//	@Test //CASO POSITIVO
-	//	void shouldDeleteAuthenticated() throws DataAccessException, DuplicatedNameException {
-	//
-	//		Authenticated au = this.authenticathedService.findAuthenticatedByUsername("ignacio");
-	//		this.authenticathedService.deleteAuthenticated(au);
-	//
-	//		boolean b = this.authenticathedService.findAuthenticatedByUsername("ignacio") != null;
-	//		Assertions.assertFalse(b);
-	//	}
+	@Test //CASO POSITIVO
+	void shouldDeleteAuthenticated() throws DataAccessException, DuplicatedNameException {
+
+		Authenticated au = this.authenticathedService.findAuthenticatedByUsername("ignacio");
+		this.authenticathedService.deleteAuthenticated(au);
+
+		boolean b = this.authenticathedService.findAuthenticatedByUsername("ignacio") == null;
+		Assertions.assertTrue(b);
+	}
+	@Test //CASO NEGATIVO
+	void shouldNotDeleteAuthenticated() throws DataAccessException, DuplicatedNameException {
+
+		Authenticated au = new Authenticated();
+
+		Assertions.assertThrows(NullPointerException.class, () -> {
+			this.authenticathedService.deleteAuthenticated(au);
+		});
+	}
 
 }

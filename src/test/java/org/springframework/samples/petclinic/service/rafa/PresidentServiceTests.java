@@ -15,6 +15,7 @@ import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.service.AuthenticatedService;
 import org.springframework.samples.petclinic.service.AuthoritiesService;
 import org.springframework.samples.petclinic.service.PresidentService;
+import org.springframework.samples.petclinic.service.exceptions.DuplicatedNameException;
 import org.springframework.stereotype.Service;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
@@ -105,7 +106,7 @@ public class PresidentServiceTests {
 	}
 
 	@Test //CASO POSITIVO - Borrar Presidente
-	void shouldDeletePresident() throws DataAccessException, CredentialException {
+	void shouldDeletePresident() throws DataAccessException, CredentialException, DuplicatedNameException {
 
 		President president = this.presidentService.findPresidentByUsername("rafa");
 
