@@ -33,7 +33,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	protected void configure(final HttpSecurity http) throws Exception {
 		http.authorizeRequests().antMatchers("/resources/**", "/webjars/**", "/h2-console/**").permitAll()
       .antMatchers(HttpMethod.GET, "/", "/exception/**").permitAll()
-      .antMatchers("/users/new").permitAll()
+      .antMatchers("/users/new").permitAll()  
       .antMatchers("/authenticateds/new").permitAll()
       .antMatchers("/footballPlayerStatistic/**").authenticated()
       .antMatchers("/matchRefereeRequest/**").hasAnyAuthority("referee")
@@ -46,6 +46,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
       .antMatchers("/competitionAdmin/**").hasAnyAuthority("competitionAdmin")
       .antMatchers("/myCompetitionAdminRequest/**").authenticated()
       .antMatchers("/competitionAdminRequest/list/**").hasAnyAuthority("admin")
+      .antMatchers("/competitionAdminRequest/accept").hasAuthority("admin")
+      .antMatchers("/competitionAdminRequest/reject").hasAuthority("admin")
       .antMatchers("/competitionAdminRequest/**").authenticated()
       .antMatchers("/deleteCompAdminRequest/**").authenticated()
       .antMatchers("/deleteCompetitionAdmin/**").hasAnyAuthority("competitionAdmin")

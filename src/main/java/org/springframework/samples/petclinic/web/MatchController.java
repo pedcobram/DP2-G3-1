@@ -120,7 +120,7 @@ public class MatchController {
 	}
 
 	@PostMapping(value = "/matches/edit/{matchId}")
-	public String processUpdateMatchForm(@Valid final Match match, @PathVariable("matchId") final int matchId, final BindingResult result) {
+	public String processUpdateMatchForm(@Valid final Match match, @PathVariable("matchId") final int matchId, final BindingResult result, final Model model) {
 
 		if (result.hasErrors()) {
 			return MatchController.VIEWS_UPDATE_MATCH_FORM;
@@ -135,6 +135,8 @@ public class MatchController {
 			match.setCreator(match1.getCreator());
 
 			this.matchService.saveMatch(match);
+
+			model.addAttribute("match", match);
 
 			return "redirect:/matches/list";
 		}

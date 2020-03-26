@@ -42,8 +42,6 @@ public class MatchRequestController {
 
 	private static final String			VIEWS_MATCH_REQUEST_CREATE_OR_UPDATE_FORM	= "matchRequests/createOrUpdateMatchRequestForm";
 
-	//private static final String			VIEWS_MATCH_REQUEST_DETAILS_FORM			= "matchRequests/MatchRequestDetails";
-
 	private static final String			VIEWS_MATCH_REQUEST_LIST					= "matchRequests/matchRequestList";
 
 	private final MatchRequestService	matchRequestService;
@@ -52,15 +50,12 @@ public class MatchRequestController {
 
 	private final MatchService			matchService;
 
-	//private final RefereeService		refereeService;
-
 
 	@Autowired
 	public MatchRequestController(final MatchRequestService matchRequestService, final FootballClubService footballClubService, final RefereeService refereeService, final MatchService matchService, final UserService userService) {
 		this.matchRequestService = matchRequestService;
 		this.footballClubService = footballClubService;
 		this.matchService = matchService;
-		//this.refereeService = refereeService;
 	}
 
 	@InitBinder

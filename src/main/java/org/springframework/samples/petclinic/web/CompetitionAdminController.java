@@ -105,7 +105,7 @@ public class CompetitionAdminController {
 	@GetMapping("/myCompetitionAdminProfile/{competitionAdminUsername}")
 	public ModelAndView showCompetitionAdminProfile(@PathVariable("competitionAdminUsername") final String competitionAdminUsername) throws CredentialException {
 
-		//Obtenemos el username actual conectado
+		//Obtenemos el username actual conectado :
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String currentPrincipalName = authentication.getName();
 
