@@ -28,8 +28,10 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Coach;
+import org.springframework.samples.petclinic.model.ContractCommercial;
 import org.springframework.samples.petclinic.model.FootballClub;
 import org.springframework.samples.petclinic.model.President;
+import org.springframework.samples.petclinic.service.ContractCommercialService;
 import org.springframework.samples.petclinic.service.FootballClubService;
 import org.springframework.samples.petclinic.service.exceptions.DateException;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedNameException;
@@ -52,15 +54,19 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class FootballClubController {
 
-	private static final String			VIEWS_CLUB_CREATE_OR_UPDATE_FORM	= "footballClubs/createOrUpdateFootballClubForm";
+	private static final String				VIEWS_CLUB_CREATE_OR_UPDATE_FORM	= "footballClubs/createOrUpdateFootballClubForm";
 
 	@Autowired
-	private final FootballClubService	footballClubService;
+	private final FootballClubService		footballClubService;
+
+	@Autowired
+	private final ContractCommercialService	contractCommercialService;
 
 
 	@Autowired
-	public FootballClubController(final FootballClubService footballClubService) {
+	public FootballClubController(final FootballClubService footballClubService, final ContractCommercialService contractCommercialService) {
 		this.footballClubService = footballClubService;
+		this.contractCommercialService = contractCommercialService;
 	}
 
 	@InitBinder
@@ -133,6 +139,11 @@ public class FootballClubController {
 
 			FootballClub club = this.footballClubService.findFootballClubByPresident(principalUsername);
 			mav.addObject(club);
+
+			ContractCommercial cc = this.contractCommercialService.findCommercialContractByClubId(club.getId());
+			if (cc != null) {
+				mav.addObject("contractCommercial", cc);
+			}
 
 			Coach clubCoach = this.footballClubService.findCoachByClubId(club.getId());
 			if (clubCoach != null) {

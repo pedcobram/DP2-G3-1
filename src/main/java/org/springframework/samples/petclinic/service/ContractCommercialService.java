@@ -16,23 +16,32 @@
 
 package org.springframework.samples.petclinic.service;
 
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.ContractCommercial;
+import org.springframework.samples.petclinic.model.FootballClub;
 import org.springframework.samples.petclinic.repository.ContractRepository;
+import org.springframework.samples.petclinic.service.exceptions.DateException;
+import org.springframework.samples.petclinic.service.exceptions.DuplicatedNameException;
 import org.springframework.samples.petclinic.service.exceptions.NoMultipleContractCommercialException;
 import org.springframework.samples.petclinic.service.exceptions.NoStealContractCommercialException;
+import org.springframework.samples.petclinic.service.exceptions.NotEnoughMoneyException;
+import org.springframework.samples.petclinic.service.exceptions.NumberOfPlayersAndCoachException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ContractCommercialService {
 
+	private ContractRepository	contractRepository;
+
 	@Autowired
-	private ContractRepository contractRepository;
+	private FootballClubService	footballClubService;
 
 
 	@Autowired
@@ -59,33 +68,47 @@ public class ContractCommercialService {
 	}
 
 	@Transactional(rollbackFor = {
-		NoMultipleContractCommercialException.class, NoStealContractCommercialException.class
+		NoMultipleContractCommercialException.class, NoStealContractCommercialException.class, NotEnoughMoneyException.class
 	})
-	public void saveContractCommercial(final ContractCommercial contractCommercial) throws DataAccessException, NoMultipleContractCommercialException, NoStealContractCommercialException {
+	public void saveContractCommercial(final ContractCommercial contractCommercial)
+		throws DataAccessException, NoMultipleContractCommercialException, NoStealContractCommercialException, NotEnoughMoneyException, DuplicatedNameException, NumberOfPlayersAndCoachException, DateException {
 		//Existe contrato commercial con este club
-		Collection<ContractCommercial> contracts = this.contractRepository.findAllCommercialContracts();
+		Collection<ContractCommercial> contracts = this.findAllCommercialContracts();
+
 		//Si se encuentra un contrato diferente con el mismo club(no null) .... Exception
 		if (!contracts.stream().filter(x -> x.getClub() != null && x.getId() != contractCommercial.getId() && x.getClub() == contractCommercial.getClub()).collect(Collectors.toList()).isEmpty()) {
 			throw new NoMultipleContractCommercialException();
 		}
 
+		FootballClub clubNuevo = null;
+		FootballClub clubViejo = null;
 		try {
-			//Si el el nuevo no tiene club NullPointerException
-			int idClubNuevo = contractCommercial.getClub().getId();
-			//Si el el viejo no tiene club o el contrato es nuevo NullPointerException
-			int idClubViejo = this.contractRepository.findContractCommercialById(contractCommercial.getId()).getClub().getId();
-			//Si no son nulos y son diferentes significa que intentan cambiar de club sin terminar contrato
-			if (idClubNuevo != idClubViejo) {
-				throw new NoStealContractCommercialException();
-			} else { //Si el contrato no es nuevo y tiene el mismo Club no null significa que ha cambiado otra cosa y eso esta permitido
-				this.contractRepository.save(contractCommercial);
-			}
-
-		} catch (NullPointerException e) {
-			//Si captura un null pointer exception significa que el contrato es nuevo
-			// y como ha superado el NoMultipleContractException es seguro guardarlo
-			this.contractRepository.save(contractCommercial);
+			clubNuevo = contractCommercial.getClub();
+		} catch (Exception e) {
+		}
+		try {
+			clubViejo = this.findContractCommercialById(contractCommercial.getId()).getClub();
+		} catch (Exception e) {
+		}
+		//Si no son nulos y son diferentes significa que intentan cambiar de club sin terminar contrato
+		if (clubNuevo != null && clubViejo != null && clubNuevo != clubViejo) {
+			throw new NoStealContractCommercialException();
 		}
 
+		//Si se intenta terminar el contrato (Club -> No Club)
+		if (clubNuevo == null && clubViejo != null) {
+			if (contractCommercial.getEndDate().getTime() - Date.valueOf(LocalDate.now()).getTime() > 0) {
+				long duracion = contractCommercial.getEndDate().getTime() - contractCommercial.getStartDate().getTime();
+				long tiempollevado = Date.valueOf(LocalDate.now()).getTime() - contractCommercial.getStartDate().getTime();
+				int clausulaApagar = (int) (contractCommercial.getClause() * (duracion - tiempollevado) / duracion);
+				//Si tienes que pagar mas de lo que tienes .... Exception
+				if (clausulaApagar > clubViejo.getMoney()) {
+					throw new NotEnoughMoneyException();
+				}
+				clubViejo.setMoney(clubViejo.getMoney() - clausulaApagar);
+				this.footballClubService.saveFootballClub(clubViejo);
+			}
+		}
+		this.contractRepository.save(contractCommercial);
 	}
 }
