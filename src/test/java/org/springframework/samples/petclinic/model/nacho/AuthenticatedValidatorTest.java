@@ -157,7 +157,7 @@ public class AuthenticatedValidatorTest {
 		Assertions.assertTrue(constraintViolations.size() == 2);
 		ConstraintViolation<Authenticated> violation = constraintViolations.iterator().next();
 		Assertions.assertTrue(violation.getPropertyPath().toString().compareTo("telephone") == 0);
-		Assertions.assertTrue(violation.getMessage().compareTo("must not be empty") == 0);
+
 	}
 
 }
