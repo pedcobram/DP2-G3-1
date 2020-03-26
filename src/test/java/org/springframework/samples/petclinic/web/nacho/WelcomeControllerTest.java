@@ -47,7 +47,9 @@ public class WelcomeControllerTest {
 	@MockBean
 	private FanService				fanService;
 	private Fan						f;
+
 	private Authenticated			au;
+	private Authenticated			auNoFan;
 	private FootballClub			club;
 	private Collection<MatchRecord>	m;
 	private static final int		TEST_ID	= 1;
@@ -103,14 +105,34 @@ public class WelcomeControllerTest {
 		this.f.setUser(this.au);
 		this.f.setClub(this.club);
 		this.f.setVip(false);
+
+		User userA = new User();
+
+		userA.setUsername("auth");
+		userA.setPassword("auth");
+		userA.setEnabled(true);
+
+		this.auNoFan = new Authenticated();
+
+		this.auNoFan.setId(WelcomeControllerTest.TEST_ID + 1);
+		this.auNoFan.setFirstName("Auth");
+		this.auNoFan.setLastName("Test");
+		this.auNoFan.setDni("12345678T");
+		this.auNoFan.setEmail("auth@test.com");
+		this.auNoFan.setTelephone("657063253");
+		this.auNoFan.setUser(userA);
+
 		MatchRecord m1 = new MatchRecord();
 		this.m = new ArrayList<MatchRecord>();
 		this.m.add(m1);
 
-		BDDMockito.given(this.fanService.existFan(WelcomeControllerTest.TEST_ID)).willReturn(true);
-		BDDMockito.given(this.fanService.findByUserId(WelcomeControllerTest.TEST_ID)).willReturn(this.f);
+		BDDMockito.given(this.fanService.existFan(this.au.getId())).willReturn(true);
+		BDDMockito.given(this.fanService.existFan(this.auNoFan.getId())).willReturn(false);
+		BDDMockito.given(this.fanService.findByUserId(this.au.getId())).willReturn(this.f);
+		BDDMockito.given(this.fanService.findByUserId(this.auNoFan.getId())).willReturn(null);
 		BDDMockito.given(this.authenticatedService.findAuthenticatedByUsername("fan")).willReturn(this.au);
-		BDDMockito.given(this.matchRecordService.findLastMatches(WelcomeControllerTest.TEST_ID)).willReturn(this.m);
+		BDDMockito.given(this.authenticatedService.findAuthenticatedByUsername("auth")).willReturn(this.auNoFan);
+		BDDMockito.given(this.matchRecordService.findLastMatches(this.au.getId())).willReturn(this.m);
 	}
 
 	@WithMockUser(username = "fan")
@@ -122,9 +144,17 @@ public class WelcomeControllerTest {
 			.andExpect(MockMvcResultMatchers.model().attribute("isVip", false)).andExpect(MockMvcResultMatchers.model().attribute("club", this.club)).andExpect(MockMvcResultMatchers.model().attribute("lastMatches", this.m))
 			.andExpect(MockMvcResultMatchers.view().name("welcome")).andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/welcome.jsp"));
 	}
-
+	@WithMockUser(username = "auth")
 	@Test //CASO POSITIVO - SIN FAN
-	void testWelcomeSuccess() throws Exception {
+	void testWelcomeWithUserNoFanSuccess() throws Exception {
+
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeDoesNotExist("isVip")).andExpect(MockMvcResultMatchers.model().attributeDoesNotExist("isFan"))
+			.andExpect(MockMvcResultMatchers.model().attributeDoesNotExist("club")).andExpect(MockMvcResultMatchers.model().attributeDoesNotExist("lastMatches")).andExpect(MockMvcResultMatchers.view().name("welcome"))
+			.andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/welcome.jsp"));
+	}
+	@WithMockUser()
+	@Test //CASO POSITIVO - SIN FAN
+	void testWelcomeWithoutUserSuccess() throws Exception {
 
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("isVip")).andExpect(MockMvcResultMatchers.model().attributeExists("isFan"))
 			.andExpect(MockMvcResultMatchers.model().attributeDoesNotExist("club")).andExpect(MockMvcResultMatchers.model().attributeDoesNotExist("lastMatches")).andExpect(MockMvcResultMatchers.model().attribute("isFan", false))

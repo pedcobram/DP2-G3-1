@@ -25,8 +25,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Authenticated;
 import org.springframework.samples.petclinic.service.AuthenticatedService;
-import org.springframework.samples.petclinic.service.AuthoritiesService;
-import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedNameException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -49,7 +47,7 @@ public class AuthenticatedController {
 
 
 	@Autowired
-	public AuthenticatedController(final AuthenticatedService authenticatedService, final UserService userService, final AuthoritiesService authoritiesService) {
+	public AuthenticatedController(final AuthenticatedService authenticatedService) {
 		this.authenticatedService = authenticatedService;
 	}
 
