@@ -49,6 +49,7 @@ public class FanControllerTest {
 	private Fan						f;
 	private Authenticated			au;
 	private FootballClub			club;
+	private Authenticated			auNoFan;
 	private static final int		TEST_ID	= 1;
 
 
@@ -103,27 +104,45 @@ public class FanControllerTest {
 		this.f.setClub(this.club);
 		this.f.setVip(false);
 
+		User userA = new User();
+
+		userA.setUsername("auth");
+		userA.setPassword("auth");
+		userA.setEnabled(true);
+
+		this.auNoFan = new Authenticated();
+
+		this.auNoFan.setId(FanControllerTest.TEST_ID + 1);
+		this.auNoFan.setFirstName("Auth");
+		this.auNoFan.setLastName("Test");
+		this.auNoFan.setDni("12345678T");
+		this.auNoFan.setEmail("auth@test.com");
+		this.auNoFan.setTelephone("657063253");
+		this.auNoFan.setUser(userA);
+
+		BDDMockito.given(this.fanService.findByUserId(this.auNoFan.getId())).willReturn(null);
 		BDDMockito.given(this.fanService.findByUserId(FanControllerTest.TEST_ID)).willReturn(this.f);
 		BDDMockito.given(this.authenticatedService.findAuthenticatedByUsername("fan")).willReturn(this.au);
+		BDDMockito.given(this.authenticatedService.findAuthenticatedByUsername("auth")).willReturn(this.auNoFan);
 		BDDMockito.given(this.footballClubService.findFootballClubById(FanControllerTest.TEST_ID)).willReturn(this.club);
 	}
 
-	@WithMockUser(username = "fan")
+	@WithMockUser(username = "auth")
 	@Test //CASO POSITIVO - LA CREACIÓN DE UN FAN NO VIP
 	void testInitCreationFormSuccess() throws Exception {
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/fan/{clubId}/new", FanControllerTest.TEST_ID)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("isNew"))
 			.andExpect(MockMvcResultMatchers.model().attribute("isNew", true)).andExpect(MockMvcResultMatchers.model().attributeExists("fan")).andExpect(MockMvcResultMatchers.model().attribute("fan", Matchers.hasProperty("vip", Matchers.is(false))))
-			.andExpect(MockMvcResultMatchers.model().attribute("fan", Matchers.hasProperty("creditCard", Matchers.nullValue()))).andExpect(MockMvcResultMatchers.model().attribute("fan", Matchers.hasProperty("user", Matchers.is(this.au))))
-			.andExpect(MockMvcResultMatchers.model().attribute("fan", Matchers.hasProperty("club", Matchers.is(this.club)))).andExpect(MockMvcResultMatchers.model().attribute("fan", this.f))
-			.andExpect(MockMvcResultMatchers.view().name("fan/createOrUpdateFanForm")).andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/fan/createOrUpdateFanForm.jsp"));
+			.andExpect(MockMvcResultMatchers.model().attribute("fan", Matchers.hasProperty("creditCard", Matchers.nullValue()))).andExpect(MockMvcResultMatchers.model().attribute("fan", Matchers.hasProperty("user", Matchers.is(this.auNoFan))))
+			.andExpect(MockMvcResultMatchers.model().attribute("fan", Matchers.hasProperty("club", Matchers.is(this.club)))).andExpect(MockMvcResultMatchers.view().name("fan/createOrUpdateFanForm"))
+			.andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/fan/createOrUpdateFanForm.jsp"));
 	}
 	@Test //CASO NEGATIVO - LA CREACIÓN DE UN FAN NO VIP
 	void testInitCreationFormErrorNotUser() throws Exception {
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/fan/{clubId}/new", FanControllerTest.TEST_ID)).andExpect(MockMvcResultMatchers.status().is4xxClientError());
 	}
-	// @WithMockUser(username = "fan")
 
-	//	@Test //CASO NEGATIVO - LA CREACIÓN DE UN FAN NO VIP
+	//	@WithMockUser(username = "auth")
+	//	@Test //CASO NEGATIVO - LA CREACIÓN DE UN FAN Duplicado
 	//	void testInitCreationFormErrorDuplicateFan() throws Exception {
 	//		this.fanService.saveFan(this.f);
 	//		this.mockMvc.perform(MockMvcRequestBuilders.get("/fan/{clubId}/new", 1)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("existFan"));
