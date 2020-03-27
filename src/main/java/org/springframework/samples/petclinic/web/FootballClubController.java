@@ -54,7 +54,6 @@ public class FootballClubController {
 
 	private static final String			VIEWS_CLUB_CREATE_OR_UPDATE_FORM	= "footballClubs/createOrUpdateFootballClubForm";
 
-	@Autowired
 	private final FootballClubService	footballClubService;
 
 
@@ -95,18 +94,19 @@ public class FootballClubController {
 	@GetMapping("/footballClubs/list/{footballClubId}") //VISTA DETALLADA DE EQUIPO
 	public ModelAndView showFootballClub(@PathVariable("footballClubId") final int footballClubId) {
 
+		ModelAndView mav = new ModelAndView("footballClubs/footballClubDetails");
+		mav.addObject(this.footballClubService.findFootballClubById(footballClubId));
+
 		//Quitamos el botón si no tiene equipo o no está público no puede hacer peticiones de partidos
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String currentPrincipalName = authentication.getName();
 		FootballClub footballClub1 = this.footballClubService.findFootballClubByPresident(currentPrincipalName);
 
-		ModelAndView mav = new ModelAndView("footballClubs/footballClubDetails");
-		mav.addObject(this.footballClubService.findCoachByClubId(footballClubId));
-		mav.addObject(this.footballClubService.findFootballClubById(footballClubId));
-
 		if (footballClub1 == null || footballClub1.getStatus() == false) {
 			mav.addObject("notHasAPublishedTeam", true);
 		}
+
+		mav.addObject(this.footballClubService.findCoachByClubId(footballClubId));
 
 		return mav;
 	}
@@ -252,12 +252,12 @@ public class FootballClubController {
 	}
 
 	@RequestMapping(value = "/footballClubs/myClub/{principalUsername}/delete") //BORRAR CLUB
-	public String processDeleteForm() throws DataAccessException, CredentialException {
+	public String processDeleteForm(@PathVariable("principalUsername") final String principalUsername) throws DataAccessException, CredentialException {
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String currentPrincipalName = authentication.getName();
 
-		FootballClub thisFootballCLub = this.footballClubService.findFootballClubByPresident(currentPrincipalName);
+		FootballClub thisFootballCLub = this.footballClubService.findFootballClubByPresident(principalUsername);
 
 		if (!thisFootballCLub.getPresident().getUser().getUsername().equals(currentPrincipalName)) { //SEGURIDAD
 			throw new CredentialException("Forbidden Access");

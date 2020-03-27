@@ -58,10 +58,8 @@ public class FootballPlayerController {
 
 	private static final String			VIEWS_PLAYER_CREATE_OR_UPDATE_FORM	= "footballPlayers/createOrUpdateFootballPlayerForm";
 
-	@Autowired
 	private final FootballPlayerService	footballPlayerService;
 
-	@Autowired
 	private final FootballClubService	footballClubService;
 
 

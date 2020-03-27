@@ -103,6 +103,16 @@ public class PresidentControllerTest {
 			.andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/presidents/createOrUpdatePresidentForm.jsp"));
 	}
 	
+	@WithMockUser(username = "rufus2")
+	
+	@Test //CASO NEGATIVO - GET - EDITAR PRESIDENTE con otro user
+	void testInitUpdatePresidentFormWithAnotherUser() throws Exception {
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/presidents/{presidentUsername}/edit", "rufus"))
+				.andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(MockMvcResultMatchers.view().name("exceptions/forbidden"))
+				.andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/exceptions/forbidden.jsp"));
+	}
+	
 	@Test //CASO NEGATIVO - GET - EDITAR PRESIDENTE sin user
 	void testInitUpdatePresidentFormError() throws Exception {
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/presidents/{presidentUsername}/edit", "rufus"))
@@ -144,6 +154,25 @@ public class PresidentControllerTest {
 				.andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/presidents/createOrUpdatePresidentForm.jsp"));
 		}
 	
+	@WithMockUser(username = "rufus2")
+	
+	@Test //CASO NEGATIVO - POST - EDITAR PRESIDENTE con otro user
+	void testProcessUpdatePresidentFormWithAnotherUser() throws Exception {
+		this.mockMvc.perform(MockMvcRequestBuilders.post("/presidents/{presidentUsername}/edit", "rufus")
+				.with(SecurityMockMvcRequestPostProcessors.csrf())
+				.param("firstName", "RufusEdit")
+				.param("lastName", "ShinraEdit")
+				.param("dni", "88888888H")
+				.param("email", "rufusEdit@shinra.com")
+				.param("telephone", "888888888")
+				.param("user.username", "rufus")
+				.param("user.password", "shinraEdit"))
+				.andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(MockMvcResultMatchers.view().name("exceptions/forbidden"))
+				.andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/exceptions/forbidden.jsp"));
+	}
+	
+	
 	@WithMockUser(username = "rufus")
 	
 	@Test //CASO POSITIVO - BORRAR PRESIDENTE
@@ -174,6 +203,16 @@ public class PresidentControllerTest {
 			.andExpect(MockMvcResultMatchers.model().attribute("president", Matchers.hasProperty("telephone", Matchers.is("608551023"))))
 			.andExpect(MockMvcResultMatchers.view().name("presidents/presidentDetails"))
 			.andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/presidents/presidentDetails.jsp"));
+	}
+	
+	@WithMockUser(username = "rufus2")
+	
+	@Test //CASO NEGATIVO - VER PRESIDENTE DETALLADAMENTE con otro user
+	void  testShowPresidentErrorWithAnotherUser() throws Exception {
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/presidents/{presidentUsername}", "rufus"))
+				.andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(MockMvcResultMatchers.view().name("exceptions/forbidden"))
+				.andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/exceptions/forbidden.jsp"));
 	}
 	
 	@Test //CASO NEGATIVO - VER PRESIDENTE DETALLADAMENTE

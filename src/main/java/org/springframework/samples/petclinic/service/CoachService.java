@@ -44,11 +44,6 @@ public class CoachService {
 		return this.coachRepository.findAll();
 	}
 
-	//Buscar todos los entrenadores con club
-	public Collection<Coach> findAllCoachsWithClub() throws DataAccessException {
-		return this.coachRepository.findAllWithClub();
-	}
-
 	//Buscar todos los entrenadores FA
 	public Collection<Coach> findAllCoachsFA() throws DataAccessException {
 		return this.coachRepository.findAllFreeAgents();

@@ -25,8 +25,10 @@
             	<petclinic:inputField label="code.label.dni" name="dni"/>
             	<petclinic:inputField label="code.label.email" name="email"/>
             	<petclinic:inputField label="code.label.telephone" name="telephone"/>
+            	<petclinic:inputField label="Username:" name="user.username"/>
             	<petclinic:inputField label="Username" name="user.username" readonly="true"/>
             	<petclinic:inputField label="Password" name="user.password" readonly="true"/>
+            	
         	</div>
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
