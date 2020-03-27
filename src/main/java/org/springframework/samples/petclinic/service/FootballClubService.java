@@ -24,6 +24,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Coach;
+import org.springframework.samples.petclinic.model.ContractCommercial;
 import org.springframework.samples.petclinic.model.ContractPlayer;
 import org.springframework.samples.petclinic.model.FootballClub;
 import org.springframework.samples.petclinic.model.FootballPlayer;
@@ -39,16 +40,19 @@ import org.springframework.util.StringUtils;
 @Service
 public class FootballClubService {
 
-	private FootballClubRepository	footRepository;
+	private FootballClubRepository		footRepository;
 
 	@Autowired
-	private FootballPlayerService	footballPlayerService;
+	private FootballPlayerService		footballPlayerService;
 
 	@Autowired
-	private ContractPlayerService	contractService;
+	private ContractPlayerService		contractPlayerService;
 
 	@Autowired
-	private CoachService			coachService;
+	private ContractCommercialService	contractCommercialService;
+
+	@Autowired
+	private CoachService				coachService;
 
 
 	@Autowired
@@ -143,9 +147,16 @@ public class FootballClubService {
 
 		if (footballClub != null) {
 
-			Collection<ContractPlayer> contracts = this.contractService.findAllPlayerContractsByClubId(footballClub.getId());
-			for (ContractPlayer a : contracts) {
-				this.contractService.deleteContractDeletingClub(a);
+			Collection<ContractPlayer> contractsPlayer = this.contractPlayerService.findAllPlayerContractsByClubId(footballClub.getId());
+			for (ContractPlayer a : contractsPlayer) {
+				this.contractPlayerService.deleteContractDeletingClub(a);
+			}
+
+			try {
+				ContractCommercial cc = this.contractCommercialService.findCommercialContractByClubId(footballClub.getId());
+				cc.setClub(null);
+				this.contractCommercialService.saveContractCommercial(cc);
+			} catch (Exception e) {
 			}
 
 			Collection<FootballPlayer> players = this.footballPlayerService.findAllClubFootballPlayers(footballClub.getId());

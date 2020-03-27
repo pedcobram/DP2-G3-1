@@ -14,6 +14,7 @@ import org.springframework.samples.petclinic.model.CompetitionAdmin;
 import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.service.AuthoritiesService;
 import org.springframework.samples.petclinic.service.CompetitionAdminService;
+import org.springframework.samples.petclinic.service.exceptions.DuplicatedNameException;
 import org.springframework.stereotype.Service;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
@@ -124,7 +125,7 @@ public class CompetitionAdminServiceTests {
 	}
 
 	@Test //CASO POSITIVO
-	void shouldDeleteCompetitionAdmin() {
+	void shouldDeleteCompetitionAdmin() throws DataAccessException, DuplicatedNameException {
 
 		CompetitionAdmin compAdmin = this.competitionAdminService.findCompetitionAdminByUsername("pedro");
 

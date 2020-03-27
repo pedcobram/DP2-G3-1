@@ -8,6 +8,7 @@ DROP TABLE owners IF EXISTS;
 DROP TABLE users IF EXISTS;
 DROP TABLE authorities IF EXISTS;
 
+DROP TABLE fans IF EXISTS;
 DROP TABLE footballClubs IF EXISTS;
 DROP TABLE authenticateds IF EXISTS;
 DROP TABLE presidents IF EXISTS;
@@ -123,4 +124,7 @@ CREATE TABLE authorities (
 ALTER TABLE authorities ADD CONSTRAINT fk_authorities_users FOREIGN KEY (username) REFERENCES users(username);
 
 CREATE UNIQUE INDEX ix_auth_username ON authorities (username,authority);
+
+
+
 

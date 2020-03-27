@@ -20,7 +20,7 @@
        			<tr>
            			<th><fmt:message key="code.label.matchlist.title"/></th>
            			<th><fmt:message key="code.label.matchlist.matchdate"/></th>
-           			<th><fmt:message key="code.label.matchlist.matchdate"/></th>
+           			<th><fmt:message key="code.label.matchlist.status"/></th>
            			<th><fmt:message key="code.label.matchlist.stadium"/></th>
            			<th><fmt:message key="code.label.matchlist.footballclub.one"/></th>
            			<th><fmt:message key="code.label.matchlist.footballclub.two"/></th>

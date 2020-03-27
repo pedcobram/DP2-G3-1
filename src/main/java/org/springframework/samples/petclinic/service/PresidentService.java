@@ -25,6 +25,7 @@ import org.springframework.samples.petclinic.model.FootballClub;
 import org.springframework.samples.petclinic.model.President;
 import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.repository.PresidentRepository;
+import org.springframework.samples.petclinic.service.exceptions.DuplicatedNameException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -69,7 +70,7 @@ public class PresidentService {
 	}
 
 	@Transactional
-	public void deletePresident(final President president) throws DataAccessException, CredentialException {
+	public void deletePresident(final President president) throws DataAccessException, CredentialException, DuplicatedNameException {
 
 		FootballClub footballClub = this.footballClubService.findFootballClubByPresident(president.getUser().getUsername());
 		this.footballClubService.deleteFootballClub(footballClub);

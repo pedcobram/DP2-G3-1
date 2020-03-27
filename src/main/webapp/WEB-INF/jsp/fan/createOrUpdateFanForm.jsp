@@ -28,28 +28,15 @@
             	 <c:choose>
                         <c:when test="${isNew}">
                             <button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-ok"></span><fmt:message key="yesVip"/></button>
-            		<spring:url value="/footballClub/${fan.club.id}/createFanNoVip" var="FanUrl"></spring:url>
-    	<a href="${fn:escapeXml(FanUrl)}" class="btn btn-default">
-    				<span class="glyphicon glyphicon-remove"></span> 
-    								 <fmt:message key="noVip"/></a>
+            				<a href="/" class="btn btn-default"><span class="glyphicon glyphicon-remove"></span><fmt:message key="noVip"/></a>
+            				<a href="/fan/delete" class="btn btn-default"><span class="glyphicon glyphicon-remove"></span><fmt:message key="delete"/></a>
                         </c:when>
                         <c:otherwise>
                             <button class="btn btn-default" type="submit"><span class="glyphicon glyphicon-ok"></span><fmt:message key="yesVip"/></button>
     						<a href="/" class="btn btn-default"><span class="glyphicon glyphicon-remove"></span><fmt:message key="noVipnow"/></a>
-
+							<a href="/fan/delete" class="btn btn-default"><span class="glyphicon glyphicon-remove"></span><fmt:message key="deleteVip"/></a>
                         </c:otherwise>
                     </c:choose>
-            
-            
-            
-            
-            
-            
-                <c:if test="${isNew}">
-                
-                    
-                    
-                </c:if>
             </div>
         </div>
     </form:form> 

@@ -91,7 +91,7 @@
     <spring:url value="/footballPlayerStatistic/detail/{playerId}" var="viewPlayerStatistics">
         	<spring:param name="playerId" value="${footballPlayer.id}"/>
     </spring:url>
-    <a href="${fn:escapeXml(viewPlayerStatistics)}" class="btn btn-default"><fmt:message key="viewPlayerStatistics"/></a>
+    <a href="${fn:escapeXml(viewPlayerStatistics)}" class="btn btn-default"><fmt:message key="code.button.footballplayerdetails.statistics"/></a>
     
 
  </jsp:body> 

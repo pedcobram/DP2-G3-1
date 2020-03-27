@@ -118,7 +118,7 @@ public class CompAdminRequestController {
 	}
 
 	@GetMapping(value = "/competitionAdminRequest/{compAdminRequestId}/edit")
-	public String initUpdatePresidentForm(@PathVariable("compAdminRequestId") final int compAdminRequestId, final Model model) {
+	public String initUpdateCompetitionAdminForm(@PathVariable("compAdminRequestId") final int compAdminRequestId, final Model model) {
 		CompAdminRequest compAdminRequest = this.compAdminRequestService.findCompAdminRequestById(compAdminRequestId);
 		model.addAttribute(compAdminRequest);
 		return CompAdminRequestController.VIEWS_COMP_ADMIN_REQUEST_CREATE_OR_UPDATE_FORM;

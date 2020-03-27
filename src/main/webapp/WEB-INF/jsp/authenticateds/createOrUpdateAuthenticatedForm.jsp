@@ -18,7 +18,7 @@
     </h2>
     <form:form modelAttribute="authenticated" class="form-horizontal" id="add-authenticated-form">
         <div class="form-group has-feedback">
-        
+        	
             <petclinic:inputField label="code.label.firstName" name="firstName"/>
             <petclinic:inputField label="code.label.lastName" name="lastName"/>
             <petclinic:inputField label="code.label.dni" name="dni"/>

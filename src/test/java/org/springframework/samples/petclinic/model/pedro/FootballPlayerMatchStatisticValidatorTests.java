@@ -1,5 +1,5 @@
 
-package org.springframework.samples.petclinic.model;
+package org.springframework.samples.petclinic.model.pedro;
 
 import java.util.Locale;
 import java.util.Set;
@@ -10,10 +10,12 @@ import javax.validation.Validator;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.samples.petclinic.model.FootballPlayerMatchStatistic;
+import org.springframework.samples.petclinic.model.MatchRecord;
 import org.springframework.samples.petclinic.model.Enum.MatchRecordStatus;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
-public class FootballPlayerStatisticValidatorTests {
+public class FootballPlayerMatchStatisticValidatorTests {
 
 	private Validator createValidator() {
 		LocalValidatorFactoryBean localValidatorFactoryBean = new LocalValidatorFactoryBean();
@@ -33,8 +35,9 @@ public class FootballPlayerStatisticValidatorTests {
 		matchRecord.setStatus(MatchRecordStatus.NOT_PUBLISHED);
 		matchRecord.setSeason_end("2000");
 		matchRecord.setSeason_start("2001");
+		//matchRecord.setMatch(match);
 
-		FootballPlayerStatistic fpms = new FootballPlayerStatistic();
+		FootballPlayerMatchStatistic fpms = new FootballPlayerMatchStatistic();
 
 		fpms.setAssists(null);
 		fpms.setGoals(0);
@@ -43,14 +46,15 @@ public class FootballPlayerStatisticValidatorTests {
 		fpms.setReceived_goals(0);
 		fpms.setSeason_end(matchRecord.getSeason_end());
 		fpms.setSeason_start(matchRecord.getSeason_start());
+		fpms.setMatchRecord(matchRecord);
 		//fpms.setPlayer(player);
 
 		Validator validator = this.createValidator();
-		Set<ConstraintViolation<FootballPlayerStatistic>> constraintViolations = validator.validate(fpms);
+		Set<ConstraintViolation<FootballPlayerMatchStatistic>> constraintViolations = validator.validate(fpms);
 
 		Assertions.assertTrue(constraintViolations.size() == 1);
 
-		ConstraintViolation<FootballPlayerStatistic> violation = constraintViolations.iterator().next();
+		ConstraintViolation<FootballPlayerMatchStatistic> violation = constraintViolations.iterator().next();
 
 		Assertions.assertTrue(violation.getPropertyPath().toString().compareTo("assists") == 0);
 		Assertions.assertTrue(violation.getMessage().compareTo("must not be null") == 0);
@@ -71,7 +75,7 @@ public class FootballPlayerStatisticValidatorTests {
 		matchRecord.setSeason_start("2001");
 		//matchRecord.setMatch(match);
 
-		FootballPlayerStatistic fpms = new FootballPlayerStatistic();
+		FootballPlayerMatchStatistic fpms = new FootballPlayerMatchStatistic();
 
 		fpms.setAssists(0);
 		fpms.setGoals(null);
@@ -80,14 +84,15 @@ public class FootballPlayerStatisticValidatorTests {
 		fpms.setReceived_goals(0);
 		fpms.setSeason_end(matchRecord.getSeason_end());
 		fpms.setSeason_start(matchRecord.getSeason_start());
+		fpms.setMatchRecord(matchRecord);
 		//fpms.setPlayer(player);
 
 		Validator validator = this.createValidator();
-		Set<ConstraintViolation<FootballPlayerStatistic>> constraintViolations = validator.validate(fpms);
+		Set<ConstraintViolation<FootballPlayerMatchStatistic>> constraintViolations = validator.validate(fpms);
 
 		Assertions.assertTrue(constraintViolations.size() == 1);
 
-		ConstraintViolation<FootballPlayerStatistic> violation = constraintViolations.iterator().next();
+		ConstraintViolation<FootballPlayerMatchStatistic> violation = constraintViolations.iterator().next();
 
 		Assertions.assertTrue(violation.getPropertyPath().toString().compareTo("goals") == 0);
 		Assertions.assertTrue(violation.getMessage().compareTo("must not be null") == 0);
@@ -108,7 +113,7 @@ public class FootballPlayerStatisticValidatorTests {
 		matchRecord.setSeason_start("2001");
 		//matchRecord.setMatch(match);
 
-		FootballPlayerStatistic fpms = new FootballPlayerStatistic();
+		FootballPlayerMatchStatistic fpms = new FootballPlayerMatchStatistic();
 
 		fpms.setAssists(0);
 		fpms.setGoals(0);
@@ -117,14 +122,15 @@ public class FootballPlayerStatisticValidatorTests {
 		fpms.setReceived_goals(0);
 		fpms.setSeason_end(matchRecord.getSeason_end());
 		fpms.setSeason_start(matchRecord.getSeason_start());
+		fpms.setMatchRecord(matchRecord);
 		//fpms.setPlayer(player);
 
 		Validator validator = this.createValidator();
-		Set<ConstraintViolation<FootballPlayerStatistic>> constraintViolations = validator.validate(fpms);
+		Set<ConstraintViolation<FootballPlayerMatchStatistic>> constraintViolations = validator.validate(fpms);
 
 		Assertions.assertTrue(constraintViolations.size() == 1);
 
-		ConstraintViolation<FootballPlayerStatistic> violation = constraintViolations.iterator().next();
+		ConstraintViolation<FootballPlayerMatchStatistic> violation = constraintViolations.iterator().next();
 
 		Assertions.assertTrue(violation.getPropertyPath().toString().compareTo("red_cards") == 0);
 		Assertions.assertTrue(violation.getMessage().compareTo("must not be null") == 0);
@@ -145,7 +151,7 @@ public class FootballPlayerStatisticValidatorTests {
 		matchRecord.setSeason_start("2001");
 		//matchRecord.setMatch(match);
 
-		FootballPlayerStatistic fpms = new FootballPlayerStatistic();
+		FootballPlayerMatchStatistic fpms = new FootballPlayerMatchStatistic();
 
 		fpms.setAssists(0);
 		fpms.setGoals(0);
@@ -154,14 +160,15 @@ public class FootballPlayerStatisticValidatorTests {
 		fpms.setReceived_goals(0);
 		fpms.setSeason_end(matchRecord.getSeason_end());
 		fpms.setSeason_start(matchRecord.getSeason_start());
+		fpms.setMatchRecord(matchRecord);
 		//fpms.setPlayer(player);
 
 		Validator validator = this.createValidator();
-		Set<ConstraintViolation<FootballPlayerStatistic>> constraintViolations = validator.validate(fpms);
+		Set<ConstraintViolation<FootballPlayerMatchStatistic>> constraintViolations = validator.validate(fpms);
 
 		Assertions.assertTrue(constraintViolations.size() == 1);
 
-		ConstraintViolation<FootballPlayerStatistic> violation = constraintViolations.iterator().next();
+		ConstraintViolation<FootballPlayerMatchStatistic> violation = constraintViolations.iterator().next();
 
 		Assertions.assertTrue(violation.getPropertyPath().toString().compareTo("yellow_cards") == 0);
 		Assertions.assertTrue(violation.getMessage().compareTo("must not be null") == 0);
@@ -182,7 +189,7 @@ public class FootballPlayerStatisticValidatorTests {
 		matchRecord.setSeason_start("2001");
 		//matchRecord.setMatch(match);
 
-		FootballPlayerStatistic fpms = new FootballPlayerStatistic();
+		FootballPlayerMatchStatistic fpms = new FootballPlayerMatchStatistic();
 
 		fpms.setAssists(0);
 		fpms.setGoals(0);
@@ -191,10 +198,11 @@ public class FootballPlayerStatisticValidatorTests {
 		fpms.setReceived_goals(null);
 		fpms.setSeason_end(matchRecord.getSeason_end());
 		fpms.setSeason_start(matchRecord.getSeason_start());
+		fpms.setMatchRecord(matchRecord);
 		//fpms.setPlayer(player);
 
 		Validator validator = this.createValidator();
-		Set<ConstraintViolation<FootballPlayerStatistic>> constraintViolations = validator.validate(fpms);
+		Set<ConstraintViolation<FootballPlayerMatchStatistic>> constraintViolations = validator.validate(fpms);
 
 		Assertions.assertTrue(constraintViolations.size() == 0);
 

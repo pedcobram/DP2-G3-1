@@ -1,5 +1,5 @@
 
-package org.springframework.samples.petclinic.model;
+package org.springframework.samples.petclinic.model.pedro;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -13,6 +13,7 @@ import javax.validation.Validator;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.samples.petclinic.model.MatchRequest;
 import org.springframework.samples.petclinic.model.Enum.RequestStatus;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 

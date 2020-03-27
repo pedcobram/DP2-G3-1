@@ -15,6 +15,7 @@ import org.springframework.samples.petclinic.service.AuthenticatedService;
 import org.springframework.samples.petclinic.service.AuthoritiesService;
 import org.springframework.samples.petclinic.service.CompetitionAdminService;
 import org.springframework.samples.petclinic.service.UserService;
+import org.springframework.samples.petclinic.service.exceptions.DuplicatedNameException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -53,7 +54,7 @@ public class CompetitionAdminController {
 	}
 
 	@RequestMapping(value = "/deleteCompetitionAdmin/{username}")
-	public String deleteCompetitionAdmin(@PathVariable("username") final String username) {
+	public String deleteCompetitionAdmin(@PathVariable("username") final String username) throws DataAccessException, DuplicatedNameException {
 
 		//Obtenemos el username actual conectado
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -105,7 +106,7 @@ public class CompetitionAdminController {
 	@GetMapping("/myCompetitionAdminProfile/{competitionAdminUsername}")
 	public ModelAndView showCompetitionAdminProfile(@PathVariable("competitionAdminUsername") final String competitionAdminUsername) throws CredentialException {
 
-		//Obtenemos el username actual conectado
+		//Obtenemos el username actual conectado :
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String currentPrincipalName = authentication.getName();
 

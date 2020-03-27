@@ -72,11 +72,11 @@
 	<c:if test="${footballClub.president.user.username != principalUsername && !notHasAPublishedTeam}">
      		<security:authorize access="hasAnyAuthority('president')">
       	  	<spring:url value="/matchRequests/${footballClub.president.user.username}/new" var="newMatchRequest"></spring:url>
-    			<a href="${fn:escapeXml(newMatchRequest)}" class="btn btn-default2"><fmt:message key="newMatchRequest"/></a>
+    			<a href="${fn:escapeXml(newMatchRequest)}" class="btn btn-default2"><fmt:message key="code.button.footballclubdetails.matchrequest"/></a>
     		</security:authorize>
     	</c:if>    								 
     								    								
-    	<spring:url value="/footballClub/${footballClubId}/fan/new" var="FanUrl"></spring:url>
+    	<spring:url value="/fan/${footballClubId}/new" var="FanUrl"></spring:url>
     	<a href="${fn:escapeXml(FanUrl)}" class="btn btn-default" >
     				<span class="glyphicon glyphicon-heart-empty"></span> 
     								 <fmt:message key="addFan"/></a>

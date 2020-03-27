@@ -117,9 +117,14 @@
     		<spring:url value="/coachs/new" var="coachsNewUrl"></spring:url>
     		<a style="margin-left: 5%" href="${fn:escapeXml(coachsNewUrl)}" class="btn btn-default">${RegisterCoach}</a>
     		<p style="margin-top:0.5%; margin-left: 28%">${RegisterCoachInfo}</p>
-    	</c:if>    
+    	</c:if>   
     	
+    </security:authorize>
     	
+    
+    <security:authorize access="hasAnyAuthority('president')">
+        <spring:url value="/myfootballClub/delete" var="addUrl"></spring:url>
+    	<a href="${fn:escapeXml(addUrl)}" onclick="return confirm('ARE YOU SURE?')" class="btn btn-default2"><fmt:message key="deleteClub"/></a>
     </security:authorize>
 
     <br/>

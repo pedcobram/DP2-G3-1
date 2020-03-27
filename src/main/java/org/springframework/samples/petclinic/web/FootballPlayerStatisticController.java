@@ -14,8 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class FootballPlayerStatisticController {
 
-	//private static final String						VIEWS_FOOTBALL_PLAYER_STATISTIC_CREATE_OR_UPDATE_FORM	= "footballPlayerStatistic/createOrUpdateFootballPlayerStatisticForm";
-
 	private static final String						VIEWS_FOOTBALL_PLAYER_STATISTIC_DETAIL	= "footballPlayerStatistic/footballPlayerStatisticDetails";
 
 	private final FootballPlayerStatisticService	footballPlayerStatisticService;

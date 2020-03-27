@@ -11,6 +11,10 @@
 	
 <jsp:body>	
 
+	<security:authorize access="isAuthenticated()">
+   		<security:authentication var="principalUsername" property="principal.username" /> 
+	</security:authorize>
+
     <h2 style="color:black"><fmt:message key="code.title.matchrecorddetail"/></h2>
     
     <table class="table table-striped">
@@ -50,15 +54,25 @@
        			<tr>
            			<th><fmt:message key="code.label.matchrecorddetail.playername"/></th>
            			<th><fmt:message key="code.label.matchrecorddetail.goals"/></th>
-           			<th><fmt:message key="code.label.matchrecorddetail.actions"/></th>
+           			<c:if test="${matchRecord.status eq 'NOT_PUBLISHED' and matchRecord.match.referee.user.username eq principalUsername}">
+           				<th><fmt:message key="code.label.matchrecorddetail.actions"/></th>
+           			</c:if>
            			<th><fmt:message key="code.label.matchrecorddetail.assists"/></th>
-           			<th><fmt:message key="code.label.matchrecorddetail.actions"/></th>
+           			<c:if test="${matchRecord.status eq 'NOT_PUBLISHED' and matchRecord.match.referee.user.username eq principalUsername}">
+	           			<th><fmt:message key="code.label.matchrecorddetail.actions"/></th>
+	           		</c:if>
            			<th><fmt:message key="code.label.matchrecorddetail.redcards"/></th>
-           			<th><fmt:message key="code.label.matchrecorddetail.actions"/></th>
+           			<c:if test="${matchRecord.status eq 'NOT_PUBLISHED' and matchRecord.match.referee.user.username eq principalUsername}">
+           				<th><fmt:message key="code.label.matchrecorddetail.actions"/></th>
+           			</c:if>
            			<th><fmt:message key="code.label.matchrecorddetail.yellowcards"/></th>
-           			<th><fmt:message key="code.label.matchrecorddetail.actions"/></th>
+           			<c:if test="${matchRecord.status eq 'NOT_PUBLISHED' and matchRecord.match.referee.user.username eq principalUsername}">	
+           				<th><fmt:message key="code.label.matchrecorddetail.actions"/></th>
+           			</c:if>	
            			<th><fmt:message key="code.label.matchrecorddetail.receivedgoals"/></th>
-           			<th><fmt:message key="code.label.matchrecorddetail.actions"/></th>
+           			<c:if test="${matchRecord.status eq 'NOT_PUBLISHED' and matchRecord.match.referee.user.username eq principalUsername}">
+           				<th><fmt:message key="code.label.matchrecorddetail.actions"/></th>
+           			</c:if>
  				</tr>
         	</thead>
         	<tbody>
@@ -70,63 +84,73 @@
                 <td>
                     <c:out value="${footballPlayers.goals}"/>
                 </td>
-                <td>
-                	<c:if test="${footballPlayers.matchRecord.status eq 'NOT_PUBLISHED'}">
+                
+                <c:if test="${footballPlayers.matchRecord.status eq 'NOT_PUBLISHED' and footballPlayers.matchRecord.match.referee.user.username eq principalUsername}">
+                	<td>                
                     	<spring:url value="/matches/matchRecord/goal/add/${footballPlayers.matchRecord.id}/${footballPlayers.player.id}" var='addGoalMatchRecordStatistics'></spring:url>
                 		<a href="${fn:escapeXml(addGoalMatchRecordStatistics)}" class="btn btn-default"><fmt:message key="code.button.matchrecorddetail.addone"/></a>
                 	
                 		<spring:url value="/matches/matchRecord/goal/substract/${footballPlayers.matchRecord.id}/${footballPlayers.player.id}" var='substractGoalMatchRecordStatistics'></spring:url>
                 		<a href="${fn:escapeXml(substractGoalMatchRecordStatistics)}" class="btn btn-default"><fmt:message key="code.button.matchrecorddetail.substractone"/></a>
-                	</c:if>
-                </td>
+                	</td>
+                </c:if>
+                	
                 <td>
                     <c:out value="${footballPlayers.assists}"/>
                 </td>
-                <td>
-                	<c:if test="${footballPlayers.matchRecord.status eq 'NOT_PUBLISHED'}">
+                
+                <c:if test="${footballPlayers.matchRecord.status eq 'NOT_PUBLISHED' and footballPlayers.matchRecord.match.referee.user.username eq principalUsername}">
+                	<td>
                     	<spring:url value="/matches/matchRecord/assist/add/${footballPlayers.matchRecord.id}/${footballPlayers.player.id}" var='addAssistMatchRecordStatistics'></spring:url>
                 		<a href="${fn:escapeXml(addAssistMatchRecordStatistics)}" class="btn btn-default"><fmt:message key="code.button.matchrecorddetail.addone"/></a>
                 	
                 		<spring:url value="/matches/matchRecord/assist/substract/${footballPlayers.matchRecord.id}/${footballPlayers.player.id}" var='substractAssistMatchRecordStatistics'></spring:url>
                 		<a href="${fn:escapeXml(substractAssistMatchRecordStatistics)}" class="btn btn-default"><fmt:message key="code.button.matchrecorddetail.substractone"/></a>
-                	</c:if>
-                </td>
+                	</td>
+                </c:if>
+                	
                <td>
                     <c:out value="${footballPlayers.red_cards}"/>
-                </td>
-                <td>
-                	<c:if test="${footballPlayers.matchRecord.status eq 'NOT_PUBLISHED'}">
+               </td>
+                
+               <c:if test="${footballPlayers.matchRecord.status eq 'NOT_PUBLISHED' and footballPlayers.matchRecord.match.referee.user.username eq principalUsername}">
+               		<td>
                     	<spring:url value="/matches/matchRecord/redCard/add/${footballPlayers.matchRecord.id}/${footballPlayers.player.id}" var='addRedCardMatchRecordStatistics'></spring:url>
                 		<a href="${fn:escapeXml(addRedCardMatchRecordStatistics)}" class="btn btn-default"><fmt:message key="code.button.matchrecorddetail.addone"/></a>
                 	
                 		<spring:url value="/matches/matchRecord/redCard/substract/${footballPlayers.matchRecord.id}/${footballPlayers.player.id}" var='substractRedCardMatchRecordStatistics'></spring:url>
                 		<a href="${fn:escapeXml(substractRedCardMatchRecordStatistics)}" class="btn btn-default"><fmt:message key="code.button.matchrecorddetail.substractone"/></a>
-                	</c:if>
-                </td>
+                	</td>
+                </c:if>
+                
                 <td>
                     <c:out value="${footballPlayers.yellow_cards}"/>
                 </td>
-                <td>
-                	<c:if test="${footballPlayers.matchRecord.status eq 'NOT_PUBLISHED'}">
+                
+                <c:if test="${footballPlayers.matchRecord.status eq 'NOT_PUBLISHED' and footballPlayers.matchRecord.match.referee.user.username eq principalUsername}">
+                	<td>
                     	<spring:url value="/matches/matchRecord/yellowCard/add/${footballPlayers.matchRecord.id}/${footballPlayers.player.id}" var='addYellowCardMatchRecordStatistics'></spring:url>
                 		<a href="${fn:escapeXml(addYellowCardMatchRecordStatistics)}" class="btn btn-default"><fmt:message key="code.button.matchrecorddetail.addone"/></a>
                 	
                 		<spring:url value="/matches/matchRecord/yellowCard/substract/${footballPlayers.matchRecord.id}/${footballPlayers.player.id}" var='substractYellowCardMatchRecordStatistics'></spring:url>
                 		<a href="${fn:escapeXml(substractYellowCardMatchRecordStatistics)}" class="btn btn-default"><fmt:message key="code.button.matchrecorddetail.substractone"/></a>
-                	</c:if>
-                </td>
+                
+                	</td>
+				</c:if>
+				                	
                 <td>
                     <c:out value="${footballPlayers.received_goals}"/>
                 </td>
-                <td>
-                	<c:if test="${footballPlayers.matchRecord.status eq 'NOT_PUBLISHED'}">
+                
+                <c:if test="${footballPlayers.matchRecord.status eq 'NOT_PUBLISHED' and footballPlayers.matchRecord.match.referee.user.username eq principalUsername}">
+               		<td>
                     	<spring:url value="/matches/matchRecord/receivedGoals/add/${footballPlayers.matchRecord.id}/${footballPlayers.player.id}" var='addRedCardMatchRecordStatistics'></spring:url>
                 		<a href="${fn:escapeXml(addRedCardMatchRecordStatistics)}" class="btn btn-default"><fmt:message key="code.button.matchrecorddetail.addone"/></a>
                 	
                 		<spring:url value="/matches/matchRecord/receivedGoals/substract/${footballPlayers.matchRecord.id}/${footballPlayers.player.id}" var='substractRedCardMatchRecordStatistics'></spring:url>
                 		<a href="${fn:escapeXml(substractRedCardMatchRecordStatistics)}" class="btn btn-default"><fmt:message key="code.button.matchrecorddetail.substractone"/></a>
-                	</c:if>	
-                </td>
+                	</td>
+                </c:if>	
             </tr>
         </c:forEach>
         </tbody>

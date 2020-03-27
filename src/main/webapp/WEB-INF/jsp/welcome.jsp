@@ -15,16 +15,55 @@
             <img class="img-responsive" src="${petsImage}"/>
         </div>
     </div> %--> 
+    <div style="text-align:center">
     
-    <c:if test="${isFan&&!isVip}"> 
+    <c:if test="${isFan}"> 
+     <spring:url value="/footballClubs/list/{footballClubId}" var="footballClubUrl">
+                     <spring:param name="footballClubId" value="${club.id}"/>
+                </spring:url>
+                <img width=30px height= auto hspace="20" src="${club.crest}"/>
+                	<a href="${fn:escapeXml(footballClubUrl)}"><b><c:out value="${club.name}"/></b></a></br></br>
+    
+    <c:if test="${!isVip}"> 
    
-    	<a href="/footballClub/noVip" class="btn btn-default">
+    	<a href="/fan/noVip" class="btn btn-default">
     					 <fmt:message key="serVip"/></a>
 	 	
     </c:if>
-    <c:if test="${isFan}"> 
-    <a href="/footballClub/fan/delete" class="btn btn-default">
+    <a href="/fan/delete" class="btn btn-default">
     					 <fmt:message key="deleteVip"/></a>
+    					 
+   </br> 	 </br> 			
+    					 
+	<table id="lastMachesTable" class="table table-striped">
+			<thead>
+       			<tr>
+            		<th class="th-center"><fmt:message key="code.label.matchlist.matchdate"/></th>
+           			<th class="th-center"><fmt:message key="code.label.matchlist.footballclub.one"/></th>
+           			<th class="th-center">	<fmt:message key="code.label.matchrecorddetail.result"/></th>          		
+           			<th class="th-center">	<fmt:message key="code.label.matchlist.footballclub.two"/></th>
+ 				</tr>
+        	</thead>
+        	<tbody>
+        <c:forEach items="${lastMatches}" var="m">
+            <tr>              		
+                <td>
+                	<c:out value="${m.match.matchDate}"/>
+                </td>
+                <td>
+                    <c:out value="${m.match.footballClub1.name}"/>
+                </td>
+                <td>
+                    <c:out value="${m.result}"/>
+                </td>        
+                <td>
+                    <c:out value="${m.match.footballClub2.name}"/>
+                </td>
+              
+            </tr>
+        </c:forEach>
+        </tbody>
+        </table>
     </c:if>
-    
+    </div>
 </petclinic:layout>

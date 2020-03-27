@@ -21,7 +21,10 @@ import java.util.Collection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Authenticated;
+import org.springframework.samples.petclinic.model.Fan;
+import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.repository.AuthenticatedRepository;
+import org.springframework.samples.petclinic.service.exceptions.DuplicatedNameException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,10 +34,10 @@ public class AuthenticatedService {
 	private AuthenticatedRepository	authenticatedRepository;
 
 	@Autowired
-	private UserService				userService;
+	private AuthoritiesService		authoritiesService;
 
 	@Autowired
-	private AuthoritiesService		authoritiesService;
+	private FanService				fanService;
 
 
 	@Autowired
@@ -58,20 +61,36 @@ public class AuthenticatedService {
 	}
 
 	@Transactional
-	public void saveAuthenticated(final Authenticated authenticated) throws DataAccessException {
-		//creating authenticated
-		this.authenticatedRepository.save(authenticated);
-		//creating user
-		this.userService.saveUser(authenticated.getUser());
-		//creating authorities
-		this.authoritiesService.saveAuthorities(authenticated.getUser().getUsername(), "authenticated");
+	public void saveAuthenticated(final Authenticated authenticated) throws DataAccessException, DuplicatedNameException {
+		Authenticated au = this.authenticatedRepository.findByUsername(authenticated.getUser().getUsername());
+		User user = authenticated.getUser();
+		if (au == null) {
+			user.setEnabled(true);
+			//creating authenticated
+			this.authenticatedRepository.save(authenticated);
+			//creating authorities
+			this.authoritiesService.saveAuthorities(authenticated.getUser().getUsername(), "authenticated");
+		} else if (authenticated.getId() != au.getId() && user.getUsername() == au.getUser().getUsername()) {
+			throw new DuplicatedNameException();
+		} else {
+			user.setEnabled(true);
+			//creating authenticated
+			this.authenticatedRepository.save(authenticated);
+			//creating authorities
+			this.authoritiesService.saveAuthorities(authenticated.getUser().getUsername(), "authenticated");
+
+		}
+
 	}
 
 	@Transactional
 	public void deleteAuthenticated(final Authenticated authenticated) throws DataAccessException {
 
 		this.authoritiesService.deleteAuthorities(authenticated.getUser().getUsername(), "authenticated");
-
+		Fan f = this.fanService.findByUserId(authenticated.getId());
+		if (f != null) {
+			this.fanService.delete(f);
+		}
 		this.authenticatedRepository.delete(authenticated);
 	}
 

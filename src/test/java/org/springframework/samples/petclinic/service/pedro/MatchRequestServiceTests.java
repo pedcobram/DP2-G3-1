@@ -1,6 +1,8 @@
 
 package org.springframework.samples.petclinic.service.pedro;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -13,12 +15,15 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.dao.DataAccessException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.samples.petclinic.model.FootballClub;
 import org.springframework.samples.petclinic.model.MatchRequest;
 import org.springframework.samples.petclinic.model.Enum.RequestStatus;
 import org.springframework.samples.petclinic.service.FootballClubService;
 import org.springframework.samples.petclinic.service.MatchRequestService;
+import org.springframework.samples.petclinic.service.exceptions.DateException;
+import org.springframework.samples.petclinic.service.exceptions.IllegalDateException;
 import org.springframework.stereotype.Service;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
@@ -120,7 +125,7 @@ public class MatchRequestServiceTests {
 	}
 
 	@Test //CASO POSITIVO
-	void shouldSaveMatchRequest() {
+	void shouldSaveMatchRequest() throws DataAccessException, IllegalDateException, DateException {
 
 		MatchRequest newMR = new MatchRequest();
 
@@ -167,6 +172,30 @@ public class MatchRequestServiceTests {
 		newMR.setMatchDate(date);
 
 		Assertions.assertThrows(ConstraintViolationException.class, () -> {
+			this.matchRequestService.saveMatchRequest(newMR);
+		});
+	}
+
+	@Test //CASO REGLA DE NEGOCIO
+	void shouldIllegalDateExceptionSaveMatchRequest() {
+
+		MatchRequest newMR = new MatchRequest();
+
+		LocalDateTime now = LocalDateTime.now();
+		Date now_date = Date.from(now.atZone(ZoneId.systemDefault()).toInstant());
+
+		FootballClub fc1 = this.footballClubService.findFootballClubById(1);
+		FootballClub fc2 = this.footballClubService.findFootballClubById(2);
+
+		newMR.setId(100);
+		newMR.setTitle("JUnit test");
+		newMR.setStatus(RequestStatus.ON_HOLD);
+		newMR.setStadium("Stadium");
+		newMR.setFootballClub1(fc1);
+		newMR.setFootballClub2(fc2);
+		newMR.setMatchDate(now_date);
+
+		Assertions.assertThrows(IllegalDateException.class, () -> {
 			this.matchRequestService.saveMatchRequest(newMR);
 		});
 	}
