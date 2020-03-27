@@ -93,7 +93,7 @@
          
     </table>
     
-    <c:if test="${coach.club.id != clubId}">
+    <c:if test="${coach.club.id != clubId && !iCantSign && clubStatus}">
     		<spring:url value="/coachs/{coachId}/sign" var="newCoachUrl">
     			<spring:param name="coachId" value="${coach.id}"/>
     		</spring:url>	

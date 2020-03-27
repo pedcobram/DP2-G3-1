@@ -78,19 +78,6 @@ public class CoachServiceTests {
 
 	}
 
-	@Test //CASO POSITIVO - Buscar todos los Entrenadores con Club
-	void shouldFindAllCoachsWithClub() {
-
-		List<Coach> coachs = new ArrayList<>();
-
-		coachs.addAll(this.coachService.findAllCoachsWithClub());
-
-		int count = coachs.size();
-
-		Assertions.assertTrue(count == 9);
-
-	}
-
 	@Test //CASO POSITIVO - Buscar todos los Jugadores Agentes Libres
 	void shouldFindAllCoachsFreeAgents() {
 

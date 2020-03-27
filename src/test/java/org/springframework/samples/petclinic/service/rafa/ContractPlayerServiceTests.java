@@ -111,8 +111,8 @@ public class ContractPlayerServiceTests {
 
 		this.contractService.saveContractPlayer(contract);
 
-		contractPlayer = this.contractService.findContractPlayerById(8);
-		Assertions.assertTrue(contractPlayer != null); //Vemos que ahora SI existe el contrato
+		contractPlayer = this.contractService.findContractPlayerById(7);
+		Assertions.assertFalse(contractPlayer == null); //Vemos que ahora SI existe el contrato
 		Assertions.assertTrue(contractPlayer.getId() != null);
 		Assertions.assertTrue(this.contractService.findContractPlayerByPlayerId(player.getId()) != null); //Vemos que ahora si tiene contrato
 

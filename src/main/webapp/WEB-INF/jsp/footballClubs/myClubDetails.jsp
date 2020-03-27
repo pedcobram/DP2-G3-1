@@ -31,7 +31,7 @@
     	<fmt:message key="code.crud.registerCoach" var="RegisterCoach"/> 	
 		<fmt:message key="code.information.registerCoach" var="RegisterCoachInfo"/>	
     	 	
-<petclinic:layout pageName="footballCLubs">
+<petclinic:layout pageName="footballClub">
 
 <jsp:attribute name="customScript">
 	
@@ -107,7 +107,9 @@
     		<a data-toggle="tooltip" title="${mousehover}" href="${fn:escapeXml(editUrl)}" class="btn btn-default">${updateClub}</a>  	
     	</c:if> 
     	<c:if test="${(footballClub.president.user.username == principalUsername)}">
-    		<spring:url value="/footballClubs/myClub/{principalUsername}/delete" var="addUrl"></spring:url>
+    		<spring:url value="/footballClubs/myClub/{principalUsername}/delete" var="addUrl">
+    			<spring:param name="principalUsername" value="${footballClub.president.user.username}"/>
+    		</spring:url>
     		<a href="${fn:escapeXml(addUrl)}" onclick="return confirm('${areYouSure}')" class="btn btn-default2"><span class="glyphicon glyphicon-trash"></span> ${deleteClub}</a>
     	</c:if>
     	  

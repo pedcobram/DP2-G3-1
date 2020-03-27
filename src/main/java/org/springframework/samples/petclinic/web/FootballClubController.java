@@ -54,7 +54,6 @@ public class FootballClubController {
 
 	private static final String			VIEWS_CLUB_CREATE_OR_UPDATE_FORM	= "footballClubs/createOrUpdateFootballClubForm";
 
-	@Autowired
 	private final FootballClubService	footballClubService;
 
 
@@ -96,9 +95,7 @@ public class FootballClubController {
 	public ModelAndView showFootballClub(@PathVariable("footballClubId") final int footballClubId) {
 
 		ModelAndView mav = new ModelAndView("footballClubs/footballClubDetails");
-
 		mav.addObject(this.footballClubService.findFootballClubById(footballClubId));
-		mav.addObject(this.footballClubService.findCoachByClubId(footballClubId));
 
 		//Quitamos el botón si no tiene equipo o no está público no puede hacer peticiones de partidos
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -108,6 +105,8 @@ public class FootballClubController {
 		if (footballClub1 == null || footballClub1.getStatus() == false) {
 			mav.addObject("notHasAPublishedTeam", true);
 		}
+
+		mav.addObject(this.footballClubService.findCoachByClubId(footballClubId));
 
 		return mav;
 	}
@@ -143,9 +142,17 @@ public class FootballClubController {
 	}
 
 	@GetMapping(value = "/footballClubs/myClub/new") //CREAR CLUB - GET
-	public String initCreationForm(final Map<String, Object> model) {
-		FootballClub footballClub = new FootballClub();
+	public String initCreationForm(final Map<String, Object> model) throws CredentialException {
 
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
+		FootballClub myClub = this.footballClubService.findFootballClubByPresident(currentPrincipalName);
+
+		if (myClub != null) { //SEGURIDAD
+			throw new CredentialException();
+		}
+
+		FootballClub footballClub = new FootballClub();
 		model.put("footballClub", footballClub);
 		model.put("isNew", true);
 		return FootballClubController.VIEWS_CLUB_CREATE_OR_UPDATE_FORM;
@@ -185,11 +192,12 @@ public class FootballClubController {
 	}
 
 	@GetMapping(value = "/footballClubs/myClub/{principalUsername}/edit") //EDITAR CLUB - GET
-	public String initUpdateFootballClubForm(@PathVariable("principalUsername") final String principalUsername, final Model model) throws CredentialException {
+	public String initUpdateFootballClubForm(@PathVariable("principalUsername") final String principalUsername, final Map<String, Object> model) throws CredentialException {
 
 		FootballClub footballClub = this.footballClubService.findFootballClubByPresident(principalUsername);
-		model.addAttribute(footballClub);
-		model.addAttribute("isEditing", true);
+
+		model.put("footballClub", footballClub);
+		model.put("isEditing", true);
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String currentPrincipalName = authentication.getName();
@@ -252,12 +260,12 @@ public class FootballClubController {
 	}
 
 	@RequestMapping(value = "/footballClubs/myClub/{principalUsername}/delete") //BORRAR CLUB
-	public String processDeleteForm() throws DataAccessException, CredentialException {
+	public String processDeleteForm(@PathVariable("principalUsername") final String principalUsername) throws DataAccessException, CredentialException {
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String currentPrincipalName = authentication.getName();
 
-		FootballClub thisFootballCLub = this.footballClubService.findFootballClubByPresident(currentPrincipalName);
+		FootballClub thisFootballCLub = this.footballClubService.findFootballClubByPresident(principalUsername);
 
 		if (!thisFootballCLub.getPresident().getUser().getUsername().equals(currentPrincipalName)) { //SEGURIDAD
 			throw new CredentialException("Forbidden Access");

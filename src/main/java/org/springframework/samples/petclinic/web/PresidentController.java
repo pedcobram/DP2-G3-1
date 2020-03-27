@@ -45,10 +45,8 @@ public class PresidentController {
 
 	private static final String			VIEWS_PRESIDENT_CREATE_OR_UPDATE_FORM	= "presidents/createOrUpdatePresidentForm";
 
-	@Autowired
 	private final AuthenticatedService	authenticatedService;
 
-	@Autowired
 	private final PresidentService		presidentService;
 
 
@@ -63,7 +61,7 @@ public class PresidentController {
 		dataBinder.setDisallowedFields("id");
 	}
 
-	@RequestMapping(value = "/presidents/new") //SER PRESIDENTE
+	@PostMapping(value = "/presidents/new") //SER PRESIDENTE
 	public String createPresident() throws DataAccessException, CredentialException {
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

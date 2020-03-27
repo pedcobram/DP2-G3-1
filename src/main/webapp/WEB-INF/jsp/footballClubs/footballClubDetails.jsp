@@ -25,7 +25,7 @@
     	<fmt:message key="code.label.president" var="President"/>  	
     	<fmt:message key="code.list.playerList" var="playerList"/>
 
-<petclinic:layout pageName="footballCLubs">
+<petclinic:layout pageName="footballClub">
 
     <h2 style="color:black">${footballClubTitle}</h2>
     

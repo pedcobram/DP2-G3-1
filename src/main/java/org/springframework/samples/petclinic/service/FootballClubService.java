@@ -40,7 +40,6 @@ import org.springframework.util.StringUtils;
 @Service
 public class FootballClubService {
 
-	@Autowired
 	private FootballClubRepository		footRepository;
 
 	@Autowired

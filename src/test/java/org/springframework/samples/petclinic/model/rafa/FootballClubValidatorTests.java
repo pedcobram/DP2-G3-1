@@ -13,6 +13,7 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.samples.petclinic.model.FootballClub;
+import org.springframework.samples.petclinic.model.President;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 class FootballClubValidatorTests {
@@ -26,11 +27,15 @@ class FootballClubValidatorTests {
 	@Test
 	void shouldNotValidateWhenNameEmpty() {
 
+		President president = new President();
+
 		LocaleContextHolder.setLocale(Locale.ENGLISH);
 		FootballClub club = new FootballClub();
 
+		club.setStatus(false);
+		club.setFans(0);
+		club.setPresident(president);
 		club.setName("");
-
 		club.setCity("London");
 		club.setStadium("Stamford Bridge");
 		club.setMoney(1000000);
@@ -58,8 +63,11 @@ class FootballClubValidatorTests {
 		LocaleContextHolder.setLocale(Locale.ENGLISH);
 		FootballClub club = new FootballClub();
 
+		President president = new President();
+		club.setStatus(false);
+		club.setFans(0);
+		club.setPresident(president);
 		club.setName("Chelsea");
-
 		club.setCity("London");
 		club.setStadium("");
 		club.setMoney(1000000);
@@ -87,8 +95,11 @@ class FootballClubValidatorTests {
 		LocaleContextHolder.setLocale(Locale.ENGLISH);
 		FootballClub club = new FootballClub();
 
+		President president = new President();
+		club.setStatus(false);
+		club.setFans(0);
+		club.setPresident(president);
 		club.setName("Chelsea");
-
 		club.setCity("");
 		club.setStadium("Stamford Bridge");
 		club.setMoney(1000000);
@@ -116,8 +127,11 @@ class FootballClubValidatorTests {
 		LocaleContextHolder.setLocale(Locale.ENGLISH);
 		FootballClub club = new FootballClub();
 
+		President president = new President();
+		club.setStatus(false);
+		club.setFans(0);
+		club.setPresident(president);
 		club.setName("Chelsea");
-
 		club.setCity("London");
 		club.setStadium("Stamford Bridge");
 		club.setMoney(null);
@@ -145,8 +159,11 @@ class FootballClubValidatorTests {
 		LocaleContextHolder.setLocale(Locale.ENGLISH);
 		FootballClub club = new FootballClub();
 
+		President president = new President();
+		club.setStatus(false);
+		club.setFans(0);
+		club.setPresident(president);
 		club.setName("Chelsea");
-
 		club.setCity("London");
 		club.setStadium("Stamford Bridge");
 		club.setMoney(1000000);
@@ -174,8 +191,11 @@ class FootballClubValidatorTests {
 		LocaleContextHolder.setLocale(Locale.ENGLISH);
 		FootballClub club = new FootballClub();
 
+		President president = new President();
+		club.setStatus(false);
+		club.setFans(0);
+		club.setPresident(president);
 		club.setName("Chelsea");
-
 		club.setCity("London");
 		club.setStadium("Stamford Bridge");
 		club.setMoney(1000000);
@@ -204,8 +224,11 @@ class FootballClubValidatorTests {
 		LocaleContextHolder.setLocale(Locale.ENGLISH);
 		FootballClub club = new FootballClub();
 
+		President president = new President();
+		club.setStatus(false);
+		club.setFans(0);
+		club.setPresident(president);
 		club.setName("Chelsea");
-
 		club.setCity("London");
 		club.setStadium("Stamford Bridge");
 		club.setMoney(1000000);

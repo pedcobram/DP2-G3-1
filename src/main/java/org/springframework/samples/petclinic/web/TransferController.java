@@ -24,13 +24,10 @@ import org.springframework.web.bind.annotation.InitBinder;
 @Controller
 public class TransferController {
 
-	@Autowired
 	private final FootballClubService	footballClubService;
 
-	@Autowired
 	private final FootballPlayerService	footballPlayerService;
 
-	@Autowired
 	private final CoachService			coachService;
 
 
@@ -69,12 +66,17 @@ public class TransferController {
 		String currentPrincipalName = authentication.getName();
 		FootballClub footballClub = this.footballClubService.findFootballClubByPresident(currentPrincipalName);
 
+		if (footballClub == null) {
+			return "footballClubs/myClubEmpty";
+		}
+
 		if (footballClub.getStatus() == false) {
 			throw new CredentialException();
 		}
 
 		Collection<Coach> coachs = new ArrayList<>();
-		coachs.addAll(this.coachService.findAllCoachsWithClub());
+		coachs.addAll(this.coachService.findAllCoachs());
+		coachs.removeAll(this.coachService.findAllCoachsFA());
 		coachs.remove(this.coachService.findCoachByClubId(footballClub.getId()));
 		model.put("coachs", coachs);
 
@@ -84,6 +86,14 @@ public class TransferController {
 
 	@GetMapping(value = "/transfers/coachs/free-agents") //LISTA DE ENTRENADORES LIBRES
 	public String showCoachFAList(final Map<String, Object> model) throws CredentialException {
+
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
+		FootballClub footballClub = this.footballClubService.findFootballClubByPresident(currentPrincipalName);
+
+		if (footballClub == null) {
+			return "footballClubs/myClubEmpty";
+		}
 
 		Collection<Coach> coachs = new ArrayList<>();
 		coachs.addAll(this.coachService.findAllCoachsFA());
@@ -99,6 +109,10 @@ public class TransferController {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String currentPrincipalName = authentication.getName();
 		FootballClub footballClub = this.footballClubService.findFootballClubByPresident(currentPrincipalName);
+
+		if (footballClub == null) {
+			return "footballClubs/myClubEmpty";
+		}
 
 		if (footballClub.getStatus() == false) {
 			throw new CredentialException();
@@ -116,6 +130,14 @@ public class TransferController {
 
 	@GetMapping(value = "/transfers/players/free-agents") //LISTA DE JUGADORES LIBRES
 	public String showPlayerFAList(final Map<String, Object> model) throws CredentialException {
+
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
+		FootballClub footballClub = this.footballClubService.findFootballClubByPresident(currentPrincipalName);
+
+		if (footballClub == null) {
+			return "footballClubs/myClubEmpty";
+		}
 
 		Collection<FootballPlayer> footballPlayers = new ArrayList<>();
 		footballPlayers.addAll(this.footballPlayerService.findAllFootballPlayersFA());
