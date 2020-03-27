@@ -34,9 +34,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 public class WelcomeControllerTest {
 
 	@Autowired
-	private WelcomeController		welcomeController;
-
-	@Autowired
 	private MockMvc					mockMvc;
 
 	@MockBean

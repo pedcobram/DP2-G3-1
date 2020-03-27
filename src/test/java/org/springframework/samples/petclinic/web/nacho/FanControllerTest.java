@@ -33,8 +33,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 public class FanControllerTest {
 
 	@Autowired
-	private FanController			fanController;
-	@Autowired
 	private MockMvc					mockMvc;
 
 	@MockBean

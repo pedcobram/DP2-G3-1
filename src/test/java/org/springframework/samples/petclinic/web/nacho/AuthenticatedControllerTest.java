@@ -28,9 +28,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 public class AuthenticatedControllerTest {
 
 	@Autowired
-	private AuthenticatedController	authenticatedController;
-
-	@Autowired
 	private MockMvc					mockMvc;
 
 	@MockBean
