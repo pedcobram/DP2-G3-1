@@ -120,12 +120,48 @@
     	</c:if>   
     	
     </security:authorize>
-    	
     
     <security:authorize access="hasAnyAuthority('president')">
         <spring:url value="/myfootballClub/delete" var="addUrl"></spring:url>
     	<a href="${fn:escapeXml(addUrl)}" onclick="return confirm('ARE YOU SURE?')" class="btn btn-default2"><fmt:message key="deleteClub"/></a>
     </security:authorize>
+    
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    
+     <c:if test="${contractCommercial != null}">
+	    <h2 style="color:black">Contrato Publicitario</h2>
+	
+	    <table class="table table-striped">
+	        <tr>
+	            <th>Banner publicitario:</th>
+	            <td><img width=30px height= auto hspace="20" src="${contractCommercial.publicity}"/></td>
+	        </tr>
+	        <tr>
+	            <th>Salario:</th>
+	            <td><c:out value="${contractCommercial.money}"/></td>
+	        </tr>
+	        <tr>
+	            <th>Inicio del Contrato:</th>
+	            <td><c:out value="${contractCommercial.startDate}"/></td>
+	        </tr>
+	        <tr>
+	            <th>Fin del Contrato:</th>
+	            <td><c:out value="${contractCommercial.endDate}"/></td>
+	        </tr>  
+	        <tr>
+	            <th>Cláusula de fin del Contrato:</th>
+	            <td><c:out value="${contractCommercial.clause}"/></td>
+	        </tr>    
+	    </table>
+	    <spring:url value="/contractsCommercial/{contractCommercialId}/removeFromMyClub" var="removeContractFromClubURL">
+			<spring:param name="contractCommercialId" value="${contractCommercial.id}"/>
+		</spring:url>	
+			<a data-toggle="tooltip" href="${fn:escapeXml(removeContractFromClubURL)}" class="btn btn-default">Eliminar Contrato Publicitario</a>
+						
+    </c:if>
 
     <br/>
     <br/>

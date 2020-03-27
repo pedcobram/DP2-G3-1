@@ -5,14 +5,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.ContractCommercial;
 import org.springframework.samples.petclinic.model.FootballClub;
 import org.springframework.samples.petclinic.service.ContractCommercialService;
 import org.springframework.samples.petclinic.service.FootballClubService;
+import org.springframework.samples.petclinic.service.exceptions.DateException;
+import org.springframework.samples.petclinic.service.exceptions.DuplicatedNameException;
 import org.springframework.samples.petclinic.service.exceptions.NoMultipleContractCommercialException;
 import org.springframework.samples.petclinic.service.exceptions.NoStealContractCommercialException;
+import org.springframework.samples.petclinic.service.exceptions.NotEnoughMoneyException;
+import org.springframework.samples.petclinic.service.exceptions.NumberOfPlayersAndCoachException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -20,6 +26,7 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -78,17 +85,34 @@ public class ContractCommercialController {
 		return mav;
 	}
 
-	//Crear Contrato de Comercial - Get
 	@GetMapping(value = "/contractsCommercial/{contractCommercialId}/addToMyClub")
-	public String addContractToMyClub(@PathVariable("contractCommercialId") final int contractCommercialId) throws DataAccessException, NoMultipleContractCommercialException, NoStealContractCommercialException {
-
+	public String initAddContractToMyClub(@PathVariable("contractCommercialId") final int contractCommercialId)
+		throws DataAccessException, NoMultipleContractCommercialException, NoStealContractCommercialException, NotEnoughMoneyException, DuplicatedNameException, NumberOfPlayersAndCoachException, DateException {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String currentPrincipalName = authentication.getName();
-
 		FootballClub footballClub = this.footballClubService.findFootballClubByPresident(currentPrincipalName);
 		ContractCommercial contractCommercial = this.contractService.findContractCommercialById(contractCommercialId);
 
-		contractCommercial.setClub(footballClub);
+		ContractCommercial cc = new ContractCommercial();
+		cc.setClause(contractCommercial.getClause());
+		cc.setClub(contractCommercial.getClub());
+		cc.setEndDate(contractCommercial.getEndDate());
+		cc.setId(contractCommercial.getId());
+		cc.setStartDate(contractCommercial.getStartDate());
+		cc.setMoney(contractCommercial.getMoney());
+		cc.setPublicity(contractCommercial.getPublicity());
+		cc.setClub(footballClub);
+
+		return this.processAddContractToMyClub(cc);
+	}
+
+	//Crear Contrato de Comercial - Get
+	@PostMapping(value = "/contractsCommercial/{contractCommercialId}/addToMyClub")
+	public String processAddContractToMyClub(@Valid final ContractCommercial contractCommercial)
+		throws DataAccessException, NoMultipleContractCommercialException, NoStealContractCommercialException, NotEnoughMoneyException, DuplicatedNameException, NumberOfPlayersAndCoachException, DateException {
+
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
 
 		this.contractService.saveContractCommercial(contractCommercial);
 
@@ -96,14 +120,29 @@ public class ContractCommercialController {
 	}
 
 	@GetMapping(value = "/contractsCommercial/{contractCommercialId}/removeFromMyClub")
-	public String removeContractFromMyClub(@PathVariable("contractCommercialId") final int contractCommercialId) throws DataAccessException, NoMultipleContractCommercialException, NoStealContractCommercialException {
+	public String initremoveContractFromMyClub(@PathVariable("contractCommercialId") final int contractCommercialId)
+		throws DataAccessException, NoMultipleContractCommercialException, NoStealContractCommercialException, NotEnoughMoneyException, DuplicatedNameException, NumberOfPlayersAndCoachException, DateException {
+		ContractCommercial contractCommercial = this.contractService.findContractCommercialById(contractCommercialId);
+
+		ContractCommercial cc = new ContractCommercial();
+		cc.setClause(contractCommercial.getClause());
+		cc.setClub(contractCommercial.getClub());
+		cc.setEndDate(contractCommercial.getEndDate());
+		cc.setId(contractCommercial.getId());
+		cc.setStartDate(contractCommercial.getStartDate());
+		cc.setMoney(contractCommercial.getMoney());
+		cc.setPublicity(contractCommercial.getPublicity());
+		cc.setClub(null);
+
+		return this.processremoveContractFromMyClub(cc);
+	}
+
+	@PostMapping(value = "/contractsCommercial/{contractCommercialId}/removeFromMyClub")
+	public String processremoveContractFromMyClub(@Valid final ContractCommercial contractCommercial)
+		throws DataAccessException, NoMultipleContractCommercialException, NoStealContractCommercialException, NotEnoughMoneyException, DuplicatedNameException, NumberOfPlayersAndCoachException, DateException {
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String currentPrincipalName = authentication.getName();
-
-		ContractCommercial contractCommercial = this.contractService.findContractCommercialById(contractCommercialId);
-
-		contractCommercial.setClub(null);
 
 		this.contractService.saveContractCommercial(contractCommercial);
 
