@@ -75,8 +75,10 @@ public class AuthenticatedControllerTest {
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/authenticateds/new")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("authenticated"))
 			.andExpect(MockMvcResultMatchers.view().name("authenticateds/createOrUpdateAuthenticatedForm")).andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/authenticateds/createOrUpdateAuthenticatedForm.jsp"));
 	}
+
 	@WithMockUser()
 	@Test //CASO POSITIVO
+
 	void testCreationFormSuccess() throws Exception {
 		this.mockMvc.perform(MockMvcRequestBuilders.post("/authenticateds/new").param("firstName", "Auth").param("lastName", "Test").param("dni", "12345678T").param("email", "auth@test.com").param("telephone", "657063253").param("user.username", "auth")
 			.param("user.password", "auth").with(SecurityMockMvcRequestPostProcessors.csrf())).andExpect(MockMvcResultMatchers.status().is3xxRedirection()).andExpect(MockMvcResultMatchers.view().name("redirect:/authenticateds/" + null));
@@ -100,7 +102,6 @@ public class AuthenticatedControllerTest {
 			.andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("authenticated")).andExpect(MockMvcResultMatchers.view().name("authenticateds/createOrUpdateAuthenticatedForm"))
 			.andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/authenticateds/createOrUpdateAuthenticatedForm.jsp")).andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("authenticated", "lastName"));
 	}
-
 	@WithMockUser()
 	@Test // CASO NEGATIVO
 	void testCreationFormDNIError() throws Exception {
@@ -128,23 +129,23 @@ public class AuthenticatedControllerTest {
 			.andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("authenticated")).andExpect(MockMvcResultMatchers.view().name("authenticateds/createOrUpdateAuthenticatedForm"))
 			.andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/authenticateds/createOrUpdateAuthenticatedForm.jsp")).andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("authenticated", "telephone"));
 	}
-	//	@WithMockUser()
-	//	@Test // CASO NEGATIVO
-	//	void testCreationFormPasswordError() throws Exception {
-	//		this.mockMvc
-	//			.perform(MockMvcRequestBuilders.post("/authenticateds/new").param("firstName", "Auth").param("lastName", "Test").param("dni", "12345678T").param("email", "auth@test.com").param("telephone", "65ok253").param("user.username", "auth")
-	//				.param("user.password", "").with(SecurityMockMvcRequestPostProcessors.csrf()))
-	//			.andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("authenticated")).andExpect(MockMvcResultMatchers.view().name("authenticateds/createOrUpdateAuthenticatedForm"))
-	//			.andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/authenticateds/createOrUpdateAuthenticatedForm.jsp")).andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("authenticated", "user.password"));
-	//	}
+	@WithMockUser()
+	@Test // CASO NEGATIVO
+	void testCreationFormPasswordError() throws Exception {
+		this.mockMvc
+			.perform(MockMvcRequestBuilders.post("/authenticateds/new").param("firstName", "Auth").param("lastName", "Test").param("dni", "12345678T").param("email", "auth@test.com").param("telephone", "65ok253").param("user.username", "auth")
+				.with(SecurityMockMvcRequestPostProcessors.csrf()))
+			.andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("authenticated")).andExpect(MockMvcResultMatchers.view().name("authenticateds/createOrUpdateAuthenticatedForm"))
+			.andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/authenticateds/createOrUpdateAuthenticatedForm.jsp")).andExpect(MockMvcResultMatchers.model().attributeHasErrors("authenticated"));
+	}
 	//	@WithMockUser()
 	//	@Test // CASO NEGATIVO
 	//	void testCreationFormUsernameError() throws Exception {
 	//		this.mockMvc
-	//			.perform(MockMvcRequestBuilders.post("/authenticateds/new").param("firstName", "Auth").param("lastName", "Test").param("dni", "12345678T").param("email", "auth@test.com").param("telephone", "657892753").param("user.username", "")
-	//				.param("user.password", "auth").with(SecurityMockMvcRequestPostProcessors.csrf()))
+	//			.perform(MockMvcRequestBuilders.post("/authenticateds/new").param("firstName", "Auth").param("lastName", "Test").param("dni", "12345678T").param("email", "auth@test.com").param("telephone", "657892753").param("user.password", "auth")
+	//				.with(SecurityMockMvcRequestPostProcessors.csrf()))
 	//			.andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("authenticated")).andExpect(MockMvcResultMatchers.view().name("authenticateds/createOrUpdateAuthenticatedForm"))
-	//			.andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/authenticateds/createOrUpdateAuthenticatedForm.jsp")).andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("authenticated", "user.username"));
+	//			.andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/authenticateds/createOrUpdateAuthenticatedForm.jsp")).andExpect(MockMvcResultMatchers.model().attributeHasErrors("authenticated"));
 	//	}
 
 	@WithMockUser()
@@ -154,6 +155,7 @@ public class AuthenticatedControllerTest {
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/authenticateds/find")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("authenticated"))
 			.andExpect(MockMvcResultMatchers.view().name("authenticateds/findAuthenticateds")).andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/authenticateds/findAuthenticateds.jsp"));
 	}
+
 	@WithMockUser()
 	@Test //CASO POSITIVO
 	void testFindFormSuccess() throws Exception {
@@ -172,12 +174,82 @@ public class AuthenticatedControllerTest {
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/authenticateds").param("lastName", "Lopez")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("authenticated", "lastName"))
 			.andExpect(MockMvcResultMatchers.view().name("authenticateds/findAuthenticateds")).andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/authenticateds/findAuthenticateds.jsp"));
 	}
+
 	@WithMockUser(username = "auth")
 	@Test //CASO POSITIVO 
 	void testInitUpdateAuthenticatedSuccess() throws Exception {
 
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/myProfile/{authenticatedId}/edit", AuthenticatedControllerTest.TEST_ID)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("authenticated"))
 			.andExpect(MockMvcResultMatchers.view().name("authenticateds/createOrUpdateAuthenticatedForm")).andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/authenticateds/createOrUpdateAuthenticatedForm.jsp"));
+	}
+
+	@WithMockUser(username = "auth")
+	@Test //CASO POSITIVO
+	void testUpdateFormSuccess() throws Exception {
+		this.mockMvc
+			.perform(MockMvcRequestBuilders.post("/myProfile/{authenticatedId}/edit", AuthenticatedControllerTest.TEST_ID).param("firstName", "AuthQ").param("lastName", "Test").param("dni", "12345678T").param("email", "auth@test.com")
+				.param("telephone", "657063253").param("user.username", "auth").param("user.password", "auth").with(SecurityMockMvcRequestPostProcessors.csrf()))
+			.andExpect(MockMvcResultMatchers.status().is3xxRedirection()).andExpect(MockMvcResultMatchers.view().name("redirect:/myProfile/" + this.au.getUser().getUsername()));
+	}
+	@WithMockUser(username = "auth")
+	@Test //CASO NEGATIVO
+	void testUpdateFormFirstNameError() throws Exception {
+		this.mockMvc
+			.perform(MockMvcRequestBuilders.post("/myProfile/{authenticatedId}/edit", AuthenticatedControllerTest.TEST_ID).param("firstName", "").param("lastName", "Test").param("dni", "12345678T").param("email", "auth@test.com")
+				.param("telephone", "657063253").param("user.username", "auth").param("user.password", "auth").with(SecurityMockMvcRequestPostProcessors.csrf()))
+			.andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("authenticated", "firstName")).andExpect(MockMvcResultMatchers.view().name("authenticateds/createOrUpdateAuthenticatedForm"))
+			.andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/authenticateds/createOrUpdateAuthenticatedForm.jsp"));
+	}
+	@WithMockUser(username = "auth")
+	@Test //CASO NEGATIVO
+	void testUpdateFormLastNameError() throws Exception {
+		this.mockMvc
+			.perform(MockMvcRequestBuilders.post("/myProfile/{authenticatedId}/edit", AuthenticatedControllerTest.TEST_ID).param("firstName", "AuthQ").param("lastName", "").param("dni", "12345678T").param("email", "auth@test.com")
+				.param("telephone", "657063253").param("user.username", "auth").param("user.password", "auth").with(SecurityMockMvcRequestPostProcessors.csrf()))
+			.andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("authenticated", "lastName")).andExpect(MockMvcResultMatchers.view().name("authenticateds/createOrUpdateAuthenticatedForm"))
+			.andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/authenticateds/createOrUpdateAuthenticatedForm.jsp"));
+	}
+	@WithMockUser(username = "auth")
+	@Test //CASO NEGATIVO
+	void testUpdateFormDNIError() throws Exception {
+		this.mockMvc
+			.perform(MockMvcRequestBuilders.post("/myProfile/{authenticatedId}/edit", AuthenticatedControllerTest.TEST_ID).param("firstName", "AuthQ").param("lastName", "TEst").param("dni", "128T").param("email", "auth@test.com")
+				.param("telephone", "657063253").param("user.username", "auth").param("user.password", "auth").with(SecurityMockMvcRequestPostProcessors.csrf()))
+			.andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("authenticated", "dni")).andExpect(MockMvcResultMatchers.view().name("authenticateds/createOrUpdateAuthenticatedForm"))
+			.andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/authenticateds/createOrUpdateAuthenticatedForm.jsp"));
+	}
+	@WithMockUser(username = "auth")
+	@Test //CASO NEGATIVO
+	void testUpdateFormEmailError() throws Exception {
+		this.mockMvc
+			.perform(MockMvcRequestBuilders.post("/myProfile/{authenticatedId}/edit", AuthenticatedControllerTest.TEST_ID).param("firstName", "AuthQ").param("lastName", "TEst").param("dni", "12345678T").param("email", "").param("telephone", "657063253")
+				.param("user.username", "auth").param("user.password", "auth").with(SecurityMockMvcRequestPostProcessors.csrf()))
+			.andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("authenticated", "email")).andExpect(MockMvcResultMatchers.view().name("authenticateds/createOrUpdateAuthenticatedForm"))
+			.andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/authenticateds/createOrUpdateAuthenticatedForm.jsp"));
+	}
+	@WithMockUser(username = "auth")
+	@Test //CASO NEGATIVO
+	void testUpdateFormTelephoneError() throws Exception {
+		this.mockMvc
+			.perform(MockMvcRequestBuilders.post("/myProfile/{authenticatedId}/edit", AuthenticatedControllerTest.TEST_ID).param("firstName", "AuthQ").param("lastName", "TEst").param("dni", "12345678T").param("email", "auth@test.com")
+				.param("telephone", "65fyh53").param("user.username", "auth").param("user.password", "auth").with(SecurityMockMvcRequestPostProcessors.csrf()))
+			.andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("authenticated", "telephone")).andExpect(MockMvcResultMatchers.view().name("authenticateds/createOrUpdateAuthenticatedForm"))
+			.andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/authenticateds/createOrUpdateAuthenticatedForm.jsp"));
+	}
+
+	@WithMockUser()
+	@Test //CASO POSITIVO 
+	void testShowAuthenticatedSuccess() throws Exception {
+
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/authenticateds/{authenticatedId}", AuthenticatedControllerTest.TEST_ID)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("authenticated"))
+			.andExpect(MockMvcResultMatchers.view().name("authenticateds/authenticatedDetails")).andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/authenticateds/authenticatedDetails.jsp"));
+	}
+	@WithMockUser()
+	@Test //CASO POSITIVO 
+	void testShowAuthenticatedProfileSuccess() throws Exception {
+
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/myProfile/{authenticatedUsername}", this.au.getUser().getUsername())).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("authenticated"))
+			.andExpect(MockMvcResultMatchers.view().name("authenticateds/authenticatedDetails")).andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/authenticateds/authenticatedDetails.jsp"));
 	}
 
 }
