@@ -108,6 +108,7 @@ public class FootballClubControllerTest {
 		sephirot.setLastName("Jenova");
 		sephirot.setSalary(4000000);
 		sephirot.setId(98);
+		
 		BDDMockito.given(this.footballClubService.findFootballClubByPresident("rufus")).willReturn(this.club);
 		BDDMockito.given(this.footballClubService.findCoachByClubId(FootballClubControllerTest.TEST_FOOTBALL_CLUB_ID)).willReturn(sephirot);
 		BDDMockito.given(this.footballClubService.findFootballClubById(FootballClubControllerTest.TEST_FOOTBALL_CLUB_ID)).willReturn(this.club);
@@ -115,7 +116,7 @@ public class FootballClubControllerTest {
 
 	}
 
-	@WithMockUser(username = "rufus")
+	@WithMockUser(username = "rufus2")
 
 	@Test //CASO POSITIVO - GET - CREAR CLUB
 	void testInitCreationFormSuccess() throws Exception {
@@ -126,6 +127,16 @@ public class FootballClubControllerTest {
 				.andExpect(MockMvcResultMatchers.view().name("footballClubs/createOrUpdateFootballClubForm"))
 				.andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/footballClubs/createOrUpdateFootballClubForm.jsp"));
 	}
+	
+	@WithMockUser(username = "rufus")
+
+	@Test //CASO NEGATIVO - GET - CREAR CLUB teniendo ya club
+	void testInitCreationFormWithClub() throws Exception {
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/footballClubs/myClub/new"))
+				.andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(MockMvcResultMatchers.view().name("exceptions/forbidden"))
+				.andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/exceptions/forbidden.jsp"));
+	}
 
 	@Test //CASO NEGATIVO - GET - CREAR CLUB
 	void testInitCreationFormSuccessError() throws Exception {
@@ -133,7 +144,7 @@ public class FootballClubControllerTest {
 				.andExpect(MockMvcResultMatchers.status().is4xxClientError());
 	}
 
-	@WithMockUser(username = "rufus")
+	@WithMockUser(username = "rufus2")
 
 	@Test //CASO POSITIVO - POST - CREAR CLUB
 	void testProcessCreationFormSuccess() throws Exception {
@@ -145,10 +156,10 @@ public class FootballClubControllerTest {
 				.param("stadium", "Suburbios Stadium")
 				.param("foundationDate", "1997/01/01"))
 				.andExpect(MockMvcResultMatchers.status().is3xxRedirection())
-				.andExpect(MockMvcResultMatchers.view().name("redirect:/footballClubs/myClub/rufus"));
+				.andExpect(MockMvcResultMatchers.view().name("redirect:/footballClubs/myClub/rufus2"));
 	}
 
-	@WithMockUser(username = "rufus")
+	@WithMockUser(username = "rufus2")
 
 	@Test //CASO NEGATIVO - POST - CREAR CLUB
 	void testProcessCreationFormHasErrors() throws Exception {

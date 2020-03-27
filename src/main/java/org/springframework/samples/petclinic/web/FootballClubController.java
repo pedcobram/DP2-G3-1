@@ -142,9 +142,17 @@ public class FootballClubController {
 	}
 
 	@GetMapping(value = "/footballClubs/myClub/new") //CREAR CLUB - GET
-	public String initCreationForm(final Map<String, Object> model) {
-		FootballClub footballClub = new FootballClub();
+	public String initCreationForm(final Map<String, Object> model) throws CredentialException {
 
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
+		FootballClub myClub = this.footballClubService.findFootballClubByPresident(currentPrincipalName);
+
+		if (myClub != null) { //SEGURIDAD
+			throw new CredentialException();
+		}
+
+		FootballClub footballClub = new FootballClub();
 		model.put("footballClub", footballClub);
 		model.put("isNew", true);
 		return FootballClubController.VIEWS_CLUB_CREATE_OR_UPDATE_FORM;

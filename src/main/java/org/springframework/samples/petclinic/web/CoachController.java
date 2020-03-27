@@ -74,13 +74,31 @@ public class CoachController {
 		String currentPrincipalName = authentication.getName();
 		FootballClub myClub = this.footballClubService.findFootballClubByPresident(currentPrincipalName);
 
-		mav.addObject("clubId", myClub.getId());
+		if (myClub != null) { //Mostrar Botón para fichar o no
+			mav.addObject("clubId", myClub.getId());
+			mav.addObject("clubStatus", myClub.getStatus());
+		} else {
+			mav.addObject("iCantSign", true);
+
+		}
 
 		return mav;
 	}
 
 	@GetMapping(value = "/coachs/new") //REGISTRAR ENTRENADOR - GET
-	public String initCreationForm(final Map<String, Object> model) {
+	public String initCreationForm(final Map<String, Object> model) throws CredentialException {
+
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
+		FootballClub myClub = this.footballClubService.findFootballClubByPresident(currentPrincipalName);
+
+		if (myClub == null) { //SEGURIDAD si no tenemos equipo no se puede registrar
+			return "footballClubs/myClubEmpty";
+		}
+
+		if (myClub.getStatus() == true) { //SEGURIDAD si tenemos equipo publico no se puede registrar
+			throw new CredentialException();
+		}
 
 		Coach coach = new Coach();
 		model.put("coach", coach);
@@ -133,6 +151,11 @@ public class CoachController {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String currentPrincipalName = authentication.getName();
 		FootballClub myClub = this.footballClubService.findFootballClubByPresident(currentPrincipalName);
+
+		if (myClub == null) { //SEGURIDAD si no tenemos equipo no se puede fichar
+			return "footballClubs/myClubEmpty";
+		}
+
 		Coach myCoach = this.coachService.findCoachByClubId(myClub.getId());
 		Coach coach = this.coachService.findCoachById(coachId);
 
@@ -171,10 +194,6 @@ public class CoachController {
 		FootballClub myClub = this.footballClubService.findFootballClubByPresident(currentPrincipalName);
 		Coach coach1 = this.coachService.findCoachById(coachId);
 		Coach myCoach = this.coachService.findCoachByClubId(myClub.getId());
-
-		if (myClub.getStatus() == false && coach.getClub() != null) { //SEGURIDAD
-			throw new CredentialException();
-		}
 
 		if (coach.getClub() == null) {  //Añadiendo variables al modelo
 			model.addAttribute("freeAgent", true);
@@ -277,6 +296,10 @@ public class CoachController {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String currentPrincipalName = authentication.getName();
 		Coach coach = this.coachService.findCoachById(coachId);
+
+		if (coach.getClub() == null) { //SEGURIDAD
+			throw new CredentialException("Forbidden Access");
+		}
 
 		if (!coach.getClub().getPresident().getUser().getUsername().equals(currentPrincipalName)) { //SEGURIDAD
 			throw new CredentialException("Forbidden Access");

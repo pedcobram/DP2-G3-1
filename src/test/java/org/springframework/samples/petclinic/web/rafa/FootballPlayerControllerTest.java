@@ -21,12 +21,9 @@ import org.springframework.samples.petclinic.model.FootballPlayer;
 import org.springframework.samples.petclinic.model.President;
 import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.model.Enum.FootballPlayerPosition;
-import org.springframework.samples.petclinic.service.AuthenticatedService;
 import org.springframework.samples.petclinic.service.FootballClubService;
 import org.springframework.samples.petclinic.service.FootballPlayerService;
-import org.springframework.samples.petclinic.service.PresidentService;
 import org.springframework.samples.petclinic.web.FootballPlayerController;
-import org.springframework.samples.petclinic.web.PresidentController;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
@@ -263,7 +260,7 @@ public class FootballPlayerControllerTest {
 	
 	@WithMockUser(username = "rufus")
 
-	@Test //CASO NEGATIVO - POST - REGISTRAR JUGADOR
+	@Test //CASO POSITIVO - POST - REGISTRAR JUGADOR
 	void testProcessCreationFormSuccess() throws Exception {
 		this.mockMvc.perform(MockMvcRequestBuilders.post("/footballPlayer/new")
 				.with(SecurityMockMvcRequestPostProcessors.csrf())
