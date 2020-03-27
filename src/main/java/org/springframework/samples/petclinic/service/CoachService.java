@@ -26,7 +26,6 @@ import org.springframework.util.StringUtils;
 @Service
 public class CoachService {
 
-	@Autowired
 	private CoachRepository coachRepository;
 
 
@@ -43,11 +42,6 @@ public class CoachService {
 	//Buscar todos los entrenadores
 	public Collection<Coach> findAllCoachs() throws DataAccessException {
 		return this.coachRepository.findAll();
-	}
-
-	//Buscar todos los entrenadores con club
-	public Collection<Coach> findAllCoachsWithClub() throws DataAccessException {
-		return this.coachRepository.findAllWithClub();
 	}
 
 	//Buscar todos los entrenadores FA

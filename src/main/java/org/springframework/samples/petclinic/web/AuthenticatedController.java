@@ -19,14 +19,13 @@ package org.springframework.samples.petclinic.web;
 import java.util.Collection;
 import java.util.Map;
 
+import javax.security.auth.login.CredentialException;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Authenticated;
 import org.springframework.samples.petclinic.service.AuthenticatedService;
-import org.springframework.samples.petclinic.service.AuthoritiesService;
-import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedNameException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -49,7 +48,7 @@ public class AuthenticatedController {
 
 
 	@Autowired
-	public AuthenticatedController(final AuthenticatedService authenticatedService, final UserService userService, final AuthoritiesService authoritiesService) {
+	public AuthenticatedController(final AuthenticatedService authenticatedService) {
 		this.authenticatedService = authenticatedService;
 	}
 
@@ -67,6 +66,7 @@ public class AuthenticatedController {
 
 	@PostMapping(value = "/authenticateds/new")
 	public String processCreationForm(@Valid final Authenticated authenticated, final BindingResult result) {
+
 		if (result.hasErrors()) {
 
 			return AuthenticatedController.VIEWS_AUTHENTICATED_CREATE_OR_UPDATE_FORM;
@@ -116,19 +116,32 @@ public class AuthenticatedController {
 	}
 
 	@GetMapping(value = "/myProfile/{authenticatedId}/edit")
-	public String initUpdateAuthenticatedForm(@PathVariable("authenticatedId") final int authenticatedId, final Model model) {
+	public String initUpdateAuthenticatedForm(@PathVariable("authenticatedId") final int authenticatedId, final Model model) throws CredentialException {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
+		Authenticated thisUser = this.authenticatedService.findAuthenticatedByUsername(currentPrincipalName);
 		Authenticated authenticated = this.authenticatedService.findAuthenticatedById(authenticatedId);
+		if (!thisUser.getId().equals(authenticated.getId())) { //SEGURIDAD
+			throw new CredentialException("Forbidden Access");
+		}
+
 		model.addAttribute(authenticated);
 		return AuthenticatedController.VIEWS_AUTHENTICATED_CREATE_OR_UPDATE_FORM;
 	}
 
 	@PostMapping(value = "/myProfile/{authenticatedId}/edit")
-	public String processUpdateAuthenticatedForm(@Valid final Authenticated authenticated, final BindingResult result, @PathVariable("authenticatedId") final int authenticatedId) {
+	public String processUpdateAuthenticatedForm(@Valid final Authenticated authenticated, final BindingResult result, @PathVariable("authenticatedId") final int authenticatedId) throws CredentialException {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
+		Authenticated thisUser = this.authenticatedService.findAuthenticatedByUsername(currentPrincipalName);
+
+		if (!thisUser.getId().equals(authenticatedId)) { //SEGURIDAD
+			throw new CredentialException("Forbidden Access");
+		}
+
 		if (result.hasErrors()) {
 			return AuthenticatedController.VIEWS_AUTHENTICATED_CREATE_OR_UPDATE_FORM;
 		} else {
-			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-			String currentPrincipalName = authentication.getName();
 
 			authenticated.setId(authenticatedId);
 			authenticated.getUser().setEnabled(true);
@@ -148,18 +161,35 @@ public class AuthenticatedController {
 	 * @param authenticatedId
 	 *            the ID of the owner to display
 	 * @return a ModelMap with the model attributes for the view
+	 * @throws CredentialException
 	 */
 
 	@GetMapping("/authenticateds/{authenticatedId}")
-	public ModelAndView showAuthenticated(@PathVariable("authenticatedId") final int authenticatedId) {
+	public ModelAndView showAuthenticated(@PathVariable("authenticatedId") final int authenticatedId) throws CredentialException {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
+		Authenticated thisUser = this.authenticatedService.findAuthenticatedByUsername(currentPrincipalName);
+		Authenticated authenticated = this.authenticatedService.findAuthenticatedById(authenticatedId);
+		if (!thisUser.getId().equals(authenticated.getId())) { //SEGURIDAD
+			throw new CredentialException("Forbidden Access");
+		}
+
 		ModelAndView mav = new ModelAndView("authenticateds/authenticatedDetails");
-		mav.addObject(this.authenticatedService.findAuthenticatedById(authenticatedId));
+		mav.addObject(authenticated);
 		return mav;
 	}
 
 	//Añadir restricción de que solo el Principal actual puede ver su vista de edición
 	@GetMapping("/myProfile/{authenticatedUsername}")
-	public ModelAndView showAuthenticatedProfile(@PathVariable("authenticatedUsername") final String authenticatedUsername) {
+	public ModelAndView showAuthenticatedProfile(@PathVariable("authenticatedUsername") final String authenticatedUsername) throws CredentialException {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
+		Authenticated thisUser = this.authenticatedService.findAuthenticatedByUsername(currentPrincipalName);
+		Authenticated authenticated = this.authenticatedService.findAuthenticatedByUsername(authenticatedUsername);
+		if (!thisUser.getId().equals(authenticated.getId())) { //SEGURIDAD
+			throw new CredentialException("Forbidden Access");
+		}
+
 		ModelAndView mav = new ModelAndView("authenticateds/authenticatedDetails");
 		mav.addObject(this.authenticatedService.findAuthenticatedByUsername(authenticatedUsername));
 		return mav;

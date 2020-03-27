@@ -38,7 +38,6 @@ public class AuthenticatedValidatorTest {
 
 	}
 
-	@SuppressWarnings("unchecked")
 	@Test
 	void shouldNotValidateWhenDniEmpty() {
 
@@ -56,15 +55,8 @@ public class AuthenticatedValidatorTest {
 		Assertions.assertTrue(constraintViolations.size() == 2);
 		ConstraintViolation<Authenticated> violation = constraintViolations.iterator().next();
 		Assertions.assertTrue(violation.getPropertyPath().toString().compareTo("dni") == 0);
-		//Assertions.assertTrue(violation.getMessage().compareTo("must not be empty") == 0);
+		Assertions.assertTrue(violation.getMessage().compareTo("must not be empty") == 0 || violation.getMessage().compareTo("must match \"[0-9]{7,8}[A-Za-z]\"") == 0);
 
-		//		Object[] violation = constraintViolations.toArray();
-		//
-		//		Assertions.assertTrue(((ConstraintViolation<Authenticated>) violation[1]).getPropertyPath().toString().compareTo("dni") == 0);
-		//		Assertions.assertTrue(((ConstraintViolation<Authenticated>) violation[1]).getMessage().compareTo("must match \"[0-9]{7,8}[A-Za-z]\"") == 0);
-		//
-		//		Assertions.assertTrue(((ConstraintViolation<Authenticated>) violation[0]).getPropertyPath().toString().compareTo("dni") == 0);
-		//		Assertions.assertTrue(((ConstraintViolation<Authenticated>) violation[0]).getMessage().compareTo("must not be empty") == 0);
 	}
 	@Test
 	void shouldNotValidateWhenDniNotPattern() {
@@ -157,7 +149,7 @@ public class AuthenticatedValidatorTest {
 		Assertions.assertTrue(constraintViolations.size() == 2);
 		ConstraintViolation<Authenticated> violation = constraintViolations.iterator().next();
 		Assertions.assertTrue(violation.getPropertyPath().toString().compareTo("telephone") == 0);
-		Assertions.assertTrue(violation.getMessage().compareTo("must not be empty") == 0);
+
 	}
 
 }

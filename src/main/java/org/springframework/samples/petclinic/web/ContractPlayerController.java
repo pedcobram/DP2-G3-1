@@ -43,7 +43,7 @@ public class ContractPlayerController {
 	private static final String			VIEWS_CONTRACT_PLAYER_CREATE_OR_UPDATE_FORM	= "contracts/createOrUpdateContractPlayerForm";
 
 	@Autowired
-	private final ContractPlayerService		contractService;
+	private final ContractPlayerService	contractService;
 
 	@Autowired
 	private final FootballPlayerService	footballPlayerService;
@@ -88,8 +88,7 @@ public class ContractPlayerController {
 		return "contracts/contractPlayerList";
 	}
 
-	//Vista de Contrato Detallada de un jugador
-	@GetMapping("/contractPlayer/{footballPlayerId}")
+	@GetMapping("/contractPlayer/{footballPlayerId}") //VISTA DE CONTRATO DETALLADA
 	public ModelAndView showContractPlayer(@PathVariable("footballPlayerId") final int footballPlayerId) throws CredentialException {
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -108,13 +107,18 @@ public class ContractPlayerController {
 	}
 
 	@GetMapping(value = "/contractPlayer/{footballPlayerId}/new") //FICHAR JUGADOR AGENTE LIBRE - GET
-	public String initCreationForm(final Model model, @PathVariable("footballPlayerId") final int footballPlayerId) throws DataAccessException, DuplicatedNameException {
+	public String initCreationForm(final Model model, @PathVariable("footballPlayerId") final int footballPlayerId) throws DataAccessException, DuplicatedNameException, CredentialException {
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String currentPrincipalName = authentication.getName();
 
 		FootballPlayer footballPlayer = this.footballPlayerService.findFootballPlayerById(footballPlayerId);
 		FootballClub footballClub = this.footballClubService.findFootballClubByPresident(currentPrincipalName);
+
+		if (footballClub == null) {  //SEGURIDAD
+			throw new CredentialException();
+		}
+
 		ContractPlayer contractPlayer = new ContractPlayer();
 
 		Integer valor = footballPlayer.getValue();
@@ -204,8 +208,13 @@ public class ContractPlayerController {
 		String currentPrincipalName = authentication.getName();
 
 		ContractPlayer thisContract = this.contractService.findContractPlayerByPlayerId(footballPlayerId);
+		FootballPlayer player = this.footballPlayerService.findFootballPlayerById(footballPlayerId);
 
-		if (thisContract.getClub().getPresident().getUser().getUsername() != currentPrincipalName) { //SEGURIDAD
+		if (player.getClub() == null) { //SEGURIDAD (Si el jugador es agente libre no se puede despedir)
+			throw new CredentialException();
+		}
+
+		if (!thisContract.getClub().getPresident().getUser().getUsername().equals(currentPrincipalName)) { //SEGURIDAD
 			throw new CredentialException();
 		}
 

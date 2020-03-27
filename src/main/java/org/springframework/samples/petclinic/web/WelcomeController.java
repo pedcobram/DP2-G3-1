@@ -8,7 +8,6 @@ import org.springframework.samples.petclinic.model.Authenticated;
 import org.springframework.samples.petclinic.model.Fan;
 import org.springframework.samples.petclinic.service.AuthenticatedService;
 import org.springframework.samples.petclinic.service.FanService;
-import org.springframework.samples.petclinic.service.FootballClubService;
 import org.springframework.samples.petclinic.service.MatchRecordService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,16 +18,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class WelcomeController {
 
 	private final AuthenticatedService	authenticatedService;
-	private final FootballClubService	footballClubService;
 	private final MatchRecordService	matchRecordService;
 	private final FanService			fanService;
 
 
 	@Autowired
-	public WelcomeController(final MatchRecordService matchRecordService, final FootballClubService footballClubService, final AuthenticatedService authenticatedService, final FanService fanService) {
+	public WelcomeController(final MatchRecordService matchRecordService, final AuthenticatedService authenticatedService, final FanService fanService) {
 		this.fanService = fanService;
 		this.authenticatedService = authenticatedService;
-		this.footballClubService = footballClubService;
 		this.matchRecordService = matchRecordService;
 	}
 

@@ -18,6 +18,4 @@ public interface CoachRepository {
 
 	void save(Coach coach) throws DataAccessException;
 
-	Collection<Coach> findAllWithClub() throws DataAccessException;
-
 }
