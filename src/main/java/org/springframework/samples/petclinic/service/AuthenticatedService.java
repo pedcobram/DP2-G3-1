@@ -88,7 +88,9 @@ public class AuthenticatedService {
 
 		this.authoritiesService.deleteAuthorities(authenticated.getUser().getUsername(), "authenticated");
 		Fan f = this.fanService.findByUserId(authenticated.getId());
-		this.fanService.delete(f);
+		if (f != null) {
+			this.fanService.delete(f);
+		}
 		this.authenticatedRepository.delete(authenticated);
 	}
 

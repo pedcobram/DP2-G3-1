@@ -12,10 +12,8 @@ import org.springframework.samples.petclinic.model.Authenticated;
 import org.springframework.samples.petclinic.model.Fan;
 import org.springframework.samples.petclinic.model.FootballClub;
 import org.springframework.samples.petclinic.service.AuthenticatedService;
-import org.springframework.samples.petclinic.service.AuthoritiesService;
 import org.springframework.samples.petclinic.service.FanService;
 import org.springframework.samples.petclinic.service.FootballClubService;
-import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedFanUserException;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedNameException;
 import org.springframework.samples.petclinic.web.validators.CreditCardValidator;
@@ -39,12 +37,13 @@ public class FanController {
 
 
 	@Autowired
-	public FanController(final FootballClubService footballClubService, final AuthenticatedService authenticatedService, final FanService fanService, final UserService userService, final AuthoritiesService authoritiesService) {
+	public FanController(final FootballClubService footballClubService, final AuthenticatedService authenticatedService, final FanService fanService) {
 		this.fanService = fanService;
 		this.authenticatedService = authenticatedService;
 		this.footballClubService = footballClubService;
 
 	}
+	// NUEVO NO VIP
 
 	@GetMapping(value = "/fan/{clubId}/new")
 	public String initCreationForm(@PathVariable final Integer clubId, final Map<String, Object> model) throws DataAccessException, DuplicatedNameException {
@@ -161,7 +160,7 @@ public class FanController {
 
 		//Si hay errores en la vista seguimos en la pantalla de edición
 		if (result.hasErrors()) {
-			model.put("isNew", true);
+			model.put("isNew", false);
 			model.put("fan", f);
 			return FanController.VIEWS_FAN_CREATE_OR_UPDATE_FORM;
 		} else {
