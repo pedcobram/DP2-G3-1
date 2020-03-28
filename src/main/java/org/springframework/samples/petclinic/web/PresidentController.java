@@ -61,7 +61,7 @@ public class PresidentController {
 		dataBinder.setDisallowedFields("id");
 	}
 
-	@PostMapping(value = "/presidents/new") //SER PRESIDENTE
+	@RequestMapping(value = "/presidents/new") //SER PRESIDENTE
 	public String createPresident() throws DataAccessException, CredentialException {
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -139,10 +139,6 @@ public class PresidentController {
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String currentPrincipalName = authentication.getName();
-
-		if (!presidentUsername.equals(currentPrincipalName)) { //SEGURIDAD
-			throw new CredentialException("Forbidden Access");
-		}
 
 		ModelAndView mav = new ModelAndView("presidents/presidentDetails");
 		mav.addObject(this.presidentService.findPresidentByUsername(presidentUsername));

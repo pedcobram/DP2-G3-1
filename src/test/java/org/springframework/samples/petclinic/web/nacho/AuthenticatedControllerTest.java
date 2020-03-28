@@ -186,6 +186,13 @@ public class AuthenticatedControllerTest {
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/myProfile/{authenticatedId}/edit", AuthenticatedControllerTest.TEST_ID)).andExpect(MockMvcResultMatchers.status().isOk())
 			.andExpect(MockMvcResultMatchers.model().attributeDoesNotExist("authenticated")).andExpect(MockMvcResultMatchers.view().name("exceptions/exception"));
 	}
+	@WithMockUser()
+	@Test //CASO NEGATIVO
+	void testInitUpdateAuthenticatedAutError() throws Exception {
+
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/myProfile/{authenticatedId}/edit", AuthenticatedControllerTest.TEST_ID)).andExpect(MockMvcResultMatchers.status().isOk())
+			.andExpect(MockMvcResultMatchers.model().attributeDoesNotExist("authenticated")).andExpect(MockMvcResultMatchers.view().name("exceptions/exception"));
+	}
 
 	@WithMockUser(username = "auth")
 	@Test //CASO POSITIVO

@@ -139,13 +139,6 @@ public class FanControllerTest {
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/fan/{clubId}/new", FanControllerTest.TEST_ID)).andExpect(MockMvcResultMatchers.status().is4xxClientError());
 	}
 
-	//	@WithMockUser(username = "auth")
-	//	@Test //CASO NEGATIVO - LA CREACIÓN DE UN FAN Duplicado
-	//	void testInitCreationFormErrorDuplicateFan() throws Exception {
-	//		this.fanService.saveFan(this.f);
-	//		this.mockMvc.perform(MockMvcRequestBuilders.get("/fan/{clubId}/new", 1)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("existFan"));
-	//	}
-
 	@WithMockUser(username = "fan")
 	@Test //CASO POSITIVO - LA CREACIÓN DE UN FAN VIP
 	void testCreationFormSuccess() throws Exception {
