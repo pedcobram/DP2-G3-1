@@ -91,6 +91,7 @@ public class ContractCommercialControllerTest {
 		cc1.setEndDate(endContractDate);
 		cc1.setPublicity("https://www.imagen.com.mx/assets/img/imagen_share.png");
 
+		cc2.setClub(this.shinraInc);
 		cc2.setClause(100000);
 		cc2.setMoney(10000);
 		cc2.setStartDate(startContractDate);
@@ -102,6 +103,8 @@ public class ContractCommercialControllerTest {
 
 		BDDMockito.given(this.contractCommercialService.findAllCommercialContracts()).willReturn(contratos);
 		BDDMockito.given(this.contractCommercialService.findContractCommercialById(1)).willReturn(cc1);
+		BDDMockito.given(this.contractCommercialService.findContractCommercialById(2)).willReturn(cc2);
+
 	}
 
 	@WithMockUser(username = "rufus")
@@ -154,7 +157,7 @@ public class ContractCommercialControllerTest {
 	@WithMockUser(username = "rufus")
 	@Test //CASO POSITIVO - ELIMINAR CONTRATO DE MI CLUB
 	void testRemoveContractFromMyClub() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/contractsCommercial/{contractCommercialId}/removeFromMyClub", ContractCommercialControllerTest.TEST_CONTRACT_COMMERCIAL_ID)).andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/contractsCommercial/{contractCommercialId}/removeFromMyClub", ContractCommercialControllerTest.TEST_CONTRACT_COMMERCIAL_ID + 1)).andExpect(MockMvcResultMatchers.status().is3xxRedirection())
 			.andExpect(MockMvcResultMatchers.view().name("redirect:/footballClubs/myClub/rufus"));
 	}
 
