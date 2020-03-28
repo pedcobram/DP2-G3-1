@@ -27,6 +27,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Authenticated;
 import org.springframework.samples.petclinic.service.AuthenticatedService;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedNameException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -74,6 +75,10 @@ public class AuthenticatedController {
 			//creating authenticated, user and authorities
 			try {
 				this.authenticatedService.saveAuthenticated(authenticated);
+
+				Authentication reAuth = new UsernamePasswordAuthenticationToken(authenticated.getUser().getUsername(), authenticated.getUser().getPassword());
+				SecurityContextHolder.getContext().setAuthentication(reAuth);
+
 				return "redirect:/authenticateds/" + authenticated.getId();
 			} catch (DataAccessException | DuplicatedNameException e) {
 				result.rejectValue("user.username", "duplicate");
