@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import javax.security.auth.login.CredentialException;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -136,8 +137,14 @@ public class ContractCommercialController {
 
 	@GetMapping(value = "/contractsCommercial/{contractCommercialId}/removeFromMyClub")
 	public String initremoveContractFromMyClub(@PathVariable("contractCommercialId") final int contractCommercialId)
-		throws DataAccessException, NoMultipleContractCommercialException, NoStealContractCommercialException, NotEnoughMoneyException, DuplicatedNameException, NumberOfPlayersAndCoachException, DateException {
+		throws DataAccessException, NoMultipleContractCommercialException, NoStealContractCommercialException, NotEnoughMoneyException, DuplicatedNameException, NumberOfPlayersAndCoachException, DateException, CredentialException {
 		ContractCommercial contractCommercial = this.contractService.findContractCommercialById(contractCommercialId);
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
+
+		if (!contractCommercial.getClub().getPresident().getUser().getUsername().equals(currentPrincipalName)) { //SEGURIDAD
+			throw new CredentialException("Forbidden Access");
+		}
 
 		ContractCommercial cc = new ContractCommercial();
 		cc.setClause(contractCommercial.getClause());
