@@ -140,8 +140,8 @@
 	            <td><img width=30px height= auto hspace="20" src="${contractCommercial.publicity}"/></td>
 	        </tr>
 	        <tr>
-	            <th>Salario:</th>
-	            <td><c:out value="${contractCommercial.money}"/></td>
+	            <th>Dinero:</th>
+	            <td><c:out value="${contractCommercial.money}"/> €</td>
 	        </tr>
 	        <tr>
 	            <th>Inicio del Contrato:</th>
@@ -160,7 +160,17 @@
 			<spring:param name="contractCommercialId" value="${contractCommercial.id}"/>
 		</spring:url>	
 			<a data-toggle="tooltip" href="${fn:escapeXml(removeContractFromClubURL)}" class="btn btn-default">Eliminar Contrato Publicitario</a>
-						
+		<br/>
+    	<br/>
+		<c:choose>
+			<c:when test="${not empty clausulaApagar}">
+				<p style="color:red">Aun no ha terminado el contrato. Elimarlo te costara <c:out value="${clausulaApagar}"/> €</p>
+			</c:when>
+			<c:otherwise>
+				<p style="color:black">Ya ha terminado el contrato y puedes eliminarlo sin problemas.</p>
+			</c:otherwise>
+		</c:choose>
+								
     </c:if>
 
     <br/>

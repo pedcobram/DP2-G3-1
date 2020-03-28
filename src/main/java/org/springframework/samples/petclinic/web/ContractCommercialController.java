@@ -2,6 +2,7 @@
 package org.springframework.samples.petclinic.web;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -74,10 +75,24 @@ public class ContractCommercialController {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String currentPrincipalName = authentication.getName();
 
+		Collection<ContractCommercial> clist = this.contractService.findAllCommercialContracts();
+
+		boolean presidentAlreadyHasContract = false;
+
+		for (ContractCommercial c : clist) {
+			if (c.getClub() != null && c.getClub().getPresident().getUser().getUsername() == currentPrincipalName) {
+				presidentAlreadyHasContract = true;
+				break;
+			}
+		}
+
+		mav.addObject("hasAlreadyContract", presidentAlreadyHasContract);
+
 		mav.addObject("contractCommercial", this.contractService.findContractCommercialById(contractCommercialId));
 
 		try {
 			mav.addObject("footballClub", this.footballClubService.findFootballClubByPresident(currentPrincipalName));
+
 		} catch (Exception e) {
 			mav.addObject("footballClub", null);
 		}

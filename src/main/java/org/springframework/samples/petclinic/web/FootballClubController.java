@@ -16,6 +16,8 @@
 
 package org.springframework.samples.petclinic.web;
 
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -56,11 +58,10 @@ public class FootballClubController {
 
 	private static final String				VIEWS_CLUB_CREATE_OR_UPDATE_FORM	= "footballClubs/createOrUpdateFootballClubForm";
 
-
 	@Autowired
 	private final ContractCommercialService	contractCommercialService;
 
-	private final FootballClubService	footballClubService;
+	private final FootballClubService		footballClubService;
 
 
 	@Autowired
@@ -142,6 +143,14 @@ public class FootballClubController {
 
 			ContractCommercial cc = this.contractCommercialService.findCommercialContractByClubId(club.getId());
 			if (cc != null) {
+				if (cc.getEndDate().getTime() - Date.valueOf(LocalDate.now()).getTime() > 0) {
+					long duracion = cc.getEndDate().getTime() - cc.getStartDate().getTime();
+					long tiempollevado = Date.valueOf(LocalDate.now()).getTime() - cc.getStartDate().getTime();
+					int clausulaApagar = (int) (cc.getClause() * (duracion - tiempollevado) / duracion);
+					mav.addObject("clausulaApagar", clausulaApagar);
+				} else {
+					mav.addObject("clausulaApagar", null);
+				}
 				mav.addObject("contractCommercial", cc);
 			}
 

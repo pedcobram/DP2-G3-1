@@ -55,10 +55,17 @@
 		<c:when test="${not empty footballClub}">
 			<c:choose>
 				<c:when test="${empty contractCommercial.club}">
-					<spring:url value="/contractsCommercial/{contractCommercialId}/addToMyClub" var="addContractToClubURL">
-				   		<spring:param name="contractCommercialId" value="${contractCommercial.id}"/>
-				   	</spring:url>	
-				   		<a data-toggle="tooltip" href="${fn:escapeXml(addContractToClubURL)}" class="btn btn-default">Añadir Contrato Publicitario</a>
+					<c:choose>
+						<c:when test="${hasAlreadyContract}">
+							<p style="color:red">No puedes tener más de un contrato a la vez.</p>
+						</c:when>
+						<c:otherwise>
+							<spring:url value="/contractsCommercial/{contractCommercialId}/addToMyClub" var="addContractToClubURL">
+					   		<spring:param name="contractCommercialId" value="${contractCommercial.id}"/>
+					   		</spring:url>	
+				   			<a data-toggle="tooltip" href="${fn:escapeXml(addContractToClubURL)}" class="btn btn-default">Añadir Contrato Publicitario</a>
+						</c:otherwise>
+					</c:choose>
 				</c:when>
 				<c:otherwise>
 					<c:choose>
