@@ -140,6 +140,10 @@ public class PresidentController {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String currentPrincipalName = authentication.getName();
 
+		if (!currentPrincipalName.equals(presidentUsername)) {
+			throw new CredentialException();
+		}
+
 		ModelAndView mav = new ModelAndView("presidents/presidentDetails");
 		mav.addObject(this.presidentService.findPresidentByUsername(presidentUsername));
 		return mav;
