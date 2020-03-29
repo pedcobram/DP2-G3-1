@@ -291,7 +291,7 @@ public class CoachController {
 	}
 
 	@RequestMapping(value = "/coachs/{coachId}/fire") //DESPEDIR ENTRENADOR
-	public String processDeleteForm(@PathVariable("coachId") final int coachId) throws CredentialException, DataAccessException {
+	public String processDeleteForm(@PathVariable("coachId") final int coachId, final Model model) throws CredentialException, DataAccessException {
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String currentPrincipalName = authentication.getName();
@@ -309,7 +309,9 @@ public class CoachController {
 
 			this.coachService.fireCoach(coach);
 		} catch (MoneyClubException e) {
-			return "redirect:/coachs/" + coach.getId();
+			model.addAttribute("salaryError", true);
+			model.addAttribute(coach);
+			return "/coachs/coachDetails";
 		}
 
 		return "redirect:/footballClubs/myClub/" + currentPrincipalName;

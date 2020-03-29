@@ -23,6 +23,7 @@
 	<fmt:message key="code.crud.sign" var="Fichar"/> 
 	<fmt:message key="code.security.firePlayer" var="areYouSure"/>
 	<fmt:message key="code.crud.fire" var="fire"/>
+	<fmt:message key="code.error.validator.fireTransaction" var="salaryValidation"/>
 
 <petclinic:layout pageName="coachs">
 
@@ -92,6 +93,13 @@
          
          
     </table>
+    
+    
+    <c:if test="${salaryError == true}">
+    	<p style="color:red"> ${salaryValidation}</p>
+    	<br>
+    	
+    </c:if>
     
     <c:if test="${coach.club.id != clubId && !iCantSign && clubStatus}">
     		<spring:url value="/coachs/{coachId}/sign" var="newCoachUrl">

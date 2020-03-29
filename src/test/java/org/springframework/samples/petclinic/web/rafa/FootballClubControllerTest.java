@@ -124,8 +124,11 @@ public class FootballClubControllerTest {
 
 	@Test //CASO POSITIVO - GET - CREAR CLUB
 	void testInitCreationFormSuccess() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/footballClubs/myClub/new")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("footballClub"))
-			.andExpect(MockMvcResultMatchers.model().attributeExists("isNew")).andExpect(MockMvcResultMatchers.view().name("footballClubs/createOrUpdateFootballClubForm"))
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/footballClubs/myClub/new"))
+			.andExpect(MockMvcResultMatchers.status().isOk())
+			.andExpect(MockMvcResultMatchers.model().attributeExists("footballClub"))
+			.andExpect(MockMvcResultMatchers.model().attributeExists("isNew"))
+			.andExpect(MockMvcResultMatchers.view().name("footballClubs/createOrUpdateFootballClubForm"))
 			.andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/footballClubs/createOrUpdateFootballClubForm.jsp"));
 	}
 
@@ -133,40 +136,59 @@ public class FootballClubControllerTest {
 
 	@Test //CASO NEGATIVO - GET - CREAR CLUB teniendo ya club
 	void testInitCreationFormWithClub() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/footballClubs/myClub/new")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.view().name("exceptions/forbidden"))
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/footballClubs/myClub/new"))
+			.andExpect(MockMvcResultMatchers.status().isOk())
+			.andExpect(MockMvcResultMatchers.view().name("exceptions/forbidden"))
 			.andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/exceptions/forbidden.jsp"));
 	}
 
 	@Test //CASO NEGATIVO - GET - CREAR CLUB
 	void testInitCreationFormSuccessError() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/footballClubs/myClub/new")).andExpect(MockMvcResultMatchers.status().is4xxClientError());
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/footballClubs/myClub/new"))
+			.andExpect(MockMvcResultMatchers.status().is4xxClientError());
 	}
 
 	@WithMockUser(username = "rufus2")
 
 	@Test //CASO POSITIVO - POST - CREAR CLUB
 	void testProcessCreationFormSuccess() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.post("/footballClubs/myClub/new").with(SecurityMockMvcRequestPostProcessors.csrf()).param("name", "Shinra Inc").param("city", "Midgar").param("crest", "https://www.example.com")
-			.param("stadium", "Suburbios Stadium").param("foundationDate", "1997/01/01")).andExpect(MockMvcResultMatchers.status().is3xxRedirection()).andExpect(MockMvcResultMatchers.view().name("redirect:/footballClubs/myClub/rufus2"));
+		this.mockMvc.perform(MockMvcRequestBuilders.post("/footballClubs/myClub/new")
+			.with(SecurityMockMvcRequestPostProcessors.csrf())
+			.param("name", "Shinra Inc")
+			.param("city", "Midgar")
+			.param("crest", "https://www.example.com")
+			.param("stadium", "Suburbios Stadium")
+			.param("foundationDate", "1997/01/01"))
+			.andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+			.andExpect(MockMvcResultMatchers.view().name("redirect:/footballClubs/myClub/rufus2"));
 	}
 
 	@WithMockUser(username = "rufus2")
 
-	@Test //CASO NEGATIVO - POST - CREAR CLUB
+	@Test //CASO NEGATIVO - POST - CREAR CLUB 
 	void testProcessCreationFormHasErrors() throws Exception {
 		this.mockMvc
-			.perform(MockMvcRequestBuilders.post("/footballClubs/myClub/new").with(SecurityMockMvcRequestPostProcessors.csrf()).param("name", "Shinra Inc").param("crest", "https://www.example.com").param("stadium", "Suburbios Stadium")
+			.perform(MockMvcRequestBuilders.post("/footballClubs/myClub/new")
+				.with(SecurityMockMvcRequestPostProcessors.csrf())
+				.param("name", "Shinra Inc")
+				.param("crest", "https://www.example.com")
+				.param("stadium", "Suburbios Stadium")
 				.param("foundationDate", "1997/01/01"))
-			.andExpect(MockMvcResultMatchers.model().attributeHasErrors("footballClub")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.view().name("footballClubs/createOrUpdateFootballClubForm"))
-			.andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/footballClubs/createOrUpdateFootballClubForm.jsp"));
+				.andExpect(MockMvcResultMatchers.model().attributeHasErrors("footballClub"))
+				.andExpect(MockMvcResultMatchers.status().isOk())
+				.andExpect(MockMvcResultMatchers.view().name("footballClubs/createOrUpdateFootballClubForm"))
+				.andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/footballClubs/createOrUpdateFootballClubForm.jsp"));
 	}
 
 	@WithMockUser(username = "rufus")
 
 	@Test //CASO POSITIVO - GET - EDITAR CLUB
 	void testInitUpdateForm() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/footballClubs/myClub/{principalUsername}/edit", "rufus")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("footballClub"))
-			.andExpect(MockMvcResultMatchers.model().attributeExists("isEditing")).andExpect(MockMvcResultMatchers.model().attribute("footballClub", Matchers.hasProperty("name", Matchers.is("Shinra Inc"))))
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/footballClubs/myClub/{principalUsername}/edit", "rufus"))
+			.andExpect(MockMvcResultMatchers.status().isOk())
+			.andExpect(MockMvcResultMatchers.model().attributeExists("footballClub"))
+			.andExpect(MockMvcResultMatchers.model().attributeExists("isEditing"))
+			.andExpect(MockMvcResultMatchers.model().attribute("footballClub", Matchers.hasProperty("name", Matchers.is("Shinra Inc"))))
 			.andExpect(MockMvcResultMatchers.model().attribute("footballClub", Matchers.hasProperty("president", Matchers.is(this.club.getPresident()))))
 			.andExpect(MockMvcResultMatchers.model().attribute("footballClub", Matchers.hasProperty("foundationDate", Matchers.is(this.club.getFoundationDate()))))
 			.andExpect(MockMvcResultMatchers.model().attribute("footballClub", Matchers.hasProperty("city", Matchers.is("Midgar"))))
@@ -175,6 +197,17 @@ public class FootballClubControllerTest {
 			.andExpect(MockMvcResultMatchers.model().attribute("footballClub", Matchers.hasProperty("status", Matchers.is(false)))).andExpect(MockMvcResultMatchers.view().name("footballClubs/createOrUpdateFootballClubForm"))
 			.andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/footballClubs/createOrUpdateFootballClubForm.jsp"));
 	}
+	
+	@WithMockUser(username = "rufus2")
+
+	@Test //CASO POSITIVO - GET - EDITAR CLUB con otro user
+	void testInitUpdateFormWhitAnotherUser() throws Exception {
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/footballClubs/myClub/{principalUsername}/edit", "rufus"))
+			.andExpect(MockMvcResultMatchers.status().isOk())
+			.andExpect(MockMvcResultMatchers.view().name("exceptions/forbidden"))
+			.andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/exceptions/forbidden.jsp"));
+	}
+
 
 	@Test //CASO NEGATIVO - GET - EDITAR CLUB
 	void testInitUpdateFormError() throws Exception {

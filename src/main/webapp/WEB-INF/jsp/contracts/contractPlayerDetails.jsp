@@ -7,6 +7,12 @@
 <%@ page contentType="text/html; charset=UTF-8" %> <!-- Para  tildes, ñ y caracteres especiales como el € %-->
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
+<!-- Tomo el valor del nombre de usuario actual %-->
+    
+    <security:authorize access="isAuthenticated()">
+   		<security:authentication var="principalUsername" property="principal.username" /> 
+	</security:authorize>
+
 	<fmt:message key="code.label.salary" var="salario1"/> 
 	<fmt:message key="code.label.startDate" var="startfecha"/> 
 	<fmt:message key="code.label.endDate" var="endfecha"/> 
@@ -16,6 +22,7 @@
 	<fmt:message key="code.title.contractPlayer" var="contractPl"/> 
 	<fmt:message key="code.security.firePlayer" var="areYouSure"/>
 	<fmt:message key="code.crud.fire" var="fire"/>
+	<fmt:message key="code.error.validator.fireTransaction" var="salaryValidation"/>
 
 <petclinic:layout pageName="contractPlayer">
 
@@ -61,7 +68,13 @@
         </tr>    
     </table>
     
-    <c:if test="${footballPlayer.club.president.user.username == principalUsername}">
+    <c:if test="${salaryError == true}">
+    	<p style="color:red"> ${salaryValidation}</p>
+    	<br>
+    	
+    </c:if>
+    
+    <c:if test="${contractPlayer.club.president.user.username == principalUsername}">
     		<spring:url value="/contractPlayer/{footballPlayerId}/delete" var="contractPlayerUrl">
     			<spring:param name="footballPlayerId" value="${contractPlayer.player.id}"/></spring:url>
     		<a href="${fn:escapeXml(contractPlayerUrl)}" onclick="return confirm('${areYouSure}')" class="btn btn-default2">${fire}</a>
