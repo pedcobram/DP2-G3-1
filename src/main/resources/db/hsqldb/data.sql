@@ -105,8 +105,11 @@ INSERT INTO match_referee_request(id, title, status, username, match_id) VALUES(
 INSERT INTO match_referee_request(id, title, status, username, match_id) VALUES(2, 'Test title 2', 0, 'referee2', 3);    
 
 -- Contract Commercial
-INSERT INTO contract_Commercial(id,end_contract_clause,end_date,start_date,money,publicity) VALUES (1, 1000,'2023-01-01','2013-01-01',100000,'https://e00-marca.uecdn.es/assets/sports/logos/football/png/144x144/179.png');
-INSERT INTO contract_Commercial(id,end_contract_clause,end_date,start_date,money,publicity) VALUES (2, 1000,'2020-01-01','2010-01-01',100000,'https://e00-marca.uecdn.es/assets/sports/logos/football/png/144x144/186.png');
+INSERT INTO contract_Commercial(id,end_contract_clause,end_date,start_date,money,publicity) VALUES (1, 2000000,'2023-01-01','2020-01-01',100000,'https://logosmarcas.com/wp-content/uploads/2018/03/Nike-logo.png');
+INSERT INTO contract_Commercial(id,end_contract_clause,end_date,start_date,money,publicity) VALUES (2, 2000000,'2024-01-01','2020-01-01',100000,'https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Adidas_Logo.svg/1200px-Adidas_Logo.svg.png');
+INSERT INTO contract_Commercial(id,end_contract_clause,end_date,start_date,money,publicity) VALUES (3, 100000,'2024-01-01','2020-01-01',50000,'https://logosmarcas.com/wp-content/uploads/2018/03/PUMA-s%C3%ADmbolo.png');
+INSERT INTO contract_Commercial(id,end_contract_clause,end_date,start_date,money,publicity) VALUES (4, 120000,'2025-01-01','2020-01-01',60000,'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Burger_King_Logo.svg/1200px-Burger_King_Logo.svg.png');
+INSERT INTO contract_Commercial(id,end_contract_clause,end_date,start_date,money,publicity) VALUES (5, 180000,'2024-01-01','2020-01-01',90000,'https://logodownload.org/wp-content/uploads/2019/12/riot-games-logo.png');
 
 -- Coachs
 INSERT INTO coachs(id, first_name, last_name, football_Clubs_id, salary, clause, birth_date) VALUES (1, 'Julen', 'Lopetegui', 1, '3000000', '6000000', '1968-03-29' );
