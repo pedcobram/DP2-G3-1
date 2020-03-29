@@ -157,17 +157,31 @@
 	            <td><c:out value="${contractCommercial.clause}"/> €</td>
 	        </tr>    
 	    </table>
-	    <spring:url value="/contractsCommercial/{contractCommercialId}/removeFromMyClub" var="removeContractFromClubURL">
-			<spring:param name="contractCommercialId" value="${contractCommercial.id}"/>
-		</spring:url>	
-			<a data-toggle="tooltip" href="${fn:escapeXml(removeContractFromClubURL)}" class="btn btn-default">Eliminar Contrato Publicitario</a>
-		<br/>
-    	<br/>
+	    
 		<c:choose>
 			<c:when test="${not empty clausulaApagar}">
-				<p style="color:red">Aun no ha terminado el contrato. Elimarlo te costara <c:out value="${clausulaApagar}"/> €</p>
-			</c:when>
+				<c:choose>
+					<c:when test="${clausulaApagar > footballClub.money}">
+						<p style="color:red">El coste de la clausula es mayor que los fondos actuales del Club. Clausula: <c:out value="${clausulaApagar}"/> €</p>
+					</c:when>
+					<c:otherwise>
+						<spring:url value="/contractsCommercial/{contractCommercialId}/removeFromMyClub" var="removeContractFromClubURL">
+						<spring:param name="contractCommercialId" value="${contractCommercial.id}"/>
+						</spring:url>	
+						<a data-toggle="tooltip" href="${fn:escapeXml(removeContractFromClubURL)}" class="btn btn-default">Eliminar Contrato Publicitario</a>
+						<br/>
+			    		<br/>
+			    		<p style="color:red">Aun no ha terminado el contrato. Eliminarlo te costara <c:out value="${clausulaApagar}"/> €</p>
+					</c:otherwise>
+				</c:choose>
+				</c:when>
 			<c:otherwise>
+				<spring:url value="/contractsCommercial/{contractCommercialId}/removeFromMyClub" var="removeContractFromClubURL">
+				<spring:param name="contractCommercialId" value="${contractCommercial.id}"/>
+				</spring:url>	
+				<a data-toggle="tooltip" href="${fn:escapeXml(removeContractFromClubURL)}" class="btn btn-default">Eliminar Contrato Publicitario</a>
+				<br/>
+	    		<br/>
 				<p style="color:black">Ya ha terminado el contrato y puedes eliminarlo sin problemas.</p>
 			</c:otherwise>
 		</c:choose>

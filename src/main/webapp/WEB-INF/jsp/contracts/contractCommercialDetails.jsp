@@ -70,10 +70,7 @@
 				<c:otherwise>
 					<c:choose>
 						<c:when test="${footballClub.id eq contractCommercial.club.id}">
-							<spring:url value="/contractsCommercial/{contractCommercialId}/removeFromMyClub" var="removeContractFromClubURL">
-					   			<spring:param name="contractCommercialId" value="${contractCommercial.id}"/>
-					   		</spring:url>	
-					   			<a data-toggle="tooltip" href="${fn:escapeXml(removeContractFromClubURL)}" class="btn btn-default">Eliminar Contrato Publicitario</a>
+							<p style="color:red">Este contrato es ya tuyo. Visita tu club para mas información.</p>
 						</c:when>
 						<c:otherwise>
 							<p style="color:red">Este contrato publicitario ya esta comprado</p>
