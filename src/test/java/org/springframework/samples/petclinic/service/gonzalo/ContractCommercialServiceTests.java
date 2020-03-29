@@ -38,7 +38,7 @@ class ContractCommercialServiceTests {
 	@Test
 	void shouldFindAllCommercialContracts() {
 		Collection<ContractCommercial> contracts = this.contractService.findAllCommercialContracts();
-		Assertions.assertTrue(contracts.size() == 2);
+		Assertions.assertTrue(contracts.size() == 5);
 	}
 
 	@Test //CASO POSITIVO - Encontrar contrato commercial por id de club
