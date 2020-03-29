@@ -16,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.dao.DataAccessException;
-import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.samples.petclinic.model.FootballClub;
 import org.springframework.samples.petclinic.model.MatchRequest;
 import org.springframework.samples.petclinic.model.Enum.RequestStatus;
@@ -221,7 +220,7 @@ public class MatchRequestServiceTests {
 
 		MatchRequest mr = this.matchRequestService.findMatchRequestById(200);
 
-		Assertions.assertThrows(InvalidDataAccessApiUsageException.class, () -> {
+		Assertions.assertThrows(NullPointerException.class, () -> {
 			this.matchRequestService.deleteMatchRequest(mr);
 		});
 	}

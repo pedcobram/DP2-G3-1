@@ -68,6 +68,10 @@ public class MatchRequestService {
 
 	@Transactional()
 	public void deleteMatchRequest(final MatchRequest matchRequest) throws DataAccessException {
+
+		matchRequest.setFootballClub1(null);
+		matchRequest.setFootballClub2(null);
+
 		this.matchRequestRepository.delete(matchRequest);
 	}
 

@@ -165,8 +165,12 @@ public class CompAdminRequestController {
 	//Vista de Competition Admin Request por Id - Authenticateds
 	@GetMapping("/myCompetitionAdminRequest/{username}")
 	public ModelAndView showCompAdminRequest(@PathVariable("username") final String username) {
+
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
+
 		ModelAndView mav = new ModelAndView("compAdminRequests/compAdminRequestDetails");
-		mav.addObject(this.compAdminRequestService.findCompAdminRequestByUsername(username));
+		mav.addObject(this.compAdminRequestService.findCompAdminRequestByUsername(currentPrincipalName));
 		return mav;
 	}
 

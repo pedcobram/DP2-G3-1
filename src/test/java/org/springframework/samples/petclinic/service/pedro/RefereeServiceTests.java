@@ -4,6 +4,7 @@ package org.springframework.samples.petclinic.service.pedro;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.security.auth.login.CredentialException;
 import javax.validation.ConstraintViolationException;
 
 import org.junit.jupiter.api.Assertions;
@@ -11,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Referee;
 import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.service.AuthenticatedService;
@@ -107,7 +109,7 @@ public class RefereeServiceTests {
 	}
 
 	@Test //CASO POSITIVO
-	void shouldDeleteReferee() {
+	void shouldDeleteReferee() throws DataAccessException, CredentialException {
 
 		User user = new User();
 

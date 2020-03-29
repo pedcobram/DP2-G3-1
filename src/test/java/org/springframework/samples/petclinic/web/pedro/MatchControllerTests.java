@@ -1,5 +1,5 @@
 
-package org.springframework.samples.petclinic.web;
+package org.springframework.samples.petclinic.web.pedro;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -19,6 +19,7 @@ import org.springframework.samples.petclinic.model.Enum.MatchStatus;
 import org.springframework.samples.petclinic.service.FootballClubService;
 import org.springframework.samples.petclinic.service.MatchService;
 import org.springframework.samples.petclinic.service.UserService;
+import org.springframework.samples.petclinic.web.MatchController;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;

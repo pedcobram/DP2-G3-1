@@ -64,9 +64,13 @@ public class MatchRequestController {
 	}
 
 	@GetMapping(value = "/matchRequests/sent/{presidentName}")
-	public String showSentMatchRequestList(final Map<String, Object> model, @PathVariable("presidentName") final String presidentName) {
+	public String showSentMatchRequestList(final Map<String, Object> model, @PathVariable("presidentName") final String presidentName) throws CredentialException {
 
-		FootballClub footballClub1 = this.footballClubService.findFootballClubByPresident(presidentName);
+		//Obtenemos el username actual conectado
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
+
+		FootballClub footballClub1 = this.footballClubService.findFootballClubByPresident(currentPrincipalName);
 
 		List<MatchRequest> matchRequests = new ArrayList<>();
 
@@ -82,9 +86,13 @@ public class MatchRequestController {
 	}
 
 	@GetMapping(value = "/matchRequests/received/{presidentName}")
-	public String showReceivedMatchRequestList(final Map<String, Object> model, @PathVariable("presidentName") final String presidentName) {
+	public String showReceivedMatchRequestList(final Map<String, Object> model, @PathVariable("presidentName") final String presidentName) throws CredentialException {
 
-		FootballClub footballClub1 = this.footballClubService.findFootballClubByPresident(presidentName);
+		//Obtenemos el username actual conectado
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
+
+		FootballClub footballClub1 = this.footballClubService.findFootballClubByPresident(currentPrincipalName);
 
 		List<MatchRequest> matchRequests = new ArrayList<>();
 
@@ -193,14 +201,18 @@ public class MatchRequestController {
 	}
 
 	@RequestMapping(value = "/matchRequests/delete/{id}/{presidentName}")
-	public String processDeleteMatchRequest(@PathVariable("id") final int matchRequestId, @PathVariable("presidentName") final String presidentName, final ModelMap model) {
+	public String processDeleteMatchRequest(@PathVariable("id") final int matchRequestId, @PathVariable("presidentName") final String presidentName, final ModelMap model) throws CredentialException {
+
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
 
 		List<MatchRequest> matchRequests = new ArrayList<>();
 
 		MatchRequest matchRequest = this.matchRequestService.findMatchRequestById(matchRequestId);
 
-		matchRequest.setFootballClub1(null);
-		matchRequest.setFootballClub2(null);
+		if (matchRequest.getCreator() != currentPrincipalName) {
+			throw new CredentialException();
+		}
 
 		this.matchRequestService.deleteMatchRequest(matchRequest);
 
@@ -214,7 +226,11 @@ public class MatchRequestController {
 	}
 
 	@RequestMapping(value = "/matchRequests/accept/{id}/{presidentName}")
-	public String processAcceptMatchRequest(@PathVariable("id") final int matchRequestId, @PathVariable("presidentName") final String presidentName, final ModelMap model) throws DataAccessException, IllegalDateException, DateException {
+	public String processAcceptMatchRequest(@PathVariable("id") final int matchRequestId, @PathVariable("presidentName") final String presidentName, final ModelMap model)
+		throws DataAccessException, IllegalDateException, DateException, CredentialException {
+
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
 
 		List<MatchRequest> matchRequests = new ArrayList<>();
 
@@ -224,7 +240,7 @@ public class MatchRequestController {
 
 		this.matchRequestService.saveMatchRequest(matchRequest);
 
-		String footballClub1 = this.footballClubService.findFootballClubByPresident(presidentName).getName();
+		String footballClub1 = this.footballClubService.findFootballClubByPresident(currentPrincipalName).getName();
 
 		matchRequests.addAll(this.matchRequestService.findAllMatchRequestsReceived(footballClub1));
 		model.put("matchRequests", matchRequests);
@@ -247,7 +263,11 @@ public class MatchRequestController {
 	}
 
 	@RequestMapping(value = "/matchRequests/reject/{id}/{presidentName}")
-	public String processRejectMatchRequest(@PathVariable("id") final int matchRequestId, @PathVariable("presidentName") final String presidentName, final ModelMap model) throws DataAccessException, IllegalDateException, DateException {
+	public String processRejectMatchRequest(@PathVariable("id") final int matchRequestId, @PathVariable("presidentName") final String presidentName, final ModelMap model)
+		throws DataAccessException, IllegalDateException, DateException, CredentialException {
+
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
 
 		List<MatchRequest> matchRequests = new ArrayList<>();
 
@@ -257,7 +277,7 @@ public class MatchRequestController {
 
 		this.matchRequestService.saveMatchRequest(matchRequest);
 
-		String footballClub1 = this.footballClubService.findFootballClubByPresident(presidentName).getName();
+		String footballClub1 = this.footballClubService.findFootballClubByPresident(currentPrincipalName).getName();
 
 		matchRequests.addAll(this.matchRequestService.findAllMatchRequestsReceived(footballClub1));
 		model.put("matchRequests", matchRequests);

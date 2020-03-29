@@ -4,6 +4,7 @@ package org.springframework.samples.petclinic.web;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.security.auth.login.CredentialException;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -89,14 +90,19 @@ public class RefereeController {
 	}
 
 	@RequestMapping(value = "/deleteReferee/{username}")
-	public String deleteReferee(@PathVariable("username") final String username) throws DataAccessException, DuplicatedNameException {
+	public String deleteReferee(@PathVariable("username") final String username) throws DataAccessException, DuplicatedNameException, CredentialException {
 
 		//Obtenemos el username actual conectado
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String currentPrincipalName = authentication.getName();
 
-		//Obtenemos el Competition Admin
 		Referee referee = this.refereeService.findRefereeByUsername(currentPrincipalName);
+
+		//
+		if (referee.getUser().getUsername() != currentPrincipalName) {
+			throw new CredentialException("Forbidden access");
+		}
+
 		Authenticated newAuth = new Authenticated();
 
 		newAuth.setId(referee.getId());
@@ -124,8 +130,17 @@ public class RefereeController {
 	}
 
 	@GetMapping(value = "/myRefereeProfile/{refereeId}/edit")
-	public String initUpdateRefereeForm(@PathVariable("refereeId") final int refereeId, final Model model) {
+	public String initUpdateRefereeForm(@PathVariable("refereeId") final int refereeId, final Model model) throws CredentialException {
+
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
+
 		Referee referee = this.refereeService.findRefereeById(refereeId);
+
+		if (referee.getUser().getUsername() != currentPrincipalName) {
+			throw new CredentialException("Forbidden access");
+		}
+
 		model.addAttribute(referee);
 		return RefereeController.VIEWS_REFEREE_CREATE_OR_UPDATE_FORM;
 	}
@@ -133,12 +148,12 @@ public class RefereeController {
 	@PostMapping(value = "/myRefereeProfile/{refereeId}/edit")
 	public String processUpdateRefereeForm(@Valid final Referee referee, final BindingResult result, @PathVariable("refereeId") final int refereeId) {
 
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
+
 		if (result.hasErrors()) {
 			return RefereeController.VIEWS_REFEREE_CREATE_OR_UPDATE_FORM;
 		} else {
-
-			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-			String currentPrincipalName = authentication.getName();
 
 			referee.setId(refereeId);
 			this.refereeService.saveReferee(referee);
@@ -148,7 +163,17 @@ public class RefereeController {
 
 	//Añadir restricción de que solo el Principal actual puede ver su vista de edición
 	@GetMapping("/myRefereeProfile/{refereeUsername}")
-	public ModelAndView showRefereeProfile(@PathVariable("refereeUsername") final String refereeUsername) {
+	public ModelAndView showRefereeProfile(@PathVariable("refereeUsername") final String refereeUsername) throws CredentialException {
+
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
+
+		Referee referee = this.refereeService.findRefereeByUsername(refereeUsername);
+
+		if (referee.getUser().getUsername() != currentPrincipalName) {
+			throw new CredentialException("Forbidden access");
+		}
+
 		ModelAndView mav = new ModelAndView("referees/refereeDetails");
 		mav.addObject(this.refereeService.findRefereeByUsername(refereeUsername));
 		return mav;

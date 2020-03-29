@@ -281,8 +281,10 @@ public class FootballClubControllerTest {
 
 	@Test //CASO POSITIVO - BORRAR EQUIPO con otro user
 	void testDeleteFootballClubWrongPresident() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/footballClubs/myClub/{principalUsername}/delete", "rufus")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.view().name("exceptions/forbidden"))
-			.andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/exceptions/forbidden.jsp"));
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/footballClubs/myClub/{principalUsername}/delete", "rufus"))
+		.andExpect(MockMvcResultMatchers.status().isOk())
+		.andExpect(MockMvcResultMatchers.view().name("exceptions/forbidden"))
+		.andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/exceptions/forbidden.jsp"));
 	}
 
 	@Test //CASO NEGATIVO - BORRAR EQUIPO sin user

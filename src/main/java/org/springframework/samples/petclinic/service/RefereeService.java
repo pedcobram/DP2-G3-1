@@ -3,6 +3,8 @@ package org.springframework.samples.petclinic.service;
 
 import java.util.Collection;
 
+import javax.security.auth.login.CredentialException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.MatchRefereeRequest;
@@ -51,7 +53,7 @@ public class RefereeService {
 	}
 
 	@Transactional()
-	public void deleteReferee(final Referee referee) throws DataAccessException {
+	public void deleteReferee(final Referee referee) throws DataAccessException, CredentialException {
 
 		MatchRefereeRequests mrrs = new MatchRefereeRequests();
 

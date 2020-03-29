@@ -67,7 +67,7 @@ public class CompetitionAdminController {
 		this.competitionAdminService.deleteCompetitionAdmin(competitionAdmin);
 
 		//CON ESTO CONSEGUIMOS QUE NO HAGA FALTA RELOGUEAR PARA GANAR LOS PRIVILEGIOS
-		Authenticated thisUser = this.authenticatedService.findAuthenticatedByUsername(username);
+		Authenticated thisUser = this.authenticatedService.findAuthenticatedByUsername(currentPrincipalName);
 
 		Set<GrantedAuthority> authorities2 = new HashSet<>();
 		authorities2.add(new SimpleGrantedAuthority("authenticated"));

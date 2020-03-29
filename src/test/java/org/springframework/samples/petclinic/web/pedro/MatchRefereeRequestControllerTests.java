@@ -1,5 +1,5 @@
 
-package org.springframework.samples.petclinic.web;
+package org.springframework.samples.petclinic.web.pedro;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +8,11 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.samples.petclinic.configuration.SecurityConfiguration;
+import org.springframework.samples.petclinic.web.FootballPlayerController;
+import org.springframework.samples.petclinic.web.MatchController;
+import org.springframework.samples.petclinic.web.MatchRecordController;
+import org.springframework.samples.petclinic.web.MatchRefereeRequestController;
+import org.springframework.samples.petclinic.web.RefereeController;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;

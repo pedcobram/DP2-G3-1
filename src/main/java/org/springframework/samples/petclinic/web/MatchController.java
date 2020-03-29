@@ -55,6 +55,7 @@ public class MatchController {
 	public String showMatchList(final Map<String, Object> model) {
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
 		String currentPrincipalName = authentication.getName();
 		FootballClub footballClub = this.footballClubService.findFootballClubByPresident(currentPrincipalName);
 

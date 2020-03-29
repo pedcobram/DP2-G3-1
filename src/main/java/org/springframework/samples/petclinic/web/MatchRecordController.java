@@ -4,6 +4,7 @@ package org.springframework.samples.petclinic.web;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.security.auth.login.CredentialException;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,8 @@ import org.springframework.samples.petclinic.service.MatchService;
 import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.samples.petclinic.service.exceptions.IllegalDateException;
 import org.springframework.samples.petclinic.service.exceptions.MatchRecordResultException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -64,7 +67,7 @@ public class MatchRecordController {
 	}
 
 	@GetMapping(value = "/matches/matchRecord/{matchId}/new")
-	public String initCreateMatchRequest(final ModelMap model) throws DataAccessException {
+	public String initCreateMatchRecord(final ModelMap model) throws DataAccessException {
 
 		MatchRecord matchRecord = new MatchRecord();
 		List<MatchRecordStatus> matchStatus = new ArrayList<MatchRecordStatus>();
@@ -112,9 +115,16 @@ public class MatchRecordController {
 	}
 
 	@GetMapping(value = "/matches/matchRecord/{matchId}/edit")
-	public String initUpdateMatchRecordForm(@PathVariable("matchId") final int matchId, final Model model) {
+	public String initUpdateMatchRecordForm(@PathVariable("matchId") final int matchId, final Model model) throws CredentialException {
+
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
 
 		MatchRecord mr = this.matchRecordService.findMatchRecordByMatchId(matchId);
+
+		if (mr.getMatch().getReferee().getUser().getUsername() != currentPrincipalName) {
+			throw new CredentialException();
+		}
 
 		List<MatchRecordStatus> matchStatus = new ArrayList<MatchRecordStatus>();
 
@@ -195,9 +205,16 @@ public class MatchRecordController {
 	}
 
 	@RequestMapping(value = "/matches/matchRecord/{matchId}/view")
-	public String viewMatchRecord(@PathVariable("matchId") final int matchId, final Model model) {
+	public String viewMatchRecord(@PathVariable("matchId") final int matchId, final Model model) throws CredentialException {
+
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
 
 		MatchRecord mr = this.matchRecordService.findMatchRecordByMatchId(matchId);
+
+		if (mr.getMatch().getReferee().getUser().getUsername() != currentPrincipalName) {
+			throw new CredentialException();
+		}
 
 		// Si se intenta acceder a un match record que no existe, devuelve al inicio
 		if (this.matchRecordService.findMatchRecordByMatchId(matchId) == null) {
@@ -214,9 +231,16 @@ public class MatchRecordController {
 	}
 
 	@RequestMapping(value = "/matches/matchRecord/goal/add/{matchRecordId}/{playerId}")
-	public String addGoalMatchRecord(@PathVariable("matchRecordId") final int matchRecordId, @PathVariable("playerId") final int playerId, final Model model) {
+	public String addGoalMatchRecord(@PathVariable("matchRecordId") final int matchRecordId, @PathVariable("playerId") final int playerId, final Model model) throws CredentialException {
+
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
 
 		FootballPlayerMatchStatistic fpms = this.footballPlayerMatchStatisticService.findFootballPlayerMatchStatisticByPlayerIdAndMatchRecordId(playerId, matchRecordId);
+
+		if (fpms.getMatchRecord().getMatch().getReferee().getUser().getUsername() != currentPrincipalName) {
+			throw new CredentialException();
+		}
 
 		fpms.setGoals(fpms.getGoals() + 1);
 
@@ -226,9 +250,16 @@ public class MatchRecordController {
 	}
 
 	@RequestMapping(value = "/matches/matchRecord/goal/substract/{matchRecordId}/{playerId}")
-	public String substractGoalMatchRecord(@PathVariable("matchRecordId") final int matchRecordId, @PathVariable("playerId") final int playerId, final Model model) {
+	public String substractGoalMatchRecord(@PathVariable("matchRecordId") final int matchRecordId, @PathVariable("playerId") final int playerId, final Model model) throws CredentialException {
+
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
 
 		FootballPlayerMatchStatistic fpms = this.footballPlayerMatchStatisticService.findFootballPlayerMatchStatisticByPlayerIdAndMatchRecordId(playerId, matchRecordId);
+
+		if (fpms.getMatchRecord().getMatch().getReferee().getUser().getUsername() != currentPrincipalName) {
+			throw new CredentialException();
+		}
 
 		fpms.setGoals(fpms.getGoals() - 1);
 
@@ -242,9 +273,16 @@ public class MatchRecordController {
 	}
 
 	@RequestMapping(value = "/matches/matchRecord/assist/add/{matchRecordId}/{playerId}")
-	public String addAssistMatchRecord(@PathVariable("matchRecordId") final int matchRecordId, @PathVariable("playerId") final int playerId, final Model model) {
+	public String addAssistMatchRecord(@PathVariable("matchRecordId") final int matchRecordId, @PathVariable("playerId") final int playerId, final Model model) throws CredentialException {
+
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
 
 		FootballPlayerMatchStatistic fpms = this.footballPlayerMatchStatisticService.findFootballPlayerMatchStatisticByPlayerIdAndMatchRecordId(playerId, matchRecordId);
+
+		if (fpms.getMatchRecord().getMatch().getReferee().getUser().getUsername() != currentPrincipalName) {
+			throw new CredentialException();
+		}
 
 		fpms.setAssists(fpms.getAssists() + 1);
 
@@ -254,9 +292,16 @@ public class MatchRecordController {
 	}
 
 	@RequestMapping(value = "/matches/matchRecord/assist/substract/{matchRecordId}/{playerId}")
-	public String substractAssistMatchRecord(@PathVariable("matchRecordId") final int matchRecordId, @PathVariable("playerId") final int playerId, final Model model) {
+	public String substractAssistMatchRecord(@PathVariable("matchRecordId") final int matchRecordId, @PathVariable("playerId") final int playerId, final Model model) throws CredentialException {
+
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
 
 		FootballPlayerMatchStatistic fpms = this.footballPlayerMatchStatisticService.findFootballPlayerMatchStatisticByPlayerIdAndMatchRecordId(playerId, matchRecordId);
+
+		if (fpms.getMatchRecord().getMatch().getReferee().getUser().getUsername() != currentPrincipalName) {
+			throw new CredentialException();
+		}
 
 		fpms.setAssists(fpms.getAssists() - 1);
 
@@ -270,9 +315,16 @@ public class MatchRecordController {
 	}
 
 	@RequestMapping(value = "/matches/matchRecord/redCard/add/{matchRecordId}/{playerId}")
-	public String addRedCardMatchRecord(@PathVariable("matchRecordId") final int matchRecordId, @PathVariable("playerId") final int playerId, final Model model) {
+	public String addRedCardMatchRecord(@PathVariable("matchRecordId") final int matchRecordId, @PathVariable("playerId") final int playerId, final Model model) throws CredentialException {
+
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
 
 		FootballPlayerMatchStatistic fpms = this.footballPlayerMatchStatisticService.findFootballPlayerMatchStatisticByPlayerIdAndMatchRecordId(playerId, matchRecordId);
+
+		if (fpms.getMatchRecord().getMatch().getReferee().getUser().getUsername() != currentPrincipalName) {
+			throw new CredentialException();
+		}
 
 		fpms.setRed_cards(fpms.getRed_cards() + 1);
 
@@ -282,9 +334,16 @@ public class MatchRecordController {
 	}
 
 	@RequestMapping(value = "/matches/matchRecord/redCard/substract/{matchRecordId}/{playerId}")
-	public String substractRedCardMatchRecord(@PathVariable("matchRecordId") final int matchRecordId, @PathVariable("playerId") final int playerId, final Model model) {
+	public String substractRedCardMatchRecord(@PathVariable("matchRecordId") final int matchRecordId, @PathVariable("playerId") final int playerId, final Model model) throws CredentialException {
+
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
 
 		FootballPlayerMatchStatistic fpms = this.footballPlayerMatchStatisticService.findFootballPlayerMatchStatisticByPlayerIdAndMatchRecordId(playerId, matchRecordId);
+
+		if (fpms.getMatchRecord().getMatch().getReferee().getUser().getUsername() != currentPrincipalName) {
+			throw new CredentialException();
+		}
 
 		fpms.setRed_cards(fpms.getRed_cards() - 1);
 
@@ -298,11 +357,22 @@ public class MatchRecordController {
 	}
 
 	@RequestMapping(value = "/matches/matchRecord/yellowCard/add/{matchRecordId}/{playerId}")
-	public String addYellowCardMatchRecord(@PathVariable("matchRecordId") final int matchRecordId, @PathVariable("playerId") final int playerId, final Model model) {
+	public String addYellowCardMatchRecord(@PathVariable("matchRecordId") final int matchRecordId, @PathVariable("playerId") final int playerId, final Model model) throws CredentialException {
+
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
 
 		FootballPlayerMatchStatistic fpms = this.footballPlayerMatchStatisticService.findFootballPlayerMatchStatisticByPlayerIdAndMatchRecordId(playerId, matchRecordId);
 
+		if (fpms.getMatchRecord().getMatch().getReferee().getUser().getUsername() != currentPrincipalName) {
+			throw new CredentialException();
+		}
+
 		fpms.setYellow_cards(fpms.getYellow_cards() + 1);
+
+		if (fpms.getMatchRecord().getMatch().getReferee().getUser().getUsername() != currentPrincipalName) {
+			throw new CredentialException();
+		}
 
 		this.footballPlayerMatchStatisticService.saveFootballPlayerStatistic(fpms);
 
@@ -310,9 +380,16 @@ public class MatchRecordController {
 	}
 
 	@RequestMapping(value = "/matches/matchRecord/yellowCard/substract/{matchRecordId}/{playerId}")
-	public String substractYellowCardMatchRecord(@PathVariable("matchRecordId") final int matchRecordId, @PathVariable("playerId") final int playerId, final Model model) {
+	public String substractYellowCardMatchRecord(@PathVariable("matchRecordId") final int matchRecordId, @PathVariable("playerId") final int playerId, final Model model) throws CredentialException {
+
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
 
 		FootballPlayerMatchStatistic fpms = this.footballPlayerMatchStatisticService.findFootballPlayerMatchStatisticByPlayerIdAndMatchRecordId(playerId, matchRecordId);
+
+		if (fpms.getMatchRecord().getMatch().getReferee().getUser().getUsername() != currentPrincipalName) {
+			throw new CredentialException();
+		}
 
 		fpms.setYellow_cards(fpms.getYellow_cards() - 1);
 
@@ -326,9 +403,16 @@ public class MatchRecordController {
 	}
 
 	@RequestMapping(value = "/matches/matchRecord/receivedGoals/add/{matchRecordId}/{playerId}")
-	public String addReceivedGoalMatchRecord(@PathVariable("matchRecordId") final int matchRecordId, @PathVariable("playerId") final int playerId, final Model model) {
+	public String addReceivedGoalMatchRecord(@PathVariable("matchRecordId") final int matchRecordId, @PathVariable("playerId") final int playerId, final Model model) throws CredentialException {
+
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
 
 		FootballPlayerMatchStatistic fpms = this.footballPlayerMatchStatisticService.findFootballPlayerMatchStatisticByPlayerIdAndMatchRecordId(playerId, matchRecordId);
+
+		if (fpms.getMatchRecord().getMatch().getReferee().getUser().getUsername() != currentPrincipalName) {
+			throw new CredentialException();
+		}
 
 		fpms.setReceived_goals(fpms.getReceived_goals() + 1);
 
@@ -338,9 +422,16 @@ public class MatchRecordController {
 	}
 
 	@RequestMapping(value = "/matches/matchRecord/receivedGoals/substract/{matchRecordId}/{playerId}")
-	public String substractReceivedGoalMatchRecord(@PathVariable("matchRecordId") final int matchRecordId, @PathVariable("playerId") final int playerId, final Model model) {
+	public String substractReceivedGoalMatchRecord(@PathVariable("matchRecordId") final int matchRecordId, @PathVariable("playerId") final int playerId, final Model model) throws CredentialException {
+
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
 
 		FootballPlayerMatchStatistic fpms = this.footballPlayerMatchStatisticService.findFootballPlayerMatchStatisticByPlayerIdAndMatchRecordId(playerId, matchRecordId);
+
+		if (fpms.getMatchRecord().getMatch().getReferee().getUser().getUsername() != currentPrincipalName) {
+			throw new CredentialException();
+		}
 
 		fpms.setReceived_goals(fpms.getReceived_goals() - 1);
 
