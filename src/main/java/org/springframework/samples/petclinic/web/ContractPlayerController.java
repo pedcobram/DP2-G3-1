@@ -201,7 +201,7 @@ public class ContractPlayerController {
 
 	//DESPEDIR JUGADOR (BORRAR CONTRATO)
 	@RequestMapping(value = "/contractPlayer/{footballPlayerId}/delete")
-	public String processDeleteForm(@PathVariable("footballPlayerId") final int footballPlayerId) throws CredentialException, DataAccessException, MoneyClubException {
+	public String processDeleteForm(@PathVariable("footballPlayerId") final int footballPlayerId, final Model model) throws CredentialException, DataAccessException, MoneyClubException {
 
 		//Obtenemos el username del usuario actual conectado
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -221,7 +221,10 @@ public class ContractPlayerController {
 		try {
 			this.contractService.deleteContract(thisContract);
 		} catch (MoneyClubException e) {
-			return "redirect:/contractPlayer/" + footballPlayerId;
+			model.addAttribute("salaryError", true);
+			model.addAttribute(player);
+			model.addAttribute(thisContract);
+			return "/contracts/contractPlayerDetails";
 		}
 
 		//Volvemos a la vista de mi club, en este caso sería la de "club empty"
