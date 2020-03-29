@@ -51,6 +51,12 @@
     <c:if test="${!footballClub.crest.isEmpty()}">
     		<div style="margin:2%" class="col-12 text-center">
     			<img width=144px  height=144px src="<spring:url value="${footballClub.crest}" htmlEscape="true" />"/>
+			
+			<c:if test="${contractCommercial != null}">
+				 <img width=144px  height=144px src="<spring:url value="/resources/images/linea.png" htmlEscape="true" />"
+                                            />
+				<img width=130px  height=110px src="${contractCommercial.publicity}"/>
+			</c:if>
 			</div>
     </c:if>
     
