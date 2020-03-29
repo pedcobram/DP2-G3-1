@@ -148,7 +148,7 @@
 	        </tr>  
 	        <tr>
 	            <th>Cláusula de fin del Contrato:</th>
-	            <td><c:out value="${contractCommercial.clause}"/></td>
+	            <td><c:out value="${contractCommercial.clause}"/> €</td>
 	        </tr>    
 	    </table>
 	    <spring:url value="/contractsCommercial/{contractCommercialId}/removeFromMyClub" var="removeContractFromClubURL">

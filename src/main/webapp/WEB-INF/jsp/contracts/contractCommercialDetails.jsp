@@ -35,7 +35,7 @@
         </tr>
         <tr>
             <th>Salario:</th>
-            <td><c:out value="${contractCommercial.money}"/></td>
+            <td><c:out value="${contractCommercial.money}"/> €</td>
         </tr>
         <tr>
             <th>Inicio del Contrato:</th>
@@ -47,7 +47,7 @@
         </tr>  
         <tr>
             <th>Cláusula de fin del Contrato:</th>
-            <td><c:out value="${contractCommercial.clause}"/></td>
+            <td><c:out value="${contractCommercial.clause}"/> €</td>
         </tr>    
     </table>
  

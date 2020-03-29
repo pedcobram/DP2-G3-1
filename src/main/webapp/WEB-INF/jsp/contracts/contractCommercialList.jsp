@@ -27,10 +27,10 @@
                 	<a href="${fn:escapeXml(contractCommercialURL)}"><b><c:out value="${contract.id}"/></b></a>
                 </td>
                 <td>
-                    <c:out value="${contract.money}"/>
+                    <c:out value="${contract.money}"/> €
                 </td>
                 <td>
-                    <c:out value="${contract.clause}"/>
+                    <c:out value="${contract.clause}"/> €
                 </td> 
             </tr>
         </c:forEach>
