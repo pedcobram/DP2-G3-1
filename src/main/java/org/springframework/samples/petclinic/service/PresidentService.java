@@ -16,23 +16,35 @@
 
 package org.springframework.samples.petclinic.service;
 
-import java.util.Collection;
+import javax.security.auth.login.CredentialException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Authenticated;
+import org.springframework.samples.petclinic.model.FootballClub;
 import org.springframework.samples.petclinic.model.President;
+import org.springframework.samples.petclinic.model.User;
 import org.springframework.samples.petclinic.repository.PresidentRepository;
+import org.springframework.samples.petclinic.service.exceptions.DuplicatedNameException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class PresidentService {
 
-	private PresidentRepository	presidentRepository;
+	private PresidentRepository		presidentRepository;
 
 	@Autowired
-	private AuthoritiesService	authoritiesService;
+	private AuthoritiesService		authoritiesService;
+
+	@Autowired
+	private FootballClubService		footballClubService;
+
+	@Autowired
+	private AuthenticatedService	authenticatedService;
 
 
 	@Autowired
@@ -50,29 +62,34 @@ public class PresidentService {
 		return this.presidentRepository.findByUsername(userName);
 	}
 
-	@Transactional(readOnly = true)
-	public Collection<President> findPresidentByLastName(final String lastName) throws DataAccessException {
-		return this.presidentRepository.findByLastName(lastName);
-	}
-
 	@Transactional
-	public void savePresident(final President president) throws DataAccessException {
-		//creating president
+	public void savePresident(final President president) throws DataAccessException, CredentialException {
+
 		this.presidentRepository.save(president);
-		//creating authorities
 		this.authoritiesService.saveAuthorities(president.getUser().getUsername(), "president");
 	}
 
-	@Transactional(readOnly = true)
-	public Authenticated findAuthenticatedByUsername(final String userName) throws DataAccessException {
-		return this.presidentRepository.findAuthenticatedByUsername(userName);
-	}
+	@Transactional
+	public void deletePresident(final President president) throws DataAccessException, CredentialException, DuplicatedNameException {
 
-	public void deletePresident(final President president) throws DataAccessException {
+		FootballClub footballClub = this.footballClubService.findFootballClubByPresident(president.getUser().getUsername());
+		this.footballClubService.deleteFootballClub(footballClub);
+
+		User user = president.getUser();
+		Authenticated auth = new Authenticated();
+		auth.setFirstName(president.getFirstName());
+		auth.setLastName(president.getLastName());
+		auth.setDni(president.getDni());
+		auth.setEmail(president.getEmail());
+		auth.setTelephone(president.getTelephone());
+		auth.setUser(user);
+
+		this.authenticatedService.saveAuthenticated(auth);
 		this.authoritiesService.deleteAuthorities(president.getUser().getUsername(), "president");
 		this.authoritiesService.saveAuthorities(president.getUser().getUsername(), "authenticated");
 		this.presidentRepository.delete(president);
 
+		Authentication reAuth = new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword());
+		SecurityContextHolder.getContext().setAuthentication(reAuth);
 	}
-
 }

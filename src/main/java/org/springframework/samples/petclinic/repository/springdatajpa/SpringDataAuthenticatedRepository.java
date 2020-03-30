@@ -31,10 +31,6 @@ public interface SpringDataAuthenticatedRepository extends AuthenticatedReposito
 	Collection<Authenticated> findByLastName(@Param("lastName") String lastName);
 
 	@Override
-	@Query("SELECT a FROM Authenticated a WHERE a.id =:id")
-	Authenticated findById(@Param("id") int id);
-
-	@Override
 	@Query("SELECT a FROM Authenticated a WHERE a.user.username =:username")
 	Authenticated findByUsername(@Param("username") String username);
 

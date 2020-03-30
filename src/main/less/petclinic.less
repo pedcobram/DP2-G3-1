@@ -13,45 +13,46 @@
  */
 @icon-font-path:    "../../webjars/bootstrap/fonts/";
 
-@spring-green:      #C42D16;
-@spring-dark-green: #5fa134;
-@spring-brown:      #FC9857;
+@spring-dark-red:   #d20000;
+@spring-dark-grey:  #777777;
 @spring-grey:       #838789;
 @spring-light-grey: #f1f1f1;
 @spring-black:		#000000;
 
 @body-bg:                           @spring-light-grey;
-@text-color:                        @spring-brown;
-@link-color:                        @spring-dark-green;
-@link-hover-color:                  @spring-dark-green;
+@text-color:                        @spring-dark-grey;
+@link-color:                        @spring-dark-red;
+@link-hover-color:                  @spring-dark-red;
 
 @navbar-default-link-color:         @spring-light-grey;
 @navbar-default-link-active-color:  @spring-light-grey;
 @navbar-default-link-hover-color:   @spring-light-grey;
-@navbar-default-link-hover-bg:      @spring-green;
+@navbar-default-link-hover-bg:      @spring-dark-red;
 @navbar-default-toggle-icon-bar-bg: @spring-light-grey;
 @navbar-default-toggle-hover-bg:    transparent;
-@navbar-default-link-active-bg:     @spring-green;
+@navbar-default-link-active-bg:     @spring-dark-red;
 
 @border-radius-base:             0;
 @border-radius-large:            0;
 @border-radius-small:            0;
 
 @btn-default-color:              @spring-light-grey;
-@btn-default-bg:                 @spring-brown;
-@btn-default-border:             @spring-green;
+@btn-default-bg:                 @spring-dark-grey;
+@btn-default-border:             @spring-dark-red;
+
+
 
 @nav-tabs-active-link-hover-color:        @spring-light-grey;
-@nav-tabs-active-link-hover-bg:           @spring-brown;
-@nav-tabs-active-link-hover-border-color: @spring-brown;
-@nav-tabs-border-color:                   @spring-brown;
+@nav-tabs-active-link-hover-bg:           @spring-dark-grey;
+@nav-tabs-active-link-hover-border-color: @spring-dark-grey;
+@nav-tabs-border-color:                   @spring-dark-grey;
 
-@pagination-active-bg:                    @spring-brown;
-@pagination-active-border:                @spring-green;
-@table-border-color:                      @spring-brown;
+@pagination-active-bg:                    @spring-dark-grey;
+@pagination-active-border:                @spring-dark-red;
+@table-border-color:                      @spring-dark-grey;
 
 .table > thead > tr > th {
-  background-color: lighten(@spring-brown, 3%);
+  background-color: lighten(@spring-dark-grey, 3%);
   color: @spring-light-grey;
 }
 
@@ -64,7 +65,7 @@
 }
 
 .table-filter {
-  background-color: @spring-brown;
+  background-color: @spring-dark-grey;
   padding: 9px 12px;
 }
 
@@ -85,14 +86,15 @@
   &:active,
   &.active,
   .open .dropdown-toggle& {
-    background-color: @spring-brown;
-    border-color: @spring-brown;
+    background-color: @spring-dark-grey;
+    border-color: @spring-dark-grey;
   }
 }
 
 .btn-default2 {
-  background-color: @spring-brown;
-  border-color: #C42D16;
+  background-color: @spring-dark-grey;
+  border-color: #d20000;
+  color:white;
   border-width: 2px;
   transition: border 0.15s;
   -webkit-transition: border 0.15s;
@@ -105,8 +107,8 @@
   &:active,
   &.active,
   .open .dropdown-toggle& {
-    background-color: #C42D16;
-    border-color: #C42D16;
+    background-color: #d20000;
+    border-color: #d20000;
   }
 }
 
@@ -153,8 +155,8 @@ h1 {
 }
 
 .splash {
-  background: @spring-green;
-  color: @spring-brown;
+  background: @spring-dark-red;
+  color: @spring-dark-grey;
   display: none;
 }
 
@@ -225,12 +227,12 @@ table td.action-column {
 }
 
 .container-details-table th {
-  background-color: lighten(@spring-brown, 3%);
+  background-color: lighten(@spring-dark-grey, 3%);
   color: @spring-light-grey;
 }
 
 .status-help-content-table td {
-  color: @spring-brown;
+  color: @spring-dark-grey;
 }
 
 .alert-success {
@@ -260,7 +262,7 @@ table td.action-column {
 }
 
 hr {
-  border-top: 1px dotted @spring-brown;
+  border-top: 1px dotted @spring-dark-grey;
 }
 
 @import "typography.less";
@@ -278,3 +280,105 @@ div.c {
   position: absolute;
   margin-left: auto;
 } 
+
+select[multiple],
+select[size] {
+  height: auto;
+  width: auto;
+}
+
+@navbar2-default-link-color:         @spring-light-grey;
+@navbar2-default-link-active-color:  @spring-light-grey;
+@navbar2-default-link-hover-color:   @spring-light-grey;
+@navbar2-default-link-hover-bg:      @spring-dark-red;
+@navbar2-default-toggle-icon-bar-bg: @spring-light-grey;
+@navbar2-default-toggle-hover-bg:    transparent;
+@navbar2-default-link-active-bg:     @spring-dark-red;
+
+
+@nav2-tabs-active-link-hover-color:        @spring-light-grey;
+@nav2-tabs-active-link-hover-bg:           @spring-dark-grey;
+@nav2-tabs-active-link-hover-border-color: @spring-dark-grey;
+@nav2-tabs-border-color:                   @spring-dark-grey;
+
+.nav2 > li > a {
+  color: @spring-grey;
+}
+
+.btn-default3 {
+
+  background-color: @spring-grey;
+  color:white;
+  border-width: 2px;
+  transition: border 0.15s;
+  -webkit-transition: border 0.15s;
+  -moz-transition: border 0.15s;
+  -o-transition: border 0.15s;
+  -ms-transition: border 0.15s;
+  text-transform: uppercase;
+  font-family: "montserratregular", sans-serif;
+  font-size: 13px;
+
+  &:hover,
+  &:focus,
+  &:active,
+  &.active,
+  .open .dropdown-toggle& {
+    background-color: #d20000;
+  }
+}
+
+.myButtonPlayer {
+    background:url(../images/jugadorV2.png) no-repeat;
+ 	background-position: center;
+	background-color: #d4d4d4;
+    cursor:pointer;
+    width: 100%;
+    height: 300px;
+    border: none;
+
+	&:hover,
+  	&:focus,
+  	&:active,
+  	&.active,
+  	.open .dropdown-toggle& {
+    background-color: #b3b3b3;
+}
+}
+.myButtonCoach {
+    background:url(../images/entrenador.png) no-repeat;
+ 	background-position: bottom;
+	background-size:60%;
+	background-color: #d4d4d4;
+    cursor:pointer;
+    width: 100%;
+    height: 300px;
+    border: none;
+
+    &:hover,
+    &:focus,
+    &:active,
+    &.active,
+    .open .dropdown-toggle& {
+    background-color: #b3b3b3;
+  }
+}
+.myButtonFreeAgent {
+	font-size:24px;
+	background-color: #d4d4d4;
+    cursor:pointer;
+    width: 100%;
+    height: 60px;
+    border: none;
+	font-weight: bold;
+	font-family: "montserratregular", sans-serif;
+	
+	&:hover,
+    &:focus,
+    &:active,
+    &.active,
+    .open .dropdown-toggle& {
+    background-color: #b3b3b3;
+  }
+
+}

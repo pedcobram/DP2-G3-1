@@ -24,16 +24,23 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Pattern;
 
 import org.springframework.core.style.ToStringCreator;
+
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 
 @Entity
 @Table(name = "presidents")
 public class President extends Person {
 
 	@Column(name = "telephone")
-	@NotEmpty
 	@Digits(fraction = 0, integer = 10)
+	@NotEmpty
 	private String	telephone;
 
 	@Column(name = "email")
@@ -42,6 +49,7 @@ public class President extends Person {
 
 	@Column(name = "dni")
 	@NotEmpty
+	@Pattern(regexp = "[0-9]{7,8}[A-Za-z]")
 	private String	dni;
 
 	//
@@ -50,36 +58,6 @@ public class President extends Person {
 	private User	user;
 	//
 
-
-	public User getUser() {
-		return this.user;
-	}
-
-	public void setUser(final User user) {
-		this.user = user;
-	}
-
-	public String getEmail() {
-		return this.email;
-	}
-
-	public void setEmail(final String email) {
-		this.email = email;
-	}
-	public String getDni() {
-		return this.dni;
-	}
-
-	public void setDni(final String dni) {
-		this.dni = dni;
-	}
-	public String getTelephone() {
-		return this.telephone;
-	}
-
-	public void setTelephone(final String telephone) {
-		this.telephone = telephone;
-	}
 
 	@Override
 	public String toString() {

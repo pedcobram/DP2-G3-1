@@ -4,51 +4,84 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
+<%@ page contentType="text/html; charset=UTF-8" %> <!-- Para  tildes, ñ y caracteres especiales como el € %-->
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
-<petclinic:layout pageName="footballCLubs">
-
-    <h2 style="color:black">FOOTBALL CLUB</h2>
-    
-    <!-- Tomo el valor del nombre de usuario actual %-->
+	<!-- Tomo el valor del nombre de usuario actual %-->
     
     <security:authorize access="isAuthenticated()">
    		<security:authentication var="principalUsername" property="principal.username" /> 
 	</security:authorize>
 
+		<fmt:message key="code.title.footballClub" var="footballClubTitle"/>
+		<fmt:message key="code.label.name" var="Name"/>
+    	<fmt:message key="code.label.logo" var="Logo"/>
+    	<fmt:message key="code.label.city" var="City"/>
+    	<fmt:message key="code.label.stadium" var="Stadium"/>
+    	<fmt:message key="code.label.money" var="Money"/>
+    	<fmt:message key="code.label.foundationDate" var="FoundationDate"/>
+    	<fmt:message key="code.label.fans" var="Fans"/>
+    	<fmt:message key="code.label.coach" var="Coach"/>
+    	<fmt:message key="code.label.president" var="President"/>  	
+    	<fmt:message key="code.list.playerList" var="playerList"/>
+
+<petclinic:layout pageName="footballClub">
+
+    <h2 style="color:black">${footballClubTitle}</h2>
+    
     <table class="table table-striped">
         <tr>
-            <th>Name</th>
-            <td><img width=30px height= auto hspace="20"; src="${footballClub.crest}"/>
+            <th>${Name}</th>
+            <td><img width=30px height= auto hspace="20" src="${footballClub.crest}"/>
                 	<b><c:out value="${footballClub.name}"/></b></td>
         </tr>
         <tr>
-            <th>City</th>
+            <th>${City}</th>
             <td><c:out value="${footballClub.city}"/></td>
         </tr>
         <tr>
-            <th>Stadium</th>
+            <th>${Stadium}</th>
             <td><c:out value="${footballClub.stadium}"/></td>
         </tr>
         <tr>
-            <th>Foundation Date</th>
+            <th>${FoundationDate}</th>
             <td><c:out value="${footballClub.foundationDate}"/></td>
         </tr>
         <tr>
-            <th>Fans</th>
+            <th>${Fans}</th>
             <td><c:out value="${footballClub.fans}"/></td>
         </tr>
          <tr>
-            <th>Coach</th>
-            <td><c:out value="${footballClub.coach}"/></td>
+            <th>${Coach}</th>
+            <td>
+            	<spring:url value="/coachs/{coachId}" var="coachUrl">
+                        <spring:param name="coachId" value="${coach.id}"/>
+                </spring:url>
+                <a href="${fn:escapeXml(coachUrl)}"><b><c:out value="${coach.firstName} ${coach.lastName}"/></b></a>
+            </td>
         </tr>
          <tr>
-            <th>President</th>
+            <th>${President}</th>
             <td><c:out value="${footballClub.president.firstName} ${footballClub.president.lastName}"/></td>
         </tr>       
     </table>
+
+    <spring:url value="/footballClubs/list/${footballClubId}/footballPlayers" var="footballPlayersUrl"></spring:url>
+    	<a href="${fn:escapeXml(footballPlayersUrl)}" class="btn btn-default"><span class="glyphicon glyphicon-user"></span> ${playerList}</a>
+					 
+	<c:if test="${footballClub.president.user.username != principalUsername && !notHasAPublishedTeam}">
+     		<security:authorize access="hasAnyAuthority('president')">
+      	  	<spring:url value="/matchRequests/${footballClub.president.user.username}/new" var="newMatchRequest"></spring:url>
+    			<a href="${fn:escapeXml(newMatchRequest)}" class="btn btn-default2"><fmt:message key="code.button.footballclubdetails.matchrequest"/></a>
+    		</security:authorize>
+    	</c:if>    								 
+    								    								
+    	<spring:url value="/fan/${footballClubId}/new" var="FanUrl"></spring:url>
+    	<a href="${fn:escapeXml(FanUrl)}" class="btn btn-default" >
+    				<span class="glyphicon glyphicon-heart-empty"></span> 
+    								 <fmt:message key="addFan"/></a>
+    	<c:if test="${existFan}"><p style="color: red;"><fmt:message key="existFan"/></p></c:if>
     
-    <br/>
-    <br/>
-    <br/>
+
     
 </petclinic:layout>

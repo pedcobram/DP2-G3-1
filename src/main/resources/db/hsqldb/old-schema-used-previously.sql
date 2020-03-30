@@ -8,9 +8,12 @@ DROP TABLE owners IF EXISTS;
 DROP TABLE users IF EXISTS;
 DROP TABLE authorities IF EXISTS;
 
+DROP TABLE fans IF EXISTS;
 DROP TABLE footballClubs IF EXISTS;
 DROP TABLE authenticateds IF EXISTS;
 DROP TABLE presidents IF EXISTS;
+
+CREATE TYPE position AS ENUM ('DL');
 
 CREATE TABLE football_Clubs (
   id         		INTEGER IDENTITY PRIMARY KEY,
@@ -28,6 +31,7 @@ CREATE TABLE football_Clubs (
 ALTER TABLE football_Clubs ADD CONSTRAINT fk_football_Clubs_presidents FOREIGN KEY (president_id) REFERENCES presidents (id);
 
 CREATE INDEX footballClubs_name ON footballClubs (name);
+
 
 CREATE TABLE authenticateds (
   id         INTEGER IDENTITY PRIMARY KEY,
@@ -120,4 +124,7 @@ CREATE TABLE authorities (
 ALTER TABLE authorities ADD CONSTRAINT fk_authorities_users FOREIGN KEY (username) REFERENCES users(username);
 
 CREATE UNIQUE INDEX ix_auth_username ON authorities (username,authority);
+
+
+
 

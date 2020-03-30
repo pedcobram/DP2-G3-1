@@ -16,28 +16,32 @@
 
 package org.springframework.samples.petclinic.repository.springdatajpa;
 
+import java.util.Collection;
+
+import org.springframework.dao.DataAccessException;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.samples.petclinic.model.FootballClub;
 import org.springframework.samples.petclinic.model.President;
 import org.springframework.samples.petclinic.repository.FootballClubRepository;
-import org.springframework.samples.petclinic.repository.VetRepository;
 
-/**
- * Spring Data JPA specialization of the {@link VetRepository} interface
- *
- * @author Michael Isvy
- * @since 15.1.2013
- */
 public interface SpringDataFootballClubRepository extends FootballClubRepository, Repository<FootballClub, Integer> {
 
 	@Override
 	@Query("SELECT a FROM President a WHERE a.user.username =:username")
-	President findPresidentByUsername(@Param("username") String username);
+	President findPresidentByUsername(@Param("username") String username) throws DataAccessException;
 
 	@Override
 	@Query("SELECT a FROM FootballClub a WHERE a.president.user.username =:username")
-	FootballClub findFootballClubByPresident(@Param("username") String username);
+	FootballClub findFootballClubByPresident(@Param("username") String username) throws DataAccessException;
+
+	@Override
+	@Query("SELECT a FROM FootballClub a WHERE a.id =:id")
+	FootballClub findById(int id) throws DataAccessException;
+
+	@Override
+	@Query("SELECT f FROM FootballClub f WHERE f.status = true")
+	Collection<FootballClub> findAllPublished() throws DataAccessException;
 
 }

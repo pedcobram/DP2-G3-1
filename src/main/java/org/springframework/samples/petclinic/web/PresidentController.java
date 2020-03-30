@@ -16,25 +16,18 @@
 
 package org.springframework.samples.petclinic.web;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
+import javax.security.auth.login.CredentialException;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Authenticated;
-import org.springframework.samples.petclinic.model.FootballClub;
 import org.springframework.samples.petclinic.model.President;
-import org.springframework.samples.petclinic.service.AuthoritiesService;
-import org.springframework.samples.petclinic.service.FootballClubService;
+import org.springframework.samples.petclinic.service.AuthenticatedService;
 import org.springframework.samples.petclinic.service.PresidentService;
-import org.springframework.samples.petclinic.service.UserService;
+import org.springframework.samples.petclinic.service.exceptions.DuplicatedNameException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -52,15 +45,15 @@ public class PresidentController {
 
 	private static final String			VIEWS_PRESIDENT_CREATE_OR_UPDATE_FORM	= "presidents/createOrUpdatePresidentForm";
 
-	private final PresidentService		presidentService;
+	private final AuthenticatedService	authenticatedService;
 
-	private final FootballClubService	footballClubService;
+	private final PresidentService		presidentService;
 
 
 	@Autowired
-	public PresidentController(final PresidentService presidentService, final FootballClubService footballClubService, final UserService userService, final AuthoritiesService authoritiesService) {
+	public PresidentController(final PresidentService presidentService, final AuthenticatedService authenticatedService) {
 		this.presidentService = presidentService;
-		this.footballClubService = footballClubService;
+		this.authenticatedService = authenticatedService;
 	}
 
 	@InitBinder
@@ -68,48 +61,14 @@ public class PresidentController {
 		dataBinder.setDisallowedFields("id");
 	}
 
-	/**
-	 * @GetMapping(value = "/presidents/new")
-	 *                   public String initCreationForm(final Map<String, Object> model) {
-	 *                   President president = new President();
-	 *
-	 *                   Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-	 *                   String currentPrincipalName = authentication.getName();
-	 *
-	 *                   Authenticated thisUser = this.presidentService.findAuthenticatedByUsername(currentPrincipalName);
-	 *
-	 *                   model.put("firstName", thisUser.getFirstName());
-	 *                   model.put("lastName", thisUser.getLastName());
-	 *                   model.put("dni", thisUser.getDni());
-	 *                   model.put("email", thisUser.getEmail());
-	 *                   model.put("telephone", thisUser.getTelephone());
-	 *
-	 *                   president.setFirstName(thisUser.getFirstName());
-	 *                   president.setLastName(thisUser.getLastName());
-	 *                   president.setDni(thisUser.getDni());
-	 *                   president.setEmail(thisUser.getEmail());
-	 *                   president.setTelephone(thisUser.getTelephone());
-	 *                   president.setUser(thisUser.getUser());
-	 *
-	 *                   model.put("president", president);
-	 *
-	 *                   return PresidentController.VIEWS_PRESIDENT_CREATE_OR_UPDATE_FORM;
-	 *                   }
-	 **/
-	@RequestMapping(value = "/createPresident")
-	public String createPresident() {
+	@RequestMapping(value = "/presidents/new") //SER PRESIDENTE
+	public String createPresident() throws DataAccessException, CredentialException {
 
-		//Obtenemos el username actual conectado
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String currentPrincipalName = authentication.getName();
+		Authenticated thisUser = this.authenticatedService.findAuthenticatedByUsername(currentPrincipalName);
 
-		//Creamos el presidente
 		President president = new President();
-
-		//Obtenemos el authenticated actual conectado
-		Authenticated thisUser = this.presidentService.findAuthenticatedByUsername(currentPrincipalName);
-
-		//Añadimos los datos del user al presidente
 		president.setFirstName(thisUser.getFirstName());
 		president.setLastName(thisUser.getLastName());
 		president.setDni(thisUser.getDni());
@@ -117,123 +76,74 @@ public class PresidentController {
 		president.setTelephone(thisUser.getTelephone());
 		president.setUser(thisUser.getUser());
 
-		//Guardamos en la db el nuevo presidente
 		this.presidentService.savePresident(president);
+		this.authenticatedService.deleteAuthenticated(thisUser);
 
-		//CON ESTO CONSEGUIMOS QUE NO HAGA FALTA RELOGUEAR PARA GANAR LOS PRIVILEGIOS DE PRESIDENTE
-		Set<GrantedAuthority> authorities2 = new HashSet<>();
-		authorities2.add(new SimpleGrantedAuthority("President"));
-		Authentication reAuth = new UsernamePasswordAuthenticationToken(currentPrincipalName, thisUser.getUser().getPassword());
+		Authentication reAuth = new UsernamePasswordAuthenticationToken(president.getUser().getUsername(), president.getUser().getPassword());
 		SecurityContextHolder.getContext().setAuthentication(reAuth);
 
-		//Redirigimos a la vista del perfil del presidente
-		return "redirect:/myPresidentProfile/" + currentPrincipalName;
+		return "redirect:/presidents/" + currentPrincipalName;
 	}
 
-	//BORRAR PRESIDENTE
+	@RequestMapping(value = "/presidents/delete") //BORRAR PRESIDENTE
+	public String deletePresident() throws DataAccessException, CredentialException, DuplicatedNameException {
 
-	@RequestMapping(value = "/deletePresident")
-	public String deletePresident() {
-
-		//Obtenemos el username actual conectado
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String currentPrincipalName = authentication.getName();
-
-		//Obtenemos el presidente
 		President president = this.presidentService.findPresidentByUsername(currentPrincipalName);
-		Authenticated user = this.presidentService.findAuthenticatedByUsername(currentPrincipalName);
 
-		//Buscamos si tiene un Club
-		FootballClub footballClub = this.footballClubService.findFootballClubByPresident(currentPrincipalName);
-
-		//Borramos el Club si existe
-		if (footballClub != null) {
-			this.footballClubService.deleteFootballClub(footballClub);
-		}
-
-		//Guardamos en la db el nuevo presidente
 		this.presidentService.deletePresident(president);
 
-		//CON ESTO CONSEGUIMOS QUE NO HAGA FALTA RELOGUEAR PARA GANAR LOS PRIVILEGIOS DE PRESIDENTE
-
-		Authentication reAuth = new UsernamePasswordAuthenticationToken(currentPrincipalName, user.getUser().getPassword());
-		SecurityContextHolder.getContext().setAuthentication(reAuth);
-
-		//Redirigimos a la vista del perfil del presidente
 		return "redirect:/myProfile/" + currentPrincipalName;
 	}
 
-	@GetMapping(value = "/presidents/find")
-	public String initFindForm(final Map<String, Object> model) {
-		model.put("president", new President());
-		return "presidents/findPresidents";
-	}
+	@GetMapping(value = "/presidents/{presidentUsername}/edit") //EDITAR PRESIDENTE - GET
+	public String initUpdatePresidentForm(final Model model, @PathVariable("presidentUsername") final String presidentUsername) throws CredentialException {
 
-	@GetMapping(value = "/presidents")
-	public String processFindForm(President president, final BindingResult result, final Map<String, Object> model) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
 
-		// allow parameterless GET request for /presidents to return all records
-		if (president.getLastName() == null) {
-			president.setLastName(""); // empty string signifies broadest possible search
+		if (!presidentUsername.equals(currentPrincipalName)) { //SEGURIDAD
+			throw new CredentialException("Forbidden Access");
 		}
 
-		// find presidents by last name
-		Collection<President> results = this.presidentService.findPresidentByLastName(president.getLastName());
-		if (results.isEmpty()) {
-			// no presidents found
-			result.rejectValue("lastName", "notFound", "not found");
-			return "presidents/findPresidents";
-		} else if (results.size() == 1) {
-			// 1 president found
-			president = results.iterator().next();
-			return "redirect:/presidents/" + president.getId();
-		} else {
-			// multiple presidents found
-			model.put("selections", results);
-			return "presidents/presidentsList";
-		}
-	}
-
-	@GetMapping(value = "/myPresidentProfile/{presidentId}/edit")
-	public String initUpdatePresidentForm(@PathVariable("presidentId") final int presidentId, final Model model) {
-		President president = this.presidentService.findPresidentById(presidentId);
+		President president = this.presidentService.findPresidentByUsername(presidentUsername);
 		model.addAttribute(president);
+
 		return PresidentController.VIEWS_PRESIDENT_CREATE_OR_UPDATE_FORM;
 	}
 
-	@PostMapping(value = "/myPresidentProfile/{presidentId}/edit")
-	public String processUpdatePresidentForm(@Valid final President president, final BindingResult result, @PathVariable("presidentId") final int presidentId) {
+	@PostMapping(value = "/presidents/{presidentUsername}/edit") //EDITAR PRESIDENTE - POST
+	public String processUpdatePresidentForm(@Valid final President president, final BindingResult result, @PathVariable("presidentUsername") final String presidentUsername) throws CredentialException {
+
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
+
+		if (!presidentUsername.equals(currentPrincipalName)) { //SEGURIDAD
+			throw new CredentialException("Forbidden Access");
+		}
+
 		if (result.hasErrors()) {
 			return PresidentController.VIEWS_PRESIDENT_CREATE_OR_UPDATE_FORM;
 		} else {
 
-			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-			String currentPrincipalName = authentication.getName();
-
-			president.setId(presidentId);
+			president.setId(this.presidentService.findPresidentByUsername(presidentUsername).getId());
+			president.getUser().setEnabled(true);
 			this.presidentService.savePresident(president);
-			return "redirect:/myPresidentProfile/" + currentPrincipalName;
+			return "redirect:/presidents/" + presidentUsername;
 		}
 	}
 
-	/**
-	 * Custom handler for displaying an authenticated.
-	 *
-	 * @param authenticatedId
-	 *            the ID of the owner to display
-	 * @return a ModelMap with the model attributes for the view
-	 */
+	@GetMapping("/presidents/{presidentUsername}") //VISTA DE PRESIDENTE
+	public ModelAndView showPresidentProfile(@PathVariable("presidentUsername") final String presidentUsername) throws CredentialException {
 
-	@GetMapping("/presidents/{presidentId}")
-	public ModelAndView showPresident(@PathVariable("presidentId") final int presidentId) {
-		ModelAndView mav = new ModelAndView("presidents/presidentDetails");
-		mav.addObject(this.presidentService.findPresidentById(presidentId));
-		return mav;
-	}
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
 
-	//Añadir restricción de que solo el Principal actual puede ver su vista de edición
-	@GetMapping("/myPresidentProfile/{presidentUsername}")
-	public ModelAndView showPresidentProfile(@PathVariable("presidentUsername") final String presidentUsername) {
+		if (!currentPrincipalName.equals(presidentUsername)) {
+			throw new CredentialException();
+		}
+
 		ModelAndView mav = new ModelAndView("presidents/presidentDetails");
 		mav.addObject(this.presidentService.findPresidentByUsername(presidentUsername));
 		return mav;

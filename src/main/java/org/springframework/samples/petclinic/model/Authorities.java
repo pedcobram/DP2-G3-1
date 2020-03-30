@@ -1,3 +1,4 @@
+
 package org.springframework.samples.petclinic.model;
 
 import javax.persistence.Entity;
@@ -10,7 +11,8 @@ import lombok.Data;
 @Entity
 @Table(name = "authorities")
 public class Authorities {
+
 	@Id
-	String username;
-	String authority;
+	String	username;
+	String	authority;
 }

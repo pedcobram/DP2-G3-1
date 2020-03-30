@@ -16,136 +16,70 @@
 
 package org.springframework.samples.petclinic.model;
 
-import java.time.LocalDate;
+import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
+import org.hibernate.validator.constraints.URL;
 import org.springframework.format.annotation.DateTimeFormat;
+
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 
 @Entity
 @Table(name = "football_Clubs")
-public class FootballClub extends BaseEntity {
+public class FootballClub extends BaseEntity implements Serializable {
 
-	@OneToOne
+	private static final long	serialVersionUID	= 1L;
+
+	@OneToOne(optional = false)
 	@JoinColumn(name = "president_id")
-	private President	president;
+	@NotNull
+	private President			president;
 
 	@Column(name = "crest")
-	private String		crest;
+	@URL
+	private String				crest;
 
 	@Column(name = "name")
-	private String		name;
+	@NotEmpty
+	private String				name;
 
 	@Column(name = "foundation_date")
+	@Temporal(TemporalType.DATE)
 	@DateTimeFormat(pattern = "yyyy/MM/dd")
-	private LocalDate	foundationDate;
+	@NotNull
+	private Date				foundationDate;
 
 	@Column(name = "stadium")
-	private String		stadium;
+	@NotEmpty
+	private String				stadium;
 
 	@Column(name = "city")
-	private String		city;
-
-	@Column(name = "fans")
-	private Integer		fans;
-
-	//	private FootballCalendar		calendar;
-
-	//	private List<FootballPlayer>	footballPlayers;
-
-	@Column(name = "coach")
-	private String		coach;
-
-	//	@Column(name = "director")
-	//	@OneToOne(optional = true)
-	//	private Director	director;
-
-	//	@Column(name = "inversor")
-	//	@ManyToOne
-	//	private Inversor	inversor;
+	@NotEmpty
+	private String				city;
 
 	@Column(name = "money")
-	private Integer		money;
+	@NotNull
+	private Integer				money;
 
-	//	private List<Merchandise>		merchandise;
+	@Column(name = "fans")
+	@NotNull
+	private Integer				fans;
 
-
-	//GETTER AND SETTER
-
-	public President getPresident() {
-		return this.president;
-	}
-
-	public void setPresident(final President president) {
-		this.president = president;
-	}
-
-	public String getCrest() {
-		return this.crest;
-	}
-
-	public void setCrest(final String Crest) {
-		this.crest = Crest;
-	}
-
-	public String getName() {
-		return this.name;
-	}
-
-	public void setName(final String Name) {
-		this.name = Name;
-	}
-
-	public void setFoundationDate(final LocalDate foundationDate) {
-		this.foundationDate = foundationDate;
-	}
-
-	public LocalDate getFoundationDate() {
-		return this.foundationDate;
-	}
-
-	public String getStadium() {
-		return this.stadium;
-	}
-
-	public void setStadium(final String Stadium) {
-		this.stadium = Stadium;
-	}
-
-	public Integer getFans() {
-		return this.fans;
-	}
-
-	public void setFans(final Integer Fans) {
-		this.fans = Fans;
-	}
-
-	public String getCity() {
-		return this.city;
-	}
-
-	public void setCity(final String City) {
-		this.city = City;
-	}
-
-	public String getCoach() {
-		return this.coach;
-	}
-
-	public void setCoach(final String Coach) {
-		this.coach = Coach;
-	}
-
-	public Integer getMoney() {
-		return this.money;
-	}
-
-	public void setMoney(final Integer Money) {
-		this.money = Money;
-	}
-
+	@Column(name = "status")
+	@NotNull
+	private Boolean				status;
 }

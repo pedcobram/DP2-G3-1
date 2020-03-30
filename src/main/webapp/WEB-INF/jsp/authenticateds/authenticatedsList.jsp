@@ -4,6 +4,14 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
+<%@ page contentType="text/html; charset=UTF-8" %> <!-- Para  tildes, ñ y caracteres especiales como el € %-->
+
+		<fmt:message key="code.conlumn.name" var="Name"/>
+    	<fmt:message key="code.label.email" var="Email"/>
+    	<fmt:message key="code.label.dni" var="Dni"/>
+    	<fmt:message key="code.label.telephone" var="Telephone"/>
+    	<fmt:message key="code.title.AuthenticatedInformation" var="AuthenticatedInfo"/>
+    	<fmt:message key="code.crud.editProfile" var="EditProfile"/>
 
 <petclinic:layout pageName="authenticateds">
     <h2>Authenticateds</h2>
@@ -35,16 +43,7 @@
                 <td>
                     <c:out value="${authenticated.telephone}"/>
                 </td>
-                  
-<!--
-                <td> 
-                    <c:out value="${owner.user.username}"/> 
-                </td>
-                <td> 
-                   <c:out value="${owner.user.password}"/> 
-                </td> 
--->
-                
+                               
             </tr>
         </c:forEach>
         </tbody>
