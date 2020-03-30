@@ -98,11 +98,6 @@ public class RefereeController {
 
 		Referee referee = this.refereeService.findRefereeByUsername(currentPrincipalName);
 
-		//
-		if (referee.getUser().getUsername() != currentPrincipalName) {
-			throw new CredentialException("Forbidden access");
-		}
-
 		Authenticated newAuth = new Authenticated();
 
 		newAuth.setId(referee.getId());
@@ -117,7 +112,7 @@ public class RefereeController {
 		this.authenticatedService.saveAuthenticated(newAuth);
 		this.refereeService.deleteReferee(referee);
 
-		Authenticated thisUser = this.authenticatedService.findAuthenticatedByUsername(username);
+		Authenticated thisUser = this.authenticatedService.findAuthenticatedByUsername(currentPrincipalName);
 
 		//CON ESTO CONSEGUIMOS QUE NO HAGA FALTA RELOGUEAR PARA GANAR LOS PRIVILEGIOS
 		Set<GrantedAuthority> authorities2 = new HashSet<>();
@@ -132,12 +127,9 @@ public class RefereeController {
 	@GetMapping(value = "/myRefereeProfile/{refereeId}/edit")
 	public String initUpdateRefereeForm(@PathVariable("refereeId") final int refereeId, final Model model) throws CredentialException {
 
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		String currentPrincipalName = authentication.getName();
-
 		Referee referee = this.refereeService.findRefereeById(refereeId);
 
-		if (referee.getUser().getUsername() != currentPrincipalName) {
+		if (referee.getId() != refereeId) {
 			throw new CredentialException("Forbidden access");
 		}
 
@@ -168,14 +160,8 @@ public class RefereeController {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String currentPrincipalName = authentication.getName();
 
-		Referee referee = this.refereeService.findRefereeByUsername(refereeUsername);
-
-		if (referee.getUser().getUsername() != currentPrincipalName) {
-			throw new CredentialException("Forbidden access");
-		}
-
 		ModelAndView mav = new ModelAndView("referees/refereeDetails");
-		mav.addObject(this.refereeService.findRefereeByUsername(refereeUsername));
+		mav.addObject(this.refereeService.findRefereeByUsername(currentPrincipalName));
 		return mav;
 	}
 
