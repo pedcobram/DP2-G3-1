@@ -63,7 +63,7 @@ public class MatchRequestController {
 		dataBinder.setDisallowedFields("id");
 	}
 
-	@GetMapping(value = "/matchRequests/sent/{presidentName}")
+	@GetMapping(value = "/matchRequests/sent")
 	public String showSentMatchRequestList(final Map<String, Object> model, @PathVariable("presidentName") final String presidentName) throws CredentialException {
 
 		//Obtenemos el username actual conectado
@@ -85,7 +85,7 @@ public class MatchRequestController {
 		return MatchRequestController.VIEWS_MATCH_REQUEST_LIST;
 	}
 
-	@GetMapping(value = "/matchRequests/received/{presidentName}")
+	@GetMapping(value = "/matchRequests/received")
 	public String showReceivedMatchRequestList(final Map<String, Object> model, @PathVariable("presidentName") final String presidentName) throws CredentialException {
 
 		//Obtenemos el username actual conectado
@@ -216,7 +216,7 @@ public class MatchRequestController {
 
 		this.matchRequestService.deleteMatchRequest(matchRequest);
 
-		String footballClub1 = this.footballClubService.findFootballClubByPresident(presidentName).getName();
+		String footballClub1 = this.footballClubService.findFootballClubByPresident(currentPrincipalName).getName();
 
 		matchRequests.addAll(this.matchRequestService.findAllMatchRequestsSent(footballClub1));
 		model.put("matchRequests", matchRequests);

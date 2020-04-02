@@ -39,13 +39,11 @@
 	<!-- Muestro el botón de editar si el usuario coincide con el usuario actual %-->  
 
 	<c:if test="${referee.user.username == principalUsername}">
-    	<spring:url value="{refereeId}/edit" var="editUrl">
-        	<spring:param name="refereeId" value="${referee.id}"/>
-    	</spring:url>
+    	<spring:url value="/myRefereeProfile/edit" var="editUrl">  	</spring:url>
     	<a href="${fn:escapeXml(editUrl)}" class="btn btn-default"><fmt:message key="code.button.refereedetails.edit"/></a>
     	
     	
-    	<spring:url value="/deleteReferee/${principalUsername}" var="editUrl"></spring:url>
+    	<spring:url value="/referee/delete" var="editUrl"></spring:url>
     	<a href="${fn:escapeXml(editUrl)}" class="btn btn-default2" style="color:white"><b><fmt:message key="code.button.refereedetails.delete"/></b></a>
     	
     </c:if>  

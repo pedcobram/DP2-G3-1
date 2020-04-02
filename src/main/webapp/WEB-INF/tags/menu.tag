@@ -143,14 +143,14 @@
 										</sec:authorize>
 										
 										<sec:authorize access="hasAuthority('referee')">	
-											<petclinic:menuItem active="${name eq 'referees'}" url="/matchRefereeRequest/list/${principalUsername}"
+											<petclinic:menuItem active="${name eq 'referees'}" url="/matchRefereeRequest/list"
 												title="personal space">
 												<span><fmt:message key="code.tag.menu.matchRefereeRequestList"/></span>
 											</petclinic:menuItem>
 										</sec:authorize>
 										
 										<sec:authorize access="hasAuthority('referee')">	
-											<petclinic:menuItem active="${name eq 'referees'}" url="/myRefereeProfile/${principalUsername}"
+											<petclinic:menuItem active="${name eq 'referees'}" url="/myRefereeProfile"
 												title="personal space">
 												<span><fmt:message key="myProfile"/></span>
 											</petclinic:menuItem>
@@ -165,7 +165,7 @@
 										</sec:authorize>
 										
 										<sec:authorize access="hasAuthority('competitionAdmin')">	
-											<petclinic:menuItem active="${name eq 'competitionAdmins'}" url="/myCompetitionAdminProfile/${principalUsername}"
+											<petclinic:menuItem active="${name eq 'competitionAdmins'}" url="/myCompetitionAdminProfile"
 												title="personal space">
 												<span><fmt:message key="myProfile"/></span>
 											</petclinic:menuItem>

@@ -83,7 +83,7 @@ public class CompAdminRequestController {
 		try {
 			this.compAdminRequestService.countCompAdminRequestByUsername(currentPrincipalName);
 		} catch (PendingRequestException pre) {
-			return "redirect:/myCompetitionAdminRequest/" + currentPrincipalName;
+			return "redirect:/myCompetitionAdminRequest";
 		}
 
 		CompAdminRequest compAdminRequest = new CompAdminRequest();
@@ -113,19 +113,23 @@ public class CompAdminRequestController {
 			this.compAdminRequestService.saveCompAdminRequest(compAdminRequest);
 
 			//Si todo sale bien vamos a la vista de mi club
-			return "redirect:/myCompetitionAdminRequest/" + currentPrincipalName;
+			return "redirect:/myCompetitionAdminRequest";
 		}
 	}
 
-	@GetMapping(value = "/competitionAdminRequest/{compAdminRequestId}/edit")
-	public String initUpdateCompetitionAdminForm(@PathVariable("compAdminRequestId") final int compAdminRequestId, final Model model) {
-		CompAdminRequest compAdminRequest = this.compAdminRequestService.findCompAdminRequestById(compAdminRequestId);
+	@GetMapping(value = "/myCompetitionAdminRequest/edit")
+	public String initUpdateCompetitionAdminForm(final Model model) {
+
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
+
+		CompAdminRequest compAdminRequest = this.compAdminRequestService.findCompAdminRequestByUsername(currentPrincipalName);
 		model.addAttribute(compAdminRequest);
 		return CompAdminRequestController.VIEWS_COMP_ADMIN_REQUEST_CREATE_OR_UPDATE_FORM;
 	}
 
-	@PostMapping(value = "/competitionAdminRequest/{compAdminRequestId}/edit")
-	public String processUpdateCompetitionAdminForm(@Valid final CompAdminRequest compAdminRequest, final BindingResult result, @PathVariable("compAdminRequestId") final int compAdminRequestId) {
+	@PostMapping(value = "/myCompetitionAdminRequest/edit")
+	public String processUpdateCompetitionAdminForm(@Valid final CompAdminRequest compAdminRequest, final BindingResult result) {
 		if (result.hasErrors()) {
 			return CompAdminRequestController.VIEWS_COMP_ADMIN_REQUEST_CREATE_OR_UPDATE_FORM;
 		} else {
@@ -141,19 +145,19 @@ public class CompAdminRequestController {
 			compAdminRequest.setUser(auth.getUser());
 
 			this.compAdminRequestService.saveCompAdminRequest(compAdminRequest);
-			return "redirect:/myCompetitionAdminRequest/" + currentPrincipalName;
+			return "redirect:/myCompetitionAdminRequest";
 		}
 	}
 
-	@RequestMapping(value = "/deleteCompAdminRequest/{id}")
-	public String deleteCompAdminRequest(@PathVariable("id") final Integer id) {
+	@RequestMapping(value = "/deleteCompAdminRequest")
+	public String deleteCompAdminRequest() {
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String currentPrincipalName = authentication.getName();
 
 		Authenticated thisUser = this.authenticatedService.findAuthenticatedByUsername(currentPrincipalName);
 
-		CompAdminRequest tbdeleted = this.compAdminRequestService.findCompAdminRequestById(id);
+		CompAdminRequest tbdeleted = this.compAdminRequestService.findCompAdminRequestByUsername(currentPrincipalName);
 		this.compAdminRequestService.deleteCompAdminRequest(tbdeleted);
 
 		Authentication reAuth = new UsernamePasswordAuthenticationToken(currentPrincipalName, thisUser.getUser().getPassword());
@@ -163,8 +167,8 @@ public class CompAdminRequestController {
 	}
 
 	//Vista de Competition Admin Request por Id - Authenticateds
-	@GetMapping("/myCompetitionAdminRequest/{username}")
-	public ModelAndView showCompAdminRequest(@PathVariable("username") final String username) {
+	@GetMapping("/myCompetitionAdminRequest")
+	public ModelAndView showCompAdminRequest() {
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String currentPrincipalName = authentication.getName();
