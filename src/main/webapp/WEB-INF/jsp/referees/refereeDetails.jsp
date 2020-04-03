@@ -42,10 +42,10 @@
     	<spring:url value="/myRefereeProfile/edit" var="editUrl">  	</spring:url>
     	<a href="${fn:escapeXml(editUrl)}" class="btn btn-default"><fmt:message key="code.button.refereedetails.edit"/></a>
     	
-    	
+    <!-- 	
     	<spring:url value="/referee/delete" var="editUrl"></spring:url>
     	<a href="${fn:escapeXml(editUrl)}" class="btn btn-default2" style="color:white"><b><fmt:message key="code.button.refereedetails.delete"/></b></a>
-    	
+     -->	
     </c:if>  
     
     <br/>

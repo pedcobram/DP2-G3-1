@@ -122,14 +122,14 @@
 										</sec:authorize>								
 
 										<sec:authorize access="hasAuthority('president')">	
-											<petclinic:menuItem active="${name eq 'presidents'}" url="/matchRequests/sent/${principalUsername}"
+											<petclinic:menuItem active="${name eq 'presidents'}" url="/matchRequests/sent"
 												title="sent match requests">
 												<span><fmt:message key="code.tag.menu.sentMatchRequests"/></span>
 											</petclinic:menuItem>
 										</sec:authorize>
 										
 										<sec:authorize access="hasAuthority('president')">	
-											<petclinic:menuItem active="${name eq 'presidents'}" url="/matchRequests/received/${principalUsername}"
+											<petclinic:menuItem active="${name eq 'presidents'}" url="/matchRequests/received"
 												title="received match requests">
 												<span><fmt:message key="code.tag.menu.receivedMatchRequests"/></span>
 											</petclinic:menuItem>

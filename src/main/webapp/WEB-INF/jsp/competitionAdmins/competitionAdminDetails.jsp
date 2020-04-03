@@ -43,7 +43,7 @@
     	<a href="${fn:escapeXml(editUrl)}" class="btn btn-default"><fmt:message key="code.button.competitionadmindetails.edit"/></a>
     	
     	
-    	<spring:url value="/deleteCompetitionAdmin/" var="editUrl">		</spring:url>
+    	<spring:url value="/competitionAdmin/delete" var="editUrl">		</spring:url>
     	<a href="${fn:escapeXml(editUrl)}" class="btn btn-default2" style="color:white"><b><fmt:message key="code.button.competitionadmindetails.delete"/></b></a>
     	
     </c:if>  
