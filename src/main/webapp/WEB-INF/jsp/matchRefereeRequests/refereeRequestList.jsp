@@ -35,10 +35,10 @@
                     <c:out value="${matchRefereeRequest.match.title}"/>
                 </td>
                 <td>
-                	<spring:url value="accept/${matchRefereeRequest.referee.user.username}/${matchRefereeRequest.match.id}" var='acceptRefereeRequestList'></spring:url>
+                	<spring:url value="list/accept/${matchRefereeRequest.match.id}" var='acceptRefereeRequestList'></spring:url>
                 	<a href="${fn:escapeXml(acceptRefereeRequestList)}" class="btn btn-default"><fmt:message key="code.button.refereerequestlist.accept"/></a>
                 	
-                	<spring:url value="reject/${matchRefereeRequest.referee.user.username}/${matchRefereeRequest.match.id}" var='rejectRefereeRequestList'></spring:url>
+                	<spring:url value="list/reject/${matchRefereeRequest.match.id}" var='rejectRefereeRequestList'></spring:url>
                 	<a href="${fn:escapeXml(rejectRefereeRequestList)}" class="btn btn-default"><fmt:message key="code.button.refereerequestlist.reject"/></a>
                 </td>
             </tr>

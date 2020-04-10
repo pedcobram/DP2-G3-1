@@ -13,6 +13,7 @@ import org.springframework.samples.petclinic.model.Authenticated;
 import org.springframework.samples.petclinic.model.Referee;
 import org.springframework.samples.petclinic.service.AuthenticatedService;
 import org.springframework.samples.petclinic.service.AuthoritiesService;
+import org.springframework.samples.petclinic.service.MatchRefereeRequestService;
 import org.springframework.samples.petclinic.service.MatchService;
 import org.springframework.samples.petclinic.service.RefereeService;
 import org.springframework.samples.petclinic.service.UserService;
@@ -28,7 +29,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -36,17 +36,24 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class RefereeController {
 
-	private static final String			VIEWS_REFEREE_CREATE_OR_UPDATE_FORM	= "referees/createOrUpdateRefereeForm";
+	private static final String					VIEWS_REFEREE_CREATE_OR_UPDATE_FORM	= "referees/createOrUpdateRefereeForm";
 
-	private final RefereeService		refereeService;
+	private final RefereeService				refereeService;
 
-	private final AuthenticatedService	authenticatedService;
+	private final AuthenticatedService			authenticatedService;
+
+	private final MatchService					matchService;
+
+	private final MatchRefereeRequestService	matchRefereeRequestService;
 
 
 	@Autowired
-	public RefereeController(final RefereeService refereeService, final AuthenticatedService authenticatedService, final MatchService matchService, final UserService userService, final AuthoritiesService authoritiesService) {
+	public RefereeController(final RefereeService refereeService, final AuthenticatedService authenticatedService, final MatchService matchService, final MatchRefereeRequestService matchRefereeRequestService, final UserService userService,
+		final AuthoritiesService authoritiesService) {
 		this.refereeService = refereeService;
 		this.authenticatedService = authenticatedService;
+		this.matchService = matchService;
+		this.matchRefereeRequestService = matchRefereeRequestService;
 	}
 
 	@InitBinder
@@ -86,11 +93,11 @@ public class RefereeController {
 		SecurityContextHolder.getContext().setAuthentication(reAuth);
 
 		//Redirigimos a la vista del perfil del presidente
-		return "redirect:/myRefereeProfile/" + currentPrincipalName;
+		return "redirect:/myRefereeProfile";
 	}
 
-	@RequestMapping(value = "/deleteReferee/{username}")
-	public String deleteReferee(@PathVariable("username") final String username) throws DataAccessException, DuplicatedNameException, CredentialException {
+	@RequestMapping(value = "/referee/delete")
+	public String deleteReferee() throws DataAccessException, DuplicatedNameException, CredentialException {
 
 		//Obtenemos el username actual conectado
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -108,6 +115,8 @@ public class RefereeController {
 		newAuth.setUser(referee.getUser());
 		newAuth.setEmail(referee.getEmail());
 
+		//
+
 		//Guardamos en la db el nuevo presidente
 		this.authenticatedService.saveAuthenticated(newAuth);
 		this.refereeService.deleteReferee(referee);
@@ -124,21 +133,20 @@ public class RefereeController {
 		return "redirect:/myProfile/" + currentPrincipalName;
 	}
 
-	@GetMapping(value = "/myRefereeProfile/{refereeId}/edit")
-	public String initUpdateRefereeForm(@PathVariable("refereeId") final int refereeId, final Model model) throws CredentialException {
+	@GetMapping(value = "/myRefereeProfile/edit")
+	public String initUpdateRefereeForm(final Model model) throws CredentialException {
 
-		Referee referee = this.refereeService.findRefereeById(refereeId);
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
 
-		if (referee.getId() != refereeId) {
-			throw new CredentialException("Forbidden access");
-		}
+		Referee referee = this.refereeService.findRefereeByUsername(currentPrincipalName);
 
 		model.addAttribute(referee);
 		return RefereeController.VIEWS_REFEREE_CREATE_OR_UPDATE_FORM;
 	}
 
-	@PostMapping(value = "/myRefereeProfile/{refereeId}/edit")
-	public String processUpdateRefereeForm(@Valid final Referee referee, final BindingResult result, @PathVariable("refereeId") final int refereeId) {
+	@PostMapping(value = "/myRefereeProfile/edit")
+	public String processUpdateRefereeForm(@Valid final Referee referee, final BindingResult result) {
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String currentPrincipalName = authentication.getName();
@@ -147,15 +155,17 @@ public class RefereeController {
 			return RefereeController.VIEWS_REFEREE_CREATE_OR_UPDATE_FORM;
 		} else {
 
-			referee.setId(refereeId);
+			Referee ref = this.refereeService.findRefereeByUsername(currentPrincipalName);
+
+			referee.setId(ref.getId());
 			this.refereeService.saveReferee(referee);
-			return "redirect:/myRefereeProfile/" + currentPrincipalName;
+			return "redirect:/myRefereeProfile";
 		}
 	}
 
 	//Añadir restricción de que solo el Principal actual puede ver su vista de edición
-	@GetMapping("/myRefereeProfile/{refereeUsername}")
-	public ModelAndView showRefereeProfile(@PathVariable("refereeUsername") final String refereeUsername) throws CredentialException {
+	@GetMapping("/myRefereeProfile")
+	public ModelAndView showRefereeProfile() throws CredentialException {
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String currentPrincipalName = authentication.getName();
