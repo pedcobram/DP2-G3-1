@@ -239,6 +239,29 @@ public class MatchRequestController {
 			throw new CredentialException();
 		}
 
+		// RN: Comprobar que no tengas un partido a esa misma hora
+		// TODO: Comprobar que ese mismo día/semana no tenga ya un partido en vez de la hora exacta
+		try {
+
+			List<Match> matches = new ArrayList<>();
+			matches.addAll(this.matchService.findAllMatchRequests());
+
+			for (Match match : matches) {
+
+				if (match.getFootballClub2().getPresident().getUser().getUsername().compareTo(currentPrincipalName) == 0 || match.getFootballClub1().getPresident().getUser().getUsername().compareTo(currentPrincipalName) == 0) {
+					if (match.getMatchDate().compareTo(matchRequest.getMatchDate()) == 0) {
+						throw new IllegalDateException();
+					}
+				}
+			}
+
+		} catch (IllegalDateException ide) {
+			//return "redirect:/matchRequests/received";
+			this.processRejectMatchRequest(matchRequestId, model);
+
+			return "redirect:/matchRequests/received";
+		}
+
 		matchRequest.setStatus(RequestStatus.ACCEPT);
 
 		this.matchRequestService.saveMatchRequest(matchRequest);
