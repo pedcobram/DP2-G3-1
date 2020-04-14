@@ -19,6 +19,7 @@
 	<fmt:message key="code.list.contractsCommercial" var="publicities"/>
 	<fmt:message key="code.list.coachList" var="coachList"/>
 	<fmt:message key="code.crud.transfers" var="Transfers"/>
+	<fmt:message key="code.list.newTournament" var="newTournament"/>
 
 <nav class="navbar navbar-default" role="navigation">
 	<div class="container">
@@ -215,6 +216,17 @@
     		<spring:url value="/matches/list" var="matchesUrl"></spring:url>
     		<a   href="${fn:escapeXml(matchesUrl)}" class="btn btn-default3"><span class="glyphicon glyphicon-list-alt"></span> <fmt:message key="code.tag.menu.matchList"/></a>
     		
+    	</div> 
+	</nav>
+</sec:authorize>
+
+<sec:authorize access="hasAuthority('competitionAdmin')">	
+<nav style="border-color:grey" class="navbar2 navbar2-default">		
+		<div class="th-center">		
+		
+    		<spring:url value="/competition/new" var="createCompetitionUrl"></spring:url>
+    		<a   href="${fn:escapeXml(createCompetitionUrl)}" class="btn btn-default3"><span class="glyphicon glyphicon-user"></span> ${newTournament}</a>
+    
     	</div> 
 	</nav>
 </sec:authorize>
