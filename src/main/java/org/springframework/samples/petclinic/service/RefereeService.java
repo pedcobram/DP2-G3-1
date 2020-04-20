@@ -1,14 +1,16 @@
 
 package org.springframework.samples.petclinic.service;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import javax.security.auth.login.CredentialException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.samples.petclinic.model.Match;
 import org.springframework.samples.petclinic.model.MatchRefereeRequest;
-import org.springframework.samples.petclinic.model.MatchRefereeRequests;
 import org.springframework.samples.petclinic.model.Referee;
 import org.springframework.samples.petclinic.repository.RefereeRepository;
 import org.springframework.stereotype.Service;
@@ -24,6 +26,9 @@ public class RefereeService {
 
 	@Autowired
 	private MatchRefereeRequestService	matchRefereeRequestService;
+
+	@Autowired
+	private MatchService				matchService;
 
 
 	@Autowired
@@ -55,13 +60,23 @@ public class RefereeService {
 	@Transactional()
 	public void deleteReferee(final Referee referee) throws DataAccessException, CredentialException {
 
-		MatchRefereeRequests mrrs = new MatchRefereeRequests();
+		List<MatchRefereeRequest> mrrs = new ArrayList<>();
+		mrrs.addAll(this.matchRefereeRequestService.findAllMatchRefereeRequests());
 
-		mrrs.getMatchRefereeRequests().addAll(this.matchRefereeRequestService.findAllMatchRefereeRequests());
-
-		for (MatchRefereeRequest mrr : mrrs.getMatchRefereeRequests()) {
+		for (MatchRefereeRequest mrr : mrrs) {
 			if (mrr.getReferee() == referee) {
 				mrr.setReferee(null);
+				this.matchRefereeRequestService.deleteMatchRefereeRequest(mrr);
+			}
+		}
+
+		List<Match> ms = new ArrayList<>();
+		ms.addAll(this.matchService.findAllMatchRequests());
+
+		for (Match m : ms) {
+			if (m.getReferee() == referee) {
+				m.setReferee(null);
+				this.matchService.saveMatch(m);
 			}
 		}
 

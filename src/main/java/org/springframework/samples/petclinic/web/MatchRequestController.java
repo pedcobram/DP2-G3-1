@@ -63,8 +63,8 @@ public class MatchRequestController {
 		dataBinder.setDisallowedFields("id");
 	}
 
-	@GetMapping(value = "/matchRequests/sent/{presidentName}")
-	public String showSentMatchRequestList(final Map<String, Object> model, @PathVariable("presidentName") final String presidentName) throws CredentialException {
+	@GetMapping(value = "/matchRequests/sent")
+	public String showSentMatchRequestList(final Map<String, Object> model) throws CredentialException {
 
 		//Obtenemos el username actual conectado
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -85,8 +85,8 @@ public class MatchRequestController {
 		return MatchRequestController.VIEWS_MATCH_REQUEST_LIST;
 	}
 
-	@GetMapping(value = "/matchRequests/received/{presidentName}")
-	public String showReceivedMatchRequestList(final Map<String, Object> model, @PathVariable("presidentName") final String presidentName) throws CredentialException {
+	@GetMapping(value = "/matchRequests/received")
+	public String showReceivedMatchRequestList(final Map<String, Object> model) throws CredentialException {
 
 		//Obtenemos el username actual conectado
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -200,8 +200,8 @@ public class MatchRequestController {
 		}
 	}
 
-	@RequestMapping(value = "/matchRequests/delete/{id}/{presidentName}")
-	public String processDeleteMatchRequest(@PathVariable("id") final int matchRequestId, @PathVariable("presidentName") final String presidentName, final ModelMap model) throws CredentialException {
+	@RequestMapping(value = "/matchRequests/delete/{matchRequestId}")
+	public String processDeleteMatchRequest(@PathVariable("matchRequestId") final int matchRequestId, final ModelMap model) throws CredentialException {
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String currentPrincipalName = authentication.getName();
@@ -210,24 +210,23 @@ public class MatchRequestController {
 
 		MatchRequest matchRequest = this.matchRequestService.findMatchRequestById(matchRequestId);
 
-		if (matchRequest.getCreator() != currentPrincipalName) {
+		if (matchRequest.getCreator().compareTo(currentPrincipalName) != 0) {
 			throw new CredentialException();
 		}
 
 		this.matchRequestService.deleteMatchRequest(matchRequest);
 
-		String footballClub1 = this.footballClubService.findFootballClubByPresident(presidentName).getName();
+		String footballClub1 = this.footballClubService.findFootballClubByPresident(currentPrincipalName).getName();
 
 		matchRequests.addAll(this.matchRequestService.findAllMatchRequestsSent(footballClub1));
 		model.put("matchRequests", matchRequests);
 		model.put("receivedRequests", true);
 
-		return MatchRequestController.VIEWS_MATCH_REQUEST_LIST;
+		return "redirect:/matchRequests/sent";
 	}
 
-	@RequestMapping(value = "/matchRequests/accept/{id}/{presidentName}")
-	public String processAcceptMatchRequest(@PathVariable("id") final int matchRequestId, @PathVariable("presidentName") final String presidentName, final ModelMap model)
-		throws DataAccessException, IllegalDateException, DateException, CredentialException {
+	@RequestMapping(value = "/matchRequests/accept/{id}")
+	public String processAcceptMatchRequest(@PathVariable("id") final int matchRequestId, final ModelMap model) throws DataAccessException, IllegalDateException, DateException, CredentialException {
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String currentPrincipalName = authentication.getName();
@@ -235,6 +234,33 @@ public class MatchRequestController {
 		List<MatchRequest> matchRequests = new ArrayList<>();
 
 		MatchRequest matchRequest = this.matchRequestService.findMatchRequestById(matchRequestId);
+
+		if (matchRequest.getFootballClub2().getPresident().getUser().getUsername().compareTo(currentPrincipalName) != 0) {
+			throw new CredentialException();
+		}
+
+		// RN: Comprobar que no tengas un partido a esa misma hora
+		// TODO: Comprobar que ese mismo día/semana no tenga ya un partido en vez de la hora exacta
+		try {
+
+			List<Match> matches = new ArrayList<>();
+			matches.addAll(this.matchService.findAllMatchRequests());
+
+			for (Match match : matches) {
+
+				if (match.getFootballClub2().getPresident().getUser().getUsername().compareTo(currentPrincipalName) == 0 || match.getFootballClub1().getPresident().getUser().getUsername().compareTo(currentPrincipalName) == 0) {
+					if (match.getMatchDate().compareTo(matchRequest.getMatchDate()) == 0) {
+						throw new IllegalDateException();
+					}
+				}
+			}
+
+		} catch (IllegalDateException ide) {
+			//return "redirect:/matchRequests/received";
+			this.processRejectMatchRequest(matchRequestId, model);
+
+			return "redirect:/matchRequests/received";
+		}
 
 		matchRequest.setStatus(RequestStatus.ACCEPT);
 
@@ -254,17 +280,15 @@ public class MatchRequestController {
 		match.setStadium(matchRequest.getStadium());
 		match.setFootballClub1(matchRequest.getFootballClub1());
 		match.setFootballClub2(matchRequest.getFootballClub2());
-
 		match.setCreator(matchRequest.getCreator());
 
 		this.matchService.saveMatch(match);
 
-		return MatchRequestController.VIEWS_MATCH_REQUEST_LIST;
+		return "redirect:/matchRequests/received";
 	}
 
-	@RequestMapping(value = "/matchRequests/reject/{id}/{presidentName}")
-	public String processRejectMatchRequest(@PathVariable("id") final int matchRequestId, @PathVariable("presidentName") final String presidentName, final ModelMap model)
-		throws DataAccessException, IllegalDateException, DateException, CredentialException {
+	@RequestMapping(value = "/matchRequests/reject/{id}")
+	public String processRejectMatchRequest(@PathVariable("id") final int matchRequestId, final ModelMap model) throws DataAccessException, IllegalDateException, DateException, CredentialException {
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String currentPrincipalName = authentication.getName();
@@ -272,6 +296,10 @@ public class MatchRequestController {
 		List<MatchRequest> matchRequests = new ArrayList<>();
 
 		MatchRequest matchRequest = this.matchRequestService.findMatchRequestById(matchRequestId);
+
+		if (matchRequest.getFootballClub2().getPresident().getUser().getUsername().compareTo(currentPrincipalName) != 0) {
+			throw new CredentialException();
+		}
 
 		matchRequest.setStatus(RequestStatus.REFUSE);
 
@@ -283,7 +311,7 @@ public class MatchRequestController {
 		model.put("matchRequests", matchRequests);
 		model.put("receivedRequests", false);
 
-		return MatchRequestController.VIEWS_MATCH_REQUEST_LIST;
+		return "redirect:/matchRequests/received";
 	}
 
 }

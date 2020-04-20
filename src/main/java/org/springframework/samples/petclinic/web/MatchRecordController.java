@@ -117,7 +117,15 @@ public class MatchRecordController {
 	@GetMapping(value = "/matches/matchRecord/{matchId}/edit")
 	public String initUpdateMatchRecordForm(@PathVariable("matchId") final int matchId, final Model model) throws CredentialException {
 
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
+
 		MatchRecord mr = this.matchRecordService.findMatchRecordByMatchId(matchId);
+
+		// Si intenta editarlo alguien que no sea su árbitroo
+		if (mr.getMatch().getReferee().getUser().getUsername().compareTo(currentPrincipalName) != 0) {
+			throw new CredentialException();
+		}
 
 		List<MatchRecordStatus> matchStatus = new ArrayList<MatchRecordStatus>();
 
@@ -200,11 +208,19 @@ public class MatchRecordController {
 	@RequestMapping(value = "/matches/matchRecord/{matchId}/view")
 	public String viewMatchRecord(@PathVariable("matchId") final int matchId, final Model model) throws CredentialException {
 
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
+
 		MatchRecord mr = this.matchRecordService.findMatchRecordByMatchId(matchId);
+
+		// Si intenta editarlo alguien que no sea su árbitroo
+		if (mr.getMatch().getReferee().getUser().getUsername().compareTo(currentPrincipalName) != 0) {
+			throw new CredentialException();
+		}
 
 		// Si se intenta acceder a un match record que no existe, devuelve al inicio
 		if (this.matchRecordService.findMatchRecordByMatchId(matchId) == null) {
-			return "redirect:/";
+			throw new CredentialException();
 		}
 
 		FootballPlayerMatchStatistics fpms = new FootballPlayerMatchStatistics();
