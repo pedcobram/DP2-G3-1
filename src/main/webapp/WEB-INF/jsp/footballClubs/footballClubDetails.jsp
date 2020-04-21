@@ -80,7 +80,7 @@
     	<a href="${fn:escapeXml(FanUrl)}" class="btn btn-default" >
     				<span class="glyphicon glyphicon-heart-empty"></span> 
     								 <fmt:message key="addFan"/></a>
-    	<c:if test="${existFan}"><p style="color: red;"><fmt:message key="existFan"/></p></c:if>
+    	<c:if test="${existFan}"><p id="existFan" style="color: red;"><fmt:message key="existFan"/></p></c:if>
     
 
     
