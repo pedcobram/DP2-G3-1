@@ -32,7 +32,7 @@ public class RefereeE2ETests {
 	})
 	@Test //CASO POSITIVO
 	void createReferee() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/createReferee")).andExpect(MockMvcResultMatchers.status().is3xxRedirection());
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/createReferee")).andExpect(MockMvcResultMatchers.status().isOk());
 	}
 
 	@WithAnonymousUser
@@ -47,7 +47,7 @@ public class RefereeE2ETests {
 	})
 	@Test //CASO POSITIVO
 	void deleteReferee() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/referee/delete")).andExpect(MockMvcResultMatchers.status().is3xxRedirection()).andExpect(MockMvcResultMatchers.redirectedUrl("/myProfile/pedro"));
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/referee/delete")).andExpect(MockMvcResultMatchers.status().isOk());
 	}
 
 	@WithAnonymousUser
