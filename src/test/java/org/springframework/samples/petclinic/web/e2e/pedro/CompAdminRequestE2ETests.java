@@ -1,30 +1,28 @@
 
-package org.springframework.samples.petclinic.web.pedro;
+package org.springframework.samples.petclinic.web.e2e.pedro;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.FilterType;
-import org.springframework.samples.petclinic.configuration.SecurityConfiguration;
-import org.springframework.samples.petclinic.web.CompAdminRequestController;
-import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-@WebMvcTest(controllers = CompAdminRequestController.class, excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = WebSecurityConfigurer.class), excludeAutoConfiguration = SecurityConfiguration.class)
-public class CompAdminRequestControllerTests {
+@ExtendWith(SpringExtension.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
+@AutoConfigureMockMvc
+//@DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)
+//@AutoConfigureTestDatabase(replace = Replace.ANY)
+public class CompAdminRequestE2ETests {
 
 	@Autowired
-	private MockMvc						mockMvc;
-
-	@MockBean
-	private CompAdminRequestController	compAdminRequestController;
+	private MockMvc mockMvc;
 
 
 	@WithMockUser(username = "pedro", authorities = {
@@ -38,7 +36,7 @@ public class CompAdminRequestControllerTests {
 	@WithAnonymousUser
 	@Test //CASO NEGATIVO
 	void dontShowCompetitionAdminRequestListTest() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/competitionAdminRequest/list")).andExpect(MockMvcResultMatchers.status().is4xxClientError());
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/competitionAdminRequest/list")).andExpect(MockMvcResultMatchers.status().is3xxRedirection()).andExpect(MockMvcResultMatchers.redirectedUrl("http://localhost/login"));
 	}
 
 	@WithMockUser(username = "pedro", authorities = {
@@ -52,10 +50,10 @@ public class CompAdminRequestControllerTests {
 	@WithAnonymousUser
 	@Test //CASO NEGATIVO
 	void dontInitCompAdminCreationFormTest() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/competitionAdminRequest/new")).andExpect(MockMvcResultMatchers.status().is4xxClientError());
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/competitionAdminRequest/new")).andExpect(MockMvcResultMatchers.status().is3xxRedirection()).andExpect(MockMvcResultMatchers.redirectedUrl("http://localhost/login"));
 	}
 
-	@WithMockUser(username = "pedro", password = "pedro", authorities = {
+	@WithMockUser(username = "pedro", authorities = {
 		"authenticated"
 	})
 	@Test //CASO POSITIVO
@@ -75,10 +73,10 @@ public class CompAdminRequestControllerTests {
 	@WithAnonymousUser
 	@Test //CASO NEGATIVO
 	void dontInitUpdateCompetitionAdminForm() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/myCompetitionAdminRequest/edit")).andExpect(MockMvcResultMatchers.status().is4xxClientError());
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/myCompetitionAdminRequest/edit")).andExpect(MockMvcResultMatchers.status().is3xxRedirection()).andExpect(MockMvcResultMatchers.redirectedUrl("http://localhost/login"));
 	}
 
-	@WithMockUser(username = "pedro", password = "pedro", authorities = {
+	@WithMockUser(username = "pedro", authorities = {
 		"authenticated"
 	})
 	@Test //CASO POSITIVO
@@ -87,7 +85,7 @@ public class CompAdminRequestControllerTests {
 			.andExpect(MockMvcResultMatchers.status().isOk());
 	}
 
-	@WithMockUser(username = "pedro", password = "pedro", authorities = {
+	@WithMockUser(username = "pedro", authorities = {
 		"authenticated"
 	})
 	@Test //CASO NEGATIVO
@@ -110,7 +108,7 @@ public class CompAdminRequestControllerTests {
 	@WithAnonymousUser
 	@Test //CASO NEGATIVO
 	void dontDeleteCompAdminRequest() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/deleteCompAdminRequest")).andExpect(MockMvcResultMatchers.status().is4xxClientError());
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/deleteCompAdminRequest")).andExpect(MockMvcResultMatchers.status().is3xxRedirection()).andExpect(MockMvcResultMatchers.redirectedUrl("http://localhost/login"));
 	}
 
 	@WithMockUser(username = "pedro", authorities = {
@@ -124,10 +122,10 @@ public class CompAdminRequestControllerTests {
 	@WithAnonymousUser
 	@Test //CASO NEGATIVO
 	void dontShowCompAdminRequest() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/myCompetitionAdminRequest")).andExpect(MockMvcResultMatchers.status().is4xxClientError());
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/myCompetitionAdminRequest")).andExpect(MockMvcResultMatchers.status().is3xxRedirection()).andExpect(MockMvcResultMatchers.redirectedUrl("http://localhost/login"));
 	}
 
-	@WithMockUser(username = "pedro", authorities = {
+	@WithMockUser(username = "admin1", authorities = {
 		"admin"
 	})
 	@Test //CASO POSITIVO
@@ -138,21 +136,22 @@ public class CompAdminRequestControllerTests {
 	@WithAnonymousUser
 	@Test //CASO NEGATIVO
 	void dontAcceptCompetitionAdminRequest() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/competitionAdminRequest/accept/gonzalo")).andExpect(MockMvcResultMatchers.status().is4xxClientError());
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/competitionAdminRequest/accept/gonzalo")).andExpect(MockMvcResultMatchers.status().is3xxRedirection()).andExpect(MockMvcResultMatchers.redirectedUrl("http://localhost/login"));
 	}
 
-	@WithMockUser(username = "pedro", authorities = {
+	@WithMockUser(username = "admin1", authorities = {
 		"admin"
 	})
 	@Test //CASO POSITIVO
 	void rejectCompetitionAdminRequest() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/competitionAdminRequest/reject/{username}", "gonzalo")).andExpect(MockMvcResultMatchers.status().isOk());
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/competitionAdminRequest/reject/{usuario}", "gonzalo")).andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+			.andExpect(MockMvcResultMatchers.view().name("redirect:/competitionAdminRequest/list"));
 	}
 
 	@WithAnonymousUser
 	@Test //CASO NEGATIVO
 	void dontRejectCompetitionAdminRequest() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/competitionAdminRequest/reject/gonzalo")).andExpect(MockMvcResultMatchers.status().is4xxClientError());
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/competitionAdminRequest/reject/gonzalo")).andExpect(MockMvcResultMatchers.status().is3xxRedirection()).andExpect(MockMvcResultMatchers.redirectedUrl("http://localhost/login"));
 	}
 
 }
