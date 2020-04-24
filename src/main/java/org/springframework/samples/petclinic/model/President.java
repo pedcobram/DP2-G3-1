@@ -16,6 +16,8 @@
 
 package org.springframework.samples.petclinic.model;
 
+import java.io.Serializable;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -36,26 +38,31 @@ import lombok.Setter;
 
 @Entity
 @Table(name = "presidents")
-public class President extends Person {
+public class President extends Person implements Serializable {
+
+	/**
+	 *
+	 */
+	private static final long	serialVersionUID	= 1L;
 
 	@Column(name = "telephone")
 	@Digits(fraction = 0, integer = 10)
 	@NotEmpty
-	private String	telephone;
+	private String				telephone;
 
 	@Column(name = "email")
 	@NotEmpty
-	private String	email;
+	private String				email;
 
 	@Column(name = "dni")
 	@NotEmpty
 	@Pattern(regexp = "[0-9]{7,8}[A-Za-z]")
-	private String	dni;
+	private String				dni;
 
 	//
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "username", referencedColumnName = "username")
-	private User	user;
+	private User				user;
 	//
 
 

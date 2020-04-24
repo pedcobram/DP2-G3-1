@@ -124,7 +124,7 @@ public class TransferController {
 		footballPlayers.removeAll(this.footballPlayerService.findAllClubFootballPlayers(footballClub.getId()));
 		model.put("footballPlayers", footballPlayers);
 
-		return "footballPlayers/footballPlayerList";
+		return "transfers/footballPlayerList";
 
 	}
 
@@ -143,8 +143,7 @@ public class TransferController {
 		footballPlayers.addAll(this.footballPlayerService.findAllFootballPlayersFA());
 		model.put("footballPlayers", footballPlayers);
 
-		return "footballPlayers/footballPlayerList";
-
+		return "transfers/footballPlayerList";
 	}
 
 }

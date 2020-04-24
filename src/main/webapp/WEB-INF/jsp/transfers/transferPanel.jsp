@@ -12,6 +12,9 @@
 	<fmt:message key="code.title.players" var="PlayersTitle"/>
 	<fmt:message key="code.title.playersFree" var="PlayersFreeTitle"/>
 	<fmt:message key="code.title.transferPanel" var="TransferTitle"/>
+	<fmt:message key="code.title.transferPanel" var="TransferTitle"/>
+	<fmt:message key="code.label.transferpanel.player.transfersRequestSent" var="playerTransferRequestSent"/>
+	<fmt:message key="code.label.transferpanel.coach.transfersRequestSent" var="coachTransferRequestSent"/>
 
 <petclinic:layout pageName="coachs">
 
@@ -30,7 +33,26 @@
 	</jsp:attribute>
 
 <jsp:body>
-	<h2 class="th-center" style="color:black; font-size:30px; margin-bottom:25px">${TransferTitle}</h2>
+	<div style="margin-bottom: 4%">
+		<h2 class="th-center" style="color:black; font-size:30px; margin-bottom:25px">${TransferTitle}</h2>
+	</div>
+	
+	<div style="margin-bottom: 15%">
+	    	
+    	<div style="margin-bottom:2%; width: 60%; height: 10%;float:left; background-color:#d4d4d4; border: 5px solid grey; box-shadow: 10px 10px 5px #3e3e3e57;">			
+ 			<div class="th-center" style="height: 60px; background-color:#d4d4d4; text-aling:center">
+ 	 			<input type="button" class="myButtonFreeAgent" value="${playerTransferRequestSent}" onclick="window.location='/transfers/players/requests/sent'"/>	
+			</div>		
+    	</div>
+	
+		<div style="margin-top:2%; width: 38%; height: 10%;float:right; margin-left:20px; background-color:#d4d4d4; border: 5px solid grey; box-shadow: 10px 10px 5px #3e3e3e57;">	
+ 			<div class="th-center" style="height: 60px; background-color:#d4d4d4; text-aling:center">
+	 	 		<input type="button" class="myButtonFreeAgent" value="${coachTransferRequestSent}" onclick="window.location='/transfers/coachs/free-agents'"/>
+			</div>	
+    	</div>
+	
+	</div>
+	
 	<div style="margin-bottom:45%">
  		
  		<div style="width: 60%; height: 350px;float:left; background-color:#d4d4d4; border: 5px solid grey; box-shadow: 10px 10px 5px #3e3e3e57;">		
@@ -71,13 +93,10 @@
 			</div>		
     	</div>
     	
-    	<div style="margin-top:2%;width: 38%; height: 10%;float:left; margin-left:20px; background-color:#d4d4d4; border: 5px solid grey; box-shadow: 10px 10px 5px #3e3e3e57;">	
+    	<div style="margin-top:2%; width: 38%; height: 10%;float:left; margin-left:20px; background-color:#d4d4d4; border: 5px solid grey; box-shadow: 10px 10px 5px #3e3e3e57;">	
  			<div class="th-center" style="height: 60px; background-color:#d4d4d4; text-aling:center">
- 		 		
  		 		<input type="button" class="myButtonFreeAgent" value="${CoachsFreeTitle}" onclick="window.location='/transfers/coachs/free-agents'"/>
- 		
-			</div>			
-			
+			</div>	
         </div>
         
     </div>

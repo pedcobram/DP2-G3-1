@@ -303,3 +303,9 @@ INSERT INTO football_player_match_statistic(id, assists, goals, yellow_cards, re
 --Fan Records
 INSERT INTO fan VALUES ( 1, null, null, null, false, 1, 1 );
 
+-- Player Transfer Requests
+
+INSERT INTO player_transfer_request(id, player_value, status, player_id, president) VALUES(0, 550000, 0, 6, 'presidente1');
+INSERT INTO player_transfer_request(id, player_value, status, player_id, president) VALUES(1, 1250000, 0, 14, 'presidente1');
+
+
