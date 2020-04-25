@@ -268,8 +268,8 @@ public class TransferControllerTest {
 			.andExpect(MockMvcResultMatchers.status().isOk())
 			.andExpect(MockMvcResultMatchers.model().attributeExists("footballPlayers"))
 			.andExpect(MockMvcResultMatchers.model().attribute("footballPlayers", Matchers.hasSize(1)))
-			.andExpect(MockMvcResultMatchers.view().name("footballPlayers/footballPlayerList"))
-			.andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/footballPlayers/footballPlayerList.jsp"));
+			.andExpect(MockMvcResultMatchers.view().name("transfers/footballPlayerList"))
+			.andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/transfers/footballPlayerList.jsp"));
 	}
 	
 	@WithMockUser(username = "rufus")
@@ -311,8 +311,8 @@ public class TransferControllerTest {
 			.andExpect(MockMvcResultMatchers.status().isOk())
 			.andExpect(MockMvcResultMatchers.model().attributeExists("footballPlayers"))
 			.andExpect(MockMvcResultMatchers.model().attribute("footballPlayers", Matchers.hasSize(1)))
-			.andExpect(MockMvcResultMatchers.view().name("footballPlayers/footballPlayerList"))
-			.andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/footballPlayers/footballPlayerList.jsp"));
+			.andExpect(MockMvcResultMatchers.view().name("transfers/footballPlayerList"))
+			.andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/transfers/footballPlayerList.jsp"));
 	}
 	
 	@WithMockUser(username = "rufus2")
