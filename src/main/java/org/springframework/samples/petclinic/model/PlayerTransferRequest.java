@@ -27,7 +27,7 @@ public class PlayerTransferRequest extends BaseEntity implements Serializable {
 	private static final long	serialVersionUID	= 1L;
 
 	@Column(name = "playerValue")
-	private Integer				playerValue;
+	private Long				playerValue;
 
 	@Column(name = "status")
 	private RequestStatus		status;

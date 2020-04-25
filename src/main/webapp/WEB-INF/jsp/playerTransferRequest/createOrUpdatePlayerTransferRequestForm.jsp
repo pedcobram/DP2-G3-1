@@ -23,14 +23,13 @@
     
     <table class="table table-striped">
    	 	<tr>
+            <th><fmt:message key="code.label.createorupdateplayertransferrequestform.currentClubFunds"/></th>
+            <td><b><c:out value="${currentClubFunds}€"/></b></td>
+        </tr>
+   	 	<tr>
             <th><fmt:message key="code.label.createorupdateplayertransferrequestform.playerValue"/></th>
             <td><b><c:out value="${playerTransferRequest.playerValue}€"/></b></td>
         </tr> 
-       <!--  <tr>
-            <th><fmt:message key="code.label.createorupdateplayertransferrequestform.fundsRemaining"/></th>
-            <td><b><c:out value="${fundsRemaining}€"/></b></td>
-        </tr>
-       -->
         <tr>
             <th><fmt:message key="code.label.createorupdateplayertransferrequestform.status"/></th>
             <td><b><c:out value="${playerTransferRequest.status}"/></b></td>

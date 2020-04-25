@@ -4,6 +4,7 @@ package org.springframework.samples.petclinic.web;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.security.auth.login.CredentialException;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,8 @@ import org.springframework.samples.petclinic.service.FootballClubService;
 import org.springframework.samples.petclinic.service.FootballPlayerService;
 import org.springframework.samples.petclinic.service.PlayerTransferRequestService;
 import org.springframework.samples.petclinic.service.PresidentService;
+import org.springframework.samples.petclinic.service.exceptions.MoneyClubException;
+import org.springframework.samples.petclinic.service.exceptions.TooManyPlayerRequestsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -70,13 +73,13 @@ public class PlayerTransferRequestController {
 		President president = this.presidentService.findPresidentByUsername(currentPrincipalName);
 		FootballClub footballClub = this.footballClubService.findFootballClubByPresident(currentPrincipalName);
 
-		ptr.setPlayerValue(fp.getValue());
+		ptr.setPlayerValue(Long.valueOf(fp.getValue()));
 		ptr.setStatus(RequestStatus.ON_HOLD);
 		ptr.setFootballPlayer(fp);
 		ptr.setPresident(president);
 
 		model.addAttribute("playerTransferRequest", ptr);
-		model.addAttribute("fundsRemaining", footballClub.getMoney() - fp.getValue());
+		model.addAttribute("currentClubFunds", footballClub.getMoney());
 
 		return PlayerTransferRequestController.VIEWS_PLAYER_TRANSFER_REQUEST_CREATE_OR_UPDATE_FORM;
 	}
@@ -103,8 +106,22 @@ public class PlayerTransferRequestController {
 
 				this.playerTransferRequestService.savePlayerTransferRequest(playerTransferRequest);
 
-			} catch (DataAccessException ide) {
-				//result.rejectValue("matchDate", "code.error.validator.atleast1monthinadvance", "Match date must be at least one month from now");
+			} catch (MoneyClubException mce) {
+				result.rejectValue("playerValue", "code.error.validator.notEnoughMoneyToMakeOffer", "Your club does not have enough funds to make this offer");
+
+				FootballClub footballClub = this.footballClubService.findFootballClubByPresident(currentPrincipalName);
+
+				model.addAttribute("currentClubFunds", footballClub.getMoney());
+
+				return PlayerTransferRequestController.VIEWS_PLAYER_TRANSFER_REQUEST_CREATE_OR_UPDATE_FORM;
+
+			} catch (TooManyPlayerRequestsException tmpre) {
+				result.rejectValue("playerValue", "code.error.validator.tooManyPlayerRequestsException", "You can only have one open player request at a time");
+
+				FootballClub footballClub = this.footballClubService.findFootballClubByPresident(currentPrincipalName);
+
+				model.addAttribute("currentClubFunds", footballClub.getMoney());
+
 				return PlayerTransferRequestController.VIEWS_PLAYER_TRANSFER_REQUEST_CREATE_OR_UPDATE_FORM;
 			}
 
@@ -113,7 +130,7 @@ public class PlayerTransferRequestController {
 	}
 
 	@GetMapping(value = "/transfers/players/requests/sent")
-	public String transferPlayerSent(final Model model) throws DataAccessException {
+	public String viewTransferPlayerSentList(final Model model) throws DataAccessException {
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String currentPrincipalName = authentication.getName();
@@ -128,23 +145,30 @@ public class PlayerTransferRequestController {
 	}
 
 	@GetMapping(value = "/transfers/players/requests/sent/edit/{requestId}")
-	public String initUpdateCompetitionAdminForm(final Model model, @PathVariable("requestId") final int requestId) {
+	public String initEditRequestTransferPlayerForm(final Model model, @PathVariable("requestId") final int requestId) throws CredentialException {
+
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
 
 		PlayerTransferRequest playerTransferRequest = this.playerTransferRequestService.findPlayerTransferRequestById(requestId);
+		FootballClub footballClub = this.footballClubService.findFootballClubByPresident(currentPrincipalName);
+
+		if (playerTransferRequest.getPresident().getUser().getUsername().compareTo(currentPrincipalName) != 0) {
+			throw new CredentialException();
+		}
 
 		model.addAttribute(playerTransferRequest);
+		model.addAttribute("currentClubFunds", footballClub.getMoney());
 
 		return PlayerTransferRequestController.VIEWS_PLAYER_TRANSFER_REQUEST_CREATE_OR_UPDATE_FORM;
 	}
 
 	@PostMapping(value = "/transfers/players/requests/sent/edit/{requestId}")
-	public String processUpdateCompetitionAdminForm(@Valid final PlayerTransferRequest playerTransferRequest, final BindingResult result, @PathVariable("requestId") final int requestId) {
+	public String processEditRequestTransferPlayerForm(@Valid final PlayerTransferRequest playerTransferRequest, final Model model, final BindingResult result, @PathVariable("requestId") final int requestId) {
+
 		if (result.hasErrors()) {
 			return PlayerTransferRequestController.VIEWS_PLAYER_TRANSFER_REQUEST_CREATE_OR_UPDATE_FORM;
 		} else {
-
-			//			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-			//			String currentPrincipalName = authentication.getName();
 
 			PlayerTransferRequest last_id = this.playerTransferRequestService.findPlayerTransferRequestById(requestId);
 
@@ -153,9 +177,54 @@ public class PlayerTransferRequestController {
 			playerTransferRequest.setFootballPlayer(last_id.getFootballPlayer());
 			playerTransferRequest.setPresident(last_id.getPresident());
 
-			this.playerTransferRequestService.savePlayerTransferRequest(playerTransferRequest);
+			try {
+
+				this.playerTransferRequestService.savePlayerTransferRequest(playerTransferRequest);
+
+			} catch (MoneyClubException mce) {
+				result.rejectValue("playerValue", "code.error.validator.notEnoughMoneyToMakeOffer", "Your club does not have enough funds to make this offer");
+
+				Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+				String currentPrincipalName = authentication.getName();
+
+				FootballClub footballClub = this.footballClubService.findFootballClubByPresident(currentPrincipalName);
+
+				model.addAttribute("currentClubFunds", footballClub.getMoney());
+
+				return PlayerTransferRequestController.VIEWS_PLAYER_TRANSFER_REQUEST_CREATE_OR_UPDATE_FORM;
+
+			} catch (TooManyPlayerRequestsException tmpre) {
+				result.rejectValue("playerValue", "code.error.validator.tooManyPlayerRequestsException", "You can only have one open player request at a time");
+
+				Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+				String currentPrincipalName = authentication.getName();
+
+				FootballClub footballClub = this.footballClubService.findFootballClubByPresident(currentPrincipalName);
+
+				model.addAttribute("currentClubFunds", footballClub.getMoney());
+
+				return PlayerTransferRequestController.VIEWS_PLAYER_TRANSFER_REQUEST_CREATE_OR_UPDATE_FORM;
+			}
+
 			return "redirect:/transfers/players/requests/sent";
 		}
+	}
+
+	@GetMapping(value = "/transfers/players/requests/sent/delete/{requestId}")
+	public String deleteTransferPlayerRequest(final Model model, @PathVariable("requestId") final int requestId) throws CredentialException {
+
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
+
+		PlayerTransferRequest playerTransferRequest = this.playerTransferRequestService.findPlayerTransferRequestById(requestId);
+
+		if (playerTransferRequest.getPresident().getUser().getUsername().compareTo(currentPrincipalName) != 0) {
+			throw new CredentialException();
+		}
+
+		this.playerTransferRequestService.deletePlayerTransferRequest(playerTransferRequest);
+
+		return "redirect:/transfers/players/requests/sent";
 	}
 
 }

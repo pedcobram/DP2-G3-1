@@ -37,6 +37,9 @@
                  <td>
                     <spring:url value="sent/edit/${playerTransferRequest.id}" var='editplayertransferrequestsentlist'></spring:url>
                 	<a href="${fn:escapeXml(editplayertransferrequestsentlist)}" class="btn btn-default"><fmt:message key="code.button.playertransferrequestsentlist.edit"/></a>
+                	
+                	<spring:url value="sent/delete/${playerTransferRequest.id}" var='deleteplayertransferrequestsentlist'></spring:url>
+                	<a href="${fn:escapeXml(deleteplayertransferrequestsentlist)}" class="btn btn-default"><fmt:message key="code.button.playertransferrequestsentlist.delete"/></a>
                 </td>
             </tr>
         </c:forEach>

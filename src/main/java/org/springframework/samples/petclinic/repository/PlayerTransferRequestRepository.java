@@ -16,6 +16,8 @@ public interface PlayerTransferRequestRepository {
 
 	PlayerTransferRequest findById(int id) throws DataAccessException;
 
+	Integer countByPresidentAndPlayer(String presidentUsername, int playerId) throws DataAccessException;
+
 	void save(PlayerTransferRequest playerTransferRequest) throws DataAccessException;
 
 	void delete(PlayerTransferRequest playerTransferRequest) throws DataAccessException;
