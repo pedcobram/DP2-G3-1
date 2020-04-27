@@ -48,9 +48,16 @@
         <tr>
             <th>Admin</th>
             <td><c:out value="${competition.creator}"/></td>
-        </tr>
+        </tr>      
         
      </table>
+     
+     <c:if test="${(competition.creator == principalUsername) && competition.status == false}">
+    		<spring:url value="/competition/{competitionId}/edit" var="editUrl">
+		   		<spring:param name="competitionId" value="${competition.id}"/>
+    		</spring:url>
+    		<a data-toggle="tooltip" title="${mousehover}" href="${fn:escapeXml(editUrl)}" class="btn btn-default">Actualizar</a>  	
+    	</c:if> 
      
  </jsp:body> 
 </petclinic:layout>

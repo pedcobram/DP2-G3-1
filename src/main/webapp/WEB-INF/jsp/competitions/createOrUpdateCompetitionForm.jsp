@@ -23,6 +23,12 @@
             <div class="control-group" style="padding: 10px">
             	<petclinic:selectField name="type" label="code.label.Competitiontypes" names="${types}" size="2"/>
             </div>
+            
+            <c:if test="${isEditing}">
+    			<div class="control-group" style="padding: 10px">
+            		<petclinic:selectField name="status" label="code.label.status" names="${status}" size="2"/>
+            	</div>
+    		</c:if> 
       
 
         </div>

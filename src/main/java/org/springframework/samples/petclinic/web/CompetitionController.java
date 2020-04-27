@@ -5,8 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.security.auth.login.CredentialException;
 import javax.validation.Valid;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Competition;
@@ -50,6 +52,14 @@ public class CompetitionController {
 		types.add(CompetitionType.LEAGUE);
 		types.add(CompetitionType.PLAYOFFS);
 		return types;
+	}
+
+	@ModelAttribute("status")
+	public List<Boolean> populateStatus() {
+		List<Boolean> status = new ArrayList<>();
+		status.add(true);
+		status.add(false);
+		return status;
 	}
 
 	@GetMapping("/competitions/{competitionId}") //VISTA DETALLADA DE COMPETICIÓN
@@ -112,5 +122,50 @@ public class CompetitionController {
 			this.competitionService.saveCompetition(competition);
 		}
 		return "redirect:/competitions/" + competition.getId();
+	}
+
+	@GetMapping(value = "/competition/{competitionId}/edit") //EDITAR COMPETITION - GET
+	public String initUpdateCompetitionForm(@PathVariable("competitionId") final int compId, final Map<String, Object> model) throws CredentialException {
+
+		Competition comp = this.competitionService.findCompetitionById(compId);
+
+		model.put("competition", comp);
+		model.put("isEditing", true);
+
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
+
+		if (!currentPrincipalName.equals(comp.getCreator()) || comp.getStatus() == true) { //SEGURIDAD
+			throw new CredentialException("Forbidden Access");
+		}
+
+		return CompetitionController.VIEWS_COMPETITION_CREATE_OR_UPDATE_FORM;
+	}
+
+	@PostMapping(value = "/competition/{competitionId}/edit") //EDITAR CLUB - POST
+	public String processUpdateFootballClubForm(@Valid final Competition competition, final BindingResult result, @PathVariable("competitionId") final Integer compId, final Model model) throws DataAccessException, CredentialException {
+
+		model.addAttribute("isEditing", true);
+
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
+
+		Competition compToUpdate = this.competitionService.findCompetitionById(compId);
+
+		if (!currentPrincipalName.equals(compToUpdate.getCreator())) { //SEGURIDAD
+			throw new CredentialException("Forbidden Access");
+		}
+
+		if (result.hasErrors()) {
+			return CompetitionController.VIEWS_COMPETITION_CREATE_OR_UPDATE_FORM;
+		} else {
+
+			BeanUtils.copyProperties(competition, compToUpdate, "id", "creator");
+
+			this.competitionService.saveCompetition(compToUpdate);
+
+			return "redirect:/competitions/" + compId;
+
+		}
 	}
 }
