@@ -85,7 +85,7 @@ public class CoachController {
 		return mav;
 	}
 
-	@GetMapping(value = "/coachs/new") //REGISTRAR ENTRENADOR - GET
+	@GetMapping(value = "/coach/new") //REGISTRAR ENTRENADOR - GET
 	public String initCreationForm(final Map<String, Object> model) throws CredentialException {
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -106,7 +106,7 @@ public class CoachController {
 		return CoachController.VIEWS_COACH_CREATE_OR_UPDATE_FORM;
 	}
 
-	@PostMapping(value = "/coachs/new") //REGISTRAR ENTRENADOR - POST
+	@PostMapping(value = "/coach/new") //REGISTRAR ENTRENADOR - POST
 	public String processCreationForm(@Valid final Coach coach, final BindingResult result, final Model model)
 		throws DataAccessException, DuplicatedNameException, NumberOfPlayersAndCoachException, MoneyClubException, SalaryException, StatusRegisteringException {
 
@@ -145,7 +145,7 @@ public class CoachController {
 		}
 	}
 
-	@GetMapping(value = "/coachs/{coachId}/sign")  //FICHAR ENTRENADOR - GET
+	@GetMapping(value = "/coach/{coachId}/sign")  //FICHAR ENTRENADOR - GET
 	public String initSignCoachForm(@PathVariable("coachId") final int coachId, final Model model) throws CredentialException {
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -185,7 +185,7 @@ public class CoachController {
 
 	}
 
-	@PostMapping(value = "/coachs/{coachId}/sign") //FICHAR ENTRENADOR - POST
+	@PostMapping(value = "/coach/{coachId}/sign") //FICHAR ENTRENADOR - POST
 	public String processUpdateFootballClubForm(@Valid final Coach coach, final BindingResult result, @PathVariable("coachId") final int coachId, final Model model)
 		throws DataAccessException, DuplicatedNameException, NumberOfPlayersAndCoachException, MoneyClubException, CredentialException, StatusRegisteringException {
 
@@ -290,7 +290,7 @@ public class CoachController {
 		}
 	}
 
-	@RequestMapping(value = "/coachs/{coachId}/fire") //DESPEDIR ENTRENADOR
+	@RequestMapping(value = "/coach/{coachId}/fire") //DESPEDIR ENTRENADOR
 	public String processDeleteForm(@PathVariable("coachId") final int coachId, final Model model) throws CredentialException, DataAccessException {
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

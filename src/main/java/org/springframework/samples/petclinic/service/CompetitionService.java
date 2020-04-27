@@ -16,6 +16,8 @@
 
 package org.springframework.samples.petclinic.service;
 
+import java.util.Collection;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Competition;
@@ -33,6 +35,21 @@ public class CompetitionService {
 	public CompetitionService(final CompetitionRepository competitionRepository) {
 		this.competitionRepository = competitionRepository;
 
+	}
+
+	@Transactional
+	public Competition findCompetitionById(final int id) throws DataAccessException {
+		return this.competitionRepository.findById(id);
+	}
+
+	@Transactional
+	public Collection<Competition> findAllPublishedCompetitions() throws DataAccessException {
+		return this.competitionRepository.findAllPublishedCompetitions();
+	}
+
+	@Transactional
+	public Collection<Competition> findMyCompetitions(final String username) throws DataAccessException {
+		return this.competitionRepository.findMyCompetitions(username);
 	}
 
 	@Transactional

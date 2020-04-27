@@ -63,13 +63,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 			.antMatchers("/footballClubs/list/**").authenticated()
 			.antMatchers("/footballClubs/myClub/**").hasAnyAuthority("president")
 			.antMatchers("/transfers/**").hasAnyAuthority("president")
-			.antMatchers("/coachs/**").hasAnyAuthority("president")
+			.antMatchers("/coachs/**").authenticated()
+			.antMatchers("/coach/**").hasAnyAuthority("president")
 			.antMatchers("/myfootballClub/**").hasAnyAuthority("president")
 			.antMatchers("/footballPlayer/new").hasAnyAuthority("president")
 			.antMatchers("/contractPlayer/**").hasAnyAuthority("president")
 			.antMatchers("/contractsCommercial/**").hasAnyAuthority("president")
 			.antMatchers("/competitions/**").authenticated()
-			.antMatchers("/competition/new").hasAnyAuthority("competitionAdmin")
+			.antMatchers("/competition/**").hasAnyAuthority("competitionAdmin")
 			.anyRequest().denyAll().and().formLogin()
 			/* .loginPage("/login") */
 			.failureUrl("/login-error").and().logout().logoutSuccessUrl("/").and().exceptionHandling().accessDeniedPage("/exception/forbidden");

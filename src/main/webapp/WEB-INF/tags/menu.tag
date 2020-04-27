@@ -19,7 +19,8 @@
 	<fmt:message key="code.list.contractsCommercial" var="publicities"/>
 	<fmt:message key="code.list.coachList" var="coachList"/>
 	<fmt:message key="code.crud.transfers" var="Transfers"/>
-	<fmt:message key="code.list.newTournament" var="newTournament"/>
+	<fmt:message key="code.list.newTournament" var="newTournament"/>	
+	<fmt:message key="code.list.myTournament" var="myTournaments"/>
 
 <nav class="navbar navbar-default" role="navigation">
 	<div class="container">
@@ -42,7 +43,7 @@
 					<span><fmt:message key="home"/></span>
 				</petclinic:menuItem>
 
-				<petclinic:menuItem active="${name eq 'owners'}" url="/owners/find"
+				<petclinic:menuItem active="${name eq 'owners'}" url="/competitions/list"
 					title="tournaments">
 					<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
 					<span><fmt:message key="tournaments"/></span>
@@ -226,6 +227,9 @@
 		
     		<spring:url value="/competition/new" var="createCompetitionUrl"></spring:url>
     		<a   href="${fn:escapeXml(createCompetitionUrl)}" class="btn btn-default3"><span class="glyphicon glyphicon-user"></span> ${newTournament}</a>
+    		
+    		<spring:url value="/competition/mylist" var="mylistCompetitionUrl"></spring:url>
+    		<a   href="${fn:escapeXml(mylistCompetitionUrl)}" class="btn btn-default3"><span class="glyphicon glyphicon-user"></span> ${myTournaments}</a>
     
     	</div> 
 	</nav>
