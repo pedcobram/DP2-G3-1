@@ -38,7 +38,7 @@
                 	<c:out value="${playerTransferRequest.club.name}"/>
                 </td>
                 <td>
-					<c:out value="${playerTransferRequest.playerValue}€"/> 
+					<c:out value="${playerTransferRequest.offer}€"/> 
                 </td>
                 <td>
                 	<c:out value="${playerTransferRequest.contractTime}"/> <c:out value=" "/> <fmt:message key="code.label.playertransferrequestsentlist.years"/>

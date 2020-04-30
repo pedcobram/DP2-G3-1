@@ -83,7 +83,7 @@ public class PlayerTransferRequestService {
 
 		//RN: Fondos no pueden ser valor negativo tras la transacción
 		FootballClub fc = this.footballClubService.findFootballClubByPresident(currentPrincipalName);
-		Long moneyAfterTransaction = fc.getMoney() - playerTransferRequest.getPlayerValue();
+		Long moneyAfterTransaction = fc.getMoney() - playerTransferRequest.getOffer() - playerTransferRequest.getContract().getClause();
 
 		if (moneyAfterTransaction < 0) {
 			throw new MoneyClubException();
@@ -100,10 +100,15 @@ public class PlayerTransferRequestService {
 		Integer salario = valor / 10;
 
 		//RN: Minimo y máximo
-		if (playerTransferRequest.getPlayerValue() < salario || playerTransferRequest.getPlayerValue() > valor) {
+		if (playerTransferRequest.getOffer() < salario || playerTransferRequest.getOffer() > valor) {
 			throw new SalaryException();
 		}
 
+		this.playerTransferRequestRepository.save(playerTransferRequest);
+	}
+
+	@Transactional
+	public void updatePlayerTransferRequest(final PlayerTransferRequest playerTransferRequest) throws DataAccessException {
 		this.playerTransferRequestRepository.save(playerTransferRequest);
 	}
 

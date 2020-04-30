@@ -11,6 +11,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 
 import org.springframework.samples.petclinic.model.Enum.RequestStatus;
 
@@ -28,8 +29,9 @@ public class PlayerTransferRequest extends BaseEntity implements Serializable {
 	 */
 	private static final long	serialVersionUID	= 1L;
 
-	@Column(name = "playerValue")
-	private Long				playerValue;
+	@Column(name = "offer")
+	@NotNull
+	private Long				offer;
 
 	@Column(name = "status")
 	private RequestStatus		status;

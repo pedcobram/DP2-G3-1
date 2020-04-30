@@ -51,7 +51,7 @@
     <form:form modelAttribute="playerTransferRequest" class="form-horizontal" id="add-referee-form">
     	
        		<div class="form-group has-feedback">
-           		<petclinic:inputField label="code.label.createorupdateplayertransferrequestform.playerValue" name="playerValue"/>
+           		<petclinic:inputField label="code.label.createorupdateplayertransferrequestform.playerValue" name="offer"/>
            		<petclinic:inputField label="code.label.createorupdateplayertransferrequestform.contractTime" name="contractTime"/>
 		<c:if test="false">           		
            		<petclinic:inputField label="code.label.createorupdateplayertransferrequestform.status" name="status" readonly="true"/>

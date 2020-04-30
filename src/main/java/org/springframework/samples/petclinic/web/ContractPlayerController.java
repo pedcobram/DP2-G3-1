@@ -25,7 +25,6 @@ import org.springframework.samples.petclinic.service.exceptions.DuplicatedNameEx
 import org.springframework.samples.petclinic.service.exceptions.MoneyClubException;
 import org.springframework.samples.petclinic.service.exceptions.NumberOfPlayersAndCoachException;
 import org.springframework.samples.petclinic.service.exceptions.SalaryException;
-import org.springframework.samples.petclinic.service.exceptions.TooManyPlayerRequestsException;
 import org.springframework.samples.petclinic.web.validators.ContractPlayerValidator;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -208,7 +207,7 @@ public class ContractPlayerController {
 
 	//DESPEDIR JUGADOR (BORRAR CONTRATO)
 	@RequestMapping(value = "/contractPlayer/{footballPlayerId}/delete")
-	public String processDeleteForm(@PathVariable("footballPlayerId") final int footballPlayerId, final Model model) throws CredentialException, DataAccessException, MoneyClubException {
+	public String processDeleteForm(@PathVariable("footballPlayerId") final int footballPlayerId, final Model model) throws SalaryException, CredentialException, DataAccessException, MoneyClubException {
 
 		//Obtenemos el username del usuario actual conectado
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -219,14 +218,9 @@ public class ContractPlayerController {
 		PlayerTransferRequest playerTransferRequest = this.playerTransferRequestService.findPlayerTransferRequestByPlayerIdAndStatusAccepted(footballPlayerId);
 
 		if (playerTransferRequest != null) {
-
 			playerTransferRequest.setContract(null);
 
-			try {
-				this.playerTransferRequestService.savePlayerTransferRequest(playerTransferRequest);
-			} catch (TooManyPlayerRequestsException | SalaryException e) {
-				return "redirect:/footballClubs/myClub/";
-			}
+			this.playerTransferRequestService.updatePlayerTransferRequest(playerTransferRequest);
 		}
 
 		if (player.getClub() == null) { //SEGURIDAD (Si el jugador es agente libre no se puede despedir)

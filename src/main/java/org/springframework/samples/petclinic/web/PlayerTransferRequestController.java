@@ -83,7 +83,7 @@ public class PlayerTransferRequestController {
 		FootballClub footballClub = this.footballClubService.findFootballClubByPresident(currentPrincipalName);
 		ContractPlayer contractPlayer = this.contractPlayerService.findContractPlayerByPlayerId(playerId);
 
-		ptr.setPlayerValue(Long.valueOf(fp.getValue()));
+		ptr.setOffer(Long.valueOf(fp.getValue()));
 		ptr.setStatus(RequestStatus.ON_HOLD);
 		ptr.setFootballPlayer(fp);
 		ptr.setClub(footballClub);
@@ -104,7 +104,7 @@ public class PlayerTransferRequestController {
 		FootballClub footballClub = this.footballClubService.findFootballClubByPresident(currentPrincipalName);
 		ContractPlayer contractPlayer = this.contractPlayerService.findContractPlayerByPlayerId(playerId);
 
-		playerTransferRequest.setPlayerValue(playerTransferRequest.getPlayerValue());
+		playerTransferRequest.setOffer(playerTransferRequest.getOffer());
 		playerTransferRequest.setStatus(RequestStatus.ON_HOLD);
 		playerTransferRequest.setFootballPlayer(fp);
 		playerTransferRequest.setClub(footballClub);
@@ -123,16 +123,16 @@ public class PlayerTransferRequestController {
 				this.playerTransferRequestService.savePlayerTransferRequest(playerTransferRequest);
 
 			} catch (MoneyClubException mce) {
-				result.rejectValue("playerValue", "code.error.validator.notEnoughMoneyToMakeOffer", "Your club does not have enough funds to make this offer");
+				result.rejectValue("offer", "code.error.validator.notEnoughMoneyToMakeOffer", "Your club does not have enough funds to make this offer");
 
 				return PlayerTransferRequestController.VIEWS_PLAYER_TRANSFER_REQUEST_CREATE_OR_UPDATE_FORM;
 
 			} catch (TooManyPlayerRequestsException tmpre) {
-				result.rejectValue("playerValue", "code.error.validator.tooManyPlayerRequestsException", "You can only have one open player request at a time");
+				result.rejectValue("offer", "code.error.validator.tooManyPlayerRequestsException", "You can only have one open player request at a time");
 
 				return PlayerTransferRequestController.VIEWS_PLAYER_TRANSFER_REQUEST_CREATE_OR_UPDATE_FORM;
 			} catch (SalaryException se) {
-				result.rejectValue("playerValue", "code.error.validator.incorrectSalary", "Salary has to be more than value/10 and less than its total value");
+				result.rejectValue("offer", "code.error.validator.incorrectSalary", "Salary has to be more than value/10 and less than its total value");
 
 				return PlayerTransferRequestController.VIEWS_PLAYER_TRANSFER_REQUEST_CREATE_OR_UPDATE_FORM;
 			}
@@ -204,16 +204,16 @@ public class PlayerTransferRequestController {
 				this.playerTransferRequestService.savePlayerTransferRequest(playerTransferRequest);
 
 			} catch (MoneyClubException mce) {
-				result.rejectValue("playerValue", "code.error.validator.notEnoughMoneyToMakeOffer", "Your club does not have enough funds to make this offer");
+				result.rejectValue("offer", "code.error.validator.notEnoughMoneyToMakeOffer", "Your club does not have enough funds to make this offer");
 
 				return PlayerTransferRequestController.VIEWS_PLAYER_TRANSFER_REQUEST_CREATE_OR_UPDATE_FORM;
 
 			} catch (TooManyPlayerRequestsException tmpre) {
-				result.rejectValue("playerValue", "code.error.validator.tooManyPlayerRequestsException", "You can only have one open player request at a time");
+				result.rejectValue("offer", "code.error.validator.tooManyPlayerRequestsException", "You can only have one open player request at a time");
 
 				return PlayerTransferRequestController.VIEWS_PLAYER_TRANSFER_REQUEST_CREATE_OR_UPDATE_FORM;
 			} catch (SalaryException se) {
-				result.rejectValue("playerValue", "code.error.validator.incorrectSalary", "Salary has to be more than value/10 and less than its total value");
+				result.rejectValue("offer", "code.error.validator.incorrectSalary", "Salary has to be more than value/10 and less than its total value");
 
 				return PlayerTransferRequestController.VIEWS_PLAYER_TRANSFER_REQUEST_CREATE_OR_UPDATE_FORM;
 			}
@@ -310,7 +310,7 @@ public class PlayerTransferRequestController {
 
 		//Restamos al club destino la cantidad pagada
 		footballClub.setId(footballClub.getId());
-		footballClub.setMoney(footballClub.getMoney() - ptr.getPlayerValue().intValue() - contract.getClause()); // - contract.getClause()
+		footballClub.setMoney(footballClub.getMoney() - ptr.getOffer().intValue() - contract.getClause()); // - contract.getClause()
 
 		try {
 			this.footballClubService.saveFootballClub(footballClub);
@@ -336,9 +336,9 @@ public class PlayerTransferRequestController {
 		contract.setClub(fc1);
 		contract.setStartDate(currentDate);
 		contract.setEndDate(datePlusContractTime);
-		contract.setSalary(ptr.getPlayerValue().intValue());
+		contract.setSalary(ptr.getOffer().intValue());
 		contract.setPlayer(footballPlayer);
-		contract.setClause(ptr.getPlayerValue().intValue() * 6);
+		contract.setClause(ptr.getOffer().intValue() * 6);
 
 		try {
 			this.contractPlayerService.saveContractPlayer(contract);
