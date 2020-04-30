@@ -16,9 +16,11 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.ContractPlayer;
 import org.springframework.samples.petclinic.model.FootballClub;
 import org.springframework.samples.petclinic.model.FootballPlayer;
+import org.springframework.samples.petclinic.model.PlayerTransferRequest;
 import org.springframework.samples.petclinic.service.ContractPlayerService;
 import org.springframework.samples.petclinic.service.FootballClubService;
 import org.springframework.samples.petclinic.service.FootballPlayerService;
+import org.springframework.samples.petclinic.service.PlayerTransferRequestService;
 import org.springframework.samples.petclinic.service.exceptions.DateException;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedNameException;
 import org.springframework.samples.petclinic.service.exceptions.MoneyClubException;
@@ -32,13 +34,16 @@ import org.springframework.stereotype.Service;
 public class ContractPlayerServiceTests {
 
 	@Autowired
-	private ContractPlayerService	contractService;
+	private ContractPlayerService			contractService;
 
 	@Autowired
-	private FootballPlayerService	footballPlayerService;
+	private FootballPlayerService			footballPlayerService;
 
 	@Autowired
-	private FootballClubService		footballClubService;
+	private FootballClubService				footballClubService;
+
+	@Autowired
+	private PlayerTransferRequestService	playerTransferRequestService;
 
 
 	@Test //CASO POSITIVO - Buscar ContractPlayer por ID
@@ -85,7 +90,7 @@ public class ContractPlayerServiceTests {
 	@Test //CASO POSITIVO - Crear Contrato (Fichar Jugador)
 	void shouldSaveContractPlayerAndGenerateId() throws DataAccessException, DuplicatedNameException, NumberOfPlayersAndCoachException, DateException, MoneyClubException, StatusException, SalaryException, StatusRegisteringException {
 
-		ContractPlayer contractPlayer = this.contractService.findContractPlayerById(8);
+		ContractPlayer contractPlayer = this.contractService.findContractPlayerById(800);
 		Assertions.assertFalse(contractPlayer != null); //Vemos que no existe
 
 		FootballPlayer player = this.footballPlayerService.findFootballPlayerById(64); //Buscamos un jugador sin contrato (Free Agent)
@@ -121,7 +126,7 @@ public class ContractPlayerServiceTests {
 	@Test //CASO NEGATIVO - Crear Contrato (Fichar Jugador) dejando un campo en blanco
 	void shouldThrowExceptionIfHastEmptyFields() throws DataAccessException, NumberOfPlayersAndCoachException, DateException, MoneyClubException, SalaryException {
 
-		ContractPlayer contractPlayer = this.contractService.findContractPlayerById(8);
+		ContractPlayer contractPlayer = this.contractService.findContractPlayerById(800);
 		Assertions.assertFalse(contractPlayer != null); //Vemos que no existe
 
 		FootballPlayer player = this.footballPlayerService.findFootballPlayerById(64); //Buscamos un jugador sin contrato (Free Agent)
@@ -153,7 +158,7 @@ public class ContractPlayerServiceTests {
 	@Test //CASO NEGATIVO - Crear Contrato (Fichar Jugador) si el club no es público y ya tiene siete jugadores //RN: Si el club no es público, solo puede tener a 7 jugadores como máximo
 	void shouldThrowExceptionIfClubIsNotPublishedAndHasSevenPlayers() throws DataAccessException, NumberOfPlayersAndCoachException, DateException, MoneyClubException, StatusException {
 
-		ContractPlayer contractPlayer = this.contractService.findContractPlayerById(8);
+		ContractPlayer contractPlayer = this.contractService.findContractPlayerById(800);
 		Assertions.assertFalse(contractPlayer != null); //Vemos que no existe
 
 		FootballPlayer player = this.footballPlayerService.findFootballPlayerById(64); //Buscamos un jugador sin contrato (Free Agent)
@@ -189,7 +194,7 @@ public class ContractPlayerServiceTests {
 	@Test //CASO NEGATIVO - Crear Contrato (Fichar Jugador) si el salario es menor al mínimo exigido //RN: Salario mínimo y máximo
 	void shouldThrowExceptionIfSalaryIsLessThanMinimum() throws DataAccessException, NumberOfPlayersAndCoachException, DateException, MoneyClubException, SalaryException {
 
-		ContractPlayer contractPlayer = this.contractService.findContractPlayerById(8);
+		ContractPlayer contractPlayer = this.contractService.findContractPlayerById(800);
 		Assertions.assertFalse(contractPlayer != null); //Vemos que no existe
 
 		FootballPlayer player = this.footballPlayerService.findFootballPlayerById(64); //Buscamos un jugador sin contrato (Free Agent)
@@ -224,7 +229,7 @@ public class ContractPlayerServiceTests {
 	@Test //CASO NEGATIVO - Crear Contrato (Fichar Jugador) si el salario es mayor al máximo exigido //RN: Salario mínimo y máximo
 	void shouldThrowExceptionIfSalaryIsMoreThanMaximum() throws DataAccessException, NumberOfPlayersAndCoachException, DateException, MoneyClubException, SalaryException {
 
-		ContractPlayer contractPlayer = this.contractService.findContractPlayerById(8);
+		ContractPlayer contractPlayer = this.contractService.findContractPlayerById(800);
 		Assertions.assertFalse(contractPlayer != null); //Vemos que no existe
 
 		FootballPlayer player = this.footballPlayerService.findFootballPlayerById(64); //Buscamos un jugador sin contrato (Free Agent)
@@ -259,7 +264,7 @@ public class ContractPlayerServiceTests {
 	@Test //CASO NEGATIVO - Crear Contrato (Fichar Jugador) si el salario es mayor a los fondos del club //RN: La transacción total no puede ser mayor a los fondos del club
 	void shouldThrowExceptionIfClubHasNotEnoughMoney() throws DataAccessException, NumberOfPlayersAndCoachException, DateException, MoneyClubException, SalaryException {
 
-		ContractPlayer contractPlayer = this.contractService.findContractPlayerById(8);
+		ContractPlayer contractPlayer = this.contractService.findContractPlayerById(800);
 		Assertions.assertFalse(contractPlayer != null); //Vemos que no existe
 
 		FootballPlayer player = this.footballPlayerService.findFootballPlayerById(66); //Buscamos un jugador sin contrato (Free Agent)
@@ -293,7 +298,7 @@ public class ContractPlayerServiceTests {
 	@Test //CASO NEGATIVO - Crear Contrato (Fichar Jugador) si la duración del contrato es menor a un año. //RN: El contrato debe tener al menos un año de duración
 	void shouldThrowExceptionIfEndDateIsLessThan1Year() throws DataAccessException, NumberOfPlayersAndCoachException, DateException, MoneyClubException, SalaryException {
 
-		ContractPlayer contractPlayer = this.contractService.findContractPlayerById(8);
+		ContractPlayer contractPlayer = this.contractService.findContractPlayerById(800);
 		Assertions.assertFalse(contractPlayer != null); //Vemos que no existe
 
 		FootballPlayer player = this.footballPlayerService.findFootballPlayerById(64); //Buscamos un jugador sin contrato (Free Agent)
@@ -328,6 +333,10 @@ public class ContractPlayerServiceTests {
 		ContractPlayer contractPlayer = this.contractService.findContractPlayerById(1);
 		Assertions.assertTrue(contractPlayer != null); //Vemos que Si existe
 
+		//Error referencial si no se elimina/actualiza antes
+		PlayerTransferRequest ptr = this.playerTransferRequestService.findPlayerTransferRequestByPlayerId(1);
+		this.playerTransferRequestService.deletePlayerTransferRequest(ptr);
+
 		this.contractService.deleteContract(contractPlayer);
 
 		contractPlayer = this.contractService.findContractPlayerById(1);
@@ -358,6 +367,10 @@ public class ContractPlayerServiceTests {
 		ContractPlayer contractPlayer = this.contractService.findContractPlayerById(1);
 		Assertions.assertTrue(contractPlayer != null); //Vemos que existe
 		Assertions.assertTrue(contractPlayer.getClause() == 9000000); //Vemos que su cláusula de rescisión es de 9mill€
+
+		//Error referencial si no se elimina/actualiza antes
+		PlayerTransferRequest ptr = this.playerTransferRequestService.findPlayerTransferRequestByPlayerId(1);
+		this.playerTransferRequestService.deletePlayerTransferRequest(ptr);
 
 		this.contractService.deleteContractDeletingClub(contractPlayer);
 

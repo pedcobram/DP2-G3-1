@@ -8,6 +8,8 @@
 
 <petclinic:layout pageName="playerTransferRequestsSent">
 	
+	<fmt:message key="code.message.transferrequest.acceptConfirmation" var="confirmationMessage" /> 
+	
 	<h2 style="color:black"><fmt:message key="code.title.playertransferrequestsentlist"/></h2>
  		<table id="vetsTable" class="table table-striped">
 			<thead>
@@ -47,11 +49,11 @@
                 	<c:out value="${playerTransferRequest.status}"/>
                 </td>
                  <td>
-                    <spring:url value="sent/edit/${playerTransferRequest.id}" var='editplayertransferrequestsentlist'></spring:url>
-                	<a href="${fn:escapeXml(editplayertransferrequestsentlist)}" class="btn btn-default"><fmt:message key="code.button.playertransferrequestsentlist.edit"/></a>
+                    <spring:url value="/transfers/players/requests/received/accept/${playerTransferRequest.footballPlayer.id}" var='acceptplayertransferrequestsentlist'></spring:url>
+                	<a href="${fn:escapeXml(acceptplayertransferrequestsentlist)}" onclick="return confirm('${confirmationMessage}')" class="btn btn-default"><fmt:message key="code.button.playertransferrequestsentlist.accept"/></a>
                 	
-                	<spring:url value="sent/delete/${playerTransferRequest.id}" var='deleteplayertransferrequestsentlist'></spring:url>
-                	<a href="${fn:escapeXml(deleteplayertransferrequestsentlist)}" class="btn btn-default"><fmt:message key="code.button.playertransferrequestsentlist.delete"/></a>
+                	<spring:url value="/transfers/players/requests/received/reject/${playerTransferRequest.footballPlayer.id}" var='rejectplayertransferrequestsentlist'></spring:url>
+                	<a href="${fn:escapeXml(rejectplayertransferrequestsentlist)}" onclick="return confirm('${confirmationMessage}')" class="btn btn-default"><fmt:message key="code.button.playertransferrequestsentlist.reject"/></a>
                 </td>
             </tr>
         </c:forEach>

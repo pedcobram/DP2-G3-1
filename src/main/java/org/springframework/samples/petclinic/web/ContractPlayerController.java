@@ -15,14 +15,17 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.ContractPlayer;
 import org.springframework.samples.petclinic.model.FootballClub;
 import org.springframework.samples.petclinic.model.FootballPlayer;
+import org.springframework.samples.petclinic.model.PlayerTransferRequest;
 import org.springframework.samples.petclinic.service.ContractPlayerService;
 import org.springframework.samples.petclinic.service.FootballClubService;
 import org.springframework.samples.petclinic.service.FootballPlayerService;
+import org.springframework.samples.petclinic.service.PlayerTransferRequestService;
 import org.springframework.samples.petclinic.service.exceptions.DateException;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedNameException;
 import org.springframework.samples.petclinic.service.exceptions.MoneyClubException;
 import org.springframework.samples.petclinic.service.exceptions.NumberOfPlayersAndCoachException;
 import org.springframework.samples.petclinic.service.exceptions.SalaryException;
+import org.springframework.samples.petclinic.service.exceptions.TooManyPlayerRequestsException;
 import org.springframework.samples.petclinic.web.validators.ContractPlayerValidator;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -40,23 +43,27 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class ContractPlayerController {
 
-	private static final String			VIEWS_CONTRACT_PLAYER_CREATE_OR_UPDATE_FORM	= "contracts/createOrUpdateContractPlayerForm";
+	private static final String					VIEWS_CONTRACT_PLAYER_CREATE_OR_UPDATE_FORM	= "contracts/createOrUpdateContractPlayerForm";
 
 	@Autowired
-	private final ContractPlayerService	contractService;
+	private final ContractPlayerService			contractService;
 
 	@Autowired
-	private final FootballPlayerService	footballPlayerService;
+	private final FootballPlayerService			footballPlayerService;
 
 	@Autowired
-	private final FootballClubService	footballClubService;
+	private final FootballClubService			footballClubService;
+
+	@Autowired
+	private final PlayerTransferRequestService	playerTransferRequestService;
 
 
 	@Autowired
-	public ContractPlayerController(final ContractPlayerService contractService, final FootballPlayerService footballPlayerService, final FootballClubService footballClubService) {
+	public ContractPlayerController(final ContractPlayerService contractService, final FootballPlayerService footballPlayerService, final PlayerTransferRequestService playerTransferRequestService, final FootballClubService footballClubService) {
 		this.contractService = contractService;
 		this.footballPlayerService = footballPlayerService;
 		this.footballClubService = footballClubService;
+		this.playerTransferRequestService = playerTransferRequestService;
 
 	}
 
@@ -209,12 +216,24 @@ public class ContractPlayerController {
 
 		ContractPlayer thisContract = this.contractService.findContractPlayerByPlayerId(footballPlayerId);
 		FootballPlayer player = this.footballPlayerService.findFootballPlayerById(footballPlayerId);
+		PlayerTransferRequest playerTransferRequest = this.playerTransferRequestService.findPlayerTransferRequestByPlayerIdAndStatusAccepted(footballPlayerId);
+
+		if (playerTransferRequest != null) {
+
+			playerTransferRequest.setContract(null);
+
+			try {
+				this.playerTransferRequestService.savePlayerTransferRequest(playerTransferRequest);
+			} catch (TooManyPlayerRequestsException | SalaryException e) {
+				return "redirect:/footballClubs/myClub/";
+			}
+		}
 
 		if (player.getClub() == null) { //SEGURIDAD (Si el jugador es agente libre no se puede despedir)
 			throw new CredentialException();
 		}
 
-		if (!thisContract.getClub().getPresident().getUser().getUsername().equals(currentPrincipalName)) { //SEGURIDAD
+		if (thisContract.getClub().getPresident().getUser().getUsername().compareTo(currentPrincipalName) != 0) { //SEGURIDAD
 			throw new CredentialException();
 		}
 

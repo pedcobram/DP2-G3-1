@@ -9,6 +9,7 @@ import org.springframework.samples.petclinic.model.FootballClub;
 import org.springframework.samples.petclinic.model.PlayerTransferRequest;
 import org.springframework.samples.petclinic.repository.PlayerTransferRequestRepository;
 import org.springframework.samples.petclinic.service.exceptions.MoneyClubException;
+import org.springframework.samples.petclinic.service.exceptions.SalaryException;
 import org.springframework.samples.petclinic.service.exceptions.TooManyPlayerRequestsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -45,8 +46,28 @@ public class PlayerTransferRequestService {
 	}
 
 	@Transactional(readOnly = true)
+	public Collection<PlayerTransferRequest> findPlayerTransferRequestsReceived(final int clubId) throws DataAccessException {
+		return this.playerTransferRequestRepository.findReceivedRequests(clubId);
+	}
+
+	@Transactional(readOnly = true)
 	public PlayerTransferRequest findPlayerTransferRequestById(final int id) throws DataAccessException {
 		return this.playerTransferRequestRepository.findById(id);
+	}
+
+	@Transactional(readOnly = true)
+	public PlayerTransferRequest findPlayerTransferRequestByPlayerId(final int playerId) throws DataAccessException {
+		return this.playerTransferRequestRepository.findByPlayerId(playerId);
+	}
+
+	@Transactional(readOnly = true)
+	public PlayerTransferRequest findOnlyByPlayerId(final int playerId) throws DataAccessException {
+		return this.playerTransferRequestRepository.findOnlyByPlayerId(playerId);
+	}
+
+	@Transactional(readOnly = true)
+	public PlayerTransferRequest findPlayerTransferRequestByPlayerIdAndStatusAccepted(final int playerId) throws DataAccessException {
+		return this.playerTransferRequestRepository.findByPlayerIdAndStatusAccepted(playerId);
 	}
 
 	@Transactional(readOnly = true)
@@ -55,7 +76,7 @@ public class PlayerTransferRequestService {
 	}
 
 	@Transactional
-	public void savePlayerTransferRequest(final PlayerTransferRequest playerTransferRequest) throws DataAccessException, MoneyClubException, TooManyPlayerRequestsException {
+	public void savePlayerTransferRequest(final PlayerTransferRequest playerTransferRequest) throws DataAccessException, MoneyClubException, TooManyPlayerRequestsException, SalaryException {
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String currentPrincipalName = authentication.getName();
@@ -75,12 +96,21 @@ public class PlayerTransferRequestService {
 			throw new TooManyPlayerRequestsException();
 		}
 
+		Integer valor = playerTransferRequest.getContract().getPlayer().getValue();
+		Integer salario = valor / 10;
+
+		//RN: Minimo y máximo
+		if (playerTransferRequest.getPlayerValue() < salario || playerTransferRequest.getPlayerValue() > valor) {
+			throw new SalaryException();
+		}
+
 		this.playerTransferRequestRepository.save(playerTransferRequest);
 	}
 
 	public void deletePlayerTransferRequest(final PlayerTransferRequest playerTransferRequest) throws DataAccessException {
-		playerTransferRequest.setPresident(null);
+		playerTransferRequest.setClub(null);
 		playerTransferRequest.setFootballPlayer(null);
+		playerTransferRequest.setContract(null);
 		this.playerTransferRequestRepository.delete(playerTransferRequest);
 	}
 

@@ -14,7 +14,15 @@ public interface PlayerTransferRequestRepository {
 
 	Collection<PlayerTransferRequest> findByFootballPlayer(String footballPlayer) throws DataAccessException;
 
+	Collection<PlayerTransferRequest> findReceivedRequests(int clubId) throws DataAccessException;
+
 	PlayerTransferRequest findById(int id) throws DataAccessException;
+
+	PlayerTransferRequest findByPlayerId(int playerId) throws DataAccessException;
+
+	PlayerTransferRequest findOnlyByPlayerId(int playerId) throws DataAccessException;
+
+	PlayerTransferRequest findByPlayerIdAndStatusAccepted(int playerId) throws DataAccessException;
 
 	Integer countByPresidentAndPlayer(String presidentUsername, int playerId) throws DataAccessException;
 

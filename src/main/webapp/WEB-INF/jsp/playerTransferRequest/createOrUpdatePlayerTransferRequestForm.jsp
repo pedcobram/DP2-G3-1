@@ -24,11 +24,15 @@
     <table class="table table-striped">
    	 	<tr>
             <th><fmt:message key="code.label.createorupdateplayertransferrequestform.currentClubFunds"/></th>
-            <td><b><c:out value="${currentClubFunds}€"/></b></td>
+            <td><b><c:out value="${playerTransferRequest.club.money}€"/></b></td>
         </tr>
    	 	<tr>
             <th><fmt:message key="code.label.createorupdateplayertransferrequestform.playerValue"/></th>
-            <td><b><c:out value="${playerTransferRequest.playerValue}€"/></b></td>
+            <td><b><c:out value="${playerTransferRequest.contract.player.value}€"/></b></td>
+        </tr> 
+        <tr>
+            <th><fmt:message key="code.label.createorupdateplayertransferrequestform.clause"/></th>
+            <td><b><c:out value="${playerTransferRequest.contract.clause}€"/></b></td>
         </tr> 
         <tr>
             <th><fmt:message key="code.label.createorupdateplayertransferrequestform.status"/></th>
@@ -40,7 +44,7 @@
         </tr>
    	 	<tr>
             <th><fmt:message key="code.label.createorupdateplayertransferrequestform.president"/></th>
-            <td><b><c:out value="${playerTransferRequest.president.firstName} ${playerTransferRequest.president.lastName}"/></b></td>
+            <td><b><c:out value="${playerTransferRequest.club.president.firstName} ${playerTransferRequest.club.president.lastName}"/></b></td>
         </tr>
     </table>
     
@@ -48,6 +52,7 @@
     	
        		<div class="form-group has-feedback">
            		<petclinic:inputField label="code.label.createorupdateplayertransferrequestform.playerValue" name="playerValue"/>
+           		<petclinic:inputField label="code.label.createorupdateplayertransferrequestform.contractTime" name="contractTime"/>
 		<c:if test="false">           		
            		<petclinic:inputField label="code.label.createorupdateplayertransferrequestform.status" name="status" readonly="true"/>
         		<petclinic:inputField label="code.label.createorupdateplayertransferrequestform.footballPlayerName" name="footballPlayer" readonly="true"/>

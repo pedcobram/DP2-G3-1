@@ -9,6 +9,8 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 
 import org.springframework.samples.petclinic.model.Enum.RequestStatus;
 
@@ -32,6 +34,11 @@ public class PlayerTransferRequest extends BaseEntity implements Serializable {
 	@Column(name = "status")
 	private RequestStatus		status;
 
+	@Column(name = "contractTime")
+	@Min(value = 1)
+	@Max(value = 5)
+	private Integer				contractTime;
+
 	//
 
 	@OneToOne(cascade = CascadeType.ALL)
@@ -39,8 +46,13 @@ public class PlayerTransferRequest extends BaseEntity implements Serializable {
 	private FootballPlayer		footballPlayer;
 
 	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "president", referencedColumnName = "username")
-	private President			president;
+	@JoinColumn(name = "contractId", referencedColumnName = "id")
+	private ContractPlayer		contract;
+
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "clubId", referencedColumnName = "id")
+	private FootballClub		club;
+
 	//
 
 }
