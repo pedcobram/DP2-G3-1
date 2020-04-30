@@ -39,6 +39,7 @@ public class PlayerTransferRequest extends BaseEntity implements Serializable {
 	@Column(name = "contractTime")
 	@Min(value = 1)
 	@Max(value = 5)
+	@NotNull
 	private Integer				contractTime;
 
 	//

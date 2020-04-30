@@ -114,7 +114,6 @@ public class PlayerTransferRequestController {
 		model.addAttribute("currentClubFunds", footballClub.getMoney());
 
 		if (result.hasErrors()) {
-
 			return PlayerTransferRequestController.VIEWS_PLAYER_TRANSFER_REQUEST_CREATE_OR_UPDATE_FORM;
 		} else {
 
@@ -154,72 +153,6 @@ public class PlayerTransferRequestController {
 		model.addAttribute("playerTransferRequests", ptrs);
 
 		return PlayerTransferRequestController.VIEWS_PLAYER_TRANSFER_REQUEST_LIST;
-	}
-
-	@GetMapping(value = "/transfers/players/requests/sent/edit/{requestId}")
-	public String initEditRequestTransferPlayerForm(final Model model, @PathVariable("requestId") final int requestId) throws CredentialException {
-
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		String currentPrincipalName = authentication.getName();
-
-		PlayerTransferRequest playerTransferRequest = this.playerTransferRequestService.findPlayerTransferRequestById(requestId);
-		FootballClub footballClub = this.footballClubService.findFootballClubByPresident(currentPrincipalName);
-
-		if (playerTransferRequest.getClub().getPresident().getUser().getUsername().compareTo(currentPrincipalName) != 0) {
-			throw new CredentialException();
-		}
-
-		model.addAttribute(playerTransferRequest);
-		model.addAttribute("currentClubFunds", footballClub.getMoney());
-
-		return PlayerTransferRequestController.VIEWS_PLAYER_TRANSFER_REQUEST_CREATE_OR_UPDATE_FORM;
-	}
-
-	@PostMapping(value = "/transfers/players/requests/sent/edit/{requestId}")
-	public String processEditRequestTransferPlayerForm(@Valid final PlayerTransferRequest playerTransferRequest, final BindingResult result, final Model model, @PathVariable("requestId") final int requestId) {
-
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		String currentPrincipalName = authentication.getName();
-
-		FootballClub footballClub = this.footballClubService.findFootballClubByPresident(currentPrincipalName);
-		PlayerTransferRequest last_id = this.playerTransferRequestService.findPlayerTransferRequestById(requestId);
-
-		playerTransferRequest.setId(requestId);
-		playerTransferRequest.setStatus(RequestStatus.ON_HOLD);
-		playerTransferRequest.setFootballPlayer(last_id.getFootballPlayer());
-		playerTransferRequest.setClub(last_id.getClub());
-		playerTransferRequest.setContract(last_id.getContract());
-		playerTransferRequest.setContractTime(playerTransferRequest.getContractTime());
-
-		model.addAttribute("currentClubFunds", footballClub.getMoney());
-
-		if (result.hasErrors()) {
-			return PlayerTransferRequestController.VIEWS_PLAYER_TRANSFER_REQUEST_CREATE_OR_UPDATE_FORM;
-		} else {
-
-			this.playerTransferRequestService.deletePlayerTransferRequest(last_id);
-
-			try {
-
-				this.playerTransferRequestService.savePlayerTransferRequest(playerTransferRequest);
-
-			} catch (MoneyClubException mce) {
-				result.rejectValue("offer", "code.error.validator.notEnoughMoneyToMakeOffer", "Your club does not have enough funds to make this offer");
-
-				return PlayerTransferRequestController.VIEWS_PLAYER_TRANSFER_REQUEST_CREATE_OR_UPDATE_FORM;
-
-			} catch (TooManyPlayerRequestsException tmpre) {
-				result.rejectValue("offer", "code.error.validator.tooManyPlayerRequestsException", "You can only have one open player request at a time");
-
-				return PlayerTransferRequestController.VIEWS_PLAYER_TRANSFER_REQUEST_CREATE_OR_UPDATE_FORM;
-			} catch (SalaryException se) {
-				result.rejectValue("offer", "code.error.validator.incorrectSalary", "Salary has to be more than value/10 and less than its total value");
-
-				return PlayerTransferRequestController.VIEWS_PLAYER_TRANSFER_REQUEST_CREATE_OR_UPDATE_FORM;
-			}
-
-			return "redirect:/transfers/players/requests/sent";
-		}
 	}
 
 	@GetMapping(value = "/transfers/players/requests/sent/delete/{requestId}")

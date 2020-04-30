@@ -85,7 +85,7 @@ public class PlayerTransferRequestService {
 		FootballClub fc = this.footballClubService.findFootballClubByPresident(currentPrincipalName);
 		Long moneyAfterTransaction = fc.getMoney() - playerTransferRequest.getOffer() - playerTransferRequest.getContract().getClause();
 
-		if (moneyAfterTransaction < 0) {
+		if (moneyAfterTransaction < 0L) {
 			throw new MoneyClubException();
 		}
 
