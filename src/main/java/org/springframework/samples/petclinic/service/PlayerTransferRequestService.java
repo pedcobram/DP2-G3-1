@@ -41,15 +41,10 @@ public class PlayerTransferRequestService {
 	}
 
 	@Transactional(readOnly = true)
-	public Collection<PlayerTransferRequest> findPlayerTransferRequestByFootballPlayer(final String footballPlayerName) throws DataAccessException {
-		return this.playerTransferRequestRepository.findByFootballPlayer(footballPlayerName);
-	}
-
-	@Transactional(readOnly = true)
 	public Collection<PlayerTransferRequest> findPlayerTransferRequestsReceived(final int clubId) throws DataAccessException {
 		return this.playerTransferRequestRepository.findReceivedRequests(clubId);
 	}
-
+	//
 	@Transactional(readOnly = true)
 	public PlayerTransferRequest findPlayerTransferRequestById(final int id) throws DataAccessException {
 		return this.playerTransferRequestRepository.findById(id);
@@ -73,6 +68,11 @@ public class PlayerTransferRequestService {
 	@Transactional(readOnly = true)
 	public Integer countPlayerTransferRequestsByPresidentAndPlayer(final String presidentUsername, final int playerId) throws DataAccessException {
 		return this.playerTransferRequestRepository.countByPresidentAndPlayer(presidentUsername, playerId);
+	}
+	
+	@Transactional(readOnly = true)
+	public Integer count() throws DataAccessException {
+		return this.playerTransferRequestRepository.count();
 	}
 
 	@Transactional

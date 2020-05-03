@@ -17,10 +17,6 @@ public interface SpringDataPlayerTransferRequestRepository extends PlayerTransfe
 	Collection<PlayerTransferRequest> findByPresident(@Param("username") String username) throws DataAccessException;
 
 	@Override
-	@Query("SELECT a FROM PlayerTransferRequest a WHERE a.footballPlayer.firstName =:footballPlayer AND a.status = 0")
-	Collection<PlayerTransferRequest> findByFootballPlayer(@Param("footballPlayer") String footballPlayer) throws DataAccessException;
-
-	@Override
 	@Query("SELECT f from PlayerTransferRequest f WHERE f.status = 0")
 	Collection<PlayerTransferRequest> findAll() throws DataAccessException;
 
@@ -47,4 +43,8 @@ public interface SpringDataPlayerTransferRequestRepository extends PlayerTransfe
 	@Override
 	@Query("SELECT COUNT(a) FROM PlayerTransferRequest a WHERE a.club.president.user.username  =:presidentUsername AND a.footballPlayer.id =:playerId AND a.status = 0")
 	Integer countByPresidentAndPlayer(@Param("presidentUsername") String presidentUsername, @Param("playerId") int playerId) throws DataAccessException;
+
+	@Override
+	@Query("SELECT COUNT(a) FROM PlayerTransferRequest a")
+	Integer count() throws DataAccessException;
 }

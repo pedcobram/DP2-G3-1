@@ -26,7 +26,7 @@ import org.springframework.samples.petclinic.service.RefereeService;
 import org.springframework.stereotype.Service;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
-public class MatchTests {
+public class MatchServiceTests {
 
 	@Autowired
 	protected MatchService					matchService;

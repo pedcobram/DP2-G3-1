@@ -82,14 +82,14 @@ public class PresidentUITest {
 	}
 
 	@Test
-	public void R21Positivo_PresidenteVerEstadisticasActaActualizadas() throws Exception {
+	public void R20Positivo_PresidenteVerEstadisticasActaActualizadas() throws Exception {
 		this.cuandoUnArbitroCierreElActaDeUnPartido();
 		this.comoPresidente("presidente1");
 		this.sePodranVisualizarLasEstadisticasDeLosJugadores();
 	}
 
 	@Test
-	public void R21Negativo_PresidenteVerEstadisticasActaActualizadas() throws Exception {
+	public void R20Negativo_PresidenteVerEstadisticasActaActualizadas() throws Exception {
 		this.comoPresidente("presidente1");
 		this.siIntentoModificarUnActaDePartidoSeMeRedirigiraALaVistaDeError();
 	}

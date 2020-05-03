@@ -243,7 +243,7 @@ public class PlayerTransferRequestController {
 
 		//Restamos al club destino la cantidad pagada
 		footballClub.setId(footballClub.getId());
-		footballClub.setMoney(footballClub.getMoney() - ptr.getOffer().intValue() - contract.getClause()); // - contract.getClause()
+		footballClub.setMoney(footballClub.getMoney() - ptr.getOffer().intValue() - contract.getClause());
 
 		try {
 			this.footballClubService.saveFootballClub(footballClub);
@@ -276,7 +276,7 @@ public class PlayerTransferRequestController {
 		try {
 			this.contractPlayerService.saveContractPlayer(contract);
 		} catch (DataAccessException | MoneyClubException | NumberOfPlayersAndCoachException | SalaryException | DateException e1) {
-			throw new CredentialException();
+			e1.getMessage(); //throw new CredentialException();
 		}
 
 		//Asignamos al jugador al nuevo club
