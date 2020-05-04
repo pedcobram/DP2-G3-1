@@ -62,7 +62,7 @@
     		<a data-toggle="tooltip" title="${mousehover}" href="${fn:escapeXml(editUrl)}" class="btn btn-default">Actualizar</a>
 
 		<!--Añadir equipos  -->
-    		<spring:url value="/competitions/{competitionId}/footballClubs" var="clubUrl">
+    		<spring:url value="/competition/{competitionId}/footballClubs" var="clubUrl">
 		   		<spring:param name="competitionId" value="${competition.id}"/>
     		</spring:url>
     		<a data-toggle="tooltip" title="${mousehover}" href="${fn:escapeXml(clubUrl)}" class="btn btn-default">${AddClub}</a>  	

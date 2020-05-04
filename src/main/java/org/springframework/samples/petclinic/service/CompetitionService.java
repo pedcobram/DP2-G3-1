@@ -17,6 +17,7 @@
 package org.springframework.samples.petclinic.service;
 
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -64,10 +65,10 @@ public class CompetitionService {
 
 	}
 
-	public Collection<FootballClub> findClubsById(final int competitionId) {
+	public Collection<String> findClubsById(final int competitionId) {
 
-		Collection<FootballClub> res = this.competitionRepository.findAllPublishedClubs();
-		res.removeAll(this.competitionRepository.findClubsById(competitionId));
+		Collection<String> res = this.competitionRepository.findAllPublishedClubs().stream().map(x -> x.getName()).collect(Collectors.toList());
+		res.removeAll(this.competitionRepository.findById(competitionId).getClubs());
 		return res;
 	}
 

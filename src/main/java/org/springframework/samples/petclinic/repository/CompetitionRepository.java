@@ -17,8 +17,6 @@ public interface CompetitionRepository {
 
 	void save(Competition competition) throws DataAccessException;
 
-	Collection<FootballClub> findClubsById(int competitionId);
-
 	Collection<FootballClub> findAllPublishedClubs();
 
 }

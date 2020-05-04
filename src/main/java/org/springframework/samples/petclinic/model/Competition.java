@@ -48,7 +48,7 @@ public class Competition extends BaseEntity {
 	//Calendar calendario;
 
 	@Column
-	@ElementCollection(targetClass = FootballClub.class)
+	@ElementCollection(targetClass = String.class)
 	private List<String>	clubs;
 
 }

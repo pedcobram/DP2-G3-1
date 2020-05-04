@@ -24,11 +24,6 @@ public interface SpringDataCompetitionRepository extends CompetitionRepository, 
 	@Query("select c from Competition c where c.creator = ?1")
 	Collection<Competition> findMyCompetitions(final String username) throws DataAccessException;
 
-	//select c from FootballClub c where c != ALL ()
-	@Override
-	@Query("select f.clubs from Competition f where f.id = ?1")
-	Collection<FootballClub> findClubsById(int competitionId);
-
 	//Clubes públicos
 	@Override
 	@Query("select c from FootballClub c where c.status = true")

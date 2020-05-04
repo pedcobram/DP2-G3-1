@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import javax.security.auth.login.CredentialException;
 import javax.validation.Valid;
@@ -171,23 +170,32 @@ public class CompetitionController {
 		}
 	}
 
-	@GetMapping("/competitions/{competitionId}/footballClubs") //AÑADIR EQUIPOS A COMPETICIÓN
+	@GetMapping("/competition/{competitionId}/footballClubs") //AÑADIR EQUIPOS A COMPETICIÓN
 	public ModelAndView showClubs(@PathVariable("competitionId") final int competitionId) {
 
-		Collection<String> allclubsName = this.competitionService.findAllPublishedClubs().stream().map(x -> x.getName()).collect(Collectors.toList());
+		Collection<String> allclubsName = this.competitionService.findClubsById(competitionId);
 
 		Competition thisComp = this.competitionService.findCompetitionById(competitionId);
-
-		Collection<String> thisclubsName = thisComp.getClubs();
-
-		for (String a : thisclubsName) {
-			allclubsName.remove(a);
-		}
 
 		ModelAndView mav = new ModelAndView("competitions/listClubs");
 		mav.addObject("clubsName", allclubsName);
 		mav.addObject("size", allclubsName.size());
 		mav.addObject(thisComp);
+
+		return mav;
+	}
+	@PostMapping("/competition/{competitionId}/footballClubs") //AÑADIR EQUIPOS A COMPETICIÓN
+	public ModelAndView addClub(@PathVariable("competitionId") final int competitionId, @ModelAttribute("clubs") final String club) {
+
+		Competition thisComp = this.competitionService.findCompetitionById(competitionId);
+
+		List<String> newClubs = thisComp.getClubs();
+		newClubs.add(club);
+		thisComp.setClubs(newClubs);
+
+		this.competitionService.saveCompetition(thisComp);
+
+		ModelAndView mav = new ModelAndView("redirect:/competitions/" + competitionId);
 
 		return mav;
 	}
