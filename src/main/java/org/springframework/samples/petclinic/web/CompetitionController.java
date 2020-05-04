@@ -68,6 +68,7 @@ public class CompetitionController {
 
 		ModelAndView mav = new ModelAndView("competitions/competitionDetails");
 		mav.addObject(this.competitionService.findCompetitionById(competitionId));
+		mav.addObject("size", this.competitionService.findCompetitionById(competitionId).getClubs().size());
 
 		return mav;
 	}

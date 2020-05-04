@@ -8,6 +8,8 @@
 <%@ page contentType="text/html; charset=UTF-8" %> <!-- Para  tildes, ñ y caracteres especiales como el € %-->
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
+<fmt:message key="code.crud.newClub" var="createClub"/>
+
 <petclinic:layout pageName="competitions.clubs">
 <jsp:body>
 <!-- Tomo el valor del nombre de usuario actual %-->
@@ -25,7 +27,7 @@
                   <div class="control-group">
                   		<petclinic:selectField name="clubs"  names="${clubsName}" label="code.label.equipos" size="${size}"/>
                   </div>
-                   		<button class="btn btn-default" type="submit"><fmt:message key="code.label.add"/></button>
+                   		<button class="btn btn-default" type="submit"><fmt:message key="code.button.competition.addClub"/></button>
                   </div>
         </form:form>
 	</jsp:body>

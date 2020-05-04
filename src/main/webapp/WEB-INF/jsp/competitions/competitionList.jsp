@@ -22,7 +22,7 @@
  		<table id="vetsTable" class="table table-striped">
 			<thead>
        			<tr>
-            		<th>Name</th>
+            		<th>${Name}</th>
            			<th>Type</th>
            			<th>Reward</th>
  				</tr>

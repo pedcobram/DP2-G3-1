@@ -51,6 +51,10 @@
         <tr>
             <th>Admin</th>
             <td><c:out value="${competition.creator}"/></td>
+        </tr> 
+        <tr>
+            <th><fmt:message key="code.label.equipos"/></th>
+            <td><c:out value="${size}"/></td>
         </tr>      
         
      </table>
