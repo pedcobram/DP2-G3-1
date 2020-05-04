@@ -54,6 +54,11 @@ public class CompetitionService {
 	}
 
 	@Transactional
+	public Collection<FootballClub> findAllPublishedClubs() throws DataAccessException {
+		return this.competitionRepository.findAllPublishedClubs();
+	}
+
+	@Transactional
 	public void saveCompetition(final Competition competition) throws DataAccessException {
 		this.competitionRepository.save(competition);
 
@@ -61,7 +66,7 @@ public class CompetitionService {
 
 	public Collection<FootballClub> findClubsById(final int competitionId) {
 
-		Collection<FootballClub> res = this.competitionRepository.findAllClubs();
+		Collection<FootballClub> res = this.competitionRepository.findAllPublishedClubs();
 		res.removeAll(this.competitionRepository.findClubsById(competitionId));
 		return res;
 	}

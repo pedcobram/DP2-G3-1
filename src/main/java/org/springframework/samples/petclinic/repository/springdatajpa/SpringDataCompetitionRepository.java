@@ -29,7 +29,8 @@ public interface SpringDataCompetitionRepository extends CompetitionRepository, 
 	@Query("select f.clubs from Competition f where f.id = ?1")
 	Collection<FootballClub> findClubsById(int competitionId);
 
+	//Clubes públicos
 	@Override
-	@Query("select c from FootballClub c")
-	Collection<FootballClub> findAllClubs();
+	@Query("select c from FootballClub c where c.status = true")
+	Collection<FootballClub> findAllPublishedClubs();
 }

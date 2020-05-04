@@ -19,6 +19,6 @@ public interface CompetitionRepository {
 
 	Collection<FootballClub> findClubsById(int competitionId);
 
-	Collection<FootballClub> findAllClubs();
+	Collection<FootballClub> findAllPublishedClubs();
 
 }

@@ -23,9 +23,9 @@
                     <petclinic:inputField label="code.label.name" name="name" readonly="true"/>
                 </div>
                   <div class="control-group">
-                  <petclinic:selectField name="clubs"  names="${footballClubList}" label="code.label.equipos" size="${size}"/>
+                  		<petclinic:selectField name="clubs"  names="${clubsName}" label="code.label.equipos" size="${size}"/>
                   </div>
-                   <button class="btn btn-default" type="submit"><fmt:message key="code.label.add"/></button>
+                   		<button class="btn btn-default" type="submit"><fmt:message key="code.label.add"/></button>
                   </div>
         </form:form>
 	</jsp:body>

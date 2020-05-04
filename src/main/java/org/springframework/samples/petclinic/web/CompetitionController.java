@@ -2,8 +2,10 @@
 package org.springframework.samples.petclinic.web;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.security.auth.login.CredentialException;
 import javax.validation.Valid;
@@ -169,13 +171,23 @@ public class CompetitionController {
 		}
 	}
 
-	@GetMapping("/competitions/{competitionId}/footballClubs") //VISTA DETALLADA DE COMPETICIÓN
+	@GetMapping("/competitions/{competitionId}/footballClubs") //AÑADIR EQUIPOS A COMPETICIÓN
 	public ModelAndView showClubs(@PathVariable("competitionId") final int competitionId) {
 
+		Collection<String> allclubsName = this.competitionService.findAllPublishedClubs().stream().map(x -> x.getName()).collect(Collectors.toList());
+
+		Competition thisComp = this.competitionService.findCompetitionById(competitionId);
+
+		Collection<String> thisclubsName = thisComp.getClubs();
+
+		for (String a : thisclubsName) {
+			allclubsName.remove(a);
+		}
+
 		ModelAndView mav = new ModelAndView("competitions/listClubs");
-		mav.addObject(this.competitionService.findClubsById(competitionId));
-		mav.addObject("size", this.competitionService.findClubsById(competitionId).size());
-		mav.addObject(this.competitionService.findCompetitionById(competitionId));
+		mav.addObject("clubsName", allclubsName);
+		mav.addObject("size", allclubsName.size());
+		mav.addObject(thisComp);
 
 		return mav;
 	}

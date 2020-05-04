@@ -25,30 +25,30 @@ public class Competition extends BaseEntity {
 
 	@Column(name = "name")
 	@NotNull
-	private String				name;
+	private String			name;
 
 	@Column(name = "description")
 	@NotNull
-	private String				description;
+	private String			description;
 
 	@Column(name = "type")
 	@NotNull
-	private CompetitionType		type;
+	private CompetitionType	type;
 
 	@Column(name = "reward")
 	@NotNull
-	private Integer				reward;
+	private Integer			reward;
 
 	@Column(name = "status")
-	private Boolean				status;
+	private Boolean			status;
 
 	@Column(name = "creator")
-	private String				creator;  //username
+	private String			creator;  //username
 
 	//Calendar calendario;
 
 	@Column
 	@ElementCollection(targetClass = FootballClub.class)
-	private List<FootballClub>	clubs;
+	private List<String>	clubs;
 
 }
