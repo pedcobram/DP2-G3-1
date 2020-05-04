@@ -5,6 +5,7 @@ import java.util.Collection;
 
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Competition;
+import org.springframework.samples.petclinic.model.FootballClub;
 
 public interface CompetitionRepository {
 
@@ -15,5 +16,9 @@ public interface CompetitionRepository {
 	Collection<Competition> findMyCompetitions(final String username) throws DataAccessException;
 
 	void save(Competition competition) throws DataAccessException;
+
+	Collection<FootballClub> findClubsById(int competitionId);
+
+	Collection<FootballClub> findAllClubs();
 
 }

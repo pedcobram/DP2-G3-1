@@ -21,6 +21,7 @@ import java.util.Collection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Competition;
+import org.springframework.samples.petclinic.model.FootballClub;
 import org.springframework.samples.petclinic.repository.CompetitionRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -56,6 +57,13 @@ public class CompetitionService {
 	public void saveCompetition(final Competition competition) throws DataAccessException {
 		this.competitionRepository.save(competition);
 
+	}
+
+	public Collection<FootballClub> findClubsById(final int competitionId) {
+
+		Collection<FootballClub> res = this.competitionRepository.findAllClubs();
+		res.removeAll(this.competitionRepository.findClubsById(competitionId));
+		return res;
 	}
 
 }

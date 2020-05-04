@@ -7,6 +7,9 @@
 <%@ page contentType="text/html; charset=UTF-8" %> <!-- Para  tildes, ñ y caracteres especiales como el € %-->
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
+		<fmt:message key="code.button.competition.addClub" var="AddClub"/>
+    	
+
 <!-- Tomo el valor del nombre de usuario actual %-->
     
     <security:authorize access="isAuthenticated()">
@@ -56,7 +59,13 @@
     		<spring:url value="/competition/{competitionId}/edit" var="editUrl">
 		   		<spring:param name="competitionId" value="${competition.id}"/>
     		</spring:url>
-    		<a data-toggle="tooltip" title="${mousehover}" href="${fn:escapeXml(editUrl)}" class="btn btn-default">Actualizar</a>  	
+    		<a data-toggle="tooltip" title="${mousehover}" href="${fn:escapeXml(editUrl)}" class="btn btn-default">Actualizar</a>
+
+		<!--Añadir equipos  -->
+    		<spring:url value="/competitions/{competitionId}/footballClubs" var="clubUrl">
+		   		<spring:param name="competitionId" value="${competition.id}"/>
+    		</spring:url>
+    		<a data-toggle="tooltip" title="${mousehover}" href="${fn:escapeXml(clubUrl)}" class="btn btn-default">${AddClub}</a>  	
     	</c:if> 
      
  </jsp:body> 

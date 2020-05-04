@@ -168,4 +168,15 @@ public class CompetitionController {
 
 		}
 	}
+
+	@GetMapping("/competitions/{competitionId}/footballClubs") //VISTA DETALLADA DE COMPETICIÓN
+	public ModelAndView showClubs(@PathVariable("competitionId") final int competitionId) {
+
+		ModelAndView mav = new ModelAndView("competitions/listClubs");
+		mav.addObject(this.competitionService.findClubsById(competitionId));
+		mav.addObject("size", this.competitionService.findClubsById(competitionId).size());
+		mav.addObject(this.competitionService.findCompetitionById(competitionId));
+
+		return mav;
+	}
 }
