@@ -171,7 +171,7 @@ public class CompetitionController {
 		}
 	}
 
-	@GetMapping("/competition/{competitionId}/footballClubs") //AÑADIR EQUIPOS A COMPETICIÓN
+	@GetMapping("/competition/{competitionId}/addClubs") //AÑADIR EQUIPOS A COMPETICIÓN
 	public ModelAndView showClubs(@PathVariable("competitionId") final int competitionId) {
 
 		Collection<String> allclubsName = this.competitionService.findClubsById(competitionId);
@@ -180,18 +180,47 @@ public class CompetitionController {
 
 		ModelAndView mav = new ModelAndView("competitions/listClubs");
 		mav.addObject("clubsName", allclubsName);
+		mav.addObject("isAdd", true);
 		mav.addObject("size", allclubsName.size());
 		mav.addObject(thisComp);
 
 		return mav;
 	}
-	@PostMapping("/competition/{competitionId}/footballClubs") //AÑADIR EQUIPOS A COMPETICIÓN
+	@PostMapping("/competition/{competitionId}/addClubs") //AÑADIR EQUIPOS A COMPETICIÓN
 	public ModelAndView addClub(@PathVariable("competitionId") final int competitionId, @ModelAttribute("clubs") final String club) {
 
 		Competition thisComp = this.competitionService.findCompetitionById(competitionId);
 
 		List<String> newClubs = thisComp.getClubs();
 		newClubs.add(club);
+		thisComp.setClubs(newClubs);
+
+		this.competitionService.saveCompetition(thisComp);
+
+		ModelAndView mav = new ModelAndView("redirect:/competitions/" + competitionId);
+
+		return mav;
+	}
+	@GetMapping("/competition/{competitionId}/clubs") //VER EQUIPOS DE LA COMPETICIÓN
+	public ModelAndView showClubsMycomp(@PathVariable("competitionId") final int competitionId) {
+
+		Competition thisComp = this.competitionService.findCompetitionById(competitionId);
+
+		ModelAndView mav = new ModelAndView("competitions/listClubs");
+		mav.addObject("clubsName", thisComp.getClubs());
+		mav.addObject("size", thisComp.getClubs().size());
+		mav.addObject("isAdd", false);
+		mav.addObject(thisComp);
+
+		return mav;
+	}
+	@PostMapping("/competition/{competitionId}/clubs") //BORRAR EQUIPOS A COMPETICIÓN
+	public ModelAndView deleteClub(@PathVariable("competitionId") final int competitionId, @ModelAttribute("clubs") final String club) {
+
+		Competition thisComp = this.competitionService.findCompetitionById(competitionId);
+
+		List<String> newClubs = thisComp.getClubs();
+		newClubs.remove(club);
 		thisComp.setClubs(newClubs);
 
 		this.competitionService.saveCompetition(thisComp);

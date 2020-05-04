@@ -9,14 +9,16 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <fmt:message key="code.crud.newClub" var="createClub"/>
-
+<fmt:message key="code.button.competition.addClub" var="addClub"/>
+<fmt:message key="code.button.competition.deleteClub" var="deleteClub"/>
+<fmt:message key="code.button.back" var="back"/>
 <petclinic:layout pageName="competitions.clubs">
 <jsp:body>
 <!-- Tomo el valor del nombre de usuario actual %-->
     
-   <!--  <security:authorize access="isAuthenticated()">
+    <security:authorize access="isAuthenticated()">
    		<security:authentication var="principalUsername" property="principal.username" /> 
-	</security:authorize>   %-->
+	</security:authorize>  
 	
 	 <form:form modelAttribute="competition" class="form-horizontal">
             
@@ -27,7 +29,18 @@
                   <div class="control-group">
                   		<petclinic:selectField name="clubs"  names="${clubsName}" label="code.label.equipos" size="${size}"/>
                   </div>
-                   		<button class="btn btn-default" type="submit"><fmt:message key="code.button.competition.addClub"/></button>
+                  <c:if test="${(competition.creator == principalUsername) && competition.status == false && size > 0}">
+					<c:choose>
+                        <c:when test="${isAdd}">
+                         <button class="btn btn-default" type="submit">${addClub}</button>
+                        </c:when>
+                        <c:otherwise>
+                            
+							<button class="btn btn-default" type="submit">${deleteClub}</button>
+                        </c:otherwise>
+                    </c:choose> 
+                    </c:if>   
+                    <input type="button" class="btn btn-default" value="${back}" name="Back" onclick="history.back()" />               		
                   </div>
         </form:form>
 	</jsp:body>
