@@ -13,8 +13,6 @@ import org.springframework.samples.petclinic.model.Authenticated;
 import org.springframework.samples.petclinic.model.Referee;
 import org.springframework.samples.petclinic.service.AuthenticatedService;
 import org.springframework.samples.petclinic.service.AuthoritiesService;
-import org.springframework.samples.petclinic.service.MatchRefereeRequestService;
-import org.springframework.samples.petclinic.service.MatchService;
 import org.springframework.samples.petclinic.service.RefereeService;
 import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedNameException;
@@ -36,24 +34,17 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class RefereeController {
 
-	private static final String					VIEWS_REFEREE_CREATE_OR_UPDATE_FORM	= "referees/createOrUpdateRefereeForm";
+	private static final String			VIEWS_REFEREE_CREATE_OR_UPDATE_FORM	= "referees/createOrUpdateRefereeForm";
 
-	private final RefereeService				refereeService;
+	private final RefereeService		refereeService;
 
-	private final AuthenticatedService			authenticatedService;
-
-	private final MatchService					matchService;
-
-	private final MatchRefereeRequestService	matchRefereeRequestService;
+	private final AuthenticatedService	authenticatedService;
 
 
 	@Autowired
-	public RefereeController(final RefereeService refereeService, final AuthenticatedService authenticatedService, final MatchService matchService, final MatchRefereeRequestService matchRefereeRequestService, final UserService userService,
-		final AuthoritiesService authoritiesService) {
+	public RefereeController(final RefereeService refereeService, final AuthenticatedService authenticatedService, final UserService userService, final AuthoritiesService authoritiesService) {
 		this.refereeService = refereeService;
 		this.authenticatedService = authenticatedService;
-		this.matchService = matchService;
-		this.matchRefereeRequestService = matchRefereeRequestService;
 	}
 
 	@InitBinder

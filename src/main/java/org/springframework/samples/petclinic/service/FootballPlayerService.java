@@ -44,7 +44,7 @@ public class FootballPlayerService {
 	private FootballPlayerRepository	footRepository;
 
 	@Autowired
-	private ContractPlayerService				contractService;
+	private ContractPlayerService		contractService;
 
 
 	@Autowired
@@ -135,5 +135,59 @@ public class FootballPlayerService {
 		this.footRepository.save(footballPlayer);
 		this.contractService.saveContractPlayer(newContract);
 
+	}
+
+	@Transactional(rollbackFor = {
+		DuplicatedNameException.class, NumberOfPlayersAndCoachException.class, DateException.class, StatusException.class, SalaryException.class, MoneyClubException.class
+	})
+	public void updateFootballPlayer(@Valid final FootballPlayer footballPlayer, @Valid final ContractPlayer newContract)
+		throws DataAccessException, DuplicatedNameException, NumberOfPlayersAndCoachException, MoneyClubException, StatusException, DateException, SalaryException {
+
+		String firstname = footballPlayer.getFirstName().toLowerCase();
+		String lastname = footballPlayer.getLastName().toLowerCase();
+		FootballPlayer otherPlayer = null;
+
+		//Creamos un "otherPlayer" si existe uno en la db con el mismo nombre y diferente id
+		for (FootballPlayer o : this.footRepository.findAll()) {
+			String ofirst = o.getFirstName().toLowerCase();
+			String olast = o.getLastName().toLowerCase();
+			ofirst = ofirst.toLowerCase();
+			olast = olast.toLowerCase();
+			if (ofirst.equals(firstname) && olast.equals(lastname) && o.getId() != footballPlayer.getId()) {
+				otherPlayer = o;
+			}
+		}
+
+		//RN: Nombre Duplicado
+		if (StringUtils.hasLength(footballPlayer.getFirstName()) && StringUtils.hasLength(footballPlayer.getLastName()) && otherPlayer != null && otherPlayer.getId() != footballPlayer.getId()) {
+			throw new DuplicatedNameException();
+		}
+
+		Date now = new Date(System.currentTimeMillis() - 1);
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(now);
+		cal.add(Calendar.YEAR, -16);
+		now = cal.getTime();
+
+		//RN: Debe tener al menos 16 años
+		if (footballPlayer.getBirthDate().after(now)) {
+			throw new DateException();
+		}
+
+		Collection<FootballPlayer> cp = this.findAllClubFootballPlayers(footballPlayer.getClub().getId());
+
+		//RN: Solo se pueden registrar jugadores hasta que se tengan 7
+		if (cp.size() >= 7 && footballPlayer.getClub().getStatus() == false) {
+			throw new NumberOfPlayersAndCoachException();
+		}
+
+		//RN: El salario no puede ser superior a los fondos del equipo
+		if (newContract.getClub().getMoney() < newContract.getSalary()) {
+			throw new MoneyClubException();
+		}
+
+		newContract.getClub().setMoney(newContract.getClub().getMoney() - newContract.getSalary());
+		this.footRepository.save(footballPlayer);
+		this.contractService.saveContractPlayer(newContract);
 	}
 }

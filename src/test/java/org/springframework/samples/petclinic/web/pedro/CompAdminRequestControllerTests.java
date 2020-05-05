@@ -146,7 +146,7 @@ public class CompAdminRequestControllerTests {
 	})
 	@Test //CASO POSITIVO
 	void rejectCompetitionAdminRequest() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/competitionAdminRequest/reject/gonzalo")).andExpect(MockMvcResultMatchers.status().isOk());
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/competitionAdminRequest/reject/{username}", "gonzalo")).andExpect(MockMvcResultMatchers.status().isOk());
 	}
 
 	@WithAnonymousUser
