@@ -136,7 +136,7 @@ public class CoachTransferRequestServiceTests {
 
 		List<CoachTransferRequest> ptrs = new ArrayList<>();
 
-		ptrs.addAll(this.coachTransferRequestService.findAllCoachTransferRequestByRequestedCoachId(1));
+		ptrs.addAll(this.coachTransferRequestService.findAllCoachTransferRequestByRequestedCoachId(7));
 
 		if (ptrs.size() == 1) {
 			res = true;
