@@ -10,6 +10,8 @@ public interface CoachTransferRequestRepository {
 
 	Collection<CoachTransferRequest> findAll() throws DataAccessException;
 
+	Collection<CoachTransferRequest> findAllOnHold() throws DataAccessException;
+
 	Collection<CoachTransferRequest> findAllReceivedRequests(int clubId) throws DataAccessException;
 
 	Collection<CoachTransferRequest> findAllByPresident(String presidentUsername) throws DataAccessException;

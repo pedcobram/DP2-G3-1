@@ -1,12 +1,15 @@
 
 package org.springframework.samples.petclinic.service;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.CoachTransferRequest;
 import org.springframework.samples.petclinic.repository.CoachTransferRequestRepository;
+import org.springframework.samples.petclinic.service.exceptions.AlreadyOneRequestOpenException;
 import org.springframework.samples.petclinic.service.exceptions.CoachTransferRequestExistsException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,9 +26,15 @@ public class CoachTransferRequestService {
 	}
 
 	//
+
 	@Transactional(readOnly = true)
 	public Collection<CoachTransferRequest> findAllCoachTransferRequest() throws DataAccessException {
 		return this.coachTransferRequestRepository.findAll();
+	}
+
+	@Transactional(readOnly = true)
+	public Collection<CoachTransferRequest> findAllCoachTransferRequestOnHold() throws DataAccessException {
+		return this.coachTransferRequestRepository.findAllOnHold();
 	}
 
 	@Transactional(readOnly = true)
@@ -76,7 +85,18 @@ public class CoachTransferRequestService {
 	}
 
 	@Transactional
-	public void saveCoachTransferRequest(final CoachTransferRequest coachTransferRequest) throws DataAccessException, CoachTransferRequestExistsException {
+	public void saveCoachTransferRequest(final CoachTransferRequest coachTransferRequest) throws DataAccessException, CoachTransferRequestExistsException, AlreadyOneRequestOpenException {
+
+		//RN: Solo una petición simultanea por equipo
+		List<CoachTransferRequest> ctrs = new ArrayList<>();
+
+		ctrs.addAll(this.findAllCoachTransferRequestOnHold());
+
+		for (CoachTransferRequest ctr2 : ctrs) {
+			if (coachTransferRequest.getMyCoach().getId().compareTo(ctr2.getMyCoach().getId()) == 0) {
+				throw new AlreadyOneRequestOpenException();
+			}
+		}
 
 		//RN: Solo una petición por árbitro
 		CoachTransferRequest ctr = this.findCoachTransferRequestByRequestedCoachIdAndMyCoachId(coachTransferRequest.getMyCoach().getId(), coachTransferRequest.getRequestedCoach().getId());
@@ -86,6 +106,7 @@ public class CoachTransferRequestService {
 		}
 
 		this.coachTransferRequestRepository.save(coachTransferRequest);
+
 	}
 
 	public void deleteCoachTransferRequest(final CoachTransferRequest coachTransferRequest) throws DataAccessException {

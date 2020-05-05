@@ -17,6 +17,10 @@ public interface SpringDataCoachTransferRequestRepository extends CoachTransferR
 	Collection<CoachTransferRequest> findAll() throws DataAccessException;
 
 	@Override
+	@Query("SELECT a from CoachTransferRequest a WHERE a.status = 0")
+	Collection<CoachTransferRequest> findAllOnHold() throws DataAccessException;
+
+	@Override
 	@Query("SELECT a from CoachTransferRequest a WHERE a.myCoach.id =:coachId AND a.status = 0")
 	Collection<CoachTransferRequest> findAllReceivedRequests(@Param("coachId") int clubId) throws DataAccessException;
 

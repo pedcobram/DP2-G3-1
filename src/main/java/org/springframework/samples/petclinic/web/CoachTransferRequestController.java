@@ -16,6 +16,7 @@ import org.springframework.samples.petclinic.model.Enum.RequestStatus;
 import org.springframework.samples.petclinic.service.CoachService;
 import org.springframework.samples.petclinic.service.CoachTransferRequestService;
 import org.springframework.samples.petclinic.service.FootballClubService;
+import org.springframework.samples.petclinic.service.exceptions.AlreadyOneRequestOpenException;
 import org.springframework.samples.petclinic.service.exceptions.CoachTransferRequestExistsException;
 import org.springframework.samples.petclinic.service.exceptions.MoneyClubException;
 import org.springframework.samples.petclinic.service.exceptions.SalaryException;
@@ -105,6 +106,10 @@ public class CoachTransferRequestController {
 
 			} catch (CoachTransferRequestExistsException e) {
 				result.rejectValue("offer", "code.error.transferAlreadyExists", "Transfer already exists");
+
+				return CoachTransferRequestController.VIEWS_COACH_TRANSFER_REQUEST_CREATE_OR_UPDATE_FORM;
+			} catch (AlreadyOneRequestOpenException e) {
+				result.rejectValue("offer", "code.error.alreadyOneRequestOpen", "Already one transfer open");
 
 				return CoachTransferRequestController.VIEWS_COACH_TRANSFER_REQUEST_CREATE_OR_UPDATE_FORM;
 			}
@@ -202,7 +207,7 @@ public class CoachTransferRequestController {
 
 		try {
 			this.coachTransferRequestService.saveCoachTransferRequest(ctr);
-		} catch (CoachTransferRequestExistsException e) {
+		} catch (CoachTransferRequestExistsException | AlreadyOneRequestOpenException e) {
 			throw new CredentialException();
 		}
 
@@ -213,6 +218,25 @@ public class CoachTransferRequestController {
 			this.coachService.signCoach(requestedCoach, fc_requestedCoach, ctr.getOffer().intValue());
 		} catch (MoneyClubException | SalaryException e) {
 			throw new CredentialException();
+		}
+
+		// Si tenía una peticion abierta de un equipo que he aceptado, la rechazo pues es redundante
+		List<CoachTransferRequest> ctrs = new ArrayList<>();
+
+		ctrs.addAll(this.coachTransferRequestService.findAllCoachTransferRequestOnHold());
+		ctrs.remove(ctr);
+
+		for (CoachTransferRequest i : ctrs) {
+
+			if (i.getRequestedCoach().equals(ctr.getMyCoach())) {
+				i.setStatus(RequestStatus.REFUSE);
+
+				try {
+					this.coachTransferRequestService.saveCoachTransferRequest(i);
+				} catch (CoachTransferRequestExistsException | AlreadyOneRequestOpenException e) {
+					throw new CredentialException();
+				}
+			}
 		}
 
 		return "redirect:/transfers/coaches/requests/received";

@@ -15,6 +15,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.CoachTransferRequest;
 import org.springframework.samples.petclinic.model.Enum.RequestStatus;
 import org.springframework.samples.petclinic.service.CoachTransferRequestService;
+import org.springframework.samples.petclinic.service.exceptions.AlreadyOneRequestOpenException;
 import org.springframework.samples.petclinic.service.exceptions.CoachTransferRequestExistsException;
 import org.springframework.stereotype.Service;
 
@@ -241,7 +242,7 @@ public class CoachTransferRequestServiceTests {
 	}
 
 	@Test // CASO POSITIVO
-	void shouldSaveCoachTransferRequest() throws DataAccessException, CredentialException, CoachTransferRequestExistsException {
+	void shouldSaveCoachTransferRequest() throws DataAccessException, CredentialException, CoachTransferRequestExistsException, AlreadyOneRequestOpenException {
 
 		CoachTransferRequest ptr = this.coachTransferRequestService.findCoachTransferRequestById(0);
 
@@ -274,7 +275,7 @@ public class CoachTransferRequestServiceTests {
 		ptr_mod.setRequestedCoach(ptr.getRequestedCoach());
 		ptr_mod.setStatus(ptr.getStatus());
 
-		Assertions.assertThrows(CoachTransferRequestExistsException.class, () -> {
+		Assertions.assertThrows(AlreadyOneRequestOpenException.class, () -> {
 			this.coachTransferRequestService.saveCoachTransferRequest(ptr_mod);
 		});
 	}
