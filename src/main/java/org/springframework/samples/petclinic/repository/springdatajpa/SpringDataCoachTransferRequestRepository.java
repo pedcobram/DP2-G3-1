@@ -13,7 +13,7 @@ import org.springframework.samples.petclinic.repository.CoachTransferRequestRepo
 public interface SpringDataCoachTransferRequestRepository extends CoachTransferRequestRepository, Repository<CoachTransferRequest, Integer> {
 
 	@Override
-	@Query("SELECT a from CoachTransferRequest a WHERE a.status = 0")
+	@Query("SELECT a from CoachTransferRequest a")
 	Collection<CoachTransferRequest> findAll() throws DataAccessException;
 
 	@Override

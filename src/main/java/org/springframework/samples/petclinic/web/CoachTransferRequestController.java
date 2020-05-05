@@ -60,7 +60,7 @@ public class CoachTransferRequestController {
 	}
 
 	@GetMapping(value = "/transfers/coaches/request/{coachId}")
-	public String requestTransferCoach(@PathVariable("coachId") final int coachId, final Model model) throws DataAccessException {
+	public String showRequestTransferCoach(@PathVariable("coachId") final int coachId, final Model model) throws DataAccessException {
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String currentPrincipalName = authentication.getName();
@@ -114,7 +114,7 @@ public class CoachTransferRequestController {
 	}
 
 	@GetMapping(value = "/transfers/coaches/requests/sent")
-	public String viewTransferPlayerSentList(final Model model) throws DataAccessException {
+	public String viewTransferCoachSentList(final Model model) throws DataAccessException {
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String currentPrincipalName = authentication.getName();
@@ -129,7 +129,7 @@ public class CoachTransferRequestController {
 	}
 
 	@GetMapping(value = "/transfers/coaches/requests/sent/delete/{requestId}")
-	public String deleteTransferPlayerRequest(final Model model, @PathVariable("requestId") final int requestId) throws CredentialException {
+	public String deleteTransferCoachRequest(final Model model, @PathVariable("requestId") final int requestId) throws CredentialException {
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String currentPrincipalName = authentication.getName();
@@ -163,13 +163,13 @@ public class CoachTransferRequestController {
 		return CoachTransferRequestController.VIEWS_COACH_TRANSFER_REQUEST_RECEIVED;
 	}
 
-	@GetMapping(value = "/transfers/coaches/requests/received/reject/{coachId}")
-	public String rejectTransferPlayerRequest(final Model model, @PathVariable("coachId") final int coachId) throws Exception {
+	@GetMapping(value = "/transfers/coaches/requests/received/reject/{coachRequestId}")
+	public String rejectTransferPlayerRequest(final Model model, @PathVariable("coachRequestId") final int coachRequestId) throws Exception {
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String currentPrincipalName = authentication.getName();
 
-		CoachTransferRequest ctr = this.coachTransferRequestService.findCoachTransferRequestById(coachId);
+		CoachTransferRequest ctr = this.coachTransferRequestService.findCoachTransferRequestById(coachRequestId);
 
 		if (ctr.getRequestedCoach().getClub().getPresident().getUser().getUsername().compareTo(currentPrincipalName) != 0) {
 			throw new CredentialException();
