@@ -24,7 +24,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 @DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)
 @AutoConfigureTestDatabase(replace = Replace.ANY)
 public class CoachTransferRequestE2ETests {
-	
+
 	//SI SE EJECUTA SIN DIRTIES CONTEXT DA ERROR EN DOS TESTS QUE INDIVIDUALMENTE SON CORRECTOS
 
 	@Autowired
@@ -45,18 +45,15 @@ public class CoachTransferRequestE2ETests {
 
 	@Test //CASO POSITIVO
 	void testShowRequestTransferCoach() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/transfers/coaches/request/{coachId}", CoachTransferRequestE2ETests.TEST_REQUESTED_COACH_ID))
-			.andExpect(MockMvcResultMatchers.status().isOk())
-			.andExpect(MockMvcResultMatchers.model().attributeExists("coachTransferRequest"))
-			.andExpect(MockMvcResultMatchers.view().name("coachTransferRequest/createOrUpdateCoachTransferRequestForm"))
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/transfers/coaches/request/{coachId}", CoachTransferRequestE2ETests.TEST_REQUESTED_COACH_ID)).andExpect(MockMvcResultMatchers.status().isOk())
+			.andExpect(MockMvcResultMatchers.model().attributeExists("coachTransferRequest")).andExpect(MockMvcResultMatchers.view().name("coachTransferRequest/createOrUpdateCoachTransferRequestForm"))
 			.andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/coachTransferRequest/createOrUpdateCoachTransferRequestForm.jsp"));
 	}
 
 	@WithAnonymousUser
 	@Test //CASO NEGATIVO
 	void testDontShowRequestTransferCoach() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/transfers/coaches/request/{coachId}", CoachTransferRequestE2ETests.TEST_REQUESTED_COACH_ID))
-			.andExpect(MockMvcResultMatchers.status().is3xxRedirection());
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/transfers/coaches/request/{coachId}", CoachTransferRequestE2ETests.TEST_REQUESTED_COACH_ID)).andExpect(MockMvcResultMatchers.status().is3xxRedirection());
 	}
 
 	//
@@ -64,25 +61,16 @@ public class CoachTransferRequestE2ETests {
 	@WithMockUser(username = "presidente1", authorities = "president")
 	@Test //CASO POSITIVO
 	void testProcessCreationForm() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.post("/transfers/coaches/request/{coachId}", CoachTransferRequestE2ETests.TEST_REQUESTED_COACH_ID)
-				.with(SecurityMockMvcRequestPostProcessors.csrf())
-				.param("offer", "1000000"))
-			.andExpect(MockMvcResultMatchers.status().is3xxRedirection())
-			.andExpect(MockMvcResultMatchers.view().name("redirect:/transfers/coaches"))
-			.andExpect(MockMvcResultMatchers.redirectedUrl("/transfers/coaches"));
+		this.mockMvc.perform(MockMvcRequestBuilders.post("/transfers/coaches/request/{coachId}", CoachTransferRequestE2ETests.TEST_REQUESTED_COACH_ID).with(SecurityMockMvcRequestPostProcessors.csrf()).param("offer", "1000000"))
+			.andExpect(MockMvcResultMatchers.status().is3xxRedirection()).andExpect(MockMvcResultMatchers.view().name("redirect:/transfers/coaches")).andExpect(MockMvcResultMatchers.redirectedUrl("/transfers/coaches"));
 	}
 
 	@WithMockUser(username = "presidente1", authorities = "president")
 	@Test //CASO NEGATIVO
 	void testProcessCreationFormHasErrors() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.post("/transfers/coaches/request/{coachId}", CoachTransferRequestE2ETests.TEST_REQUESTED_COACH_ID)
-				.with(SecurityMockMvcRequestPostProcessors.csrf())
-				.param("offer", ""))
-			.andExpect(MockMvcResultMatchers.status().isOk())
-			.andExpect(MockMvcResultMatchers.model().attributeHasErrors())
-			.andExpect(MockMvcResultMatchers.model().attributeExists("coachTransferRequest"))
-			.andExpect(MockMvcResultMatchers.view().name("coachTransferRequest/createOrUpdateCoachTransferRequestForm"))
-			.andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/coachTransferRequest/createOrUpdateCoachTransferRequestForm.jsp"));
+		this.mockMvc.perform(MockMvcRequestBuilders.post("/transfers/coaches/request/{coachId}", CoachTransferRequestE2ETests.TEST_REQUESTED_COACH_ID).with(SecurityMockMvcRequestPostProcessors.csrf()).param("offer", ""))
+			.andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeHasErrors()).andExpect(MockMvcResultMatchers.model().attributeExists("coachTransferRequest"))
+			.andExpect(MockMvcResultMatchers.view().name("coachTransferRequest/createOrUpdateCoachTransferRequestForm")).andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/coachTransferRequest/createOrUpdateCoachTransferRequestForm.jsp"));
 	}
 
 	//
@@ -90,18 +78,14 @@ public class CoachTransferRequestE2ETests {
 	@WithMockUser(username = "presidente1", authorities = "president")
 	@Test //CASO POSITIVO
 	void testShowPlayerRequestsSentList() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/transfers/coaches/requests/sent"))
-			.andExpect(MockMvcResultMatchers.status().isOk())
-			.andExpect(MockMvcResultMatchers.model().attributeExists("coachTransferRequests"))
-			.andExpect(MockMvcResultMatchers.view().name("coachTransferRequest/coachTransferRequestSentList"))
-			.andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/coachTransferRequest/coachTransferRequestSentList.jsp"));
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/transfers/coaches/requests/sent")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("coachTransferRequests"))
+			.andExpect(MockMvcResultMatchers.view().name("coachTransferRequest/coachTransferRequestSentList")).andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/coachTransferRequest/coachTransferRequestSentList.jsp"));
 	}
 
 	@WithAnonymousUser
 	@Test //CASO NEGATIVO
 	void testDontShowPlayerRequestsSentList() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/transfers/coaches/requests/sent"))
-			.andExpect(MockMvcResultMatchers.status().is3xxRedirection());
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/transfers/coaches/requests/sent")).andExpect(MockMvcResultMatchers.status().is3xxRedirection());
 	}
 
 	//
@@ -109,17 +93,14 @@ public class CoachTransferRequestE2ETests {
 	@WithMockUser(username = "presidente2", authorities = "president")
 	@Test //CASO POSITIVO
 	void testDeleteTransferPlayerRequest() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/transfers/coaches/requests/sent/delete/{requestId}", CoachTransferRequestE2ETests.TEST_MY_COACH_TRANSFER_REQUEST_ID))
-			.andExpect(MockMvcResultMatchers.status().is3xxRedirection())
-			.andExpect(MockMvcResultMatchers.view().name("redirect:/transfers/coaches/requests/sent"))
-			.andExpect(MockMvcResultMatchers.redirectedUrl("/transfers/coaches/requests/sent"));
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/transfers/coaches/requests/sent/delete/{requestId}", CoachTransferRequestE2ETests.TEST_MY_COACH_TRANSFER_REQUEST_ID)).andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+			.andExpect(MockMvcResultMatchers.view().name("redirect:/transfers/coaches/requests/sent")).andExpect(MockMvcResultMatchers.redirectedUrl("/transfers/coaches/requests/sent"));
 	}
 
 	@WithAnonymousUser
 	@Test //CASO NEGATIVO
 	void testDontDeleteTransferPlayerRequest() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/transfers/coaches/requests/sent/delete/{requestId}", CoachTransferRequestE2ETests.TEST_MY_COACH_TRANSFER_REQUEST_ID))
-			.andExpect(MockMvcResultMatchers.status().is3xxRedirection());
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/transfers/coaches/requests/sent/delete/{requestId}", CoachTransferRequestE2ETests.TEST_MY_COACH_TRANSFER_REQUEST_ID)).andExpect(MockMvcResultMatchers.status().is3xxRedirection());
 	}
 
 	//
@@ -127,54 +108,44 @@ public class CoachTransferRequestE2ETests {
 	@WithMockUser(username = "presidente1", authorities = "president")
 	@Test //CASO POSITIVO
 	void testViewTransferPlayerReceivedList() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/transfers/coaches/requests/received"))
-			.andExpect(MockMvcResultMatchers.status().isOk())
-			.andExpect(MockMvcResultMatchers.model().attributeExists("coachTransferRequests"))
-			.andExpect(MockMvcResultMatchers.view().name("coachTransferRequest/coachTransferRequestReceivedList"))
-			.andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/coachTransferRequest/coachTransferRequestReceivedList.jsp"));
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/transfers/coaches/requests/received")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("coachTransferRequests"))
+			.andExpect(MockMvcResultMatchers.view().name("coachTransferRequest/coachTransferRequestReceivedList")).andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/coachTransferRequest/coachTransferRequestReceivedList.jsp"));
 	}
 
 	@WithAnonymousUser
 	@Test //CASO NEGATIVO
 	void testDontViewTransferPlayerReceivedList() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/transfers/players/requests/received"))
-			.andExpect(MockMvcResultMatchers.status().is3xxRedirection());
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/transfers/players/requests/received")).andExpect(MockMvcResultMatchers.status().is3xxRedirection());
 	}
 
 	//
 
-	@WithMockUser(username = "presidente1", authorities = "president")
+	@WithMockUser(username = "owner5", authorities = "president")
 	@Test //CASO POSITIVO
 	void testRejectTransferPlayerRequest() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/transfers/coaches/requests/received/reject/{coachRequestId}", CoachTransferRequestE2ETests.TEST_MY_COACH_TRANSFER_REQUEST_ID))
-			.andExpect(MockMvcResultMatchers.status().is3xxRedirection())
-			.andExpect(MockMvcResultMatchers.view().name("redirect:/transfers/coaches/requests/received"))
-			.andExpect(MockMvcResultMatchers.redirectedUrl("/transfers/coaches/requests/received"));
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/transfers/coaches/requests/received/reject/{coachRequestId}", CoachTransferRequestE2ETests.TEST_MY_COACH_TRANSFER_REQUEST_ID)).andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+			.andExpect(MockMvcResultMatchers.view().name("redirect:/transfers/coaches/requests/received")).andExpect(MockMvcResultMatchers.redirectedUrl("/transfers/coaches/requests/received"));
 	}
 
 	@WithAnonymousUser
 	@Test //CASO NEGATIVO
 	void testDontRejectTransferPlayerRequest() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/transfers/coaches/requests/received/reject/{coachId}", CoachTransferRequestE2ETests.TEST_MY_COACH_TRANSFER_REQUEST_ID))
-			.andExpect(MockMvcResultMatchers.status().is3xxRedirection());
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/transfers/coaches/requests/received/reject/{coachId}", CoachTransferRequestE2ETests.TEST_MY_COACH_TRANSFER_REQUEST_ID)).andExpect(MockMvcResultMatchers.status().is3xxRedirection());
 	}
 
 	//
 
-	@WithMockUser(username = "presidente1", authorities = "president")
+	@WithMockUser(username = "owner5", authorities = "president")
 	@Test //CASO POSITIVO
 	void testAcceptTransferPlayerRequest() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/transfers/coaches/requests/received/accept/{playerId}", CoachTransferRequestE2ETests.TEST_MY_COACH_TRANSFER_REQUEST_ID))
-			.andExpect(MockMvcResultMatchers.status().is3xxRedirection())
-			.andExpect(MockMvcResultMatchers.view().name("redirect:/transfers/coaches/requests/received"))
-			.andExpect(MockMvcResultMatchers.redirectedUrl("/transfers/coaches/requests/received"));
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/transfers/coaches/requests/received/accept/{playerId}", CoachTransferRequestE2ETests.TEST_MY_COACH_TRANSFER_REQUEST_ID)).andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+			.andExpect(MockMvcResultMatchers.view().name("redirect:/transfers/coaches/requests/received")).andExpect(MockMvcResultMatchers.redirectedUrl("/transfers/coaches/requests/received"));
 	}
 
 	@WithAnonymousUser
 	@Test //CASO NEGATIVO
 	void testDontAcceptTransferPlayerRequest() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/transfers/coaches/requests/received/accept/{playerId}", CoachTransferRequestE2ETests.TEST_MY_COACH_TRANSFER_REQUEST_ID))
-			.andExpect(MockMvcResultMatchers.status().is3xxRedirection());
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/transfers/coaches/requests/received/accept/{playerId}", CoachTransferRequestE2ETests.TEST_MY_COACH_TRANSFER_REQUEST_ID)).andExpect(MockMvcResultMatchers.status().is3xxRedirection());
 	}
 
 }
