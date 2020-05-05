@@ -55,13 +55,13 @@
 	
 		<div style="margin-top:2%; width: 38%; height: 10%;float:right; margin-left:0px; background-color:#d4d4d4; border: 5px solid grey; box-shadow: 10px 10px 5px #3e3e3e57;">	
  			<div class="th-center" style="height: 60px; background-color:#d4d4d4; text-aling:center">
-	 	 		<input type="button" class="myButtonFreeAgent" value="${coachTransferRequestSent}" onclick="window.location='/transfers/coachs/requests/sent'"/>
+	 	 		<input type="button" class="myButtonFreeAgent" value="${coachTransferRequestSent}" onclick="window.location='/transfers/coaches/requests/sent'"/>
 			</div>	
     	</div>
     	
     	<div style="margin-top:2%; margin-bottom: 2%; width: 38%; height: 10%;float:right; margin-left: 20px; background-color:#d4d4d4; border: 5px solid grey; box-shadow: 10px 10px 5px #3e3e3e57;">	
  			<div class="th-center" style="height: 60px; background-color:#d4d4d4; text-aling:center">
-	 	 		<input type="button" class="myButtonFreeAgent" value="${coachTransferRequestReceived}" onclick="window.location='/transfers/coachs/requests/received'"/>
+	 	 		<input type="button" class="myButtonFreeAgent" value="${coachTransferRequestReceived}" onclick="window.location='/transfers/coaches/requests/received'"/>
 			</div>	
     	</div>
 	
@@ -92,7 +92,7 @@
 			
 			<c:choose>
                     <c:when test="${status == true}">
-                        <input type="button" class="myButtonCoach" onclick="window.location='/transfers/coachs'"/>
+                        <input type="button" class="myButtonCoach" onclick="window.location='/transfers/coaches'"/>
                     </c:when>
                     <c:otherwise>
                         <input type="button" class="myButtonCoach" data-toggle="tooltip" title="Publica tu club para poder acceder"/>
@@ -111,7 +111,7 @@
     	
     		<div style="margin-top:2%; width: 38%; height: 10%;float:left; margin-left:20px; background-color:#d4d4d4; border: 5px solid grey; box-shadow: 10px 10px 5px #3e3e3e57;">	
  				<div class="th-center" style="height: 60px; background-color:#d4d4d4; text-aling:center">
- 		 			<input type="button" class="myButtonFreeAgent" value="${CoachsFreeTitle}" onclick="window.location='/transfers/coachs/free-agents'"/>
+ 		 			<input type="button" class="myButtonFreeAgent" value="${CoachsFreeTitle}" onclick="window.location='/transfers/coaches/free-agents'"/>
 				</div>	
         	</div>
         </div>	

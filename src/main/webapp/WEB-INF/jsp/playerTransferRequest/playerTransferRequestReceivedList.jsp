@@ -8,8 +8,8 @@
 
 <petclinic:layout pageName="playerTransferRequestsSent">
 	
-	<fmt:message key="code.message.transferrequest.acceptConfirmation" var="confirmationMessage" /> 
-	<fmt:message key="code.message.transferrequest.deleteConfirmation" var="deleteMessage" /> 
+	<fmt:message key="code.message.playertransferrequest.acceptConfirmation" var="confirmationMessage" /> 
+	<fmt:message key="code.message.playertransferrequest.deleteConfirmation" var="deleteMessage" /> 
 	
 	<h2 style="color:black"><fmt:message key="code.title.playertransferrequestsentlist"/></h2>
  		<table id="vetsTable" class="table table-striped">

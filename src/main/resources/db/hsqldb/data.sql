@@ -372,4 +372,6 @@ INSERT INTO fan VALUES ( 1, null, null, null, false, 1, 1 );
 INSERT INTO player_transfer_request(id, offer, contract_time, status, player_id, contract_id, club_id) VALUES(0, 2000000, 1, 0, 1, 1, '2');
 INSERT INTO player_transfer_request(id, offer, contract_time, status, player_id, contract_id, club_id) VALUES(1, 2000000, 2, 0, 14, 18, '1');
 
+-- Coach Transfer Requests
+INSERT INTO coach_transfer_request(id, offer, status, my_coach, requested_coach) VALUES(0, 1000000, 0, 2, 1);
 

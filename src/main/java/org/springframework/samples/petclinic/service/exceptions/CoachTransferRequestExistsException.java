@@ -1,7 +1,7 @@
 
 package org.springframework.samples.petclinic.service.exceptions;
 
-public class SalaryException extends Exception {
+public class CoachTransferRequestExistsException extends Exception {
 
 	/**
 	 *

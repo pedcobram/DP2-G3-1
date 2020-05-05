@@ -59,7 +59,7 @@ public class TransferController {
 		return "transfers/transferPanel";
 	}
 
-	@GetMapping(value = "/transfers/coachs") //LISTA DE ENTRENADORES
+	@GetMapping(value = "/transfers/coaches") //LISTA DE ENTRENADORES
 	public String showCoachList(final Map<String, Object> model) throws CredentialException {
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -80,11 +80,11 @@ public class TransferController {
 		coachs.remove(this.coachService.findCoachByClubId(footballClub.getId()));
 		model.put("coachs", coachs);
 
-		return "coachs/coachList";
+		return "transfers/coachList";
 
 	}
 
-	@GetMapping(value = "/transfers/coachs/free-agents") //LISTA DE ENTRENADORES LIBRES
+	@GetMapping(value = "/transfers/coaches/free-agents") //LISTA DE ENTRENADORES LIBRES
 	public String showCoachFAList(final Map<String, Object> model) throws CredentialException {
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
