@@ -2,7 +2,10 @@
 package org.springframework.samples.petclinic.web;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -12,9 +15,17 @@ import javax.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.samples.petclinic.model.Calendary;
 import org.springframework.samples.petclinic.model.Competition;
+import org.springframework.samples.petclinic.model.FootballClub;
+import org.springframework.samples.petclinic.model.Jornada;
+import org.springframework.samples.petclinic.model.Match;
 import org.springframework.samples.petclinic.model.Enum.CompetitionType;
+import org.springframework.samples.petclinic.model.Enum.MatchStatus;
 import org.springframework.samples.petclinic.service.CompetitionService;
+import org.springframework.samples.petclinic.service.FootballClubService;
+import org.springframework.samples.petclinic.service.MatchService;
+import org.springframework.samples.petclinic.service.RefereeService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -26,6 +37,7 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -36,10 +48,22 @@ public class CompetitionController {
 	@Autowired
 	private final CompetitionService	competitionService;
 
+	@Autowired
+	private final FootballClubService	footballClubService;
 
 	@Autowired
-	public CompetitionController(final CompetitionService competitionService) {
+	private final RefereeService		refereeService;
+
+	@Autowired
+	private final MatchService			matchService;
+
+
+	@Autowired
+	public CompetitionController(final CompetitionService competitionService, final FootballClubService footballClubService, final RefereeService refereeService, final MatchService matchService) {
 		this.competitionService = competitionService;
+		this.footballClubService = footballClubService;
+		this.refereeService = refereeService;
+		this.matchService = matchService;
 	}
 
 	@InitBinder
@@ -229,4 +253,107 @@ public class CompetitionController {
 
 		return mav;
 	}
+
+	@SuppressWarnings("unused")
+	@RequestMapping(value = "/competition/{competitionId}/publish") //PUBLICAR COMPETITION
+	public String initPublishCompetitionForm(@PathVariable("competitionId") final int compId, final Map<String, Object> model) throws CredentialException {
+
+		Competition comp = this.competitionService.findCompetitionById(compId);
+
+		model.put("competition", comp);
+
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
+
+		if (!currentPrincipalName.equals(comp.getCreator()) || comp.getStatus() == true) { //SEGURIDAD
+			throw new CredentialException("Forbidden Access");
+		}
+
+		if (comp.getType().equals(CompetitionType.LEAGUE)) {
+
+			List<String> equipos = comp.getClubs();
+			List<String> equipos2 = comp.getClubs();
+			Collections.reverse(equipos2);
+
+			Date fechaPartido = new Date(System.currentTimeMillis() - 1);
+
+			List<Match> competitionMatches = new ArrayList<Match>();
+
+			//Creamos el calendario
+
+			Calendary calendary = new Calendary();
+			calendary.setCompetition(comp);
+			this.competitionService.saveCalendary(calendary);
+
+			//Creamos las jornadas
+
+			Integer N = equipos.size();
+
+			for (int i = 0; i < N * 2 - 2; i++) {
+
+				int numero = i + 1;
+				Jornada j = new Jornada();
+				j.setCalendary(calendary);
+				j.setName("Jornada" + numero);
+				this.competitionService.saveJornada(j);
+			}
+
+			Collection<Jornada> jornadas = this.competitionService.findAllJornadasFromCompetitionId(compId);
+
+			int jornadasCount = 0;
+
+			for (Jornada a : jornadas) {
+
+				int contador = 1;
+				int i = 0;
+				int j = equipos.size() - 1;
+				FootballClub club = new FootballClub();
+				FootballClub club2 = new FootballClub();
+
+				while (contador <= equipos.size() / 2) {
+
+					club = this.footballClubService.findFootballClubByName(equipos.get(i));
+					club2 = this.footballClubService.findFootballClubByName(equipos.get(j));
+
+					Match newMatch = new Match();
+
+					Calendar cal = Calendar.getInstance();
+					cal.setTime(fechaPartido);
+					cal.add(Calendar.HOUR, 2);
+					fechaPartido = cal.getTime();
+
+					newMatch.setCreator(currentPrincipalName);
+					newMatch.setFootballClub1(club);
+					newMatch.setFootballClub2(club2);
+					newMatch.setMatchDate(fechaPartido);
+					newMatch.setMatchStatus(MatchStatus.TO_BE_PLAYED);
+					newMatch.setStadium(club.getStadium());
+					newMatch.setTitle("Partido de Liga");
+					newMatch.setReferee(this.refereeService.findRefereeById(1));
+					newMatch.setJornada(a);
+
+					this.competitionService.saveMatch(newMatch);
+
+					contador++;
+					i++;
+					j--;
+
+				}
+
+				Collections.rotate(equipos, 1);
+
+				Calendar cal = Calendar.getInstance();
+				cal.setTime(fechaPartido);
+
+				cal.add(Calendar.HOUR, 44);
+				fechaPartido = cal.getTime();
+
+				jornadasCount++;
+
+			}
+		}
+
+		return "redirect:/competitions/" + compId;
+	}
+
 }

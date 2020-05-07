@@ -78,6 +78,12 @@
     	<!-- Gestionar Equipos -->  
     	
     		<a data-toggle="tooltip" title="${mousehover}" href="${fn:escapeXml(clubUrl)}" class="btn btn-default">${showClub}</a> 	
+    		
+    	<!-- Publicar Competición-->  
+    		<spring:url value="/competition/{competitionId}/publish" var="publishUrl">
+		   		<spring:param name="competitionId" value="${competition.id}"/>
+    		</spring:url>
+    		<a data-toggle="tooltip" title="${mousehover}" href="${fn:escapeXml(publishUrl)}" class="btn btn-default2">PUBLICAR Y GENERAR CALENDARIO</a> 
     	</c:if> 
      
  </jsp:body> 

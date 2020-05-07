@@ -7,6 +7,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -60,4 +61,10 @@ public class Match extends BaseEntity {
 
 	@Column(name = "creator")
 	private String			creator; //Será el username
+
+	//OPCIONAL - PARA LAS COMPETICIONES
+	@ManyToOne(optional = true)
+	@JoinColumn(name = "jornada_id")
+	private Jornada			jornada;
+
 }

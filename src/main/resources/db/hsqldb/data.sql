@@ -301,3 +301,12 @@ INSERT INTO football_player_match_statistic(id, assists, goals, yellow_cards, re
 --Fan Records
 INSERT INTO fan VALUES ( 1, null, null, null, false, 1, 1 );
 
+--Competitions
+
+INSERT INTO competitions(id, name, description, type, reward, status, creator) VALUES (1, 'Premier League', 'Torneo donde los equipos participantes jugarán todos contra todos.', 0, 10000000, false, 'pedro' );
+
+INSERT INTO competition_clubs(competition_id, clubs) VALUES (1, 'Sevilla Fútbol Club');
+INSERT INTO competition_clubs(competition_id, clubs) VALUES (1, 'Manchester City Football Club');
+INSERT INTO competition_clubs(competition_id, clubs) VALUES (1, 'Liverpool Football Club');
+INSERT INTO competition_clubs(competition_id, clubs) VALUES (1, 'Real Betis Balompié');
+

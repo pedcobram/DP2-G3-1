@@ -21,8 +21,11 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.samples.petclinic.model.Calendary;
 import org.springframework.samples.petclinic.model.Competition;
 import org.springframework.samples.petclinic.model.FootballClub;
+import org.springframework.samples.petclinic.model.Jornada;
+import org.springframework.samples.petclinic.model.Match;
 import org.springframework.samples.petclinic.repository.CompetitionRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -50,6 +53,16 @@ public class CompetitionService {
 	}
 
 	@Transactional
+	public Collection<Match> findAllMatchByJornadaId(final Integer jornadaId) {
+		return this.competitionRepository.findAllMatchByJornadaId(jornadaId);
+	}
+
+	@Transactional
+	public Collection<Match> findAllMatchByCompetitionId(final Integer compId) {
+		return this.competitionRepository.findAllMatchByCompetitionId(compId);
+	}
+
+	@Transactional
 	public Collection<Competition> findMyCompetitions(final String username) throws DataAccessException {
 		return this.competitionRepository.findMyCompetitions(username);
 	}
@@ -57,6 +70,11 @@ public class CompetitionService {
 	@Transactional
 	public Collection<FootballClub> findAllPublishedClubs() throws DataAccessException {
 		return this.competitionRepository.findAllPublishedClubs();
+	}
+
+	@Transactional
+	public Collection<Jornada> findAllJornadasFromCompetitionId(final Integer compId) {
+		return this.competitionRepository.findAllJornadasFromCompetitionId(compId);
 	}
 
 	@Transactional
@@ -70,6 +88,24 @@ public class CompetitionService {
 		Collection<String> res = this.competitionRepository.findAllPublishedClubs().stream().map(x -> x.getName()).collect(Collectors.toList());
 		res.removeAll(this.competitionRepository.findById(competitionId).getClubs());
 		return res;
+	}
+
+	@Transactional
+	public void saveCalendary(final Calendary calendary) throws DataAccessException {
+		this.competitionRepository.save(calendary);
+
+	}
+
+	@Transactional
+	public void saveMatch(final Match newMatch) throws DataAccessException {
+		this.competitionRepository.save(newMatch);
+
+	}
+
+	@Transactional
+	public void saveJornada(final Jornada j) throws DataAccessException {
+		this.competitionRepository.save(j);
+
 	}
 
 }
