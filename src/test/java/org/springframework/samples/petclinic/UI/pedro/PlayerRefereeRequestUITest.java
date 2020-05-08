@@ -56,14 +56,14 @@ public class PlayerRefereeRequestUITest {
 	//
 
 	@Test
-	public void R23Positivo_FicharJugadoresDeOtroEquipo() throws Exception {
+	public void R21Positivo_FicharJugadoresDeOtroEquipo() throws Exception {
 		this.comoPresidente("presidente2");
 		this.puedoSolicitarUnTraspasoDeJugadorAOtroPresidenteYQueLoAcepte("presidente1");
 		this.paraAñadirloAMiEquipoYMerjorarMiPlantilla();
 	}
 
 	@Test
-	public void R23Negativo_FicharJugadorDeOtroEquipo() throws Exception {
+	public void R21Negativo_FicharJugadorDeOtroEquipo() throws Exception {
 		this.comoPresidente("presidente2");
 		this.puedoSolicitarUnTraspasoAlPresidenteDeOtroEquipoConCantidadInferiorAUnDecimoDeSuValor();
 		this.entoncesSeMostraraUnMensajeDeErrorIndicandolo();

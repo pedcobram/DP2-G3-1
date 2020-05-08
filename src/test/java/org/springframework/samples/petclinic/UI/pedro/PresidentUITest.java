@@ -69,27 +69,27 @@ public class PresidentUITest {
 	}
 
 	@Test
-	public void R12Positivo_PresidenteAceptarPartido() throws Exception {
+	public void R10Positivo_PresidenteAceptarPartido() throws Exception {
 		this.setupR12();
 		this.comoPresidente("presidente2");
 		this.podraAceptarORechazarPartidosAmistosos();
 	}
 
 	@Test
-	public void R12Negativo_PresidenteAceptarPartido() throws Exception {
+	public void R10Negativo_PresidenteAceptarPartido() throws Exception {
 		this.comoPresidente("presidente1");
 		this.NoPodraAceptarInvitacionesAPartidosConMismaFechaQueOtroYaAceptado();
 	}
 
 	@Test
-	public void R20Positivo_PresidenteVerEstadisticasActaActualizadas() throws Exception {
+	public void R18Positivo_PresidenteVerEstadisticasActaActualizadas() throws Exception {
 		this.cuandoUnArbitroCierreElActaDeUnPartido();
 		this.comoPresidente("presidente1");
 		this.sePodranVisualizarLasEstadisticasDeLosJugadores();
 	}
 
 	@Test
-	public void R20Negativo_PresidenteVerEstadisticasActaActualizadas() throws Exception {
+	public void R18Negativo_PresidenteVerEstadisticasActaActualizadas() throws Exception {
 		this.comoPresidente("presidente1");
 		this.siIntentoModificarUnActaDePartidoSeMeRedirigiraALaVistaDeError();
 	}

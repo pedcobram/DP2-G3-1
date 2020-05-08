@@ -56,14 +56,14 @@ public class CoachRefereeRequestUITest {
 	//
 
 	@Test
-	public void R23Positivo_FicharEntrenadorDeOtroEquipo() throws Exception {
+	public void R21Positivo_FicharEntrenadorDeOtroEquipo() throws Exception {
 		this.comoPresidente("presidente1");
 		this.puedoSolicitarUnTraspasoDeEntrenadorAlPresidenteDeOtroEquipoYQueLoAcepte();
 		this.paraIntercambiarEntrenadoresEntreEquiposPagandoLaClausulaDeCesionYElSalario();
 	}
 
 	@Test
-	public void R23Negativo_FicharEntrenadorDeOtroEquipo() throws Exception {
+	public void R21Negativo_FicharEntrenadorDeOtroEquipo() throws Exception {
 		this.comoPresidente("presidente1");
 		this.puedoSolicitarUnTraspasoDeEntrenadorAlPresidenteDeOtroEquipo();
 		this.siLaCantidadEsInferiorA100000SeMostraraUnError();

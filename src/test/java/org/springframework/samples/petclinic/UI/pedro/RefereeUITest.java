@@ -54,34 +54,34 @@ public class RefereeUITest {
 	}
 
 	@Test
-	public void R13Positivo_RefereeAceptarPeticionPartido() throws Exception {
+	public void R11Positivo_RefereeAceptarPeticionPartido() throws Exception {
 		this.comoArbitro("referee1");
 		this.puedoAceptarORechazarPeticionesDeArbitroAPartidosAmistosos();
 	}
 
 	@Test
-	public void R14Positivo_RefereeEditarActaPartido() throws Exception {
+	public void R12Positivo_RefereeEditarActaPartido() throws Exception {
 		this.comoArbitro("referee1");
 		this.cuandoAccedaAlFormularioDeEdicionDelActaDeUnPartidoAceptado();
 		this.entoncesPodreModificarLosDatosDelActa();
 	}
 
 	@Test
-	public void R14Negativo_RefereeEditarActaPartido() throws Exception {
+	public void R12Negativo_RefereeEditarActaPartido() throws Exception {
 		this.comoArbitro("referee1");
 		this.cuandoAccedaAlFormularioDeEdicionDelActaDeUnPartidoQueYoNoHayaAceptado();
 		this.entoncesSeMeRedirigiraALaVistaDeError();
 	}
 
 	@Test
-	public void R15Positivo_RefereeEditarFinalizarPartido() throws Exception {
+	public void R13Positivo_RefereeEditarFinalizarPartido() throws Exception {
 		this.comoArbitro("referee1");
 		this.cuandoAccedaAlFormularioDeEdicionDelActaDePartido();
 		this.entoncesPodreEditarElActa();
 	}
 
 	@Test
-	public void R15Negativo_RefereeEditarFinalizarPartido() throws Exception {
+	public void R13Negativo_RefereeEditarFinalizarPartido() throws Exception {
 		this.comoArbitro("referee1");
 		this.cuandoAccedaAlFormularaioDeEdicionDeActaEIntentePublicarloSinResultado();
 		this.entoncesSeMostraraUnErrorIndicandolo();
