@@ -108,4 +108,15 @@ public class CompetitionService {
 
 	}
 
+	@Transactional
+	public Calendary findCalendaryByCompetitionId(final int competitionId) {
+		return this.competitionRepository.findCalendaryByCompetitionId(competitionId);
+	}
+
+	@Transactional
+	public Jornada findJornadaById(final int jornadaId) {
+
+		return this.competitionRepository.findJornadaById(jornadaId);
+	}
+
 }

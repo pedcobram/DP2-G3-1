@@ -34,4 +34,8 @@ public interface CompetitionRepository {
 
 	Collection<Match> findAllMatchByCompetitionId(Integer compId) throws DataAccessException;
 
+	Calendary findCalendaryByCompetitionId(int competitionId) throws DataAccessException;
+
+	Jornada findJornadaById(int jornadaId) throws DataAccessException;
+
 }

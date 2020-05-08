@@ -6,6 +6,7 @@ import java.util.Collection;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
+import org.springframework.samples.petclinic.model.Calendary;
 import org.springframework.samples.petclinic.model.Competition;
 import org.springframework.samples.petclinic.model.FootballClub;
 import org.springframework.samples.petclinic.model.Jornada;
@@ -44,4 +45,12 @@ public interface SpringDataCompetitionRepository extends CompetitionRepository, 
 	@Override
 	@Query("select m from Match m where m.jornada.calendary.competition.id = ?1")
 	Collection<Match> findAllMatchByCompetitionId(final Integer compId);
+
+	@Override
+	@Query("select c from Calendary c where c.competition.id = ?1")
+	Calendary findCalendaryByCompetitionId(int competitionId);
+
+	@Override
+	@Query("select j from Jornada j where j.id = ?1")
+	Jornada findJornadaById(int jornadaId);
 }

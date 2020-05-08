@@ -83,8 +83,14 @@
     		<spring:url value="/competition/{competitionId}/publish" var="publishUrl">
 		   		<spring:param name="competitionId" value="${competition.id}"/>
     		</spring:url>
-    		<a data-toggle="tooltip" title="${mousehover}" href="${fn:escapeXml(publishUrl)}" class="btn btn-default2">PUBLICAR Y GENERAR CALENDARIO</a> 
+    		<a data-toggle="tooltip" title="${mousehover}" href="${fn:escapeXml(publishUrl)}" class="btn btn-default2">PUBLICAR COMPETICIÓN Y GENERAR CALENDARIO</a> 
     	</c:if> 
-     
+    	<!-- Calendario Competición-->  
+    	<c:if test="${competition.status == true}">
+    	<spring:url value="/competitions/{competitionId}/calendary" var="calendaryUrl">
+		   		<spring:param name="competitionId" value="${competition.id}"/>
+    		</spring:url>
+    		<a data-toggle="tooltip" title="${mousehover}" href="${fn:escapeXml(calendaryUrl)}" class="btn btn-default">Calendario</a>
+     	</c:if> 
  </jsp:body> 
 </petclinic:layout>

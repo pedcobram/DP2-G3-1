@@ -59,7 +59,7 @@ public class CompetitionController {
 
 
 	@Autowired
-	public CompetitionController(final CompetitionService competitionService, final FootballClubService footballClubService, final RefereeService refereeService, final MatchService matchService) {
+	public CompetitionController(final CompetitionService competitionService, final MatchService matchService, final FootballClubService footballClubService, final RefereeService refereeService) {
 		this.competitionService = competitionService;
 		this.footballClubService = footballClubService;
 		this.refereeService = refereeService;
@@ -94,6 +94,37 @@ public class CompetitionController {
 		mav.addObject(this.competitionService.findCompetitionById(competitionId));
 		mav.addObject("size", this.competitionService.findCompetitionById(competitionId).getClubs().size());
 
+		return mav;
+	}
+
+	@GetMapping("/competitions/{competitionId}/calendary") //VISTA DETALLADA DE CALENDARIO
+	public ModelAndView showCalendary(@PathVariable("competitionId") final int competitionId) {
+
+		ModelAndView mav = new ModelAndView("competitions/calendaryDetails");
+		mav.addObject(this.competitionService.findCalendaryByCompetitionId(competitionId));
+		mav.addObject("jornadas", this.competitionService.findAllJornadasFromCompetitionId(competitionId));
+
+		return mav;
+	}
+
+	@GetMapping("/competitions/{competitionId}/calendary/jornada/{jornadaId}/match/{matchId}") //VISTA DETALLADA DE PARTIDO
+	public ModelAndView showMatch(@PathVariable("matchId") final int matchId) throws CredentialException {
+
+		Match match = this.matchService.findMatchById(matchId);
+
+		ModelAndView mav = new ModelAndView("competitions/matchDetails");
+
+		mav.addObject(match);
+
+		return mav;
+	}
+
+	@GetMapping("/competitions/{competitionId}/calendary/jornada/{jornadaId}") //VISTA DETALLADA DE JORNADA
+	public ModelAndView showJornada(@PathVariable("jornadaId") final int jornadaId) {
+
+		ModelAndView mav = new ModelAndView("competitions/jornadasDetails");
+		mav.addObject(this.competitionService.findJornadaById(jornadaId));
+		mav.addObject("partidos", this.competitionService.findAllMatchByJornadaId(jornadaId));
 		return mav;
 	}
 
@@ -186,7 +217,7 @@ public class CompetitionController {
 			return CompetitionController.VIEWS_COMPETITION_CREATE_OR_UPDATE_FORM;
 		} else {
 
-			BeanUtils.copyProperties(competition, compToUpdate, "id", "creator");
+			BeanUtils.copyProperties(competition, compToUpdate, "id", "creator", "clubs", "status");
 
 			this.competitionService.saveCompetition(compToUpdate);
 
@@ -225,6 +256,7 @@ public class CompetitionController {
 
 		return mav;
 	}
+
 	@GetMapping("/competition/{competitionId}/clubs") //VER EQUIPOS DE LA COMPETICIÓN
 	public ModelAndView showClubsMycomp(@PathVariable("competitionId") final int competitionId) {
 
@@ -238,6 +270,7 @@ public class CompetitionController {
 
 		return mav;
 	}
+
 	@PostMapping("/competition/{competitionId}/clubs") //BORRAR EQUIPOS A COMPETICIÓN
 	public ModelAndView deleteClub(@PathVariable("competitionId") final int competitionId, @ModelAttribute("clubs") final String club) {
 
@@ -254,7 +287,6 @@ public class CompetitionController {
 		return mav;
 	}
 
-	@SuppressWarnings("unused")
 	@RequestMapping(value = "/competition/{competitionId}/publish") //PUBLICAR COMPETITION
 	public String initPublishCompetitionForm(@PathVariable("competitionId") final int compId, final Map<String, Object> model) throws CredentialException {
 
@@ -294,19 +326,18 @@ public class CompetitionController {
 				int numero = i + 1;
 				Jornada j = new Jornada();
 				j.setCalendary(calendary);
-				j.setName("Jornada" + numero);
+				j.setName("Jornada " + numero);
 				this.competitionService.saveJornada(j);
 			}
 
 			Collection<Jornada> jornadas = this.competitionService.findAllJornadasFromCompetitionId(compId);
-
-			int jornadasCount = 0;
 
 			for (Jornada a : jornadas) {
 
 				int contador = 1;
 				int i = 0;
 				int j = equipos.size() - 1;
+
 				FootballClub club = new FootballClub();
 				FootballClub club2 = new FootballClub();
 
@@ -348,10 +379,11 @@ public class CompetitionController {
 				cal.add(Calendar.HOUR, 44);
 				fechaPartido = cal.getTime();
 
-				jornadasCount++;
-
 			}
 		}
+
+		comp.setStatus(true);
+		this.competitionService.saveCompetition(comp);
 
 		return "redirect:/competitions/" + compId;
 	}
