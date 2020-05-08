@@ -27,8 +27,12 @@ import org.springframework.samples.petclinic.model.FootballClub;
 import org.springframework.samples.petclinic.model.Jornada;
 import org.springframework.samples.petclinic.model.Match;
 import org.springframework.samples.petclinic.repository.CompetitionRepository;
+import org.springframework.samples.petclinic.service.exceptions.DuplicatedNameException;
+import org.springframework.samples.petclinic.service.exceptions.NotEnoughMoneyException;
+import org.springframework.samples.petclinic.service.exceptions.StatusException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 @Service
 public class CompetitionService {
@@ -78,7 +82,39 @@ public class CompetitionService {
 	}
 
 	@Transactional
-	public void saveCompetition(final Competition competition) throws DataAccessException {
+	public void saveCompetition(final Competition competition) throws DataAccessException, DuplicatedNameException, NotEnoughMoneyException, StatusException {
+
+		String name = competition.getName().toLowerCase();
+		Competition otherComp = null;
+
+		//Creamos un "otherFootClub" si existe uno en la db con el mismo nombre y diferente id
+		for (Competition o : this.competitionRepository.findAllCompetition()) {
+			String compName = o.getName();
+			compName = compName.toLowerCase();
+			if (compName.equals(name) && o.getId() != competition.getId()) {
+				otherComp = o;
+			}
+		}
+
+		//RN: El nombre no puede ser el mismo
+		if (StringUtils.hasLength(competition.getName()) && otherComp != null && otherComp.getId() != competition.getId()) {
+			throw new DuplicatedNameException();
+		}
+
+		//RN: La recompensa mínima deberá de ser de 5.000.000 €
+
+		if (competition.getReward() < 5000000) {
+			throw new NotEnoughMoneyException();
+		}
+
+		//RN: A la hora de publicar: Las ligas solo podrán ser de número Par y de 4 equipos en adelante (4, 6, 8, 10, etc...)
+		if (competition.getStatus() == true) {
+			if (competition.getClubs().size() < 4 || competition.getClubs().size() % 2 != 0) {
+				competition.setStatus(false);
+				throw new StatusException();
+			}
+		}
+
 		this.competitionRepository.save(competition);
 
 	}

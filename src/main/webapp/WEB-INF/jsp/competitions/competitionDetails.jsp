@@ -63,6 +63,8 @@
         
      </table>
      
+     
+     
      <c:if test="${(competition.creator == principalUsername) && competition.status == false}">
     		<spring:url value="/competition/{competitionId}/edit" var="editUrl">
 		   		<spring:param name="competitionId" value="${competition.id}"/>
@@ -92,5 +94,14 @@
     		</spring:url>
     		<a data-toggle="tooltip" title="${mousehover}" href="${fn:escapeXml(calendaryUrl)}" class="btn btn-default">Calendario</a>
      	</c:if> 
+     	
+     	<c:if test="${statusError == true}">
+     		<br>
+     		<br>	
+    		<p style="color:red"> En el formato liga deben haber mínimo 4 equipos y deben ser pares (4, 6, 8, 10...)</p>
+    		<br>	
+    	</c:if>
+     	
+     	
  </jsp:body> 
 </petclinic:layout>

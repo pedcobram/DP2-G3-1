@@ -26,6 +26,9 @@ import org.springframework.samples.petclinic.service.CompetitionService;
 import org.springframework.samples.petclinic.service.FootballClubService;
 import org.springframework.samples.petclinic.service.MatchService;
 import org.springframework.samples.petclinic.service.RefereeService;
+import org.springframework.samples.petclinic.service.exceptions.DuplicatedNameException;
+import org.springframework.samples.petclinic.service.exceptions.NotEnoughMoneyException;
+import org.springframework.samples.petclinic.service.exceptions.StatusException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -163,7 +166,7 @@ public class CompetitionController {
 	}
 
 	@PostMapping(value = "/competition/new") //CREAR COMPETICIÓN - POST
-	public String processCreationForm(@Valid final Competition competition, final BindingResult result, final Model model) throws DataAccessException {
+	public String processCreationForm(@Valid final Competition competition, final BindingResult result, final Model model) throws DataAccessException, StatusException {
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String currentPrincipalName = authentication.getName();
@@ -174,9 +177,17 @@ public class CompetitionController {
 			return CompetitionController.VIEWS_COMPETITION_CREATE_OR_UPDATE_FORM;
 		} else {
 
-			competition.setStatus(false);
-			competition.setCreator(currentPrincipalName);
-			this.competitionService.saveCompetition(competition);
+			try {
+				competition.setStatus(false);
+				competition.setCreator(currentPrincipalName);
+				this.competitionService.saveCompetition(competition);
+			} catch (DuplicatedNameException e) {
+				result.rejectValue("name", "duplicate", "already exists");
+				return CompetitionController.VIEWS_COMPETITION_CREATE_OR_UPDATE_FORM;
+			} catch (NotEnoughMoneyException e) {
+				result.rejectValue("reward", "duplicate", "Cantidad de recompensa mínima: 5.000.000 €");
+				return CompetitionController.VIEWS_COMPETITION_CREATE_OR_UPDATE_FORM;
+			}
 		}
 		return "redirect:/competitions/" + competition.getId();
 	}
@@ -199,8 +210,8 @@ public class CompetitionController {
 		return CompetitionController.VIEWS_COMPETITION_CREATE_OR_UPDATE_FORM;
 	}
 
-	@PostMapping(value = "/competition/{competitionId}/edit") //EDITAR CLUB - POST
-	public String processUpdateFootballClubForm(@Valid final Competition competition, final BindingResult result, @PathVariable("competitionId") final Integer compId, final Model model) throws DataAccessException, CredentialException {
+	@PostMapping(value = "/competition/{competitionId}/edit") //EDITAR COMPETICION - POST
+	public String processUpdateFootballClubForm(@Valid final Competition competition, final BindingResult result, @PathVariable("competitionId") final Integer compId, final Model model) throws DataAccessException, CredentialException, StatusException {
 
 		model.addAttribute("isEditing", true);
 
@@ -219,11 +230,21 @@ public class CompetitionController {
 
 			BeanUtils.copyProperties(competition, compToUpdate, "id", "creator", "clubs", "status");
 
-			this.competitionService.saveCompetition(compToUpdate);
+			try {
+
+				this.competitionService.saveCompetition(compToUpdate);
+			} catch (NotEnoughMoneyException e) {
+				result.rejectValue("reward", "duplicate", "Cantidad de recompensa mínima: 5.000.000 €");
+				return CompetitionController.VIEWS_COMPETITION_CREATE_OR_UPDATE_FORM;
+			} catch (DuplicatedNameException e) {
+				result.rejectValue("name", "duplicate", "already exists");
+				return CompetitionController.VIEWS_COMPETITION_CREATE_OR_UPDATE_FORM;
+			}
 
 			return "redirect:/competitions/" + compId;
 
 		}
+
 	}
 
 	@GetMapping("/competition/{competitionId}/addClubs") //AÑADIR EQUIPOS A COMPETICIÓN
@@ -242,7 +263,7 @@ public class CompetitionController {
 		return mav;
 	}
 	@PostMapping("/competition/{competitionId}/addClubs") //AÑADIR EQUIPOS A COMPETICIÓN
-	public ModelAndView addClub(@PathVariable("competitionId") final int competitionId, @ModelAttribute("clubs") final String club) {
+	public ModelAndView addClub(@PathVariable("competitionId") final int competitionId, @ModelAttribute("clubs") final String club) throws DataAccessException, DuplicatedNameException {
 
 		Competition thisComp = this.competitionService.findCompetitionById(competitionId);
 
@@ -250,7 +271,11 @@ public class CompetitionController {
 		newClubs.add(club);
 		thisComp.setClubs(newClubs);
 
-		this.competitionService.saveCompetition(thisComp);
+		try {
+			this.competitionService.saveCompetition(thisComp);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 		ModelAndView mav = new ModelAndView("redirect:/competitions/" + competitionId);
 
@@ -272,7 +297,7 @@ public class CompetitionController {
 	}
 
 	@PostMapping("/competition/{competitionId}/clubs") //BORRAR EQUIPOS A COMPETICIÓN
-	public ModelAndView deleteClub(@PathVariable("competitionId") final int competitionId, @ModelAttribute("clubs") final String club) {
+	public ModelAndView deleteClub(@PathVariable("competitionId") final int competitionId, @ModelAttribute("clubs") final String club) throws DataAccessException, DuplicatedNameException, NotEnoughMoneyException, StatusException {
 
 		Competition thisComp = this.competitionService.findCompetitionById(competitionId);
 
@@ -288,11 +313,11 @@ public class CompetitionController {
 	}
 
 	@RequestMapping(value = "/competition/{competitionId}/publish") //PUBLICAR COMPETITION
-	public String initPublishCompetitionForm(@PathVariable("competitionId") final int compId, final Map<String, Object> model) throws CredentialException {
+	public String initPublishCompetitionForm(@PathVariable("competitionId") final int compId, final Model model) throws CredentialException, DataAccessException, DuplicatedNameException, NotEnoughMoneyException, StatusException {
 
 		Competition comp = this.competitionService.findCompetitionById(compId);
 
-		model.put("competition", comp);
+		model.addAttribute("competition", comp);
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String currentPrincipalName = authentication.getName();
@@ -302,6 +327,16 @@ public class CompetitionController {
 		}
 
 		if (comp.getType().equals(CompetitionType.LEAGUE)) {
+
+			try {
+				comp.setStatus(true);
+				this.competitionService.saveCompetition(comp);
+			} catch (StatusException e) {
+				model.addAttribute("statusError", true);
+				model.addAttribute("competition", comp);
+				model.addAttribute("size", comp.getClubs().size());
+				return "/competitions/competitionDetails";
+			}
 
 			List<String> equipos = comp.getClubs();
 			List<String> equipos2 = comp.getClubs();
@@ -382,7 +417,6 @@ public class CompetitionController {
 			}
 		}
 
-		comp.setStatus(true);
 		this.competitionService.saveCompetition(comp);
 
 		return "redirect:/competitions/" + compId;

@@ -38,4 +38,6 @@ public interface CompetitionRepository {
 
 	Jornada findJornadaById(int jornadaId) throws DataAccessException;
 
+	Collection<Competition> findAllCompetition() throws DataAccessException;
+
 }
