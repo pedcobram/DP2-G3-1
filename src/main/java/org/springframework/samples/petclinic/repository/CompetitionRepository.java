@@ -20,6 +20,8 @@ public interface CompetitionRepository {
 
 	void save(Competition competition) throws DataAccessException;
 
+	void delete(Competition competition) throws DataAccessException;
+
 	Collection<FootballClub> findAllPublishedClubs();
 
 	void save(Calendary calendary) throws DataAccessException;
@@ -39,5 +41,7 @@ public interface CompetitionRepository {
 	Jornada findJornadaById(int jornadaId) throws DataAccessException;
 
 	Collection<Competition> findAllCompetition() throws DataAccessException;
+
+	Collection<Jornada> findAllJornadas();
 
 }

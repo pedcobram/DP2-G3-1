@@ -210,8 +210,8 @@ public class MatchRequestController {
 
 		MatchRequest matchRequest = this.matchRequestService.findMatchRequestById(matchRequestId);
 
-		if (matchRequest.getCreator() != currentPrincipalName) {
-			throw new CredentialException();
+		if (!matchRequest.getCreator().equals(currentPrincipalName)) {
+			throw new CredentialException(); //SEGURIDAD
 		}
 
 		this.matchRequestService.deleteMatchRequest(matchRequest);

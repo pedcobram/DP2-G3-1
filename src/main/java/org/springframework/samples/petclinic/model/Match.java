@@ -3,7 +3,6 @@ package org.springframework.samples.petclinic.model;
 
 import java.util.Date;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -43,19 +42,19 @@ public class Match extends BaseEntity {
 	@NotEmpty
 	private String			stadium;
 
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne(optional = true)
 	@JoinColumn(name = "footballClub1", referencedColumnName = "name")
 	private FootballClub	footballClub1;
 
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne(optional = true)
 	@JoinColumn(name = "footballClub2", referencedColumnName = "name")
 	private FootballClub	footballClub2;
 
-	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToOne(optional = true)
 	@JoinColumn(name = "referee", referencedColumnName = "username")
 	private Referee			referee;
 
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne(optional = true)
 	@JoinColumn(name = "matchRecord", referencedColumnName = "id")
 	private MatchRecord		matchRecord;
 

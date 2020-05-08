@@ -42,6 +42,10 @@ public interface SpringDataCompetitionRepository extends CompetitionRepository, 
 	Collection<Jornada> findAllJornadasFromCompetitionId(final Integer compId);
 
 	@Override
+	@Query("select j from Jornada j ")
+	Collection<Jornada> findAllJornadas();
+
+	@Override
 	@Query("select m from Match m where m.jornada.id = ?1")
 	Collection<Match> findAllMatchByJornadaId(final Integer jornadaId);
 

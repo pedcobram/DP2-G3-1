@@ -18,15 +18,24 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Calendary;
 import org.springframework.samples.petclinic.model.Competition;
 import org.springframework.samples.petclinic.model.FootballClub;
+import org.springframework.samples.petclinic.model.FootballPlayer;
+import org.springframework.samples.petclinic.model.FootballPlayerMatchStatistic;
 import org.springframework.samples.petclinic.model.Jornada;
 import org.springframework.samples.petclinic.model.Match;
+import org.springframework.samples.petclinic.model.MatchRecord;
 import org.springframework.samples.petclinic.model.Enum.CompetitionType;
+import org.springframework.samples.petclinic.model.Enum.MatchRecordStatus;
 import org.springframework.samples.petclinic.model.Enum.MatchStatus;
 import org.springframework.samples.petclinic.service.CompetitionService;
 import org.springframework.samples.petclinic.service.FootballClubService;
+import org.springframework.samples.petclinic.service.FootballPlayerMatchStatisticService;
+import org.springframework.samples.petclinic.service.FootballPlayerService;
+import org.springframework.samples.petclinic.service.MatchRecordService;
 import org.springframework.samples.petclinic.service.MatchService;
 import org.springframework.samples.petclinic.service.RefereeService;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedNameException;
+import org.springframework.samples.petclinic.service.exceptions.IllegalDateException;
+import org.springframework.samples.petclinic.service.exceptions.MatchRecordResultException;
 import org.springframework.samples.petclinic.service.exceptions.NotEnoughMoneyException;
 import org.springframework.samples.petclinic.service.exceptions.StatusException;
 import org.springframework.security.core.Authentication;
@@ -46,27 +55,40 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class CompetitionController {
 
-	private static final String			VIEWS_COMPETITION_CREATE_OR_UPDATE_FORM	= "competitions/createOrUpdateCompetitionForm";
+	private static final String							VIEWS_COMPETITION_CREATE_OR_UPDATE_FORM	= "competitions/createOrUpdateCompetitionForm";
 
 	@Autowired
-	private final CompetitionService	competitionService;
+	private final CompetitionService					competitionService;
 
 	@Autowired
-	private final FootballClubService	footballClubService;
+	private final FootballClubService					footballClubService;
 
 	@Autowired
-	private final RefereeService		refereeService;
+	private final FootballPlayerService					footballPlayerService;
 
 	@Autowired
-	private final MatchService			matchService;
+	private final RefereeService						refereeService;
+
+	@Autowired
+	private final MatchService							matchService;
+
+	@Autowired
+	private final FootballPlayerMatchStatisticService	footballPlayerMatchStatisticService;
+
+	@Autowired
+	private final MatchRecordService					matchRecordService;
 
 
 	@Autowired
-	public CompetitionController(final CompetitionService competitionService, final MatchService matchService, final FootballClubService footballClubService, final RefereeService refereeService) {
+	public CompetitionController(final CompetitionService competitionService, final FootballPlayerService footballPlayerService, final MatchRecordService matchRecordService, final FootballPlayerMatchStatisticService footballPlayerMatchStatisticService,
+		final MatchService matchService, final FootballClubService footballClubService, final RefereeService refereeService) {
 		this.competitionService = competitionService;
 		this.footballClubService = footballClubService;
+		this.footballPlayerService = footballPlayerService;
 		this.refereeService = refereeService;
 		this.matchService = matchService;
+		this.footballPlayerMatchStatisticService = footballPlayerMatchStatisticService;
+		this.matchRecordService = matchRecordService;
 	}
 
 	@InitBinder
@@ -91,11 +113,21 @@ public class CompetitionController {
 	}
 
 	@GetMapping("/competitions/{competitionId}") //VISTA DETALLADA DE COMPETICIÓN
-	public ModelAndView showCompetition(@PathVariable("competitionId") final int competitionId) {
+	public ModelAndView showCompetition(@PathVariable("competitionId") final int competitionId) throws CredentialException {
+
+		Competition competition = this.competitionService.findCompetitionById(competitionId);
+
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
 
 		ModelAndView mav = new ModelAndView("competitions/competitionDetails");
-		mav.addObject(this.competitionService.findCompetitionById(competitionId));
+		mav.addObject(competition);
 		mav.addObject("size", this.competitionService.findCompetitionById(competitionId).getClubs().size());
+
+		//Si no está publicada y no eres el creador no puedes verla
+		if (competition.getStatus() == false && !competition.getCreator().equals(currentPrincipalName)) { //SEGURIDAD
+			throw new CredentialException();
+		}
 
 		return mav;
 	}
@@ -248,11 +280,18 @@ public class CompetitionController {
 	}
 
 	@GetMapping("/competition/{competitionId}/addClubs") //AÑADIR EQUIPOS A COMPETICIÓN
-	public ModelAndView showClubs(@PathVariable("competitionId") final int competitionId) {
+	public ModelAndView showClubs(@PathVariable("competitionId") final int competitionId) throws CredentialException {
 
 		Collection<String> allclubsName = this.competitionService.findClubsById(competitionId);
 
 		Competition thisComp = this.competitionService.findCompetitionById(competitionId);
+
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
+
+		if (!thisComp.getCreator().equals(currentPrincipalName)) { //SEGURIDAD
+			throw new CredentialException();
+		}
 
 		ModelAndView mav = new ModelAndView("competitions/listClubs");
 		mav.addObject("clubsName", allclubsName);
@@ -263,9 +302,16 @@ public class CompetitionController {
 		return mav;
 	}
 	@PostMapping("/competition/{competitionId}/addClubs") //AÑADIR EQUIPOS A COMPETICIÓN
-	public ModelAndView addClub(@PathVariable("competitionId") final int competitionId, @ModelAttribute("clubs") final String club) throws DataAccessException, DuplicatedNameException {
+	public ModelAndView addClub(@PathVariable("competitionId") final int competitionId, @ModelAttribute("clubs") final String club) throws DataAccessException, DuplicatedNameException, CredentialException {
 
 		Competition thisComp = this.competitionService.findCompetitionById(competitionId);
+
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
+
+		if (!thisComp.getCreator().equals(currentPrincipalName)) { //SEGURIDAD
+			throw new CredentialException();
+		}
 
 		List<String> newClubs = thisComp.getClubs();
 		newClubs.add(club);
@@ -282,10 +328,18 @@ public class CompetitionController {
 		return mav;
 	}
 
-	@GetMapping("/competition/{competitionId}/clubs") //VER EQUIPOS DE LA COMPETICIÓN
-	public ModelAndView showClubsMycomp(@PathVariable("competitionId") final int competitionId) {
+	@GetMapping("/competitions/{competitionId}/clubs") //VER EQUIPOS DE LA COMPETICIÓN
+	public ModelAndView showClubsMycomp(@PathVariable("competitionId") final int competitionId) throws CredentialException {
 
 		Competition thisComp = this.competitionService.findCompetitionById(competitionId);
+
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
+
+		//Si no está publicada y no eres el creador no puedes verlo
+		if (thisComp.getStatus() == false && !thisComp.getCreator().equals(currentPrincipalName)) { //SEGURIDAD
+			throw new CredentialException();
+		}
 
 		ModelAndView mav = new ModelAndView("competitions/listClubs");
 		mav.addObject("clubsName", thisComp.getClubs());
@@ -297,9 +351,16 @@ public class CompetitionController {
 	}
 
 	@PostMapping("/competition/{competitionId}/clubs") //BORRAR EQUIPOS A COMPETICIÓN
-	public ModelAndView deleteClub(@PathVariable("competitionId") final int competitionId, @ModelAttribute("clubs") final String club) throws DataAccessException, DuplicatedNameException, NotEnoughMoneyException, StatusException {
+	public ModelAndView deleteClub(@PathVariable("competitionId") final int competitionId, @ModelAttribute("clubs") final String club) throws DataAccessException, DuplicatedNameException, NotEnoughMoneyException, StatusException, CredentialException {
 
 		Competition thisComp = this.competitionService.findCompetitionById(competitionId);
+
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
+
+		if (!thisComp.getCreator().equals(currentPrincipalName)) { //SEGURIDAD
+			throw new CredentialException();
+		}
 
 		List<String> newClubs = thisComp.getClubs();
 		newClubs.remove(club);
@@ -313,7 +374,8 @@ public class CompetitionController {
 	}
 
 	@RequestMapping(value = "/competition/{competitionId}/publish") //PUBLICAR COMPETITION
-	public String initPublishCompetitionForm(@PathVariable("competitionId") final int compId, final Model model) throws CredentialException, DataAccessException, DuplicatedNameException, NotEnoughMoneyException, StatusException {
+	public String initPublishCompetitionForm(@PathVariable("competitionId") final int compId, final Model model)
+		throws CredentialException, DataAccessException, DuplicatedNameException, NotEnoughMoneyException, StatusException, IllegalDateException, MatchRecordResultException {
 
 		Competition comp = this.competitionService.findCompetitionById(compId);
 
@@ -343,8 +405,6 @@ public class CompetitionController {
 			Collections.reverse(equipos2);
 
 			Date fechaPartido = new Date(System.currentTimeMillis() - 1);
-
-			List<Match> competitionMatches = new ArrayList<Match>();
 
 			//Creamos el calendario
 
@@ -400,6 +460,38 @@ public class CompetitionController {
 
 					this.competitionService.saveMatch(newMatch);
 
+					MatchRecord newRecord = new MatchRecord();
+
+					newRecord.setMatch(newMatch);
+					newRecord.setSeason_start("2020");
+					newRecord.setSeason_end("2021");
+					newRecord.setTitle("Acta del partido: " + club.getName() + " - " + club2.getName() + " de la " + a.getName());
+					newRecord.setStatus(MatchRecordStatus.NOT_PUBLISHED);
+
+					this.matchRecordService.saveMatchRecord(newRecord);
+
+					// Añadimos los jugadores al acta
+
+					List<FootballPlayer> fps = new ArrayList<>();
+
+					fps.addAll(this.footballPlayerService.findAllClubFootballPlayers(newMatch.getFootballClub1().getId()));
+					fps.addAll(this.footballPlayerService.findAllClubFootballPlayers(newMatch.getFootballClub2().getId()));
+
+					for (FootballPlayer fp : fps) {
+						FootballPlayerMatchStatistic fpms = new FootballPlayerMatchStatistic();
+
+						fpms.setAssists(0);
+						fpms.setGoals(0);
+						fpms.setReceived_goals(0);
+						fpms.setRed_cards(0);
+						fpms.setYellow_cards(0);
+
+						fpms.setMatchRecord(newRecord);
+						fpms.setPlayer(fp);
+
+						this.footballPlayerMatchStatisticService.saveFootballPlayerStatistic(fpms);
+					}
+
 					contador++;
 					i++;
 					j--;
@@ -422,4 +514,27 @@ public class CompetitionController {
 		return "redirect:/competitions/" + compId;
 	}
 
+	@RequestMapping(value = "/competition/{competitionId}/delete") //BORRAR COMPETICION
+	public String processDeleteForm(@PathVariable("competitionId") final int competitionId, final Model model) throws DataAccessException, CredentialException {
+
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
+
+		Competition thisComp = this.competitionService.findCompetitionById(competitionId);
+
+		if (!thisComp.getCreator().equals(currentPrincipalName)) { //SEGURIDAD
+			throw new CredentialException();
+		}
+
+		try {
+			this.competitionService.deleteCompetition(thisComp);
+		} catch (StatusException e) {
+			model.addAttribute("statusError2", true);
+			model.addAttribute("competition", thisComp);
+			model.addAttribute("size", thisComp.getClubs().size());
+			return "/competitions/competitionDetails";
+		}
+
+		return "redirect:/";
+	}
 }

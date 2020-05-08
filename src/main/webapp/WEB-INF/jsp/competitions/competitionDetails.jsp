@@ -53,8 +53,8 @@
             <th>Admin</th>
             <td><c:out value="${competition.creator}"/></td>
         </tr> 
-        <tr>
-        <spring:url value="/competition/{competitionId}/clubs" var="clubUrl">
+        <tr> 
+        <spring:url value="/competitions/{competitionId}/clubs" var="clubUrl">
 		   		<spring:param name="competitionId" value="${competition.id}"/>
     		</spring:url>
             <th><fmt:message key="code.label.equipos"/></th>
@@ -95,10 +95,24 @@
     		<a data-toggle="tooltip" title="${mousehover}" href="${fn:escapeXml(calendaryUrl)}" class="btn btn-default">Calendario</a>
      	</c:if> 
      	
+     	<c:if test="${(competition.creator == principalUsername) && competition.status == true}">
+    		<spring:url value="/competition/{competitionId}/delete" var="deleteUrl">
+		   		<spring:param name="competitionId" value="${competition.id}"/>
+    		</spring:url>
+    		<a data-toggle="tooltip" title="${mousehover}" href="${fn:escapeXml(deleteUrl)}" class="btn btn-default2">Borrar Competición</a>
+     	</c:if>
+     	
      	<c:if test="${statusError == true}">
      		<br>
      		<br>	
     		<p style="color:red"> En el formato liga deben haber mínimo 4 equipos y deben ser pares (4, 6, 8, 10...)</p>
+    		<br>	
+    	</c:if>
+    	
+    	<c:if test="${statusError2 == true}">
+     		<br>
+     		<br>	
+    		<p style="color:red"> No puedes borrar la competición, ya se ha disputado al menos un partido</p>
     		<br>	
     	</c:if>
      	

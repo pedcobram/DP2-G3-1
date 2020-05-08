@@ -24,8 +24,11 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Calendary;
 import org.springframework.samples.petclinic.model.Competition;
 import org.springframework.samples.petclinic.model.FootballClub;
+import org.springframework.samples.petclinic.model.FootballPlayerMatchStatistic;
 import org.springframework.samples.petclinic.model.Jornada;
 import org.springframework.samples.petclinic.model.Match;
+import org.springframework.samples.petclinic.model.Enum.CompetitionType;
+import org.springframework.samples.petclinic.model.Enum.MatchStatus;
 import org.springframework.samples.petclinic.repository.CompetitionRepository;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedNameException;
 import org.springframework.samples.petclinic.service.exceptions.NotEnoughMoneyException;
@@ -37,7 +40,22 @@ import org.springframework.util.StringUtils;
 @Service
 public class CompetitionService {
 
-	private CompetitionRepository competitionRepository;
+	private CompetitionRepository				competitionRepository;
+
+	@Autowired
+	private MatchService						matchService;
+
+	@Autowired
+	private MatchRecordService					matchRecordService;
+
+	@Autowired
+	private FootballPlayerMatchStatisticService	playerMatchStatisticService;
+
+	@Autowired
+	private CalendaryService					calendaryService;
+
+	@Autowired
+	private JornadaService						jornadaService;
 
 
 	@Autowired
@@ -108,7 +126,7 @@ public class CompetitionService {
 		}
 
 		//RN: A la hora de publicar: Las ligas solo podrán ser de número Par y de 4 equipos en adelante (4, 6, 8, 10, etc...)
-		if (competition.getStatus() == true) {
+		if (competition.getStatus() == true && competition.getType().equals(CompetitionType.LEAGUE)) {
 			if (competition.getClubs().size() < 4 || competition.getClubs().size() % 2 != 0) {
 				competition.setStatus(false);
 				throw new StatusException();
@@ -134,6 +152,7 @@ public class CompetitionService {
 
 	@Transactional
 	public void saveMatch(final Match newMatch) throws DataAccessException {
+
 		this.competitionRepository.save(newMatch);
 
 	}
@@ -153,6 +172,43 @@ public class CompetitionService {
 	public Jornada findJornadaById(final int jornadaId) {
 
 		return this.competitionRepository.findJornadaById(jornadaId);
+	}
+
+	@Transactional
+	public void deleteCompetition(final Competition thisComp) throws DataAccessException, StatusException {
+
+		//Borrar jornadas, calendario y partidos
+
+		//RN: Si se ha disputado algun partido de la competición ya no se podrá borrar.
+
+		for (Match a : this.competitionRepository.findAllMatchByCompetitionId(thisComp.getId())) {
+
+			if (a.getMatchStatus().equals(MatchStatus.FINISHED)) {
+				throw new StatusException();
+			}
+
+			Integer id = this.matchRecordService.findMatchRecordByMatchId(a.getId()).getId();
+
+			Collection<FootballPlayerMatchStatistic> al = this.playerMatchStatisticService.findFootballPlayerMatchStatisticByMatchRecordId(id);
+
+			for (FootballPlayerMatchStatistic sd : al) {
+				this.playerMatchStatisticService.deleteFootballPlayerStatistic(sd);
+			}
+
+			this.matchRecordService.deleteMatchRecord(this.matchRecordService.findMatchRecordByMatchId(a.getId()));
+			this.matchService.deleteMatch(a);
+		}
+
+		for (Jornada a : this.jornadaService.findAllJornadasFromCompetitionId(thisComp.getId())) {
+			this.jornadaService.deleteJornada(a);
+		}
+
+		Calendary c = this.findCalendaryByCompetitionId(thisComp.getId());
+
+		this.calendaryService.deleteCalendary(c);
+
+		this.competitionRepository.delete(thisComp);
+
 	}
 
 }
