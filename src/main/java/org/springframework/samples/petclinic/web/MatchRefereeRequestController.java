@@ -26,6 +26,8 @@ import org.springframework.samples.petclinic.service.RefereeService;
 import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.samples.petclinic.service.exceptions.IllegalDateException;
 import org.springframework.samples.petclinic.service.exceptions.MatchRecordResultException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -164,25 +166,30 @@ public class MatchRefereeRequestController {
 		return MatchRefereeRequestController.VIEWS_MATCH_REFEREE_LIST;
 	}
 
-	@GetMapping(value = "/matchRefereeRequest/list/{refereeName}")
-	public String showMatchRefereeRequestList(final Map<String, Object> model, @PathVariable("refereeName") final String refereeName) {
+	@GetMapping(value = "/matchRefereeRequest/list")
+	public String showMatchRefereeRequestList(final Map<String, Object> model) {
+
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
 
 		List<MatchRefereeRequest> matchRefereeRequests = new ArrayList<>();
 
-		matchRefereeRequests.addAll(this.matchRefereeRequestService.findOnHoldMatchRefereeRequests(refereeName));
+		matchRefereeRequests.addAll(this.matchRefereeRequestService.findOnHoldMatchRefereeRequests(currentPrincipalName));
 
 		model.put("matchRefereeRequests", matchRefereeRequests);
 
 		return MatchRefereeRequestController.VIEWS_MATCH_REFEREE_REQUEST_LIST;
 	}
 
-	@GetMapping(value = "/matchRefereeRequest/list/accept/{username}/{matchId}")
-	public String acceptMatchRefereeRequest(@Valid final MatchRefereeRequest matchRefereeRequest, final BindingResult result, @PathVariable("username") final String username, @PathVariable("matchId") final int matchId)
-		throws DataAccessException, IllegalDateException, MatchRecordResultException {
+	@GetMapping(value = "/matchRefereeRequest/list/accept/{matchId}")
+	public String acceptMatchRefereeRequest(@Valid final MatchRefereeRequest matchRefereeRequest, final BindingResult result, @PathVariable("matchId") final int matchId) throws DataAccessException, IllegalDateException, MatchRecordResultException {
 
-		Referee ref = this.refereeService.findRefereeByUsername(username);
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
+
+		Referee ref = this.refereeService.findRefereeByUsername(currentPrincipalName);
 		Match match = this.matchService.findMatchById(matchId);
-		MatchRefereeRequest mrr = this.matchRefereeRequestService.findMatchRefereeRequestByUsernameAndMatchId(username, matchId);
+		MatchRefereeRequest mrr = this.matchRefereeRequestService.findMatchRefereeRequestByUsernameAndMatchId(currentPrincipalName, matchId);
 
 		matchRefereeRequest.setId(mrr.getId());
 		matchRefereeRequest.setTitle(mrr.getTitle());
@@ -223,7 +230,6 @@ public class MatchRefereeRequestController {
 		this.matchRecordService.saveMatchRecord(mr);
 
 		// Añadimos los jugadores al acta
-
 		List<FootballPlayer> fps = new ArrayList<>();
 
 		fps.addAll(this.footballPlayerService.findAllClubFootballPlayers(match.getFootballClub1().getId()));
@@ -244,17 +250,18 @@ public class MatchRefereeRequestController {
 			this.footballPlayerMatchStatisticService.saveFootballPlayerStatistic(fpms);
 		}
 
-		//
-		return "redirect:/matchRefereeRequest/list/" + username;
-
+		return "redirect:/matchRefereeRequest/list";
 	}
 
-	@GetMapping(value = "/matchRefereeRequest/list/reject/{username}/{matchId}")
-	public String rejectCompetitionAdminRequest(@Valid final MatchRefereeRequest matchRefereeRequest, final BindingResult result, @PathVariable("username") final String username, @PathVariable("matchId") final int matchId) throws DataAccessException {
+	@GetMapping(value = "/matchRefereeRequest/list/reject/{matchId}")
+	public String rejectCompetitionAdminRequest(@Valid final MatchRefereeRequest matchRefereeRequest, final BindingResult result, @PathVariable("matchId") final int matchId) throws DataAccessException {
 
-		Referee ref = this.refereeService.findRefereeByUsername(username);
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
+
+		Referee ref = this.refereeService.findRefereeByUsername(currentPrincipalName);
 		Match match = this.matchService.findMatchById(matchId);
-		MatchRefereeRequest mrr = this.matchRefereeRequestService.findMatchRefereeRequestByUsernameAndMatchId(username, matchId);
+		MatchRefereeRequest mrr = this.matchRefereeRequestService.findMatchRefereeRequestByUsernameAndMatchId(currentPrincipalName, matchId);
 
 		matchRefereeRequest.setId(mrr.getId());
 		matchRefereeRequest.setTitle(mrr.getTitle());
@@ -265,7 +272,7 @@ public class MatchRefereeRequestController {
 		this.matchRefereeRequestService.saveMatchRefereeRequest(matchRefereeRequest);
 
 		//
-		return "redirect:/matchRefereeRequest/list/" + username;
+		return "redirect:/matchRefereeRequest/list";
 	}
 
 }

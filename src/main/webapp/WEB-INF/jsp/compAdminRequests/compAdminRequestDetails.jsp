@@ -38,15 +38,11 @@
 	<!-- Muestro el botón de editar si el usuario coincide con el usuario actual %-->  
 	
 	<c:if test="${compAdminRequest.user.username == principalUsername}">
-    	<spring:url value="/competitionAdminRequest/{compAdminRequestId}/edit" var="editUrl">
-        	<spring:param name="compAdminRequestId" value="${compAdminRequest.id}"/>
-    	</spring:url>
+    	<spring:url value="myCompetitionAdminRequest/edit" var="editUrl">  	</spring:url>
     	<a href="${fn:escapeXml(editUrl)}" class="btn btn-default"><fmt:message key="code.button.compadminrequestdetails.edit"/></a>
     	
     	
-    	<spring:url value="/deleteCompAdminRequest/{compAdminRequestId}" var="editUrl">
-    		<spring:param name="compAdminRequestId" value="${compAdminRequest.id}"/>
-    	</spring:url>
+    	<spring:url value="/deleteCompAdminRequest" var="editUrl">  </spring:url>
     	<a href="${fn:escapeXml(editUrl)}" class="btn btn-default2" style="color:white"><b><fmt:message key="code.button.compadminrequestdetails.delete"/></b></a>
     	
     </c:if>  

@@ -124,14 +124,14 @@
 										</sec:authorize>								
 
 										<sec:authorize access="hasAuthority('president')">	
-											<petclinic:menuItem active="${name eq 'presidents'}" url="/matchRequests/sent/${principalUsername}"
+											<petclinic:menuItem active="${name eq 'presidents'}" url="/matchRequests/sent"
 												title="sent match requests">
 												<span><fmt:message key="code.tag.menu.sentMatchRequests"/></span>
 											</petclinic:menuItem>
 										</sec:authorize>
 										
 										<sec:authorize access="hasAuthority('president')">	
-											<petclinic:menuItem active="${name eq 'presidents'}" url="/matchRequests/received/${principalUsername}"
+											<petclinic:menuItem active="${name eq 'presidents'}" url="/matchRequests/received"
 												title="received match requests">
 												<span><fmt:message key="code.tag.menu.receivedMatchRequests"/></span>
 											</petclinic:menuItem>
@@ -145,14 +145,14 @@
 										</sec:authorize>
 										
 										<sec:authorize access="hasAuthority('referee')">	
-											<petclinic:menuItem active="${name eq 'referees'}" url="/matchRefereeRequest/list/${principalUsername}"
+											<petclinic:menuItem active="${name eq 'referees'}" url="/matchRefereeRequest/list"
 												title="personal space">
 												<span><fmt:message key="code.tag.menu.matchRefereeRequestList"/></span>
 											</petclinic:menuItem>
 										</sec:authorize>
 										
 										<sec:authorize access="hasAuthority('referee')">	
-											<petclinic:menuItem active="${name eq 'referees'}" url="/myRefereeProfile/${principalUsername}"
+											<petclinic:menuItem active="${name eq 'referees'}" url="/myRefereeProfile"
 												title="personal space">
 												<span><fmt:message key="myProfile"/></span>
 											</petclinic:menuItem>
@@ -167,7 +167,7 @@
 										</sec:authorize>
 										
 										<sec:authorize access="hasAuthority('competitionAdmin')">	
-											<petclinic:menuItem active="${name eq 'competitionAdmins'}" url="/myCompetitionAdminProfile/${principalUsername}"
+											<petclinic:menuItem active="${name eq 'competitionAdmins'}" url="/myCompetitionAdminProfile"
 												title="personal space">
 												<span><fmt:message key="myProfile"/></span>
 											</petclinic:menuItem>

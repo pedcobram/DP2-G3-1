@@ -36,13 +36,13 @@ public class CompetitionAdminControllerTests {
 	})
 	@Test //CASO POSITIVO
 	void deleteCompetitionAdmin() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/deleteCompetitionAdmin/pedro")).andExpect(MockMvcResultMatchers.status().isOk());
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/competitionAdmin/delete")).andExpect(MockMvcResultMatchers.status().isOk());
 	}
-	
+
 	@WithAnonymousUser
 	@Test //CASO NEGATIVO
 	void dontDeleteCompetitionAdmin() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/deleteCompetitionAdmin/pedro")).andExpect(MockMvcResultMatchers.status().is4xxClientError());
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/competitionAdmin/delete")).andExpect(MockMvcResultMatchers.status().is4xxClientError());
 	}
 
 	@WithMockUser(username = "pedro", authorities = {
@@ -50,78 +50,54 @@ public class CompetitionAdminControllerTests {
 	})
 	@Test //CASO POSITIVO
 	void initUpdatePresidentForm() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/myCompetitionAdminProfile/1/edit")).andExpect(MockMvcResultMatchers.status().isOk());
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/myCompetitionAdminProfile/edit")).andExpect(MockMvcResultMatchers.status().isOk());
 	}
-	
+
 	@WithAnonymousUser
 	@Test //CASO NEGATIVO
 	void dontInitUpdatePresidentForm() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/myCompetitionAdminProfile/1/edit")).andExpect(MockMvcResultMatchers.status().is4xxClientError());
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/myCompetitionAdminProfile/edit")).andExpect(MockMvcResultMatchers.status().is4xxClientError());
 	}
-	
+
 	@WithMockUser(username = "pedro", authorities = {
 		"competitionAdmin"
 	})
 	@Test //CASO POSITIVO
 	void processUpdateCompetitionAdminForm() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.post("/myCompetitionAdminProfile/1/edit")
-			.with(SecurityMockMvcRequestPostProcessors.csrf())
-			.param("firstName", "First Name")
-			.param("lastName", "Last Name")
-			.param("telephone", "111111111")
-			.param("email", "test@gmail.com")
-			.param("dni", "11111111A"))
-		.andExpect(MockMvcResultMatchers.status().isOk());
+		this.mockMvc.perform(MockMvcRequestBuilders.post("/myCompetitionAdminProfile/edit").with(SecurityMockMvcRequestPostProcessors.csrf()).param("firstName", "First Name").param("lastName", "Last Name").param("telephone", "111111111")
+			.param("email", "test@gmail.com").param("dni", "11111111A")).andExpect(MockMvcResultMatchers.status().isOk());
 	}
-	
+
 	@WithAnonymousUser
 	@Test //CASO NEGATIVO
 	void dontProcessUpdateCompetitionAdminForm() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.post("/myCompetitionAdminProfile/1/edit")
-			.with(SecurityMockMvcRequestPostProcessors.csrf())
-			.param("firstName", "First Name")
-			.param("lastName", "Last Name")
-			.param("telephone", "111111111")
-			.param("email", "test@gmail.com")
-			.param("dni", "11111111A"))
-		.andExpect(MockMvcResultMatchers.status().is4xxClientError());
+		this.mockMvc.perform(MockMvcRequestBuilders.post("/myCompetitionAdminProfile/edit").with(SecurityMockMvcRequestPostProcessors.csrf()).param("firstName", "First Name").param("lastName", "Last Name").param("telephone", "111111111")
+			.param("email", "test@gmail.com").param("dni", "11111111A")).andExpect(MockMvcResultMatchers.status().is4xxClientError());
 	}
-	
+
 	@WithMockUser(username = "pedro", authorities = {
 		"competitionAdmin"
 	})
 	@Test //CASO NEGATIVO
 	void ProcessWithErrorUpdateCompetitionAdminForm() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.post("/myCompetitionAdminProfile/1/edit")
-			.with(SecurityMockMvcRequestPostProcessors.csrf())
-			.param("firstName", "")
-			.param("lastName", "")
-			.param("telephone", "")
-			.param("email", "")
-			.param("dni", ""))
-		.andExpect(MockMvcResultMatchers.status().isOk())
-		.andExpect(MockMvcResultMatchers.model().attributeHasErrors("competitionAdmin"))
-		.andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("competitionAdmin", "firstName"))
-		.andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("competitionAdmin", "lastName"))
-		.andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("competitionAdmin", "telephone"))
-		.andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("competitionAdmin", "email"))
-		.andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("competitionAdmin", "dni"));
-	} 
-	
+		this.mockMvc.perform(MockMvcRequestBuilders.post("/myCompetitionAdminProfile/edit").with(SecurityMockMvcRequestPostProcessors.csrf()).param("firstName", "").param("lastName", "").param("telephone", "").param("email", "").param("dni", ""))
+			.andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeHasErrors("competitionAdmin")).andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("competitionAdmin", "firstName"))
+			.andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("competitionAdmin", "lastName")).andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("competitionAdmin", "telephone"))
+			.andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("competitionAdmin", "email")).andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("competitionAdmin", "dni"));
+	}
+
 	@WithMockUser(username = "pedro", authorities = {
 		"competitionAdmin"
 	})
 	@Test //CASO POSITIVO
 	void showCompetitionAdminProfile() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/myCompetitionAdminProfile/pedro"))
-		.andExpect(MockMvcResultMatchers.status().isOk());
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/myCompetitionAdminProfile")).andExpect(MockMvcResultMatchers.status().isOk());
 	}
-	
+
 	@WithAnonymousUser
 	@Test //CASO NEGATIVO
 	void dontShowCompetitionAdminProfile() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/myCompetitionAdminProfile/pedro"))
-		.andExpect(MockMvcResultMatchers.status().is4xxClientError());
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/myCompetitionAdminProfile")).andExpect(MockMvcResultMatchers.status().is4xxClientError());
 	}
-	
+
 }
