@@ -91,29 +91,6 @@ class CompetitionValidatorTests {
 	}
 
 	@Test
-	void shouldNotValidateWhenCreatorNull() {
-
-		LocaleContextHolder.setLocale(Locale.ENGLISH);
-
-		Competition comp = new Competition();
-
-		comp.setName("Bundesliga");
-		comp.setDescription("Description");
-		comp.setReward(5000000);
-		comp.setType(CompetitionType.LEAGUE);
-		comp.setCreator(null);
-		comp.setStatus(false);
-
-		Validator validator = this.createValidator();
-		Set<ConstraintViolation<Competition>> constraintViolations = validator.validate(comp);
-
-		Assertions.assertThat(constraintViolations.size()).isEqualTo(1);
-		ConstraintViolation<Competition> violation = constraintViolations.iterator().next();
-		Assertions.assertThat(violation.getPropertyPath().toString()).isEqualTo("creator");
-		Assertions.assertThat(violation.getMessage()).isEqualTo("must not be null");
-	}
-
-	@Test
 	void shouldNotValidateWhenTypeNull() {
 
 		LocaleContextHolder.setLocale(Locale.ENGLISH);

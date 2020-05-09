@@ -299,7 +299,8 @@ public class CompetitionController {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String currentPrincipalName = authentication.getName();
 
-		if (!thisComp.getCreator().equals(currentPrincipalName)) { //SEGURIDAD
+		//Si no está publicada y no eres el creador no puedes verlo
+		if (thisComp.getStatus() == true || !thisComp.getCreator().equals(currentPrincipalName)) { //SEGURIDAD
 			throw new CredentialException();
 		}
 
@@ -360,7 +361,7 @@ public class CompetitionController {
 		return mav;
 	}
 
-	@PostMapping("/competition/{competitionId}/clubs") //BORRAR EQUIPOS A COMPETICIÓN
+	@PostMapping("/competitions/{competitionId}/clubs") //BORRAR EQUIPOS A COMPETICIÓN
 	public ModelAndView deleteClub(@PathVariable("competitionId") final int competitionId, @ModelAttribute("clubs") final String club) throws DataAccessException, DuplicatedNameException, NotEnoughMoneyException, StatusException, CredentialException {
 
 		Competition thisComp = this.competitionService.findCompetitionById(competitionId);
