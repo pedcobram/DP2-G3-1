@@ -11,4 +11,8 @@ public interface JornadaRepository {
 	void delete(Jornada Jornada) throws DataAccessException;
 
 	Collection<Jornada> findAllJornadasFromCompetitionId(Integer compId);
+
+	Jornada findById(int id);
+
+	void save(Jornada j);
 }

@@ -39,4 +39,19 @@ public class CalendaryService {
 	public void deleteCalendary(final Calendary calendary) throws DataAccessException {
 		this.calendaryRepository.delete(calendary);
 	}
+
+	@Transactional
+	public Calendary findById(final int i) {
+		return this.calendaryRepository.findById(i);
+	}
+
+	@Transactional
+	public Calendary findCalendaryByCompetitionId(final int competitionId) {
+		return this.calendaryRepository.findCalendaryByCompetitionId(competitionId);
+	}
+
+	public void saveCalendary(final Calendary calendary) {
+		this.calendaryRepository.save(calendary);
+
+	}
 }

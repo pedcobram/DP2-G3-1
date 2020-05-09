@@ -95,7 +95,7 @@
     		<a data-toggle="tooltip" title="${mousehover}" href="${fn:escapeXml(calendaryUrl)}" class="btn btn-default">Calendario</a>
      	</c:if> 
      	
-     	<c:if test="${(competition.creator == principalUsername) && competition.status == true}">
+     	<c:if test="${(competition.creator == principalUsername)}">
     		<spring:url value="/competition/{competitionId}/delete" var="deleteUrl">
 		   		<spring:param name="competitionId" value="${competition.id}"/>
     		</spring:url>

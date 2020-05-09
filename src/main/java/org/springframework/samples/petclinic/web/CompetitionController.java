@@ -26,10 +26,12 @@ import org.springframework.samples.petclinic.model.MatchRecord;
 import org.springframework.samples.petclinic.model.Enum.CompetitionType;
 import org.springframework.samples.petclinic.model.Enum.MatchRecordStatus;
 import org.springframework.samples.petclinic.model.Enum.MatchStatus;
+import org.springframework.samples.petclinic.service.CalendaryService;
 import org.springframework.samples.petclinic.service.CompetitionService;
 import org.springframework.samples.petclinic.service.FootballClubService;
 import org.springframework.samples.petclinic.service.FootballPlayerMatchStatisticService;
 import org.springframework.samples.petclinic.service.FootballPlayerService;
+import org.springframework.samples.petclinic.service.JornadaService;
 import org.springframework.samples.petclinic.service.MatchRecordService;
 import org.springframework.samples.petclinic.service.MatchService;
 import org.springframework.samples.petclinic.service.RefereeService;
@@ -78,10 +80,16 @@ public class CompetitionController {
 	@Autowired
 	private final MatchRecordService					matchRecordService;
 
+	@Autowired
+	private final JornadaService						jornadaService;
 
 	@Autowired
-	public CompetitionController(final CompetitionService competitionService, final FootballPlayerService footballPlayerService, final MatchRecordService matchRecordService, final FootballPlayerMatchStatisticService footballPlayerMatchStatisticService,
-		final MatchService matchService, final FootballClubService footballClubService, final RefereeService refereeService) {
+	private final CalendaryService						calendaryService;
+
+
+	@Autowired
+	public CompetitionController(final CompetitionService competitionService, final CalendaryService calendaryService, final JornadaService jornadaService, final FootballPlayerService footballPlayerService, final MatchRecordService matchRecordService,
+		final FootballPlayerMatchStatisticService footballPlayerMatchStatisticService, final MatchService matchService, final FootballClubService footballClubService, final RefereeService refereeService) {
 		this.competitionService = competitionService;
 		this.footballClubService = footballClubService;
 		this.footballPlayerService = footballPlayerService;
@@ -89,6 +97,8 @@ public class CompetitionController {
 		this.matchService = matchService;
 		this.footballPlayerMatchStatisticService = footballPlayerMatchStatisticService;
 		this.matchRecordService = matchRecordService;
+		this.jornadaService = jornadaService;
+		this.calendaryService = calendaryService;
 	}
 
 	@InitBinder
@@ -121,8 +131,8 @@ public class CompetitionController {
 		String currentPrincipalName = authentication.getName();
 
 		ModelAndView mav = new ModelAndView("competitions/competitionDetails");
-		mav.addObject(competition);
-		mav.addObject("size", this.competitionService.findCompetitionById(competitionId).getClubs().size());
+		mav.addObject("competition", competition);
+		mav.addObject("size", competition.getClubs().size());
 
 		//Si no está publicada y no eres el creador no puedes verla
 		if (competition.getStatus() == false && !competition.getCreator().equals(currentPrincipalName)) { //SEGURIDAD
@@ -136,8 +146,8 @@ public class CompetitionController {
 	public ModelAndView showCalendary(@PathVariable("competitionId") final int competitionId) {
 
 		ModelAndView mav = new ModelAndView("competitions/calendaryDetails");
-		mav.addObject(this.competitionService.findCalendaryByCompetitionId(competitionId));
-		mav.addObject("jornadas", this.competitionService.findAllJornadasFromCompetitionId(competitionId));
+		mav.addObject(this.calendaryService.findCalendaryByCompetitionId(competitionId));
+		mav.addObject("jornadas", this.jornadaService.findAllJornadasFromCompetitionId(competitionId));
 
 		return mav;
 	}
@@ -158,7 +168,7 @@ public class CompetitionController {
 	public ModelAndView showJornada(@PathVariable("jornadaId") final int jornadaId) {
 
 		ModelAndView mav = new ModelAndView("competitions/jornadasDetails");
-		mav.addObject(this.competitionService.findJornadaById(jornadaId));
+		mav.addObject(this.jornadaService.findJornadaById(jornadaId));
 		mav.addObject("partidos", this.competitionService.findAllMatchByJornadaId(jornadaId));
 		return mav;
 	}
@@ -217,7 +227,7 @@ public class CompetitionController {
 				result.rejectValue("name", "duplicate", "already exists");
 				return CompetitionController.VIEWS_COMPETITION_CREATE_OR_UPDATE_FORM;
 			} catch (NotEnoughMoneyException e) {
-				result.rejectValue("reward", "duplicate", "Cantidad de recompensa mínima: 5.000.000 €");
+				result.rejectValue("reward", "code.validator.competition.money", "Cantidad de recompensa mínima: 5.000.000 €");
 				return CompetitionController.VIEWS_COMPETITION_CREATE_OR_UPDATE_FORM;
 			}
 		}
@@ -266,7 +276,7 @@ public class CompetitionController {
 
 				this.competitionService.saveCompetition(compToUpdate);
 			} catch (NotEnoughMoneyException e) {
-				result.rejectValue("reward", "duplicate", "Cantidad de recompensa mínima: 5.000.000 €");
+				result.rejectValue("reward", "code.validator.competition.money", "Cantidad de recompensa mínima: 5.000.000 €");
 				return CompetitionController.VIEWS_COMPETITION_CREATE_OR_UPDATE_FORM;
 			} catch (DuplicatedNameException e) {
 				result.rejectValue("name", "duplicate", "already exists");
@@ -410,7 +420,7 @@ public class CompetitionController {
 
 			Calendary calendary = new Calendary();
 			calendary.setCompetition(comp);
-			this.competitionService.saveCalendary(calendary);
+			this.calendaryService.saveCalendary(calendary);
 
 			//Creamos las jornadas
 
@@ -422,10 +432,11 @@ public class CompetitionController {
 				Jornada j = new Jornada();
 				j.setCalendary(calendary);
 				j.setName("Jornada " + numero);
-				this.competitionService.saveJornada(j);
+				this.jornadaService.saveJornada(j);
+				;
 			}
 
-			Collection<Jornada> jornadas = this.competitionService.findAllJornadasFromCompetitionId(compId);
+			Collection<Jornada> jornadas = this.jornadaService.findAllJornadasFromCompetitionId(compId);
 
 			for (Jornada a : jornadas) {
 
@@ -458,7 +469,7 @@ public class CompetitionController {
 					newMatch.setReferee(this.refereeService.findRefereeById(1));
 					newMatch.setJornada(a);
 
-					this.competitionService.saveMatch(newMatch);
+					this.matchService.saveMatch(newMatch);
 
 					MatchRecord newRecord = new MatchRecord();
 

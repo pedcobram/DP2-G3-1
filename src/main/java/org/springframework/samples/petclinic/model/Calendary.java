@@ -16,7 +16,7 @@ import lombok.Setter;
 @Table(name = "calendary")
 public class Calendary extends BaseEntity {
 
-	@OneToOne(optional = true)
+	@OneToOne(optional = false)
 	@JoinColumn(name = "competition_id")
 	private Competition competition;
 }

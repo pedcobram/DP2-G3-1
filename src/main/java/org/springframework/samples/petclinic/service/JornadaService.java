@@ -28,8 +28,19 @@ public class JornadaService {
 	}
 
 	@Transactional
+	public Jornada findJornadaById(final int id) throws DataAccessException {
+		return this.jornadaRepository.findById(id);
+	}
+
+	@Transactional
 	public void deleteJornada(final Jornada jornada) throws DataAccessException {
 		this.jornadaRepository.delete(jornada);
+	}
+
+	@Transactional
+	public void saveJornada(final Jornada j) throws DataAccessException {
+		this.jornadaRepository.save(j);
+
 	}
 
 }

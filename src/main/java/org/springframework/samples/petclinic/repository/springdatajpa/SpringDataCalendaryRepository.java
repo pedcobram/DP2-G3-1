@@ -16,6 +16,7 @@
 
 package org.springframework.samples.petclinic.repository.springdatajpa;
 
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 import org.springframework.samples.petclinic.model.Calendary;
 import org.springframework.samples.petclinic.repository.CalendaryRepository;
@@ -27,5 +28,9 @@ import org.springframework.samples.petclinic.repository.CalendaryRepository;
  * @since 15.1.2013
  */
 public interface SpringDataCalendaryRepository extends CalendaryRepository, Repository<Calendary, Integer> {
+
+	@Override
+	@Query("select c from Calendary c where c.competition.id = ?1")
+	Calendary findCalendaryByCompetitionId(int competitionId);
 
 }

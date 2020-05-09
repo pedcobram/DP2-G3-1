@@ -23,7 +23,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Calendary;
 import org.springframework.samples.petclinic.model.Competition;
-import org.springframework.samples.petclinic.model.FootballClub;
 import org.springframework.samples.petclinic.model.FootballPlayerMatchStatistic;
 import org.springframework.samples.petclinic.model.Jornada;
 import org.springframework.samples.petclinic.model.Match;
@@ -80,23 +79,8 @@ public class CompetitionService {
 	}
 
 	@Transactional
-	public Collection<Match> findAllMatchByCompetitionId(final Integer compId) {
-		return this.competitionRepository.findAllMatchByCompetitionId(compId);
-	}
-
-	@Transactional
 	public Collection<Competition> findMyCompetitions(final String username) throws DataAccessException {
 		return this.competitionRepository.findMyCompetitions(username);
-	}
-
-	@Transactional
-	public Collection<FootballClub> findAllPublishedClubs() throws DataAccessException {
-		return this.competitionRepository.findAllPublishedClubs();
-	}
-
-	@Transactional
-	public Collection<Jornada> findAllJornadasFromCompetitionId(final Integer compId) {
-		return this.competitionRepository.findAllJornadasFromCompetitionId(compId);
 	}
 
 	@Transactional
@@ -145,44 +129,15 @@ public class CompetitionService {
 	}
 
 	@Transactional
-	public void saveCalendary(final Calendary calendary) throws DataAccessException {
-		this.competitionRepository.save(calendary);
-
-	}
-
-	@Transactional
-	public void saveMatch(final Match newMatch) throws DataAccessException {
-
-		this.competitionRepository.save(newMatch);
-
-	}
-
-	@Transactional
-	public void saveJornada(final Jornada j) throws DataAccessException {
-		this.competitionRepository.save(j);
-
-	}
-
-	@Transactional
-	public Calendary findCalendaryByCompetitionId(final int competitionId) {
-		return this.competitionRepository.findCalendaryByCompetitionId(competitionId);
-	}
-
-	@Transactional
-	public Jornada findJornadaById(final int jornadaId) {
-
-		return this.competitionRepository.findJornadaById(jornadaId);
-	}
-
-	@Transactional
 	public void deleteCompetition(final Competition thisComp) throws DataAccessException, StatusException {
 
 		//Borrar jornadas, calendario y partidos
 
-		//RN: Si se ha disputado algun partido de la competición ya no se podrá borrar.
+		Collection<Match> matches = this.competitionRepository.findAllMatchByCompetitionId(thisComp.getId());
 
-		for (Match a : this.competitionRepository.findAllMatchByCompetitionId(thisComp.getId())) {
+		for (Match a : matches) {
 
+			//RN: Si se ha disputado algun partido de la competición ya no se podrá borrar.
 			if (a.getMatchStatus().equals(MatchStatus.FINISHED)) {
 				throw new StatusException();
 			}
@@ -199,13 +154,17 @@ public class CompetitionService {
 			this.matchService.deleteMatch(a);
 		}
 
-		for (Jornada a : this.jornadaService.findAllJornadasFromCompetitionId(thisComp.getId())) {
+		Collection<Jornada> jornadas = this.jornadaService.findAllJornadasFromCompetitionId(thisComp.getId());
+
+		for (Jornada a : jornadas) {
 			this.jornadaService.deleteJornada(a);
 		}
 
-		Calendary c = this.findCalendaryByCompetitionId(thisComp.getId());
+		Calendary c = this.calendaryService.findCalendaryByCompetitionId(thisComp.getId());
 
-		this.calendaryService.deleteCalendary(c);
+		if (c != null) {
+			this.calendaryService.deleteCalendary(c);
+		}
 
 		this.competitionRepository.delete(thisComp);
 

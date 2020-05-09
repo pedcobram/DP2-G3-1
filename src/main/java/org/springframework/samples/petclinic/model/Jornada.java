@@ -18,7 +18,7 @@ import lombok.Setter;
 @Table(name = "jornada")
 public class Jornada extends BaseEntity {
 
-	@ManyToOne(optional = true)
+	@ManyToOne(optional = false)
 	@JoinColumn(name = "calendary_id")
 	private Calendary	calendary;
 

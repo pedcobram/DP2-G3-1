@@ -7,6 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.samples.petclinic.model.Enum.CompetitionType;
@@ -24,11 +25,11 @@ public class Competition extends BaseEntity {
 	//Atributos
 
 	@Column(name = "name")
-	@NotNull
+	@NotEmpty
 	private String			name;
 
 	@Column(name = "description")
-	@NotNull
+	@NotEmpty
 	private String			description;
 
 	@Column(name = "type")
@@ -43,6 +44,7 @@ public class Competition extends BaseEntity {
 	private Boolean			status;
 
 	@Column(name = "creator")
+	@NotNull
 	private String			creator;  //username
 
 	//Calendar calendario;
