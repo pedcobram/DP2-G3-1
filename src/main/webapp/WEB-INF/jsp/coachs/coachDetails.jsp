@@ -101,15 +101,15 @@
     	
     </c:if>
     
-    <c:if test="${coach.club.id != clubId && !iCantSign && clubStatus}">
-    		<spring:url value="/coachs/{coachId}/sign" var="newCoachUrl">
+    <c:if test="${coach.club.id != clubId && !iCantSign && clubStatus || clubStatus == false && coach.club == null}">
+    		<spring:url value="/coach/{coachId}/sign" var="newCoachUrl">
     			<spring:param name="coachId" value="${coach.id}"/>
     		</spring:url>	
     		<a data-toggle="tooltip" title="${mousehover}" href="${fn:escapeXml(newCoachUrl)}" class="btn btn-default">${Fichar}</a>
     </c:if>
     
     <c:if test="${coach.club.president.user.username == principalUsername}">
-    		<spring:url value="/coachs/{coachId}/fire" var="fireCoachUrl">
+    		<spring:url value="/coach/{coachId}/fire" var="fireCoachUrl">
     			<spring:param name="coachId" value="${coach.id}"/></spring:url>
     		<a href="${fn:escapeXml(fireCoachUrl)}" onclick="return confirm('${areYouSure}')" class="btn btn-default2">${fire}</a>
     	</c:if> 

@@ -45,4 +45,5 @@ public class MatchRecord extends BaseEntity {
 	@JoinColumn(name = "match", referencedColumnName = "id")
 	private Match				match;
 
+	private String				winner;
 }

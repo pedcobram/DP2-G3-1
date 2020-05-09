@@ -31,7 +31,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(final HttpSecurity http) throws Exception {
 		http.authorizeRequests().antMatchers("/resources/**", "/webjars/**", "/h2-console/**").permitAll()
-		.antMatchers(HttpMethod.GET, "/", "/exception/**").permitAll()
+			.antMatchers(HttpMethod.GET, "/", "/exception/**").permitAll()
 			.antMatchers("/users/new").permitAll()
 			.antMatchers("/authenticateds/new").permitAll()
 			.antMatchers("/footballPlayerStatistic/**").authenticated()
@@ -41,6 +41,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 			.antMatchers("/matches/**").authenticated()
 			.antMatchers("/createReferee").authenticated()
 			.antMatchers("/myRefereeProfile/**").hasAnyAuthority("referee")
+			.antMatchers("/deleteReferee/**").hasAnyAuthority("referee")
 			.antMatchers("/referee/**").hasAnyAuthority("referee")
 			.antMatchers("/competitionAdmin/**").hasAnyAuthority("competitionAdmin")
 			.antMatchers("/myCompetitionAdminRequest/**").authenticated()
@@ -63,12 +64,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 			.antMatchers("/footballClubs/list/**").authenticated()
 			.antMatchers("/footballClubs/myClub/**").hasAnyAuthority("president")
 			.antMatchers("/transfers/**").hasAnyAuthority("president")
-			.antMatchers("/coachs/**").hasAnyAuthority("president")
+			.antMatchers("/coachs/**").authenticated()
+			.antMatchers("/coach/**").hasAnyAuthority("president")
 			.antMatchers("/myfootballClub/**").hasAnyAuthority("president")
 			.antMatchers("/footballPlayer/new").hasAnyAuthority("president")
 			.antMatchers("/contractPlayer/**").hasAnyAuthority("president")
-			.antMatchers("/contractsCommercial/**").hasAnyAuthority("president").anyRequest()
-			.denyAll().and().formLogin()
+			.antMatchers("/contractsCommercial/**").hasAnyAuthority("president")
+			.antMatchers("/competitions/**").authenticated()
+			.antMatchers("/competition/**").hasAnyAuthority("competitionAdmin")
+			.anyRequest().denyAll().and().formLogin()
 			/* .loginPage("/login") */
 			.failureUrl("/login-error").and().logout().logoutSuccessUrl("/").and().exceptionHandling().accessDeniedPage("/exception/forbidden");
 		// Configuración para que funcione la consola de administración
