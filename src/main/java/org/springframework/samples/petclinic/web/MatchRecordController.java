@@ -118,12 +118,19 @@ public class MatchRecordController {
 	public String initUpdateMatchRecordForm(@PathVariable("matchId") final int matchId, final Model model) throws CredentialException {
 
 		MatchRecord mr = this.matchRecordService.findMatchRecordByMatchId(matchId);
-
+		Match m = this.matchService.findMatchById(mr.getMatch().getId());
 		List<MatchRecordStatus> matchStatus = new ArrayList<MatchRecordStatus>();
 
 		matchStatus.add(MatchRecordStatus.NOT_PUBLISHED);
 		matchStatus.add(MatchRecordStatus.PUBLISHED);
 
+		//Ver el ganador del partido
+		List<String> winner = new ArrayList<String>();
+		winner.add("<fmt:message key=\"code.matchrecord.empate\"/>");
+		winner.add(m.getFootballClub1().getName());
+		winner.add(m.getFootballClub2().getName());
+
+		model.addAttribute("winner", winner);
 		model.addAttribute("matchStatus", matchStatus);
 		model.addAttribute("matchRecord", mr);
 
@@ -134,12 +141,20 @@ public class MatchRecordController {
 	public String processUpdateMatchRecordForm(@Valid final MatchRecord matchRecord, final BindingResult result, final ModelMap model, @PathVariable("matchId") final int matchId) throws IllegalDateException {
 
 		List<MatchRecordStatus> matchStatus = new ArrayList<MatchRecordStatus>();
+		Match m = this.matchService.findMatchById(matchId);
+		//		Match thism = this.matchService.findMatchById(matchRecord.getMatch().getId());
 
 		matchStatus.add(MatchRecordStatus.NOT_PUBLISHED);
 		matchStatus.add(MatchRecordStatus.PUBLISHED);
 
 		model.addAttribute("matchStatus", matchStatus);
+		//
+		List<String> winner = new ArrayList<String>();
+		winner.add("<fmt:message key=\"code.matchrecord.empate\"/>");
+		winner.add(m.getFootballClub1().getName());
+		winner.add(m.getFootballClub2().getName());
 
+		model.addAttribute("winner", winner);
 		if (result.hasErrors()) {
 			return MatchRecordController.VIEWS_CREATE_OR_UPDATE_MATCH_RECORD_FORM;
 		} else {
@@ -160,7 +175,7 @@ public class MatchRecordController {
 				if (mr.getStatus() == MatchRecordStatus.PUBLISHED) {
 
 					//Cambiamos el estado del partido a finalizado una vez se cierre el acta
-					Match m = this.matchService.findMatchById(matchId);
+
 					m.setMatchStatus(MatchStatus.FINISHED);
 
 					//Añadimos las estadísticas del partido a la personal de los jugadores
