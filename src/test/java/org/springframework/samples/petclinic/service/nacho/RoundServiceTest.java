@@ -77,15 +77,24 @@ public class RoundServiceTest {
 		});
 
 	}
+
 	@Test //CASO POSITIVO
 	void shouldDelete() throws DataAccessException, StatusException {
 
-		this.roundService.delete(this.roundService.findById(1).get());
+		this.roundService.delete(this.roundService.findById(2).get());
 
-		Assertions.assertTrue(!this.roundService.findById(1).isPresent());
+		Assertions.assertTrue(this.roundService.findById(2).isPresent());
+
 	}
 	@Test //CASO NEGATIVO
-	void shouldNotDelete() {
+	void shouldNotDelete() throws DataAccessException {
+		Assertions.assertThrows(StatusException.class, () -> {
+			this.roundService.delete(this.roundService.findById(1).get());
+		});
+	}
+
+	@Test //CASO NEGATIVO
+	void shouldNotDelete1() {
 
 		Assertions.assertThrows(NullPointerException.class, () -> {
 			this.roundService.delete(null);
@@ -95,9 +104,18 @@ public class RoundServiceTest {
 	@Test //CASO POSITIVO
 	void shouldDeleteAll() throws DataAccessException, StatusException {
 
-		this.roundService.deleteAll(3);
+		this.roundService.deleteAll(4);
 
-		Assertions.assertTrue(!this.roundService.findById(1).isPresent());
+		Assertions.assertTrue(this.roundService.findById(2).isPresent());
+
+	}
+	@Test //CASO NEGATIVO
+	void shouldNotDeleteAll() throws DataAccessException {
+
+		Assertions.assertThrows(StatusException.class, () -> {
+			this.roundService.deleteAll(3);
+		});
+
 	}
 
 }

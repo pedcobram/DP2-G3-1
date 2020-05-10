@@ -309,9 +309,9 @@ INSERT INTO fan VALUES ( 1, null, null, null, false, 1, 1 );
 --Competitions
 
 INSERT INTO competitions(id, name, description, type, reward, status, creator) VALUES (1, 'Premier League', 'Torneo donde los equipos participantes jugarán todos contra todos.', 0, 10000000, false, 'pedro' );
-INSERT INTO competitions(id, name, description, type, reward, status, creator) VALUES (2, 'La Liga', 'Torneo donde los equipos participantes jugarán todos contra todos.', 0, 10000000, true, 'pedro' );
+INSERT INTO competitions(id, name, description, type, reward, status, creator) VALUES (2, 'La Liga', 'Torneo donde los equipos participantes jugarán todos contra todos.', 0, 10000000, true , 'pedro' );
 INSERT INTO competitions(id, name, description, type, reward, status, creator) VALUES (3, 'Copa del Rey', 'Torneo donde los equipos participantes jugarán rondas eliminatorias', 1, 10000000, true, 'pedro' );
-
+INSERT INTO competitions(id, name, description, type, reward, status) VALUES (4, 'Prueba', 'prueba', 0, 10000000, true );
 INSERT INTO competition_clubs(competition_id, clubs) VALUES (2, 'Sevilla Fútbol Club');
 INSERT INTO competition_clubs(competition_id, clubs) VALUES (2, 'Manchester City Football Club');
 INSERT INTO competition_clubs(competition_id, clubs) VALUES (2, 'Liverpool Football Club');
@@ -351,6 +351,7 @@ INSERT INTO matches(id, title, match_date, match_status, stadium, football_Club1
 
 --Rounds
 INSERT INTO round(id, name, competition_id) VALUES (1, 'Cuartos de final',3);
+INSERT INTO round(id,name) VALUES (2, 'prueba');
 
 --Matches for Round
 INSERT INTO matches(id, title, match_date, match_status, stadium, football_Club1, football_Club2, referee,round_id, creator) VALUES (5, 'Partido de Cuartos de final', '2023-05-11 20:30', 0, 'Ramón Sánchez-Pizjuan', 'Sevilla Fútbol Club', 'Real Betis Balompié', 'referee2',1, 'presidente1');
