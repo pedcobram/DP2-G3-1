@@ -19,6 +19,9 @@
             <petclinic:inputField label="code.label.createorupdatemaatchrecordform.season" name="season_start" />
             <petclinic:inputField label="code.label.createorupdatemaatchrecordform.result" name="result"/>
             <div class="control-group">
+                  <c:if test="${!matchRecord['new']}">
+                  <petclinic:selectField label="code.label.createorupdatemaatchrecordform.winner" name="winner" names="${winner}" size="3" />
+                  </c:if>   
                     <petclinic:selectField label="code.label.createorupdatemaatchrecordform.matchstatus" name="status" names="${matchStatus}" size="2" />
                 </div>
         </div>

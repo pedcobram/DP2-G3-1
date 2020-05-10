@@ -112,7 +112,7 @@
     		</spring:url>
     		<a data-toggle="tooltip" title="${mousehover}" href="${fn:escapeXml(editUrl)}" class="btn btn-default">${updateClub}</a>  	
     	</c:if> 
-    	<c:if test="${(footballClub.president.user.username == principalUsername)}">
+    	<c:if test="${(footballClub.president.user.username == principalUsername) && footballClub.status == false}">
     		<spring:url value="/footballClubs/myClub/{principalUsername}/delete" var="addUrl">
     			<spring:param name="principalUsername" value="${footballClub.president.user.username}"/>
     		</spring:url>
@@ -120,7 +120,7 @@
     	</c:if>
     	  
     	<c:if test="${footballClub.president.user.username == principalUsername && footballClub.status == false}">
-    		<spring:url value="/coachs/new" var="coachsNewUrl"></spring:url>
+    		<spring:url value="/coach/new" var="coachsNewUrl"></spring:url>
     		<a style="margin-left: 5%" href="${fn:escapeXml(coachsNewUrl)}" class="btn btn-default">${RegisterCoach}</a>
     		<p style="margin-top:0.5%; margin-left: 28%">${RegisterCoachInfo}</p>
     	</c:if>   

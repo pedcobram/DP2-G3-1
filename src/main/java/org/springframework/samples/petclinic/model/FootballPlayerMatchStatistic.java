@@ -1,7 +1,6 @@
 
 package org.springframework.samples.petclinic.model;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -50,11 +49,11 @@ public class FootballPlayerMatchStatistic extends BaseEntity {
 	@Pattern(regexp = "^\\d{4}$|^$")
 	private String			season_end;
 
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne(optional = true)
 	@JoinColumn(name = "football_player_id", referencedColumnName = "id")
 	private FootballPlayer	player;
 
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne(optional = true)
 	@JoinColumn(name = "match_record", referencedColumnName = "id")
 	private MatchRecord		matchRecord;
 

@@ -288,7 +288,7 @@ public class FootballClubController {
 
 		FootballClub thisFootballCLub = this.footballClubService.findFootballClubByPresident(principalUsername);
 
-		if (!thisFootballCLub.getPresident().getUser().getUsername().equals(currentPrincipalName)) { //SEGURIDAD
+		if (!thisFootballCLub.getPresident().getUser().getUsername().equals(currentPrincipalName) || thisFootballCLub.getStatus() == true) { //SEGURIDAD
 			throw new CredentialException("Forbidden Access");
 		}
 

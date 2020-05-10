@@ -368,6 +368,37 @@ INSERT INTO football_player_match_statistic(id, assists, goals, yellow_cards, re
 --Fan Records
 INSERT INTO fan VALUES ( 1, null, null, null, false, 1, 1 );
 
+--Competitions
+
+INSERT INTO competitions(id, name, description, type, reward, status, creator) VALUES (1, 'Premier League', 'Torneo donde los equipos participantes jugarán todos contra todos.', 0, 10000000, false, 'pedro' );
+INSERT INTO competitions(id, name, description, type, reward, status, creator) VALUES (2, 'La Liga', 'Torneo donde los equipos participantes jugarán todos contra todos.', 0, 10000000, true, 'pedro' );
+
+INSERT INTO competition_clubs(competition_id, clubs) VALUES (2, 'Sevilla Fútbol Club');
+INSERT INTO competition_clubs(competition_id, clubs) VALUES (2, 'Manchester City Football Club');
+INSERT INTO competition_clubs(competition_id, clubs) VALUES (2, 'Liverpool Football Club');
+INSERT INTO competition_clubs(competition_id, clubs) VALUES (2, 'Real Betis Balompié');
+
+INSERT INTO competition_clubs(competition_id, clubs) VALUES (1, 'Sevilla Fútbol Club');
+INSERT INTO competition_clubs(competition_id, clubs) VALUES (1, 'Manchester City Football Club');
+INSERT INTO competition_clubs(competition_id, clubs) VALUES (1, 'Liverpool Football Club');
+INSERT INTO competition_clubs(competition_id, clubs) VALUES (1, 'Real Betis Balompié');
+
+--Calendary
+
+INSERT INTO calendary(id, competition_id) VALUES (1, 2);
+
+--Jornadas
+
+INSERT INTO jornada(id, name, calendary_id) VALUES (1, 'Jornada 1', 1);
+INSERT INTO jornada(id, name, calendary_id) VALUES (2, 'Jornada 2', 1);
+INSERT INTO jornada(id, name, calendary_id) VALUES (3, 'Jornada 3', 1);
+INSERT INTO jornada(id, name, calendary_id) VALUES (4, 'Jornada 4', 1);
+INSERT INTO jornada(id, name, calendary_id) VALUES (5, 'Jornada 5', 1);
+INSERT INTO jornada(id, name, calendary_id) VALUES (6, 'Jornada 6', 1);
+
+--MatchesJornadas
+
+INSERT INTO matches(id, title, match_date, match_status, stadium, football_Club1, football_Club2, creator, jornada_id) VALUES(4, 'Jornada 1 de la Liga', '2020-08-11 20:30', 1, 'Ramón Sánchez-Pizjuan', 'Sevilla Fútbol Club', 'Real Betis Balompié', 'pedro', 1);
 -- Player Transfer Requests
 INSERT INTO player_transfer_request(id, offer, contract_time, status, player_id, contract_id, club_id) VALUES(0, 2000000, 1, 0, 1, 1, '2');
 INSERT INTO player_transfer_request(id, offer, contract_time, status, player_id, contract_id, club_id) VALUES(1, 2000000, 2, 0, 14, 18, '1');
