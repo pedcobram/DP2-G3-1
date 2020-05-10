@@ -10,10 +10,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Round;
 import org.springframework.samples.petclinic.service.AuthenticatedService;
 import org.springframework.samples.petclinic.service.FootballClubService;
 import org.springframework.samples.petclinic.service.RoundService;
+import org.springframework.samples.petclinic.service.exceptions.StatusException;
 import org.springframework.stereotype.Service;
 
 @DataJpaTest(includeFilters = @ComponentScan.Filter(Service.class))
@@ -58,9 +60,12 @@ public class RoundServiceTest {
 	void shouldSave() {
 
 		Round f = new Round();
+
 		f.setName("prueba");
 
-		Assertions.assertTrue(!this.roundService.findById(2).isPresent());
+		this.roundService.save(f);
+
+		Assertions.assertTrue(this.roundService.findById(2).isPresent());
 	}
 	@Test //CASO NEGATIVO
 	void shouldNotSave() {
@@ -72,4 +77,27 @@ public class RoundServiceTest {
 		});
 
 	}
+	@Test //CASO POSITIVO
+	void shouldDelete() throws DataAccessException, StatusException {
+
+		this.roundService.delete(this.roundService.findById(1).get());
+
+		Assertions.assertTrue(!this.roundService.findById(1).isPresent());
+	}
+	@Test //CASO NEGATIVO
+	void shouldNotDelete() {
+
+		Assertions.assertThrows(NullPointerException.class, () -> {
+			this.roundService.delete(null);
+		});
+	}
+
+	@Test //CASO POSITIVO
+	void shouldDeleteAll() throws DataAccessException, StatusException {
+
+		this.roundService.deleteAll(3);
+
+		Assertions.assertTrue(!this.roundService.findById(1).isPresent());
+	}
+
 }

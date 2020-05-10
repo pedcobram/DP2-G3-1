@@ -536,7 +536,7 @@ public class CompetitionController {
 		return "redirect:/competitions/" + compId;
 	}
 
-	@RequestMapping(value = "/competitions/{competitionId}/delete") //BORRAR COMPETICION
+	@RequestMapping(value = "/competition/{competitionId}/delete") //BORRAR COMPETICION
 	public String processDeleteForm(@PathVariable("competitionId") final int competitionId, final Model model) throws DataAccessException, CredentialException {
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

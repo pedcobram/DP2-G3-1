@@ -280,42 +280,47 @@ public class CompetitionService {
 	public void deleteCompetition(final Competition thisComp) throws DataAccessException, StatusException {
 
 		//Borrar jornadas, calendario y partidos
+		if (thisComp.getType().equals(CompetitionType.LEAGUE)) {
+			Collection<Match> matches = this.competitionRepository.findAllMatchByCompetitionId(thisComp.getId());
 
-		Collection<Match> matches = this.competitionRepository.findAllMatchByCompetitionId(thisComp.getId());
+			for (Match a : matches) {
 
-		for (Match a : matches) {
+				//RN: Si se ha disputado algun partido de la competición ya no se podrá borrar.
+				if (a.getMatchStatus().equals(MatchStatus.FINISHED)) {
+					throw new StatusException();
+				}
 
-			//RN: Si se ha disputado algun partido de la competición ya no se podrá borrar.
-			if (a.getMatchStatus().equals(MatchStatus.FINISHED)) {
-				throw new StatusException();
+				Integer id = this.matchRecordService.findMatchRecordByMatchId(a.getId()).getId();
+
+				Collection<FootballPlayerMatchStatistic> al = this.playerMatchStatisticService.findFootballPlayerMatchStatisticByMatchRecordId(id);
+
+				for (FootballPlayerMatchStatistic sd : al) {
+					this.playerMatchStatisticService.deleteFootballPlayerStatistic(sd);
+				}
+
+				this.matchRecordService.deleteMatchRecord(this.matchRecordService.findMatchRecordByMatchId(a.getId()));
+				this.matchService.deleteMatch(a);
 			}
 
-			Integer id = this.matchRecordService.findMatchRecordByMatchId(a.getId()).getId();
+			Collection<Jornada> jornadas = this.jornadaService.findAllJornadasFromCompetitionId(thisComp.getId());
 
-			Collection<FootballPlayerMatchStatistic> al = this.playerMatchStatisticService.findFootballPlayerMatchStatisticByMatchRecordId(id);
-
-			for (FootballPlayerMatchStatistic sd : al) {
-				this.playerMatchStatisticService.deleteFootballPlayerStatistic(sd);
+			for (Jornada a : jornadas) {
+				this.jornadaService.deleteJornada(a);
 			}
 
-			this.matchRecordService.deleteMatchRecord(this.matchRecordService.findMatchRecordByMatchId(a.getId()));
-			this.matchService.deleteMatch(a);
+			Calendary c = this.calendaryService.findCalendaryByCompetitionId(thisComp.getId());
+
+			if (c != null) {
+				this.calendaryService.deleteCalendary(c);
+			}
+
+			this.competitionRepository.delete(thisComp);
+		} else if (thisComp.getType().equals(CompetitionType.PLAYOFFS)) {
+
+			this.roundService.deleteAll(thisComp.getId());
+			this.competitionRepository.delete(thisComp);
+
 		}
-
-		Collection<Jornada> jornadas = this.jornadaService.findAllJornadasFromCompetitionId(thisComp.getId());
-
-		for (Jornada a : jornadas) {
-			this.jornadaService.deleteJornada(a);
-		}
-
-		Calendary c = this.calendaryService.findCalendaryByCompetitionId(thisComp.getId());
-
-		if (c != null) {
-			this.calendaryService.deleteCalendary(c);
-		}
-
-		this.competitionRepository.delete(thisComp);
-
 	}
 
 }
