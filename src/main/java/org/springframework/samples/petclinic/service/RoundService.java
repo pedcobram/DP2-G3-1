@@ -18,6 +18,9 @@ public class RoundService {
 
 	private RoundRepository roundRepository;
 
+	//	@Autowired
+	//	private MatchRepository matchRepository;
+
 
 	@Autowired
 	public RoundService(final RoundRepository roundRepository) {
@@ -33,7 +36,7 @@ public class RoundService {
 
 	@Transactional()
 	public void delete(@Valid final Round r) throws DataAccessException {
-
+		//this.matchRepository.deleteByCom(match);
 		this.roundRepository.deleteById(r.getId());
 
 	}
