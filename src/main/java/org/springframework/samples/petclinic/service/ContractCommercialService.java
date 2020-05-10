@@ -100,7 +100,8 @@ public class ContractCommercialService {
 			if (contractCommercial.getEndDate().getTime() - Date.valueOf(LocalDate.now()).getTime() > 0) {
 				long duracion = contractCommercial.getEndDate().getTime() - contractCommercial.getStartDate().getTime();
 				long tiempollevado = Date.valueOf(LocalDate.now()).getTime() - contractCommercial.getStartDate().getTime();
-				int clausulaApagar = (int) (contractCommercial.getClause() * (duracion - tiempollevado) / duracion);
+				double percent = ((double) duracion - (double) tiempollevado) / duracion;
+				int clausulaApagar = (int) (contractCommercial.getClause() * percent);
 				//Si tienes que pagar mas de lo que tienes .... Exception
 				if (clausulaApagar > clubViejo.getMoney()) {
 					throw new NotEnoughMoneyException();

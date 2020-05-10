@@ -111,7 +111,7 @@
 		<spring:url value="/footballClubs/myClub/{principalUsername}/addMoney" var="addMoneyUrl">
 		   		<spring:param name="principalUsername" value="${footballClub.president.user.username}"/>  
     	</spring:url>
-    	<a data-toggle="tooltip" title="${mousehover}" href="${fn:escapeXml(addMoneyUrl)}" class="btn btn-default">${addMoneyToClub}</a>
+    	<a href="${fn:escapeXml(addMoneyUrl)}" class="btn btn-default">${addMoneyToClub}</a>
     	<c:if test="${(footballClub.president.user.username == principalUsername) && footballClub.status == false}">
     		<spring:url value="/footballClubs/myClub/{principalUsername}/edit" var="editUrl">
 		   		<spring:param name="principalUsername" value="${footballClub.president.user.username}"/>
