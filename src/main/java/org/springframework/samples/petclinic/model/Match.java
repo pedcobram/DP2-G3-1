@@ -66,4 +66,9 @@ public class Match extends BaseEntity {
 	@JoinColumn(name = "jornada_id")
 	private Jornada			jornada;
 
+	//OPCIONAL - PARA LAS COMPETICIONES
+	@ManyToOne(optional = true)
+	@JoinColumn(name = "round_id")
+	private Round			round;
+
 }

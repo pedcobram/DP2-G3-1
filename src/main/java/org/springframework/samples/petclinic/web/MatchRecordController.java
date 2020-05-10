@@ -16,6 +16,7 @@ import org.springframework.samples.petclinic.model.Match;
 import org.springframework.samples.petclinic.model.MatchRecord;
 import org.springframework.samples.petclinic.model.Enum.MatchRecordStatus;
 import org.springframework.samples.petclinic.model.Enum.MatchStatus;
+import org.springframework.samples.petclinic.service.CompetitionService;
 import org.springframework.samples.petclinic.service.FootballPlayerMatchStatisticService;
 import org.springframework.samples.petclinic.service.FootballPlayerStatisticService;
 import org.springframework.samples.petclinic.service.MatchRecordService;
@@ -51,14 +52,17 @@ public class MatchRecordController {
 
 	private final FootballPlayerMatchStatisticService	footballPlayerMatchStatisticService;
 
+	private final CompetitionService					competitionService;
+
 
 	@Autowired
-	public MatchRecordController(final MatchRecordService matchRecordService, final MatchService matchService, final FootballPlayerMatchStatisticService footballPlayerMatchStatisticService,
+	public MatchRecordController(final CompetitionService competitionService, final MatchRecordService matchRecordService, final MatchService matchService, final FootballPlayerMatchStatisticService footballPlayerMatchStatisticService,
 		final FootballPlayerStatisticService footballPlayerStatisticService, final UserService userService) {
 		this.matchRecordService = matchRecordService;
 		this.matchService = matchService;
 		this.footballPlayerStatisticService = footballPlayerStatisticService;
 		this.footballPlayerMatchStatisticService = footballPlayerMatchStatisticService;
+		this.competitionService = competitionService;
 	}
 
 	@InitBinder
@@ -130,7 +134,10 @@ public class MatchRecordController {
 
 		//Ver el ganador del partido
 		List<String> winner = new ArrayList<String>();
-		winner.add("<fmt:message key=\"code.matchrecord.empate\"/>");
+		if (m.getRound().equals(null)) {
+			winner.add("<fmt:message key=\"code.matchrecord.empate\"/>");
+			;
+		}
 		winner.add(m.getFootballClub1().getName());
 		winner.add(m.getFootballClub2().getName());
 
@@ -146,7 +153,6 @@ public class MatchRecordController {
 
 		List<MatchRecordStatus> matchStatus = new ArrayList<MatchRecordStatus>();
 		Match m = this.matchService.findMatchById(matchId);
-		//		Match thism = this.matchService.findMatchById(matchRecord.getMatch().getId());
 
 		matchStatus.add(MatchRecordStatus.NOT_PUBLISHED);
 		matchStatus.add(MatchRecordStatus.PUBLISHED);
@@ -154,11 +160,15 @@ public class MatchRecordController {
 		model.addAttribute("matchStatus", matchStatus);
 		//
 		List<String> winner = new ArrayList<String>();
-		winner.add("<fmt:message key=\"code.matchrecord.empate\"/>");
+		if (m.getRound().equals(null)) {
+			winner.add("<fmt:message key=\"code.matchrecord.empate\"/>");
+			;
+		}
 		winner.add(m.getFootballClub1().getName());
 		winner.add(m.getFootballClub2().getName());
 
 		model.addAttribute("winner", winner);
+
 		if (result.hasErrors()) {
 			return MatchRecordController.VIEWS_CREATE_OR_UPDATE_MATCH_RECORD_FORM;
 		} else {
@@ -202,7 +212,9 @@ public class MatchRecordController {
 
 							this.footballPlayerStatisticService.saveFootballPlayerStatistic(fps);
 						}
+
 					}
+					this.competitionService.createRoundFinish(matchRecord);
 				}
 			} catch (IllegalDateException ide) {
 				result.rejectValue("season_start", "code.error.validator.IllegalStartEndDate", "Season end must be grater than season start");

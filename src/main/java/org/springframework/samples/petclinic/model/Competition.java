@@ -44,7 +44,6 @@ public class Competition extends BaseEntity {
 	private Boolean			status;
 
 	@Column(name = "creator")
-	@NotNull
 	private String			creator;  //username
 
 	//Calendar calendario;
