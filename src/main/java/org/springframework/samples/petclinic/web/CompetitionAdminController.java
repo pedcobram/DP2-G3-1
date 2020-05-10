@@ -27,7 +27,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -53,8 +52,8 @@ public class CompetitionAdminController {
 		dataBinder.setDisallowedFields("id");
 	}
 
-	@RequestMapping(value = "/deleteCompetitionAdmin/{username}")
-	public String deleteCompetitionAdmin(@PathVariable("username") final String username) throws DataAccessException, DuplicatedNameException {
+	@RequestMapping(value = "/competitionAdmin/delete")
+	public String deleteCompetitionAdmin() throws DataAccessException, DuplicatedNameException {
 
 		//Obtenemos el username actual conectado
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -78,15 +77,20 @@ public class CompetitionAdminController {
 		return "redirect:/myProfile/" + currentPrincipalName;
 	}
 
-	@GetMapping(value = "/myCompetitionAdminProfile/{competitionAdminId}/edit")
-	public String initUpdatePresidentForm(@PathVariable("competitionAdminId") final int competitionAdminId, final Model model) {
-		CompetitionAdmin competitionAdmin = this.competitionAdminService.findCompetitionAdminById(competitionAdminId);
+	@GetMapping(value = "/myCompetitionAdminProfile/edit")
+	public String initUpdatePresidentForm(final Model model) {
+
+		//Obtenemos el username actual conectado
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
+
+		CompetitionAdmin competitionAdmin = this.competitionAdminService.findCompetitionAdminByUsername(currentPrincipalName);
 		model.addAttribute(competitionAdmin);
 		return CompetitionAdminController.VIEWS_COMPETITION_ADMIN_CREATE_OR_UPDATE_FORM;
 	}
 
-	@PostMapping(value = "/myCompetitionAdminProfile/{competitionAdminId}/edit")
-	public String processUpdateCompetitionAdminForm(@Valid final CompetitionAdmin competitionAdmin, final BindingResult result, @PathVariable("competitionAdminId") final int competitionAdminId) throws DataAccessException, CredentialException {
+	@PostMapping(value = "/myCompetitionAdminProfile/edit")
+	public String processUpdateCompetitionAdminForm(@Valid final CompetitionAdmin competitionAdmin, final BindingResult result) throws DataAccessException, CredentialException {
 
 		if (result.hasErrors()) {
 			return CompetitionAdminController.VIEWS_COMPETITION_ADMIN_CREATE_OR_UPDATE_FORM;
@@ -95,27 +99,25 @@ public class CompetitionAdminController {
 			Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 			String currentPrincipalName = authentication.getName();
 
-			competitionAdmin.setId(competitionAdminId);
+			CompetitionAdmin compAdmin = this.competitionAdminService.findCompetitionAdminByUsername(currentPrincipalName);
+
+			competitionAdmin.setId(compAdmin.getId());
 
 			this.competitionAdminService.saveCompetitionAdmin(competitionAdmin);
 
-			return "redirect:/myCompetitionAdminProfile/" + currentPrincipalName;
+			return "redirect:/myCompetitionAdminProfile";
 		}
 	}
 
-	@GetMapping("/myCompetitionAdminProfile/{competitionAdminUsername}")
-	public ModelAndView showCompetitionAdminProfile(@PathVariable("competitionAdminUsername") final String competitionAdminUsername) throws CredentialException {
+	@GetMapping("/myCompetitionAdminProfile")
+	public ModelAndView showCompetitionAdminProfile() throws CredentialException {
 
 		//Obtenemos el username actual conectado :
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String currentPrincipalName = authentication.getName();
 
-		if (this.competitionAdminService.findCompetitionAdminByUsername(competitionAdminUsername).getUser().getUsername() != currentPrincipalName) {
-			throw new CredentialException("Forbidden Access");
-		}
-
 		ModelAndView mav = new ModelAndView("competitionAdmins/competitionAdminDetails");
-		mav.addObject(this.competitionAdminService.findCompetitionAdminByUsername(competitionAdminUsername));
+		mav.addObject(this.competitionAdminService.findCompetitionAdminByUsername(currentPrincipalName));
 		return mav;
 	}
 

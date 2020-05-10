@@ -15,9 +15,11 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.ContractPlayer;
 import org.springframework.samples.petclinic.model.FootballClub;
 import org.springframework.samples.petclinic.model.FootballPlayer;
+import org.springframework.samples.petclinic.model.PlayerTransferRequest;
 import org.springframework.samples.petclinic.service.ContractPlayerService;
 import org.springframework.samples.petclinic.service.FootballClubService;
 import org.springframework.samples.petclinic.service.FootballPlayerService;
+import org.springframework.samples.petclinic.service.PlayerTransferRequestService;
 import org.springframework.samples.petclinic.service.exceptions.DateException;
 import org.springframework.samples.petclinic.service.exceptions.DuplicatedNameException;
 import org.springframework.samples.petclinic.service.exceptions.MoneyClubException;
@@ -40,23 +42,27 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class ContractPlayerController {
 
-	private static final String			VIEWS_CONTRACT_PLAYER_CREATE_OR_UPDATE_FORM	= "contracts/createOrUpdateContractPlayerForm";
+	private static final String					VIEWS_CONTRACT_PLAYER_CREATE_OR_UPDATE_FORM	= "contracts/createOrUpdateContractPlayerForm";
 
 	@Autowired
-	private final ContractPlayerService	contractService;
+	private final ContractPlayerService			contractService;
 
 	@Autowired
-	private final FootballPlayerService	footballPlayerService;
+	private final FootballPlayerService			footballPlayerService;
 
 	@Autowired
-	private final FootballClubService	footballClubService;
+	private final FootballClubService			footballClubService;
+
+	@Autowired
+	private final PlayerTransferRequestService	playerTransferRequestService;
 
 
 	@Autowired
-	public ContractPlayerController(final ContractPlayerService contractService, final FootballPlayerService footballPlayerService, final FootballClubService footballClubService) {
+	public ContractPlayerController(final ContractPlayerService contractService, final FootballPlayerService footballPlayerService, final PlayerTransferRequestService playerTransferRequestService, final FootballClubService footballClubService) {
 		this.contractService = contractService;
 		this.footballPlayerService = footballPlayerService;
 		this.footballClubService = footballClubService;
+		this.playerTransferRequestService = playerTransferRequestService;
 
 	}
 
@@ -201,7 +207,7 @@ public class ContractPlayerController {
 
 	//DESPEDIR JUGADOR (BORRAR CONTRATO)
 	@RequestMapping(value = "/contractPlayer/{footballPlayerId}/delete")
-	public String processDeleteForm(@PathVariable("footballPlayerId") final int footballPlayerId, final Model model) throws CredentialException, DataAccessException, MoneyClubException {
+	public String processDeleteForm(@PathVariable("footballPlayerId") final int footballPlayerId, final Model model) throws SalaryException, CredentialException, DataAccessException, MoneyClubException {
 
 		//Obtenemos el username del usuario actual conectado
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -209,12 +215,19 @@ public class ContractPlayerController {
 
 		ContractPlayer thisContract = this.contractService.findContractPlayerByPlayerId(footballPlayerId);
 		FootballPlayer player = this.footballPlayerService.findFootballPlayerById(footballPlayerId);
+		PlayerTransferRequest playerTransferRequest = this.playerTransferRequestService.findPlayerTransferRequestByPlayerIdAndStatusAccepted(footballPlayerId);
+
+		if (playerTransferRequest != null) {
+			playerTransferRequest.setContract(null);
+
+			this.playerTransferRequestService.updatePlayerTransferRequest(playerTransferRequest);
+		}
 
 		if (player.getClub() == null) { //SEGURIDAD (Si el jugador es agente libre no se puede despedir)
 			throw new CredentialException();
 		}
 
-		if (!thisContract.getClub().getPresident().getUser().getUsername().equals(currentPrincipalName)) { //SEGURIDAD
+		if (thisContract.getClub().getPresident().getUser().getUsername().compareTo(currentPrincipalName) != 0) { //SEGURIDAD
 			throw new CredentialException();
 		}
 

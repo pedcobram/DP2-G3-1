@@ -129,7 +129,7 @@ public class ContractPlayerService {
 	//Borrar contrato si un club es borrado y se declara insolvente
 	@Transactional
 	public void deleteContractDeletingClub(final Contract contract) throws DataAccessException {
-
+		contract.setClub(null);
 		this.contractRepository.delete(contract);
 	}
 }
