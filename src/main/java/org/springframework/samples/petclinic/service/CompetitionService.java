@@ -139,8 +139,9 @@ public class CompetitionService {
 				competition.setStatus(false);
 				throw new StatusException();
 			}
+
 		} else if (competition.getStatus() == true && competition.getType().equals(CompetitionType.PLAYOFFS)) {
-			if (competition.getClubs().size() % 4 != 0 && competition.getClubs().size() == 0) {
+			if (Integer.bitCount(competition.getClubs().size()) != 1 || competition.getClubs().size() < 4) {
 				competition.setStatus(false);
 				throw new StatusException();
 			}

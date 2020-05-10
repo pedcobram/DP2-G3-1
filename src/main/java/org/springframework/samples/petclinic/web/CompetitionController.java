@@ -523,7 +523,7 @@ public class CompetitionController {
 				comp.setStatus(true);
 				this.competitionService.saveCompetition(comp);
 			} catch (StatusException e) {
-				model.addAttribute("statusError", true);
+				model.addAttribute("statusErrorPO", true);
 				model.addAttribute("competition", comp);
 				model.addAttribute("size", comp.getClubs().size());
 				return "/competitions/competitionDetails";
@@ -536,7 +536,7 @@ public class CompetitionController {
 		return "redirect:/competitions/" + compId;
 	}
 
-	@RequestMapping(value = "/competition/{competitionId}/delete") //BORRAR COMPETICION
+	@RequestMapping(value = "/competitions/{competitionId}/delete") //BORRAR COMPETICION
 	public String processDeleteForm(@PathVariable("competitionId") final int competitionId, final Model model) throws DataAccessException, CredentialException {
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
