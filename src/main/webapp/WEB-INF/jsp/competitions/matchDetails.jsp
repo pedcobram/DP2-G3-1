@@ -24,6 +24,7 @@
     	<fmt:message key="code.label.coach" var="Coach"/>
     	<fmt:message key="code.label.president" var="President"/>  	
     	<fmt:message key="code.list.playerList" var="playerList"/>
+    	<fmt:message key="code.button.back" var="back"/>
 
 <petclinic:layout pageName="matches">
 
@@ -59,5 +60,5 @@
         	<td><c:out value="${match.matchStatus}"/></td>        
         </tr> 
     </table>							 
-    
+    <input type="button" class="btn btn-default" value="${back}" name="Back" onclick="history.back()" />  
 </petclinic:layout>

@@ -9,6 +9,8 @@
 
 		<fmt:message key="code.button.competition.addClub" var="addClub"/>
 		<fmt:message key="code.button.competition.showClub" var="showClub"/>
+		<fmt:message key="code.button.competition.showRound" var="showRound"/>
+		<fmt:message key="code.button.competition.errorNumberClub" var="errorNumberClub"/>
     	
 
 <!-- Tomo el valor del nombre de usuario actual %-->
@@ -88,12 +90,19 @@
     		<a data-toggle="tooltip" title="${mousehover}" href="${fn:escapeXml(publishUrl)}" class="btn btn-default2">PUBLICAR COMPETICIÓN Y GENERAR CALENDARIO</a> 
     	</c:if> 
     	<!-- Calendario Competición-->  
-    	<c:if test="${competition.status == true}">
+    	<c:if test="${competition.status == true && competition.type == 'LEAGUE'}">
     	<spring:url value="/competitions/{competitionId}/calendary" var="calendaryUrl">
 		   		<spring:param name="competitionId" value="${competition.id}"/>
     		</spring:url>
     		<a data-toggle="tooltip" title="${mousehover}" href="${fn:escapeXml(calendaryUrl)}" class="btn btn-default">Calendario</a>
      	</c:if> 
+     	<c:if test="${competition.status == true && competition.type =='PLAYOFFS'}">
+    	<spring:url value="/competitions/{competitionId}/rounds" var="roundUrl">
+		   		<spring:param name="competitionId" value="${competition.id}"/>
+    		</spring:url>
+    		<a data-toggle="tooltip" title="${mousehover}" href="${fn:escapeXml(roundUrl)}" class="btn btn-default">${showRound}</a>
+     	</c:if> 
+     	
      	
      	<c:if test="${(competition.creator == principalUsername)}">
     		<spring:url value="/competition/{competitionId}/delete" var="deleteUrl">
@@ -113,6 +122,13 @@
      		<br>
      		<br>	
     		<p style="color:red"> No puedes borrar la competición, ya se ha disputado al menos un partido</p>
+    		<br>	
+    	</c:if>
+    	
+    	<c:if test="${statusErrorPO == true}">
+     		<br>
+     		<br>	
+    		<p style="color:red"> ${errorNumberClub}</p>
     		<br>	
     	</c:if>
      	

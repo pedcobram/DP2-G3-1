@@ -519,6 +519,17 @@ public class CompetitionController {
 				fechaPartido = cal.getTime();
 
 			}
+		} else if (comp.getType().equals(CompetitionType.PLAYOFFS)) {
+			try {
+				comp.setStatus(true);
+				this.competitionService.saveCompetition(comp);
+			} catch (StatusException e) {
+				model.addAttribute("statusErrorPO", true);
+				model.addAttribute("competition", comp);
+				model.addAttribute("size", comp.getClubs().size());
+				return "/competitions/competitionDetails";
+			}
+			this.competitionService.createRounds(comp, true);
 		}
 
 		this.competitionService.saveCompetition(comp);
