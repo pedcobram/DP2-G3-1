@@ -149,7 +149,8 @@ public class FootballClubController {
 				if (cc.getEndDate().getTime() - Date.valueOf(LocalDate.now()).getTime() > 0) {
 					long duracion = cc.getEndDate().getTime() - cc.getStartDate().getTime();
 					long tiempollevado = Date.valueOf(LocalDate.now()).getTime() - cc.getStartDate().getTime();
-					int clausulaApagar = (int) (cc.getClause() * (duracion - tiempollevado) / duracion);
+					double percent = ((double) duracion - (double) tiempollevado) / duracion;
+					int clausulaApagar = (int) (cc.getClause() * percent);
 					mav.addObject("clausulaApagar", clausulaApagar);
 				} else {
 					mav.addObject("clausulaApagar", null);

@@ -100,6 +100,30 @@ public class ContractCommercialUITest {
 		Assert.assertEquals("Este contrato publicitario ya esta comprado", this.driver.findElement(By.xpath("//div/div/p")).getText());
 	}
 
+	@Test
+	public void Positivo_PresidenteTerminarContrato() throws Exception {
+		this.comoPresidente("presidente1");
+		this.cuandoAccedaALosDetallesDelContratoComercialPrimero();
+		this.pulseAñadirContrato();
+		Assert.assertEquals("150000000 €", this.driver.findElement(By.xpath("//tr[8]/td")).getText());
+		this.pulseEliminarContrato();
+		Assertions.assertThrows(NoSuchElementException.class, () -> {
+			this.driver.findElement(By.xpath("//h2[2]")).getText();
+		});
+		Assert.assertNotEquals("150000000 €", this.driver.findElement(By.xpath("//tr[8]/td")).getText());
+	}
+
+	@Test
+	public void Negativo_PresidenteTerminarContrato() throws Exception {
+		this.comoPresidente("presidente1");
+		this.cuandoAccedaALosDetallesDelContratoComercialSUPERCaro();
+		this.pulseAñadirContrato();
+		Assertions.assertThrows(NoSuchElementException.class, () -> {
+			this.driver.findElement(By.linkText("Eliminar Contrato Publicitario")).getText();
+		});
+	}
+
+	// HERRAMIENTAS
 	private void comoPresidente(final String presidente) {
 		this.driver.get("www.localhost:" + this.port + "/?lang=es");
 		this.driver.get("www.localhost:" + this.port + "/login");
@@ -120,9 +144,18 @@ public class ContractCommercialUITest {
 		this.driver.findElement(By.linkText("Añadir Contrato Publicitario")).click();
 	}
 
+	private void pulseEliminarContrato() {
+		this.driver.findElement(By.linkText("Eliminar Contrato Publicitario")).click();
+	}
+
 	private void cuandoAccedaALosDetallesDelContratoComercialPrimero() {
 		this.driver.findElement(By.linkText("CONTRATOS COMERCIALES")).click();
-		this.driver.findElement(By.xpath("//table[@id='vetsTable']/tbody/tr/td/a/b")).click();
+		this.driver.findElement(By.xpath("//table[@id='vetsTable']/tbody/tr[1]/td/a/b")).click();
+	}
+
+	private void cuandoAccedaALosDetallesDelContratoComercialSUPERCaro() {
+		this.driver.findElement(By.linkText("CONTRATOS COMERCIALES")).click();
+		this.driver.findElement(By.xpath("//table[@id='vetsTable']/tbody/tr[5]/td/a/b")).click();
 	}
 
 	private void cuandoAccedaALosDetallesDelContratoComercialSegundo() {
