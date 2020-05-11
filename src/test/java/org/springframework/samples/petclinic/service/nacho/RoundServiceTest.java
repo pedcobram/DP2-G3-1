@@ -83,8 +83,9 @@ public class RoundServiceTest {
 
 	@Test //CASO POSITIVO
 	void shouldDelete() throws DataAccessException, StatusException {
+		Round id = this.roundService.findById(2);
+		this.roundService.delete(id);
 
-		this.roundService.delete(this.roundService.findById(2));
 		Assertions.assertThrows(NoSuchElementException.class, () -> {
 			this.roundService.findById(2);
 		});

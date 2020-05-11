@@ -430,11 +430,7 @@ INSERT INTO matches(id, title, match_date, match_status, stadium, football_Club1
 INSERT INTO matches(id, title, match_date, match_status, stadium, football_Club1, football_Club2, referee,round_id, creator) VALUES (7, 'Partido de Cuartos de final', '2020-05-11 20:30', 1, 'Camp Nou', 'Manchester City Football Club', 'Liverpool Football Club', 'referee1',1, 'presidente3');
 INSERT INTO matches(id, title, match_date, match_status, stadium, football_Club1, football_Club2, referee,round_id, creator) VALUES (8, 'Partido de Cuartos de final', '2021-05-11 20:30', 0, 'Ramón Sánchez-Pizjuan', 'Real Madrid Club de Fútbol', 'Fútbol Club Barcelona','referee1',1, 'presidente1');
 
---RoundsMatches
-INSERT INTO round_matches(round_id, matches_id) VALUES (1,5);
-INSERT INTO round_matches(round_id, matches_id) VALUES (1,6);
-INSERT INTO round_matches(round_id, matches_id) VALUES (1,7);
-INSERT INTO round_matches(round_id, matches_id) VALUES (1,8);
+
 --Match Records for Round
 INSERT INTO match_record(id, title, status, season_end, season_start, result,winner, match) VALUES(2, 'title 1', 1, '2020', '2019', '1-0','Sevilla Fútbol Club', 5);
 INSERT INTO match_record(id, title, status, season_end, season_start, result,winner, match) VALUES(3, 'title 1', 1, '2020', '2019', '3-2','Valencia Club de Fútbol', 6);

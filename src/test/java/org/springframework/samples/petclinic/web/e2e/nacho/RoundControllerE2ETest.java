@@ -31,17 +31,17 @@ public class RoundControllerE2ETest {
 	private static final int	TEST_COMPETITION_ID		= 3;
 
 
-	//	@WithMockUser(username = "pedro", authorities = {
-	//		"CompetitionAdmin"
-	//	})
-	//	@Test //CASO POSITIVO - SHOW ROUNDS
-	//	void testShowsRounds() throws Exception {
-	//		this.mockMvc.perform(MockMvcRequestBuilders.get("/competitions/{competitionId}/rounds", RoundControllerE2ETest.TEST_COMPETITION_ID)).andExpect(MockMvcResultMatchers.status().isOk());
-	//		//			.andExpect(MockMvcResultMatchers.model().attributeExists("competition")).andExpect(MockMvcResultMatchers.model().attributeExists("rounds")).andExpect(MockMvcResultMatchers.view().name(RoundControllerE2ETest.VIEWS_ROUND_LIST))
-	//		//			.andExpect(MockMvcResultMatchers.forwardedUrl(RoundControllerE2ETest.VIEWS_URL_ROUND_LIST));
-	//		;
-	//
-	//	}
+	@WithMockUser(username = "pedro", authorities = {
+		"CompetitionAdmin"
+	})
+	@Test //CASO POSITIVO - SHOW ROUNDS
+	void testShowsRounds() throws Exception {
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/competitions/{competitionId}/rounds", RoundControllerE2ETest.TEST_COMPETITION_ID)).andExpect(MockMvcResultMatchers.status().isOk())
+			.andExpect(MockMvcResultMatchers.model().attributeExists("competition")).andExpect(MockMvcResultMatchers.model().attributeExists("rounds")).andExpect(MockMvcResultMatchers.view().name(RoundControllerE2ETest.VIEWS_ROUND_LIST))
+			.andExpect(MockMvcResultMatchers.forwardedUrl(RoundControllerE2ETest.VIEWS_URL_ROUND_LIST));
+		;
+
+	}
 	@WithAnonymousUser
 	@Test //CASO NEGATIVO -SHOW ROUNDS
 	void testNotShowsRounds() throws Exception {
@@ -50,17 +50,17 @@ public class RoundControllerE2ETest {
 		;
 
 	}
-	//	@WithMockUser(username = "pedro", authorities = {
-	//		"CompetitionAdmin"
-	//	})
-	//	@Test //CASO POSITIVO - SHOW ROUND
-	//	void testShowsRound() throws Exception {
-	//		this.mockMvc.perform(MockMvcRequestBuilders.get("/competitions/{competitionId}/round/{roundId}", RoundControllerE2ETest.TEST_COMPETITION_ID, 1)).andExpect(MockMvcResultMatchers.status().isOk())
-	//			.andExpect(MockMvcResultMatchers.model().attributeExists("round")).andExpect(MockMvcResultMatchers.model().attributeExists("rounds")).andExpect(MockMvcResultMatchers.view().name(RoundControllerE2ETest.VIEWS_ROUND_DETAILS))
-	//			.andExpect(MockMvcResultMatchers.forwardedUrl(RoundControllerE2ETest.VIEWS_URL_ROUND_DETAILS));
-	//		;
-	//
-	//	}
+	@WithMockUser(username = "pedro", authorities = {
+		"CompetitionAdmin"
+	})
+	@Test //CASO POSITIVO - SHOW ROUND
+	void testShowsRound() throws Exception {
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/competitions/{competitionId}/round/{roundId}", RoundControllerE2ETest.TEST_COMPETITION_ID, 1)).andExpect(MockMvcResultMatchers.status().isOk())
+			.andExpect(MockMvcResultMatchers.model().attributeExists("round")).andExpect(MockMvcResultMatchers.model().attributeExists("rounds")).andExpect(MockMvcResultMatchers.view().name(RoundControllerE2ETest.VIEWS_ROUND_DETAILS))
+			.andExpect(MockMvcResultMatchers.forwardedUrl(RoundControllerE2ETest.VIEWS_URL_ROUND_DETAILS));
+		;
+
+	}
 	@WithAnonymousUser
 	@Test //CASO NEGATIVO - SHOW ROUND
 	void testNotShowsRound() throws Exception {

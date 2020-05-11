@@ -79,7 +79,6 @@ public class RoundControllerTest {
 		r.setId(1);
 		r.setCompetition(c);
 		r.setName("Cuartos de final");
-		r.setMatches(ms);
 
 		BDDMockito.given(this.roundService.findByCompetitionId(RoundControllerTest.TEST_COMPETITION_ID)).willReturn(rs);
 		BDDMockito.given(this.competitionService.findCompetitionById(RoundControllerTest.TEST_COMPETITION_ID)).willReturn(c);

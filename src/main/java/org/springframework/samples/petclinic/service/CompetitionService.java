@@ -153,11 +153,12 @@ public class CompetitionService {
 
 	public void createRoundFinish(final MatchRecord mr) throws IllegalDateException, MatchRecordResultException {
 
+		List<Match> lm = this.matchService.findMatchByRoundId(mr.getMatch().getRound().getId());
+
 		//Comprobamos si es un partido de playoff y que no es una ronda final
-		if (!mr.getMatch().getRound().equals(null) && mr.getMatch().getRound().getMatches().size() != 1) {
+		if (!mr.getMatch().getRound().equals(null) && lm.size() != 1) {
 			Round r = mr.getMatch().getRound();
 			Boolean res = false;
-			List<Match> lm = new ArrayList<>(r.getMatches());
 			List<String> winners = new ArrayList<>();
 
 			//Comprobamos si todos los partidos han terminado
@@ -264,7 +265,7 @@ public class CompetitionService {
 
 		}
 		//guardamos ronda creada
-		r1.setMatches(partidos);
+		//r1.setMatches(partidos);
 		this.roundService.save(r1);
 
 	}

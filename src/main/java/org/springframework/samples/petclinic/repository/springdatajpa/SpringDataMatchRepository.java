@@ -2,6 +2,7 @@
 package org.springframework.samples.petclinic.repository.springdatajpa;
 
 import java.util.Collection;
+import java.util.List;
 
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.jpa.repository.Query;
@@ -31,5 +32,9 @@ public interface SpringDataMatchRepository extends MatchRepository, Repository<M
 	@Override
 	@Query("SELECT COUNT(a) FROM Match a")
 	int count() throws DataAccessException;
+
+	@Override
+	@Query("SELECT m FROM Match m WHERE m.round.id = ?1 order by m.id")
+	List<Match> findMatchByRoundId(int id) throws DataAccessException;
 
 }

@@ -1,9 +1,6 @@
 
 package org.springframework.samples.petclinic.model;
 
-import java.util.List;
-
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -17,13 +14,13 @@ import lombok.EqualsAndHashCode;
 @Entity
 public class Round extends NamedEntity {
 
-	@ElementCollection(targetClass = Match.class)
-	private List<Match>	matches;
+	//	@ElementCollection(targetClass = Match.class)
+	//	private List<Match>	matches;
 
 	@ManyToOne()
 	@JoinColumn(name = "competition_id", referencedColumnName = "id")
 	@Valid
-	private Competition	competition;
+	private Competition competition;
 
 
 	public void nameRounds(final int nClubs) {

@@ -49,27 +49,30 @@ public class RoundService {
 	@Transactional()
 	public void delete(@Valid final Round r) throws DataAccessException, StatusException {
 
-		for (Match a : r.getMatches()) {
+		List<Match> lm = this.matchService.findMatchByRoundId(r.getId());
+		if (lm.size() != 0) {
+			for (Match a : lm) {
 
-			//RN: Si se ha disputado algun partido de la competición ya no se podrá borrar.
-			if (a.getMatchStatus().equals(MatchStatus.FINISHED)) {
-				throw new StatusException();
+				//RN: Si se ha disputado algun partido de la competición ya no se podrá borrar.
+				if (a.getMatchStatus().equals(MatchStatus.FINISHED)) {
+					throw new StatusException();
+				}
 			}
-		}
-		//Antes borramos los partidos con sus MatchRecords,y MatchStatistic
-		for (Match a : r.getMatches()) {
+			//Antes borramos los partidos con sus MatchRecords,y MatchStatistic
+			for (Match a : lm) {
 
-			Integer id = this.matchRecordService.findMatchRecordByMatchId(a.getId()).getId();
+				Integer id = this.matchRecordService.findMatchRecordByMatchId(a.getId()).getId();
 
-			Collection<FootballPlayerMatchStatistic> al = this.playerMatchStatisticService.findFootballPlayerMatchStatisticByMatchRecordId(id);
+				Collection<FootballPlayerMatchStatistic> al = this.playerMatchStatisticService.findFootballPlayerMatchStatisticByMatchRecordId(id);
 
-			for (FootballPlayerMatchStatistic sd : al) {
-				this.playerMatchStatisticService.deleteFootballPlayerStatistic(sd);
+				for (FootballPlayerMatchStatistic sd : al) {
+					this.playerMatchStatisticService.deleteFootballPlayerStatistic(sd);
+				}
+
+				this.matchRecordService.deleteMatchRecord(this.matchRecordService.findMatchRecordByMatchId(a.getId()));
+
+				this.matchService.deleteMatch(a);
 			}
-
-			this.matchRecordService.deleteMatchRecord(this.matchRecordService.findMatchRecordByMatchId(a.getId()));
-
-			this.matchService.deleteMatch(a);
 		}
 		this.roundRepository.deleteById(r.getId());
 
