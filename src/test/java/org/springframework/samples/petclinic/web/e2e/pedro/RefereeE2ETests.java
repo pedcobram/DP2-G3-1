@@ -26,13 +26,12 @@ public class RefereeE2ETests {
 
 
 	//NOTA: Da error al ejecutar en local, pasa correctamente el test en travis-ci
-	@WithMockUser(username = "pedro", authorities = {
+	@WithMockUser(username = "manuel", authorities = {
 		"authenticated"
 	})
 	@Test //CASO POSITIVO
 	void createReferee() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/createReferee")).andExpect(MockMvcResultMatchers.status().isOk());
-		//.andExpect(MockMvcResultMatchers.redirectedUrl("http://localhost/login"));
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/createReferee")).andExpect(MockMvcResultMatchers.status().is3xxRedirection()).andExpect(MockMvcResultMatchers.redirectedUrl("/myRefereeProfile"));
 	}
 
 	@WithAnonymousUser
@@ -43,13 +42,12 @@ public class RefereeE2ETests {
 	}
 
 	//NOTA: Da error al ejecutar en local, pasa correctamente el test en travis-ci
-	@WithMockUser(username = "pedro", authorities = {
+	@WithMockUser(username = "referee1", authorities = {
 		"referee"
 	})
 	@Test //CASO POSITIVO
 	void deleteReferee() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/referee/delete")).andExpect(MockMvcResultMatchers.status().isOk());
-		//.andExpect(MockMvcResultMatchers.redirectedUrl("http://localhost/login"));
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/referee/delete")).andExpect(MockMvcResultMatchers.status().is3xxRedirection()).andExpect(MockMvcResultMatchers.redirectedUrl("/myProfile/referee1"));
 	}
 
 	@WithAnonymousUser

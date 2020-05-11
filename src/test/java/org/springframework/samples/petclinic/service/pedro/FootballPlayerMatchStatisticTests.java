@@ -1,14 +1,13 @@
 
 package org.springframework.samples.petclinic.service.pedro;
 
-import javax.validation.ConstraintViolationException;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.dao.DataAccessException;
+import org.springframework.orm.ObjectRetrievalFailureException;
 import org.springframework.samples.petclinic.model.FootballPlayer;
 import org.springframework.samples.petclinic.model.FootballPlayerMatchStatistic;
 import org.springframework.samples.petclinic.model.FootballPlayerMatchStatistics;
@@ -208,7 +207,7 @@ public class FootballPlayerMatchStatisticTests {
 
 		fpms.setAssists(0);
 		fpms.setGoals(0);
-		fpms.setId(100);
+		fpms.setId(99);
 		fpms.setMatchRecord(mr);
 		fpms.setPlayer(fp);
 		fpms.setReceived_goals(0);
@@ -217,7 +216,7 @@ public class FootballPlayerMatchStatisticTests {
 		fpms.setSeason_start("0000");
 		fpms.setYellow_cards(0);
 
-		Assertions.assertThrows(ConstraintViolationException.class, () -> {
+		Assertions.assertThrows(ObjectRetrievalFailureException.class, () -> {
 			this.footballPlayerMatchStatisticService.saveFootballPlayerStatistic(fpms);
 		});
 

@@ -53,7 +53,7 @@ public class MatchServiceTests {
 
 		int count = ms.size();
 
-		Assertions.assertTrue(count == 4);
+		Assertions.assertTrue(count == 9);
 	}
 
 	@Test //CASO POSITIVO
@@ -65,7 +65,7 @@ public class MatchServiceTests {
 
 		int count = ms.size();
 
-		Assertions.assertTrue(count == 1);
+		Assertions.assertTrue(count == 4);
 	}
 
 	@Test //CASO NEGATIVO
@@ -135,7 +135,7 @@ public class MatchServiceTests {
 
 		int count = this.matchService.count();
 
-		Assertions.assertTrue(count == 5);
+		Assertions.assertTrue(count == 10);
 	}
 
 	@Test //CASO NEGATIVO
@@ -181,13 +181,13 @@ public class MatchServiceTests {
 
 		int pre_delete = this.matchService.count();
 
-		Assertions.assertTrue(pre_delete == 5);
+		Assertions.assertTrue(pre_delete == 10);
 
 		this.matchService.deleteMatch(m);
 
 		int post_delete = this.matchService.count();
 
-		Assertions.assertTrue(post_delete == 4);
+		Assertions.assertTrue(post_delete == 9);
 	}
 
 	@Test //CASO NEGATIVO
