@@ -24,7 +24,7 @@ public class WelcomeE2ETest {
 	private MockMvc mockMvc;
 
 
-	@WithMockUser(username = "ignacio", authorities = {
+	@WithMockUser(username = "manuel", authorities = {
 		"authenticated"
 	})
 	@Test //CASO POSITIVO - CON FAN
@@ -34,7 +34,7 @@ public class WelcomeE2ETest {
 			.andExpect(MockMvcResultMatchers.model().attributeExists("club")).andExpect(MockMvcResultMatchers.model().attributeExists("lastMatches")).andExpect(MockMvcResultMatchers.model().attribute("isFan", true))
 			.andExpect(MockMvcResultMatchers.view().name("welcome")).andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/welcome.jsp"));
 	}
-	@WithMockUser(username = "manuel", authorities = {
+	@WithMockUser(username = "ignacio", authorities = {
 		"authenticated"
 	})
 	@Test //CASO POSITIVO - SIN FAN
