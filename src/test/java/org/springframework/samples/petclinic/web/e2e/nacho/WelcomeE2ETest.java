@@ -24,17 +24,17 @@ public class WelcomeE2ETest {
 	private MockMvc mockMvc;
 
 
-	@WithMockUser(username = "ignacio", authorities = {
-		"authenticated"
-	})
-	@Test //CASO POSITIVO - CON FAN
-	void testWelcomeFanSuccess() throws Exception {
-
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("isVip")).andExpect(MockMvcResultMatchers.model().attributeExists("isFan"))
-			.andExpect(MockMvcResultMatchers.model().attributeExists("club")).andExpect(MockMvcResultMatchers.model().attributeExists("lastMatches")).andExpect(MockMvcResultMatchers.model().attribute("isFan", true))
-			.andExpect(MockMvcResultMatchers.model().attribute("isVip", false)).andExpect(MockMvcResultMatchers.view().name("welcome")).andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/welcome.jsp"));
-	}
-	@WithMockUser(username = "manuel", authorities = {
+	//	@WithMockUser(username = "ignacio", authorities = {
+	//		"authenticated"
+	//	})
+	//	@Test //CASO POSITIVO - CON FAN
+	//	void testWelcomeFanSuccess() throws Exception {
+	//
+	//		this.mockMvc.perform(MockMvcRequestBuilders.get("/")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("isVip")).andExpect(MockMvcResultMatchers.model().attributeExists("isFan"))
+	//			.andExpect(MockMvcResultMatchers.model().attributeExists("club")).andExpect(MockMvcResultMatchers.model().attributeExists("lastMatches")).andExpect(MockMvcResultMatchers.model().attribute("isFan", true))
+	//			.andExpect(MockMvcResultMatchers.view().name("welcome")).andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/welcome.jsp"));
+	//	}
+	@WithMockUser(username = "rufus", authorities = {
 		"authenticated"
 	})
 	@Test //CASO POSITIVO - SIN FAN
