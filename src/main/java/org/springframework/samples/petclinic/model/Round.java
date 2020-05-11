@@ -20,7 +20,7 @@ public class Round extends NamedEntity {
 	@ElementCollection(targetClass = Match.class)
 	private List<Match>	matches;
 
-	@ManyToOne
+	@ManyToOne()
 	@JoinColumn(name = "competition_id", referencedColumnName = "id")
 	@Valid
 	private Competition	competition;

@@ -57,7 +57,7 @@ public class RoundController {
 		List<Round> rs = this.roundService.findByCompetitionId(competitionId);
 		Collections.reverse(rs);
 		mav.addObject("rounds", rs);
-		mav.addObject("round", this.roundService.findById(roundId).get());
+		mav.addObject("round", this.roundService.findById(roundId));
 		return mav;
 	}
 	@GetMapping("/competitions/{competitionId}/round/{roundId}/match/{matchId}") //VISTA DETALLADA DE PARTIDO

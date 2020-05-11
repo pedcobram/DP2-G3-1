@@ -3,7 +3,6 @@ package org.springframework.samples.petclinic.service;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -38,11 +37,13 @@ public class RoundService {
 		this.roundRepository = roundRepository;
 
 	}
+	@Transactional(readOnly = true)
 	public List<Round> findByCompetitionId(final int id) {
 		return this.roundRepository.findByCompetitionId(id);
 	}
-	public Optional<Round> findById(final int id) {
-		return this.roundRepository.findById(id);
+	@Transactional(readOnly = true)
+	public Round findById(final int id) {
+		return this.roundRepository.findById(id).get();
 	}
 
 	@Transactional()

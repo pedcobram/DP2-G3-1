@@ -2,6 +2,7 @@
 package org.springframework.samples.petclinic.service.nacho;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import javax.validation.ConstraintViolationException;
 
@@ -47,14 +48,16 @@ public class RoundServiceTest {
 	@Test //CASO POSITIVO
 	void shouldfindById() {
 
-		Round f = this.roundService.findById(1).get();
+		Round f = this.roundService.findById(1);
 
 		Assertions.assertTrue(f != null);
 	}
 	@Test //CASO NEGATIVO
 	void shouldNotfindById() {
 
-		Assertions.assertTrue(!this.roundService.findById(3).isPresent());
+		Assertions.assertThrows(NoSuchElementException.class, () -> {
+			this.roundService.findById(3);
+		});
 	}
 	@Test //CASO POSITIVO
 	void shouldSave() {
@@ -65,7 +68,7 @@ public class RoundServiceTest {
 
 		this.roundService.save(f);
 
-		Assertions.assertTrue(this.roundService.findById(2).isPresent());
+		Assertions.assertTrue(!this.roundService.findById(2).equals(null));
 	}
 	@Test //CASO NEGATIVO
 	void shouldNotSave() {
@@ -81,15 +84,16 @@ public class RoundServiceTest {
 	@Test //CASO POSITIVO
 	void shouldDelete() throws DataAccessException, StatusException {
 
-		this.roundService.delete(this.roundService.findById(2).get());
-
-		Assertions.assertTrue(this.roundService.findById(2).isPresent());
+		this.roundService.delete(this.roundService.findById(2));
+		Assertions.assertThrows(NoSuchElementException.class, () -> {
+			this.roundService.findById(2);
+		});
 
 	}
 	@Test //CASO NEGATIVO
 	void shouldNotDelete() throws DataAccessException {
 		Assertions.assertThrows(StatusException.class, () -> {
-			this.roundService.delete(this.roundService.findById(1).get());
+			this.roundService.delete(this.roundService.findById(1));
 		});
 	}
 
@@ -106,7 +110,7 @@ public class RoundServiceTest {
 
 		this.roundService.deleteAll(4);
 
-		Assertions.assertTrue(this.roundService.findById(2).isPresent());
+		Assertions.assertTrue(!this.roundService.findById(2).equals(null));
 
 	}
 	@Test //CASO NEGATIVO
