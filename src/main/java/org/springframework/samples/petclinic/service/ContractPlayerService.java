@@ -25,6 +25,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Contract;
 import org.springframework.samples.petclinic.model.ContractPlayer;
 import org.springframework.samples.petclinic.model.FootballPlayer;
+import org.springframework.samples.petclinic.model.PlayerTransferRequest;
 import org.springframework.samples.petclinic.repository.ContractRepository;
 import org.springframework.samples.petclinic.service.exceptions.DateException;
 import org.springframework.samples.petclinic.service.exceptions.MoneyClubException;
@@ -36,10 +37,13 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class ContractPlayerService {
 
-	private ContractRepository		contractRepository;
+	private ContractRepository				contractRepository;
 
 	@Autowired
-	private FootballPlayerService	footballPlayerService;
+	private FootballPlayerService			footballPlayerService;
+
+	@Autowired
+	private PlayerTransferRequestService	playerTransferRequestService;
 
 
 	@Autowired
@@ -116,9 +120,15 @@ public class ContractPlayerService {
 
 		ContractPlayer thisContract = this.findContractPlayerById(contract.getId());
 
+		PlayerTransferRequest ptr = this.playerTransferRequestService.findPlayerTransferRequestByPlayerId(contract.getId());
+
 		//RN: La transacción total no puede ser mayor a los fondos del club
 		if (contract.getClub().getMoney() < contract.getClause()) {
 			throw new MoneyClubException();
+		}
+
+		if (ptr != null) {
+			this.playerTransferRequestService.deletePlayerTransferRequest(ptr);
 		}
 
 		contract.getClub().setMoney(contract.getClub().getMoney() - contract.getClause());
