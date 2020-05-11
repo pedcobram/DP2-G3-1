@@ -59,8 +59,8 @@ public class TransferE2ETests {
 
 	@Test //CASO POSITIVO - LISTA DE ENTRENADORES
 	void testShowCoachList() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/transfers/coachs")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("coachs"))
-			.andExpect(MockMvcResultMatchers.model().attribute("coachs", Matchers.hasSize(8))).andExpect(MockMvcResultMatchers.view().name("coachs/coachList")).andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/coachs/coachList.jsp"));
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/transfers/coaches")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("coachs"))
+			.andExpect(MockMvcResultMatchers.model().attribute("coachs", Matchers.hasSize(8))).andExpect(MockMvcResultMatchers.view().name("transfers/coachList")).andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/transfers/coachList.jsp"));
 	}
 
 	@WithMockUser(username = "owner8", authorities = {
@@ -70,7 +70,7 @@ public class TransferE2ETests {
 	@Test //CASO NEGATIVO - LISTA DE ENTRENADORES con presidente con club sin publicar
 	void testShowCoachListWithClubNotPublished() throws Exception {
 
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/transfers/coachs")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeDoesNotExist("coachs"))
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/transfers/coaches")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeDoesNotExist("coachs"))
 			.andExpect(MockMvcResultMatchers.view().name("exceptions/forbidden")).andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/exceptions/forbidden.jsp"));
 	}
 
@@ -80,7 +80,7 @@ public class TransferE2ETests {
 
 	@Test //CASO NEGATIVO - LISTA DE ENTRENADORES con presidente sin club
 	void testShowCoachListWithoutClub() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/transfers/coachs")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeDoesNotExist("coachs"))
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/transfers/coaches")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeDoesNotExist("coachs"))
 			.andExpect(MockMvcResultMatchers.view().name("footballClubs/myClubEmpty")).andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/footballClubs/myClubEmpty.jsp"));
 	}
 
@@ -95,7 +95,7 @@ public class TransferE2ETests {
 
 	@Test //CASO POSITIVO - LISTA DE ENTRENADORES FA
 	void testShowFACoachList() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/transfers/coachs/free-agents")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("coachs"))
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/transfers/coaches/free-agents")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("coachs"))
 			.andExpect(MockMvcResultMatchers.model().attribute("coachs", Matchers.hasSize(3))).andExpect(MockMvcResultMatchers.view().name("coachs/coachList")).andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/coachs/coachList.jsp"));
 	}
 
@@ -106,7 +106,7 @@ public class TransferE2ETests {
 	@Test //CASO NEGATIVO - LISTA DE ENTRENADORES FA con presidente sin club
 	void testShowCoachFAListWithoutClub() throws Exception {
 
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/transfers/coachs/free-agents")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeDoesNotExist("coachs"))
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/transfers/coaches/free-agents")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeDoesNotExist("coachs"))
 			.andExpect(MockMvcResultMatchers.view().name("footballClubs/myClubEmpty")).andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/footballClubs/myClubEmpty.jsp"));
 	}
 
@@ -122,8 +122,8 @@ public class TransferE2ETests {
 	@Test //CASO POSITIVO - LISTA DE JUGADORES
 	void testShowPlayerList() throws Exception {
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/transfers/players")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("footballPlayers"))
-			.andExpect(MockMvcResultMatchers.model().attribute("footballPlayers", Matchers.hasSize(56))).andExpect(MockMvcResultMatchers.view().name("footballPlayers/footballPlayerList"))
-			.andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/footballPlayers/footballPlayerList.jsp"));
+			.andExpect(MockMvcResultMatchers.model().attribute("footballPlayers", Matchers.hasSize(56))).andExpect(MockMvcResultMatchers.view().name("transfers/footballPlayerList"))
+			.andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/transfers/footballPlayerList.jsp"));
 	}
 
 	@WithMockUser(username = "owner8", authorities = {
@@ -159,8 +159,8 @@ public class TransferE2ETests {
 	@Test //CASO POSITIVO - LISTA DE JUGADORES FA
 	void testShowPlayerFAList() throws Exception {
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/transfers/players/free-agents")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("footballPlayers"))
-			.andExpect(MockMvcResultMatchers.model().attribute("footballPlayers", Matchers.hasSize(5))).andExpect(MockMvcResultMatchers.view().name("footballPlayers/footballPlayerList"))
-			.andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/footballPlayers/footballPlayerList.jsp"));
+			.andExpect(MockMvcResultMatchers.model().attribute("footballPlayers", Matchers.hasSize(5))).andExpect(MockMvcResultMatchers.view().name("transfers/footballPlayerList"))
+			.andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/transfers/footballPlayerList.jsp"));
 	}
 
 	@WithMockUser(username = "rafa", authorities = {

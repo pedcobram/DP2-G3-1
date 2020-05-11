@@ -38,8 +38,11 @@ public class CompetitionAdminUITestRafa {
 	@BeforeEach
 	public void setUp() throws Exception {
 
-		String pathToGeckoDriver = "C:\\Users\\arkke\\Downloads";
-		System.setProperty("webdriver.chrome.driver", pathToGeckoDriver + "\\chromedriver.exe");
+		//String pathToGeckoDriver = "C:\\Users\\arkke\\Downloads";
+		//System.setProperty("webdriver.chrome.driver", pathToGeckoDriver + "\\chromedriver.exe");
+
+		String path = System.getenv("webdriver.chrome.driver");
+		System.setProperty("webdriver.chrome.driver", path);
 
 		this.driver = new ChromeDriver();
 		this.baseUrl = "https://www.google.com/";

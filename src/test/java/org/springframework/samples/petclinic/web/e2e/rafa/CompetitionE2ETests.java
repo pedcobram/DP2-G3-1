@@ -65,12 +65,8 @@ public class CompetitionE2ETests {
 
 	@Test //CASO POSITIVO - VISTA DETALLADA DE CALENDARIO
 	void testShowCalendary() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/competitions/{competitionId}/calendary", 2))
-		.andExpect(MockMvcResultMatchers.status().isOk())
-		.andExpect(MockMvcResultMatchers.model().attributeExists("calendary"))
-			.andExpect(MockMvcResultMatchers.model().attributeExists("jornadas"))
-			.andExpect(MockMvcResultMatchers.view().name("competitions/calendaryDetails"))
-			.andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/competitions/calendaryDetails.jsp"));
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/competitions/{competitionId}/calendary", 2)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("calendary"))
+			.andExpect(MockMvcResultMatchers.model().attributeExists("jornadas")).andExpect(MockMvcResultMatchers.view().name("competitions/calendaryDetails")).andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/competitions/calendaryDetails.jsp"));
 	}
 
 	@Test //CASO NEGATIVO - VISTA DE CALENDARIO sin user
@@ -121,7 +117,7 @@ public class CompetitionE2ETests {
 	void testShowCompetitionsPublishedList() throws Exception {
 
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/competitions/list")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("competitions"))
-			.andExpect(MockMvcResultMatchers.model().attribute("competitions", Matchers.hasSize(1))).andExpect(MockMvcResultMatchers.view().name("competitions/competitionList"))
+			.andExpect(MockMvcResultMatchers.model().attribute("competitions", Matchers.hasSize(3))).andExpect(MockMvcResultMatchers.view().name("competitions/competitionList"))
 			.andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/competitions/competitionList.jsp"));
 	}
 
@@ -138,7 +134,7 @@ public class CompetitionE2ETests {
 	void testShowMyCompetitionsList() throws Exception {
 
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/competition/mylist")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("competitions"))
-			.andExpect(MockMvcResultMatchers.model().attribute("competitions", Matchers.hasSize(2))).andExpect(MockMvcResultMatchers.view().name("competitions/competitionList"))
+			.andExpect(MockMvcResultMatchers.model().attribute("competitions", Matchers.hasSize(3))).andExpect(MockMvcResultMatchers.view().name("competitions/competitionList"))
 			.andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/competitions/competitionList.jsp"));
 	}
 
@@ -160,9 +156,7 @@ public class CompetitionE2ETests {
 
 	@Test //CASO NEGATIVO - GET - CREAR COMPETICIÓN sin user
 	void testInitCreationFormError() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/competition/new"))
-			.andExpect(MockMvcResultMatchers.status().is3xxRedirection())
-			.andExpect(MockMvcResultMatchers.redirectedUrl("http://localhost/login"));
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/competition/new")).andExpect(MockMvcResultMatchers.status().is3xxRedirection()).andExpect(MockMvcResultMatchers.redirectedUrl("http://localhost/login"));
 	}
 
 	@WithMockUser(username = "pedro", authorities = {
@@ -172,7 +166,7 @@ public class CompetitionE2ETests {
 	@Test //CASO POSITIVO - POST - CREAR COMPETICIÓN
 	void testProcessCreationFormSuccess() throws Exception {
 		this.mockMvc.perform(MockMvcRequestBuilders.post("/competition/new").with(SecurityMockMvcRequestPostProcessors.csrf()).param("name", "The League").param("description", "Description").param("type", "LEAGUE").param("status", "false")
-			.param("creator", "rufus").param("reward", "50000000")).andExpect(MockMvcResultMatchers.status().is3xxRedirection()).andExpect(MockMvcResultMatchers.view().name("redirect:/competitions/3"));
+			.param("creator", "rufus").param("reward", "50000000")).andExpect(MockMvcResultMatchers.status().is3xxRedirection()).andExpect(MockMvcResultMatchers.view().name("redirect:/competitions/5"));
 	}
 
 	@WithMockUser(username = "pedro", authorities = {
@@ -227,9 +221,7 @@ public class CompetitionE2ETests {
 
 	@Test //CASO NEGATIVO - GET - EDITAR COMPETICIÓN sin user
 	void testInitUpdateFormError() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/competition/{competitionId}/edit", 1))
-		.andExpect(MockMvcResultMatchers.status().is3xxRedirection())
-		.andExpect(MockMvcResultMatchers.redirectedUrl("http://localhost/login"));
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/competition/{competitionId}/edit", 1)).andExpect(MockMvcResultMatchers.status().is3xxRedirection()).andExpect(MockMvcResultMatchers.redirectedUrl("http://localhost/login"));
 	}
 
 	@WithMockUser(username = "pedro", authorities = {

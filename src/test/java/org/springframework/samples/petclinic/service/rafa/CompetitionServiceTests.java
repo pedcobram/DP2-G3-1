@@ -55,7 +55,7 @@ public class CompetitionServiceTests {
 
 		int count = comps.size();
 
-		Assertions.assertTrue(count == 1);
+		Assertions.assertTrue(count == 3);
 	}
 
 	@Test //CASO POSITIVO - Buscar Todos los partidos por jornada Id
@@ -79,7 +79,7 @@ public class CompetitionServiceTests {
 
 		int count = comps.size();
 
-		Assertions.assertTrue(count == 2);
+		Assertions.assertTrue(count == 3);
 	}
 
 	@Test //CASO POSITIVO - Buscar Equipos por competición Id
@@ -97,7 +97,7 @@ public class CompetitionServiceTests {
 	@Test //CASO POSITIVO - Guardar Competición
 	void shouldSaveCompetition() throws DataAccessException, DuplicatedNameException, NotEnoughMoneyException, StatusException {
 
-		Competition comp = this.competitionService.findCompetitionById(3);
+		Competition comp = this.competitionService.findCompetitionById(5);
 
 		Assertions.assertFalse(comp != null); //Vemos que no existe
 
@@ -112,7 +112,7 @@ public class CompetitionServiceTests {
 
 		this.competitionService.saveCompetition(comp);
 
-		comp = this.competitionService.findCompetitionById(3);
+		comp = this.competitionService.findCompetitionById(5);
 
 		Assertions.assertTrue(comp != null); //Ahora si existe 
 	}
