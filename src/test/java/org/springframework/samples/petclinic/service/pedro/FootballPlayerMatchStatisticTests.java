@@ -1,13 +1,14 @@
 
 package org.springframework.samples.petclinic.service.pedro;
 
+import javax.validation.ConstraintViolationException;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.dao.DataAccessException;
-import org.springframework.orm.ObjectRetrievalFailureException;
 import org.springframework.samples.petclinic.model.FootballPlayer;
 import org.springframework.samples.petclinic.model.FootballPlayerMatchStatistic;
 import org.springframework.samples.petclinic.model.FootballPlayerMatchStatistics;
@@ -216,7 +217,10 @@ public class FootballPlayerMatchStatisticTests {
 		fpms.setSeason_start("0000");
 		fpms.setYellow_cards(0);
 
-		Assertions.assertThrows(ObjectRetrievalFailureException.class, () -> {
+		// FIX POR GONZALO
+		// He supuesto que al estar el titulo vacio buscabas que ocurriera un fallo
+		// provocado por la mala elaboracion del MatchRecord "mr" -> title vacio (fallo)
+		Assertions.assertThrows(ConstraintViolationException.class, () -> {
 			this.footballPlayerMatchStatisticService.saveFootballPlayerStatistic(fpms);
 		});
 
