@@ -19,6 +19,8 @@
 	<fmt:message key="code.list.contractsCommercial" var="publicities"/>
 	<fmt:message key="code.list.coachList" var="coachList"/>
 	<fmt:message key="code.crud.transfers" var="Transfers"/>
+	<fmt:message key="code.list.newTournament" var="newTournament"/>	
+	<fmt:message key="code.list.myTournament" var="myTournaments"/>
 
 <nav class="navbar navbar-default" role="navigation">
 	<div class="container">
@@ -41,7 +43,7 @@
 					<span><fmt:message key="home"/></span>
 				</petclinic:menuItem>
 
-				<petclinic:menuItem active="${name eq 'owners'}" url="/owners/find"
+				<petclinic:menuItem active="${name eq 'owners'}" url="/competitions/list"
 					title="tournaments">
 					<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
 					<span><fmt:message key="tournaments"/></span>
@@ -122,14 +124,14 @@
 										</sec:authorize>								
 
 										<sec:authorize access="hasAuthority('president')">	
-											<petclinic:menuItem active="${name eq 'presidents'}" url="/matchRequests/sent/${principalUsername}"
+											<petclinic:menuItem active="${name eq 'presidents'}" url="/matchRequests/sent"
 												title="sent match requests">
 												<span><fmt:message key="code.tag.menu.sentMatchRequests"/></span>
 											</petclinic:menuItem>
 										</sec:authorize>
 										
 										<sec:authorize access="hasAuthority('president')">	
-											<petclinic:menuItem active="${name eq 'presidents'}" url="/matchRequests/received/${principalUsername}"
+											<petclinic:menuItem active="${name eq 'presidents'}" url="/matchRequests/received"
 												title="received match requests">
 												<span><fmt:message key="code.tag.menu.receivedMatchRequests"/></span>
 											</petclinic:menuItem>
@@ -143,14 +145,14 @@
 										</sec:authorize>
 										
 										<sec:authorize access="hasAuthority('referee')">	
-											<petclinic:menuItem active="${name eq 'referees'}" url="/matchRefereeRequest/list/${principalUsername}"
+											<petclinic:menuItem active="${name eq 'referees'}" url="/matchRefereeRequest/list"
 												title="personal space">
 												<span><fmt:message key="code.tag.menu.matchRefereeRequestList"/></span>
 											</petclinic:menuItem>
 										</sec:authorize>
 										
 										<sec:authorize access="hasAuthority('referee')">	
-											<petclinic:menuItem active="${name eq 'referees'}" url="/myRefereeProfile/${principalUsername}"
+											<petclinic:menuItem active="${name eq 'referees'}" url="/myRefereeProfile"
 												title="personal space">
 												<span><fmt:message key="myProfile"/></span>
 											</petclinic:menuItem>
@@ -165,7 +167,7 @@
 										</sec:authorize>
 										
 										<sec:authorize access="hasAuthority('competitionAdmin')">	
-											<petclinic:menuItem active="${name eq 'competitionAdmins'}" url="/myCompetitionAdminProfile/${principalUsername}"
+											<petclinic:menuItem active="${name eq 'competitionAdmins'}" url="/myCompetitionAdminProfile"
 												title="personal space">
 												<span><fmt:message key="myProfile"/></span>
 											</petclinic:menuItem>
@@ -215,6 +217,20 @@
     		<spring:url value="/matches/list" var="matchesUrl"></spring:url>
     		<a   href="${fn:escapeXml(matchesUrl)}" class="btn btn-default3"><span class="glyphicon glyphicon-list-alt"></span> <fmt:message key="code.tag.menu.matchList"/></a>
     		
+    	</div> 
+	</nav>
+</sec:authorize>
+
+<sec:authorize access="hasAuthority('competitionAdmin')">	
+<nav style="border-color:grey" class="navbar2 navbar2-default">		
+		<div class="th-center">		
+		
+    		<spring:url value="/competition/new" var="createCompetitionUrl"></spring:url>
+    		<a   href="${fn:escapeXml(createCompetitionUrl)}" class="btn btn-default3"><span class="glyphicon glyphicon-user"></span> ${newTournament}</a>
+    		
+    		<spring:url value="/competition/mylist" var="mylistCompetitionUrl"></spring:url>
+    		<a   href="${fn:escapeXml(mylistCompetitionUrl)}" class="btn btn-default3"><span class="glyphicon glyphicon-user"></span> ${myTournaments}</a>
+    
     	</div> 
 	</nav>
 </sec:authorize>

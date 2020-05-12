@@ -7,7 +7,7 @@
 <%@ page contentType="text/html; charset=UTF-8" %> <!-- Para  tildes, ñ y caracteres especiales como el € %-->
 
 <petclinic:layout pageName="contractsCommercial">
- 		<h2 style="color:black"><fmt:message key="contractsCommercial"/></h2>
+ 		<h2 style="color:black"><fmt:message key="code.list.contractsCommercial"/></h2>
  		<table id="vetsTable" class="table table-striped">
 			<thead>
        			<tr>

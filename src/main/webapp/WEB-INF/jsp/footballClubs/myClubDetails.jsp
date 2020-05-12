@@ -3,6 +3,7 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="petclinic" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page contentType="text/html; charset=UTF-8" %> <!-- Para  tildes, ñ y caracteres especiales como el € %-->
@@ -29,7 +30,9 @@
     	<fmt:message key="code.list.playerList" var="playerList"/>
     	<fmt:message key="code.security.deleteClub" var="areYouSure"/>
     	<fmt:message key="code.crud.registerCoach" var="RegisterCoach"/> 	
-		<fmt:message key="code.information.registerCoach" var="RegisterCoachInfo"/>	
+		<fmt:message key="code.information.registerCoach" var="RegisterCoachInfo"/>
+		<fmt:message key="code.label.moneyToAdd" var="moneyToAdd"/>
+		<fmt:message key="code.label.addMoneyToClub" var="addMoneyToClub"/>
     	 	
 <petclinic:layout pageName="footballClub">
 
@@ -105,14 +108,17 @@
 	<fmt:message key="publishClubMouseHover" var="mousehover"/>
 	
 	<security:authorize access="hasAnyAuthority('president')">
-	
-		<c:if test="${(footballClub.president.user.username == principalUsername) && footballClub.status == false}">
+		<spring:url value="/footballClubs/myClub/{principalUsername}/addMoney" var="addMoneyUrl">
+		   		<spring:param name="principalUsername" value="${footballClub.president.user.username}"/>  
+    	</spring:url>
+    	<a href="${fn:escapeXml(addMoneyUrl)}" class="btn btn-default">${addMoneyToClub}</a>
+    	<c:if test="${(footballClub.president.user.username == principalUsername) && footballClub.status == false}">
     		<spring:url value="/footballClubs/myClub/{principalUsername}/edit" var="editUrl">
 		   		<spring:param name="principalUsername" value="${footballClub.president.user.username}"/>
     		</spring:url>
     		<a data-toggle="tooltip" title="${mousehover}" href="${fn:escapeXml(editUrl)}" class="btn btn-default">${updateClub}</a>  	
     	</c:if> 
-    	<c:if test="${(footballClub.president.user.username == principalUsername)}">
+    	<c:if test="${(footballClub.president.user.username == principalUsername) && footballClub.status == false}">
     		<spring:url value="/footballClubs/myClub/{principalUsername}/delete" var="addUrl">
     			<spring:param name="principalUsername" value="${footballClub.president.user.username}"/>
     		</spring:url>
@@ -120,7 +126,7 @@
     	</c:if>
     	  
     	<c:if test="${footballClub.president.user.username == principalUsername && footballClub.status == false}">
-    		<spring:url value="/coachs/new" var="coachsNewUrl"></spring:url>
+    		<spring:url value="/coach/new" var="coachsNewUrl"></spring:url>
     		<a style="margin-left: 5%" href="${fn:escapeXml(coachsNewUrl)}" class="btn btn-default">${RegisterCoach}</a>
     		<p style="margin-top:0.5%; margin-left: 28%">${RegisterCoachInfo}</p>
     	</c:if>   

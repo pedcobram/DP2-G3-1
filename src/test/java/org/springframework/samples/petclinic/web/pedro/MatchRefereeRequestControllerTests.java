@@ -41,8 +41,8 @@ public class MatchRefereeRequestControllerTests {
 
 	@MockBean
 	private FootballPlayerController		footballPlayerController;
-	
-	
+
+
 	@WithMockUser(username = "pedro", authorities = {
 		"president"
 	})
@@ -50,13 +50,13 @@ public class MatchRefereeRequestControllerTests {
 	void initMatchRefereeRequestList() throws Exception {
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/matches/refereeRequest/refereeList/1")).andExpect(MockMvcResultMatchers.status().isOk());
 	}
-	
+
 	@WithAnonymousUser
 	@Test //CASO NEGATIVO
 	void dontInitMatchRefereeRequestList() throws Exception {
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/matches/refereeRequest/refereeList/1")).andExpect(MockMvcResultMatchers.status().is4xxClientError());
 	}
-	
+
 	@WithMockUser(username = "pedro", authorities = {
 		"president"
 	})
@@ -64,84 +64,75 @@ public class MatchRefereeRequestControllerTests {
 	void initMatchRefereeRequestForm() throws Exception {
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/matches/refereeRequest/new/1/1")).andExpect(MockMvcResultMatchers.status().isOk());
 	}
-	
+
 	@WithAnonymousUser
 	@Test //CASO NEGATIVO
 	void dontInitMatchRefereeRequestForm() throws Exception {
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/matches/refereeRequest/new/1/1")).andExpect(MockMvcResultMatchers.status().is4xxClientError());
 	}
-	
+
 	@WithMockUser(username = "pedro", authorities = {
 		"president"
 	})
 	@Test //CASO POSITIVO
 	void createMatchRefereeRequestForm() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.post("/matches/refereeRequest/new/1/1")
-			.with(SecurityMockMvcRequestPostProcessors.csrf())
-			.param("title", "Title")
-			.param("status", "ON_HOLD"))
-		.andExpect(MockMvcResultMatchers.status().isOk())
-		.andExpect(MockMvcResultMatchers.model().hasNoErrors());
+		this.mockMvc.perform(MockMvcRequestBuilders.post("/matches/refereeRequest/new/1/1").with(SecurityMockMvcRequestPostProcessors.csrf()).param("title", "Title").param("status", "ON_HOLD")).andExpect(MockMvcResultMatchers.status().isOk())
+			.andExpect(MockMvcResultMatchers.model().hasNoErrors());
 	}
-	
+
 	@WithMockUser(username = "pedro", authorities = {
 		"president"
 	})
 	@Test //CASO NEGATIVO
 	void dontCreateMatchRefereeRequestForm() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.post("/matches/refereeRequest/new/1/1")
-			.with(SecurityMockMvcRequestPostProcessors.csrf())
-			.param("title", "")
-			.param("status", ""))
-		.andExpect(MockMvcResultMatchers.status().isOk())
-		.andExpect(MockMvcResultMatchers.model().hasErrors())
-		.andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("matchRefereeRequest", "title"))
-		.andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("matchRefereeRequest", "status"));
+		this.mockMvc.perform(MockMvcRequestBuilders.post("/matches/refereeRequest/new/1/1").with(SecurityMockMvcRequestPostProcessors.csrf()).param("title", "").param("status", "")).andExpect(MockMvcResultMatchers.status().isOk())
+			.andExpect(MockMvcResultMatchers.model().hasErrors()).andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("matchRefereeRequest", "title"))
+			.andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("matchRefereeRequest", "status"));
 	}
-	
+
 	@WithMockUser(username = "pedro", authorities = {
 		"president"
 	})
 	@Test //CASO POSITIVO
 	void showMatchRefereeRequestList() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/matchRefereeRequest/list/referee1")).andExpect(MockMvcResultMatchers.status().isOk());
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/matchRefereeRequest/list")).andExpect(MockMvcResultMatchers.status().isOk());
 	}
-	
+
 	@WithAnonymousUser
 	@Test //CASO NEGATIVO
 	void dontShowMatchRefereeRequestList() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/matchRefereeRequest/list/referee1")).andExpect(MockMvcResultMatchers.status().is4xxClientError());
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/matchRefereeRequest/list")).andExpect(MockMvcResultMatchers.status().is4xxClientError());
 	}
-	
+
 	//
-	
+
 	@WithMockUser(username = "pedro", authorities = {
 		"president"
 	})
 	@Test //CASO POSITIVO
 	void acceptMatchRefereeRequest() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/matchRefereeRequest/list/accept/referee1/1")).andExpect(MockMvcResultMatchers.status().isOk());
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/matchRefereeRequest/list/accept/1")).andExpect(MockMvcResultMatchers.status().isOk());
 	}
-	
+
 	@WithAnonymousUser
 	@Test //CASO NEGATIVO
 	void dontAcceptMatchRefereeRequest() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/matchRefereeRequest/list/accept/referee1/1")).andExpect(MockMvcResultMatchers.status().is4xxClientError());
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/matchRefereeRequest/list/accept/1")).andExpect(MockMvcResultMatchers.status().is4xxClientError());
 	}
-	
+
 	//
-	
+
 	@WithMockUser(username = "pedro", authorities = {
 		"president"
 	})
 	@Test //CASO POSITIVO
 	void rejectCompetitionAdminRequest() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/matchRefereeRequest/list/reject/referee1/1")).andExpect(MockMvcResultMatchers.status().isOk());
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/matchRefereeRequest/list/reject/1")).andExpect(MockMvcResultMatchers.status().isOk());
 	}
-	
+
 	@WithAnonymousUser
 	@Test //CASO NEGATIVO
 	void dontRejectCompetitionAdminRequest() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/matchRefereeRequest/list/reject/referee1/1")).andExpect(MockMvcResultMatchers.status().is4xxClientError());
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/matchRefereeRequest/list/reject/1")).andExpect(MockMvcResultMatchers.status().is4xxClientError());
 	}
 }

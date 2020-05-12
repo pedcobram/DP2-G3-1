@@ -135,15 +135,6 @@ public class AuthenticatedControllerTest {
 			.andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("authenticated")).andExpect(MockMvcResultMatchers.view().name("authenticateds/createOrUpdateAuthenticatedForm"))
 			.andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/authenticateds/createOrUpdateAuthenticatedForm.jsp")).andExpect(MockMvcResultMatchers.model().attributeHasErrors("authenticated"));
 	}
-	//	@WithMockUser()
-	//	@Test // CASO NEGATIVO
-	//	void testCreationFormUsernameError() throws Exception {
-	//		this.mockMvc
-	//			.perform(MockMvcRequestBuilders.post("/authenticateds/new").param("firstName", "Auth").param("lastName", "Test").param("dni", "12345678T").param("email", "auth@test.com").param("telephone", "657892753").param("user.password", "auth")
-	//				.with(SecurityMockMvcRequestPostProcessors.csrf()))
-	//			.andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("authenticated")).andExpect(MockMvcResultMatchers.view().name("authenticateds/createOrUpdateAuthenticatedForm"))
-	//			.andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/authenticateds/createOrUpdateAuthenticatedForm.jsp")).andExpect(MockMvcResultMatchers.model().attributeHasErrors("authenticated"));
-	//	}
 
 	@WithMockUser()
 	@Test //CASO POSITIVO 

@@ -23,4 +23,6 @@ public interface FootballClubRepository {
 
 	void delete(FootballClub footballClub) throws DataAccessException;
 
+	FootballClub findFootballClubByName(String name) throws DataAccessException;
+
 }

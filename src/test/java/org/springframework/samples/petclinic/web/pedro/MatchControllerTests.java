@@ -33,6 +33,7 @@ public class MatchControllerTests {
 	@Autowired
 	private MockMvc				mockMvc;
 
+	@SuppressWarnings("unused")
 	@Autowired
 	private MatchController		matchController;
 
@@ -122,17 +123,10 @@ public class MatchControllerTests {
 	})
 	@Test //CASO NEGATIVO
 	void dontProcessUpdateMatchForm() throws Exception {
-		this.mockMvc
-			.perform(MockMvcRequestBuilders.post("/matches/edit/1")
-				.with(SecurityMockMvcRequestPostProcessors.csrf())
-				.param("title", "Title").param("matchDate", "")
-				.param("matchStatus", "TO_BE_PLAYED").param("stadium", "")
-				.param("footballClub1", "Sevilla Fútbol Club")
-				.param("footballClub2", "Fútbol Club Barcelona"))
-			.andExpect(MockMvcResultMatchers.status().isOk())
-			.andExpect(MockMvcResultMatchers.view().name("exceptions/exception"));
-			//.andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("match", "matchDate"))
-			//.andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("match", "stadium"));
+		this.mockMvc.perform(MockMvcRequestBuilders.post("/matches/edit/1").with(SecurityMockMvcRequestPostProcessors.csrf()).param("title", "Title").param("matchDate", "").param("matchStatus", "TO_BE_PLAYED").param("stadium", "")
+			.param("footballClub1", "Sevilla Fútbol Club").param("footballClub2", "Fútbol Club Barcelona")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.view().name("exceptions/exception"));
+		//.andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("match", "matchDate"))
+		//.andExpect(MockMvcResultMatchers.model().attributeHasFieldErrors("match", "stadium"));
 	}
 
 	@WithMockUser(username = "pedro", authorities = {

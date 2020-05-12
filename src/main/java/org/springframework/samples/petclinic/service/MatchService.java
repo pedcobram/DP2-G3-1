@@ -2,6 +2,7 @@
 package org.springframework.samples.petclinic.service;
 
 import java.util.Collection;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -49,6 +50,11 @@ public class MatchService {
 	@Transactional()
 	public void deleteMatch(final Match match) throws DataAccessException {
 		this.matchRepository.delete(match);
+	}
+	@Transactional(readOnly = true)
+	public List<Match> findMatchByRoundId(final int id) {
+		return this.matchRepository.findMatchByRoundId(id);
+
 	}
 
 	public int count() throws DataAccessException {

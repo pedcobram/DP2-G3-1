@@ -51,12 +51,15 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class FootballClubController {
 
 	private static final String				VIEWS_CLUB_CREATE_OR_UPDATE_FORM	= "footballClubs/createOrUpdateFootballClubForm";
+
+	private static final String				VIEWS_ADD_MONEY_FORM				= "footballClubs/addMoneyToClubForm";
 
 	@Autowired
 	private final ContractCommercialService	contractCommercialService;
@@ -146,7 +149,8 @@ public class FootballClubController {
 				if (cc.getEndDate().getTime() - Date.valueOf(LocalDate.now()).getTime() > 0) {
 					long duracion = cc.getEndDate().getTime() - cc.getStartDate().getTime();
 					long tiempollevado = Date.valueOf(LocalDate.now()).getTime() - cc.getStartDate().getTime();
-					int clausulaApagar = (int) (cc.getClause() * (duracion - tiempollevado) / duracion);
+					double percent = ((double) duracion - (double) tiempollevado) / duracion;
+					int clausulaApagar = (int) (cc.getClause() * percent);
 					mav.addObject("clausulaApagar", clausulaApagar);
 				} else {
 					mav.addObject("clausulaApagar", null);
@@ -288,7 +292,7 @@ public class FootballClubController {
 
 		FootballClub thisFootballCLub = this.footballClubService.findFootballClubByPresident(principalUsername);
 
-		if (!thisFootballCLub.getPresident().getUser().getUsername().equals(currentPrincipalName)) { //SEGURIDAD
+		if (!thisFootballCLub.getPresident().getUser().getUsername().equals(currentPrincipalName) || thisFootballCLub.getStatus() == true) { //SEGURIDAD
 			throw new CredentialException("Forbidden Access");
 		}
 
@@ -297,4 +301,44 @@ public class FootballClubController {
 		return "redirect:/footballClubs/myClub/" + currentPrincipalName;
 	}
 
+	@GetMapping(value = "/footballClubs/myClub/{principalUsername}/addMoney") //EDITAR CLUB - GET
+	public String initAddMoneyForm(@PathVariable("principalUsername") final String principalUsername, final Model model) throws CredentialException {
+
+		FootballClub footballClub = this.footballClubService.findFootballClubByPresident(principalUsername);
+
+		model.addAttribute("footballClub", footballClub);
+
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
+
+		if (!currentPrincipalName.equals(principalUsername)) { //SEGURIDAD
+			throw new CredentialException("Forbidden Access");
+		}
+
+		return FootballClubController.VIEWS_ADD_MONEY_FORM;
+	}
+
+	@PostMapping(value = "/footballClubs/myClub/{principalUsername}/addMoney") //EDITAR CLUB - POST
+	public String processAddMoneyForm(@Valid final FootballClub footballClub, @RequestParam("moneyToAdd") final Integer money, final BindingResult result, @PathVariable("principalUsername") final String principalUsername, final Model model)
+		throws DataAccessException, DuplicatedNameException, NumberOfPlayersAndCoachException, CredentialException, DateException {
+
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
+
+		if (!currentPrincipalName.equals(principalUsername)) { //SEGURIDAD
+			throw new CredentialException("Forbidden Access");
+		}
+
+		if (result.hasErrors()) {
+			return FootballClubController.VIEWS_ADD_MONEY_FORM;
+		} else {
+
+			FootballClub footballClubToUpdate = this.footballClubService.findFootballClubByPresident(principalUsername);
+
+			footballClubToUpdate.setMoney(footballClubToUpdate.getMoney() + money);
+			this.footballClubService.saveFootballClub(footballClubToUpdate);
+
+			return "redirect:/footballClubs/myClub/" + currentPrincipalName;
+		}
+	}
 }

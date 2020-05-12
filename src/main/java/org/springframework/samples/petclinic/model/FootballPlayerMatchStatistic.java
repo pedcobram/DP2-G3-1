@@ -50,11 +50,11 @@ public class FootballPlayerMatchStatistic extends BaseEntity {
 	@Pattern(regexp = "^\\d{4}$|^$")
 	private String			season_end;
 
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne(optional = true, cascade = CascadeType.ALL)
 	@JoinColumn(name = "football_player_id", referencedColumnName = "id")
 	private FootballPlayer	player;
 
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne(optional = true, cascade = CascadeType.ALL)
 	@JoinColumn(name = "match_record", referencedColumnName = "id")
 	private MatchRecord		matchRecord;
 

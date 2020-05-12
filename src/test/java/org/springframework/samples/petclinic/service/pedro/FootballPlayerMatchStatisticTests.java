@@ -208,7 +208,7 @@ public class FootballPlayerMatchStatisticTests {
 
 		fpms.setAssists(0);
 		fpms.setGoals(0);
-		fpms.setId(100);
+		fpms.setId(99);
 		fpms.setMatchRecord(mr);
 		fpms.setPlayer(fp);
 		fpms.setReceived_goals(0);
@@ -217,6 +217,9 @@ public class FootballPlayerMatchStatisticTests {
 		fpms.setSeason_start("0000");
 		fpms.setYellow_cards(0);
 
+		// FIX POR GONZALO
+		// He supuesto que al estar el titulo vacio buscabas que ocurriera un fallo
+		// provocado por la mala elaboracion del MatchRecord "mr" -> title vacio (fallo)
 		Assertions.assertThrows(ConstraintViolationException.class, () -> {
 			this.footballPlayerMatchStatisticService.saveFootballPlayerStatistic(fpms);
 		});

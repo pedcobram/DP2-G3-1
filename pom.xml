@@ -29,10 +29,28 @@
 
         <jacoco.version>0.8.5</jacoco.version>
         <spring-format.version>0.0.19</spring-format.version>
+        <selenium.version>3.141.59</selenium.version>
 
     </properties>
-
+	
     <dependencies>
+    	<!-- Selenium dependencies -->
+    	<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-remote-driver</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-firefox-driver</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-chrome-driver</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-support</artifactId>
+		</dependency>
         <!-- Spring and Spring Boot dependencies -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -149,6 +167,17 @@
 
     <build>
         <plugins>
+        	<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<excludes>
+						<exclude>**/*UITest.java</exclude>
+						<exclude>**/*APITest.java</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
+        	
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>

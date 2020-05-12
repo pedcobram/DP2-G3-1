@@ -22,7 +22,7 @@
                      <spring:param name="footballClubId" value="${club.id}"/>
                 </spring:url>
                 <img width=30px height= auto hspace="20" src="${club.crest}"/>
-                	<a href="${fn:escapeXml(footballClubUrl)}"><b><c:out value="${club.name}"/></b></a></br></br>
+                	<a id="urlClub" href="${fn:escapeXml(footballClubUrl)}"><b><c:out value="${club.name}"/></b></a></br></br>
     
     <c:if test="${!isVip}"> 
    
@@ -30,7 +30,7 @@
     					 <fmt:message key="serVip"/></a>
 	 	
     </c:if>
-    <a href="/fan/delete" class="btn btn-default">
+    <a id ="deleteFan" href="/fan/delete" class="btn btn-default">
     					 <fmt:message key="deleteVip"/></a>
     					 
    </br> 	 </br> 			

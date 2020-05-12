@@ -97,9 +97,12 @@ INSERT INTO match_requests(id, title, match_date, stadium, status, football_Club
 INSERT INTO match_requests(id, title, match_date, stadium, status, football_Club1, football_Club2, creator) VALUES(4, 'Partido amistoso 4', '2021-05-11 20:30', 'Camp Nou', 0, 'Fútbol Club Barcelona', 'Sevilla Fútbol Club', 'presidente3');
 
 -- Matches
+INSERT INTO matches(id, title, match_date, match_status, stadium, football_Club1, football_Club2, referee, creator) VALUES(0, 'Match title 0', '2023-05-11 20:30', 0, 'Ramón Sánchez-Pizjuan', 'Sevilla Fútbol Club', 'Real Betis Balompié', 'referee2', 'presidente1');
 INSERT INTO matches(id, title, match_date, match_status, stadium, football_Club1, football_Club2, creator) VALUES(1, 'Match title 1', '2020-05-11 20:30', 0, 'Ramón Sánchez-Pizjuan', 'Sevilla Fútbol Club', 'Real Betis Balompié', 'presidente1');
 INSERT INTO matches(id, title, match_date, match_status, stadium, football_Club1, football_Club2, referee, creator) VALUES(2, 'Match title 2', '2020-03-11 20:30', 1, 'Camp Nou', 'Fútbol Club Barcelona', 'Sevilla Fútbol Club', 'referee1', 'presidente3');
 INSERT INTO matches(id, title, match_date, match_status, stadium, football_Club1, football_Club2, creator) VALUES(3, 'Match title 3', '2021-05-11 20:30', 0, 'Ramón Sánchez-Pizjuan', 'Sevilla Fútbol Club', 'Real Betis Balompié', 'presidente1');
+
+
 -- Match Referee Requests
 INSERT INTO match_referee_request(id, title, status, username, match_id) VALUES(1, 'Test title 1', 0, 'referee1', 3);
 INSERT INTO match_referee_request(id, title, status, username, match_id) VALUES(2, 'Test title 2', 0, 'referee2', 3);    
@@ -109,7 +112,7 @@ INSERT INTO contract_Commercial(id,end_contract_clause,end_date,start_date,money
 INSERT INTO contract_Commercial(id,end_contract_clause,end_date,start_date,money,publicity) VALUES (2, 2000000,'2024-01-01','2020-01-01',100000,'https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Adidas_Logo.svg/1200px-Adidas_Logo.svg.png');
 INSERT INTO contract_Commercial(id,end_contract_clause,end_date,start_date,money,publicity) VALUES (3, 100000,'2024-01-01','2020-01-01',50000,'https://logosmarcas.com/wp-content/uploads/2018/03/PUMA-s%C3%ADmbolo.png');
 INSERT INTO contract_Commercial(id,end_contract_clause,end_date,start_date,money,publicity) VALUES (4, 120000,'2025-01-01','2020-01-01',60000,'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Burger_King_Logo.svg/1200px-Burger_King_Logo.svg.png');
-INSERT INTO contract_Commercial(id,end_contract_clause,end_date,start_date,money,publicity) VALUES (5, 180000,'2024-01-01','2020-01-01',90000,'https://logodownload.org/wp-content/uploads/2019/12/riot-games-logo.png');
+INSERT INTO contract_Commercial(id,end_contract_clause,end_date,start_date,money,publicity) VALUES (5, 1000000000,'2024-01-01','2020-01-01',90000,'https://logodownload.org/wp-content/uploads/2019/12/riot-games-logo.png');
 
 -- Coachs
 INSERT INTO coachs(id, first_name, last_name, football_Clubs_id, salary, clause, birth_date) VALUES (1, 'Julen', 'Lopetegui', 1, '3000000', '6000000', '1968-03-29' );
@@ -211,8 +214,73 @@ INSERT into contract_player(id, football_Clubs_id, start_date, end_date, end_con
 INSERT into contract_player(id, football_Clubs_id, start_date, end_date, end_contract_clause ,football_Players_id, salary) VALUES (3, 1, '2019-06-30', '2022-06-30', '4500000', 3, '2000000');
 INSERT into contract_player(id, football_Clubs_id, start_date, end_date, end_contract_clause ,football_Players_id, salary) VALUES (4, 1, '2019-06-30', '2023-06-30', '12500000', 4, '2500000');
 INSERT into contract_player(id, football_Clubs_id, start_date, end_date, end_contract_clause ,football_Players_id, salary) VALUES (5, 1, '2019-06-30', '2023-06-30', '6000000', 5, '1500000');
-INSERT into contract_player(id, football_Clubs_id, start_date, end_date, end_contract_clause ,football_Players_id, salary) VALUES (6, 1, '2017-06-30', '2022-06-30', '2000000', 46, '2500000');
+INSERT into contract_player(id, football_Clubs_id, start_date, end_date, end_contract_clause ,football_Players_id, salary) VALUES (6, 1, '2017-06-30', '2022-06-30', '2000000', 46, '1600000');
 INSERT into contract_player(id, football_Clubs_id, start_date, end_date, end_contract_clause ,football_Players_id, salary) VALUES (7, 1, '2019-06-30', '2024-06-30', '12500000', 47, '1500000');
+
+INSERT into contract_player(id, football_Clubs_id, start_date, end_date, end_contract_clause ,football_Players_id, salary) VALUES (8, 2, '2018-06-30', '2021-06-30', '9000000', 6, '1500000');
+INSERT into contract_player(id, football_Clubs_id, start_date, end_date, end_contract_clause ,football_Players_id, salary) VALUES (9, 2, '2019-06-30', '2023-06-30', '12500000', 7, '2000000');
+INSERT into contract_player(id, football_Clubs_id, start_date, end_date, end_contract_clause ,football_Players_id, salary) VALUES (10, 2, '2019-06-30', '2022-06-30', '4500000', 8, '2000000');
+INSERT into contract_player(id, football_Clubs_id, start_date, end_date, end_contract_clause ,football_Players_id, salary) VALUES (11, 2, '2019-06-30', '2023-06-30', '12500000', 9, '2500000');
+INSERT into contract_player(id, football_Clubs_id, start_date, end_date, end_contract_clause ,football_Players_id, salary) VALUES (12, 2, '2019-06-30', '2023-06-30', '6000000', 10, '1500000');
+INSERT into contract_player(id, football_Clubs_id, start_date, end_date, end_contract_clause ,football_Players_id, salary) VALUES (13, 2, '2017-06-30', '2022-06-30', '2000000', 48, '2500000');
+INSERT into contract_player(id, football_Clubs_id, start_date, end_date, end_contract_clause ,football_Players_id, salary) VALUES (14, 2, '2019-06-30', '2024-06-30', '12500000', 49, '1500000');
+
+INSERT into contract_player(id, football_Clubs_id, start_date, end_date, end_contract_clause ,football_Players_id, salary) VALUES (15, 3, '2018-06-30', '2021-06-30', '9000000', 11, '1500000');
+INSERT into contract_player(id, football_Clubs_id, start_date, end_date, end_contract_clause ,football_Players_id, salary) VALUES (16, 3, '2019-06-30', '2023-06-30', '12500000', 12, '2000000');
+INSERT into contract_player(id, football_Clubs_id, start_date, end_date, end_contract_clause ,football_Players_id, salary) VALUES (17, 3, '2019-06-30', '2022-06-30', '4500000', 13, '2000000');
+INSERT into contract_player(id, football_Clubs_id, start_date, end_date, end_contract_clause ,football_Players_id, salary) VALUES (18, 3, '2019-06-30', '2023-06-30', '12500000', 14, '2500000');
+INSERT into contract_player(id, football_Clubs_id, start_date, end_date, end_contract_clause ,football_Players_id, salary) VALUES (19, 3, '2019-06-30', '2023-06-30', '6000000', 15, '1500000');
+INSERT into contract_player(id, football_Clubs_id, start_date, end_date, end_contract_clause ,football_Players_id, salary) VALUES (20, 3, '2017-06-30', '2022-06-30', '2000000', 50, '2500000');
+INSERT into contract_player(id, football_Clubs_id, start_date, end_date, end_contract_clause ,football_Players_id, salary) VALUES (21, 3, '2019-06-30', '2024-06-30', '12500000', 51, '1500000');
+
+INSERT into contract_player(id, football_Clubs_id, start_date, end_date, end_contract_clause ,football_Players_id, salary) VALUES (22, 4, '2018-06-30', '2021-06-30', '9000000', 16, '1500000');
+INSERT into contract_player(id, football_Clubs_id, start_date, end_date, end_contract_clause ,football_Players_id, salary) VALUES (23, 4, '2019-06-30', '2023-06-30', '12500000', 17, '2000000');
+INSERT into contract_player(id, football_Clubs_id, start_date, end_date, end_contract_clause ,football_Players_id, salary) VALUES (24, 4, '2019-06-30', '2022-06-30', '4500000', 18, '2000000');
+INSERT into contract_player(id, football_Clubs_id, start_date, end_date, end_contract_clause ,football_Players_id, salary) VALUES (25, 4, '2019-06-30', '2023-06-30', '12500000', 19, '2500000');
+INSERT into contract_player(id, football_Clubs_id, start_date, end_date, end_contract_clause ,football_Players_id, salary) VALUES (26, 4, '2019-06-30', '2023-06-30', '6000000', 20, '1500000');
+INSERT into contract_player(id, football_Clubs_id, start_date, end_date, end_contract_clause ,football_Players_id, salary) VALUES (27, 4, '2017-06-30', '2022-06-30', '2000000', 52, '2500000');
+INSERT into contract_player(id, football_Clubs_id, start_date, end_date, end_contract_clause ,football_Players_id, salary) VALUES (28, 4, '2019-06-30', '2024-06-30', '12500000', 53, '1500000');
+
+INSERT into contract_player(id, football_Clubs_id, start_date, end_date, end_contract_clause ,football_Players_id, salary) VALUES (29, 5, '2018-06-30', '2021-06-30', '9000000', 21, '1500000');
+INSERT into contract_player(id, football_Clubs_id, start_date, end_date, end_contract_clause ,football_Players_id, salary) VALUES (30, 5, '2019-06-30', '2023-06-30', '12500000', 22, '2000000');
+INSERT into contract_player(id, football_Clubs_id, start_date, end_date, end_contract_clause ,football_Players_id, salary) VALUES (31, 5, '2019-06-30', '2022-06-30', '4500000', 23, '2000000');
+INSERT into contract_player(id, football_Clubs_id, start_date, end_date, end_contract_clause ,football_Players_id, salary) VALUES (32, 5, '2019-06-30', '2023-06-30', '12500000', 24, '2500000');
+INSERT into contract_player(id, football_Clubs_id, start_date, end_date, end_contract_clause ,football_Players_id, salary) VALUES (33, 5, '2019-06-30', '2023-06-30', '6000000', 25, '1500000');
+INSERT into contract_player(id, football_Clubs_id, start_date, end_date, end_contract_clause ,football_Players_id, salary) VALUES (34, 5, '2017-06-30', '2022-06-30', '2000000', 54, '2500000');
+INSERT into contract_player(id, football_Clubs_id, start_date, end_date, end_contract_clause ,football_Players_id, salary) VALUES (35, 5, '2019-06-30', '2024-06-30', '12500000', 55, '1500000');
+
+INSERT into contract_player(id, football_Clubs_id, start_date, end_date, end_contract_clause ,football_Players_id, salary) VALUES (36, 6, '2018-06-30', '2021-06-30', '9000000', 26, '1500000');
+INSERT into contract_player(id, football_Clubs_id, start_date, end_date, end_contract_clause ,football_Players_id, salary) VALUES (37, 6, '2019-06-30', '2023-06-30', '12500000', 27, '2000000');
+INSERT into contract_player(id, football_Clubs_id, start_date, end_date, end_contract_clause ,football_Players_id, salary) VALUES (38, 6, '2019-06-30', '2022-06-30', '4500000', 28, '2000000');
+INSERT into contract_player(id, football_Clubs_id, start_date, end_date, end_contract_clause ,football_Players_id, salary) VALUES (39, 6, '2019-06-30', '2023-06-30', '12500000', 29, '2500000');
+INSERT into contract_player(id, football_Clubs_id, start_date, end_date, end_contract_clause ,football_Players_id, salary) VALUES (40, 6, '2019-06-30', '2023-06-30', '6000000', 30, '1500000');
+INSERT into contract_player(id, football_Clubs_id, start_date, end_date, end_contract_clause ,football_Players_id, salary) VALUES (41, 6, '2017-06-30', '2022-06-30', '2000000', 56, '2500000');
+INSERT into contract_player(id, football_Clubs_id, start_date, end_date, end_contract_clause ,football_Players_id, salary) VALUES (42, 6, '2019-06-30', '2024-06-30', '12500000', 57, '1500000');
+
+
+INSERT into contract_player(id, football_Clubs_id, start_date, end_date, end_contract_clause ,football_Players_id, salary) VALUES (43, 7, '2018-06-30', '2021-06-30', '9000000', 31, '1500000');
+INSERT into contract_player(id, football_Clubs_id, start_date, end_date, end_contract_clause ,football_Players_id, salary) VALUES (44, 7, '2019-06-30', '2023-06-30', '12500000', 32, '2000000');
+INSERT into contract_player(id, football_Clubs_id, start_date, end_date, end_contract_clause ,football_Players_id, salary) VALUES (45, 7, '2019-06-30', '2022-06-30', '4500000', 33, '2000000');
+INSERT into contract_player(id, football_Clubs_id, start_date, end_date, end_contract_clause ,football_Players_id, salary) VALUES (46, 7, '2019-06-30', '2023-06-30', '12500000', 34, '2500000');
+INSERT into contract_player(id, football_Clubs_id, start_date, end_date, end_contract_clause ,football_Players_id, salary) VALUES (47, 7, '2019-06-30', '2023-06-30', '6000000', 35, '1500000');
+INSERT into contract_player(id, football_Clubs_id, start_date, end_date, end_contract_clause ,football_Players_id, salary) VALUES (48, 7, '2017-06-30', '2022-06-30', '2000000', 58, '2500000');
+INSERT into contract_player(id, football_Clubs_id, start_date, end_date, end_contract_clause ,football_Players_id, salary) VALUES (49, 7, '2019-06-30', '2024-06-30', '12500000', 59, '1500000');
+
+INSERT into contract_player(id, football_Clubs_id, start_date, end_date, end_contract_clause ,football_Players_id, salary) VALUES (50, 8, '2018-06-30', '2021-06-30', '9000000', 36, '1500000');
+INSERT into contract_player(id, football_Clubs_id, start_date, end_date, end_contract_clause ,football_Players_id, salary) VALUES (51, 8, '2019-06-30', '2023-06-30', '12500000', 37, '2000000');
+INSERT into contract_player(id, football_Clubs_id, start_date, end_date, end_contract_clause ,football_Players_id, salary) VALUES (52, 8, '2019-06-30', '2022-06-30', '4500000', 38, '2000000');
+INSERT into contract_player(id, football_Clubs_id, start_date, end_date, end_contract_clause ,football_Players_id, salary) VALUES (53, 8, '2019-06-30', '2023-06-30', '12500000', 39, '2500000');
+INSERT into contract_player(id, football_Clubs_id, start_date, end_date, end_contract_clause ,football_Players_id, salary) VALUES (54, 8, '2019-06-30', '2023-06-30', '6000000', 40, '1500000');
+INSERT into contract_player(id, football_Clubs_id, start_date, end_date, end_contract_clause ,football_Players_id, salary) VALUES (55, 8, '2017-06-30', '2022-06-30', '2000000', 60, '2500000');
+INSERT into contract_player(id, football_Clubs_id, start_date, end_date, end_contract_clause ,football_Players_id, salary) VALUES (56, 8, '2019-06-30', '2024-06-30', '12500000', 61, '1500000');
+
+INSERT into contract_player(id, football_Clubs_id, start_date, end_date, end_contract_clause ,football_Players_id, salary) VALUES (57, 9, '2018-06-30', '2021-06-30', '9000000', 41, '1500000');
+INSERT into contract_player(id, football_Clubs_id, start_date, end_date, end_contract_clause ,football_Players_id, salary) VALUES (58, 9, '2019-06-30', '2023-06-30', '12500000', 42, '2000000');
+INSERT into contract_player(id, football_Clubs_id, start_date, end_date, end_contract_clause ,football_Players_id, salary) VALUES (59, 9, '2019-06-30', '2022-06-30', '4500000', 43, '2000000');
+INSERT into contract_player(id, football_Clubs_id, start_date, end_date, end_contract_clause ,football_Players_id, salary) VALUES (60, 9, '2019-06-30', '2023-06-30', '12500000', 44, '2500000');
+INSERT into contract_player(id, football_Clubs_id, start_date, end_date, end_contract_clause ,football_Players_id, salary) VALUES (61, 9, '2019-06-30', '2023-06-30', '6000000', 45, '1500000');
+INSERT into contract_player(id, football_Clubs_id, start_date, end_date, end_contract_clause ,football_Players_id, salary) VALUES (62, 9, '2017-06-30', '2022-06-30', '2000000', 62, '2500000');
+INSERT into contract_player(id, football_Clubs_id, start_date, end_date, end_contract_clause ,football_Players_id, salary) VALUES (63, 9, '2019-06-30', '2024-06-30', '12500000', 63, '1500000');
 
 -- Football Player Statistics
 INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(1, 0, 0, 0, 0, 0, 2019, 2020, 1);
@@ -293,11 +361,79 @@ INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_card
 INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(64, 0, 0, 0, 0, 0, 2019, 2020, 64);
 
 -- Match Records
-INSERT INTO match_record(id, title, status, season_end, season_start, result, match) VALUES(1, 'title', 0, '2020', '2019', 'result', 2);
+INSERT INTO match_record(id, title, status, season_end, season_start, result, match) VALUES(0, 'title 0', 0, '2020', '2019', '', 0);
+INSERT INTO match_record(id, title, status, season_end, season_start, result, match) VALUES(1, 'title 1', 0, '2020', '2019', 'result', 2);
+
 
 -- Football Player Match Statistics
 INSERT INTO football_player_match_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id, match_record) VALUES (1, 0, 0, 0, 0, null, 2019, 2020, 1, 1);
 
 --Fan Records
 INSERT INTO fan VALUES ( 1, null, null, null, false, 1, 1 );
+
+--Competitions
+
+INSERT INTO competitions(id, name, description, type, reward, status, creator) VALUES (1, 'Premier League', 'Torneo donde los equipos participantes jugarán todos contra todos.', 0, 10000000, false, 'pedro' );
+INSERT INTO competitions(id, name, description, type, reward, status, creator) VALUES (2, 'La Liga', 'Torneo donde los equipos participantes jugarán todos contra todos.', 0, 10000000, true , 'pedro' );
+INSERT INTO competitions(id, name, description, type, reward, status, creator) VALUES (3, 'Copa del Rey', 'Torneo donde los equipos participantes jugarán rondas eliminatorias', 1, 10000000, true, 'pedro' );
+INSERT INTO competitions(id, name, description, type, reward, status) VALUES (4, 'Prueba', 'prueba', 0, 10000000, true );
+INSERT INTO competition_clubs(competition_id, clubs) VALUES (2, 'Sevilla Fútbol Club');
+INSERT INTO competition_clubs(competition_id, clubs) VALUES (2, 'Manchester City Football Club');
+INSERT INTO competition_clubs(competition_id, clubs) VALUES (2, 'Liverpool Football Club');
+INSERT INTO competition_clubs(competition_id, clubs) VALUES (2, 'Real Betis Balompié');
+
+INSERT INTO competition_clubs(competition_id, clubs) VALUES (1, 'Sevilla Fútbol Club');
+INSERT INTO competition_clubs(competition_id, clubs) VALUES (1, 'Manchester City Football Club');
+INSERT INTO competition_clubs(competition_id, clubs) VALUES (1, 'Liverpool Football Club');
+INSERT INTO competition_clubs(competition_id, clubs) VALUES (1, 'Real Betis Balompié');
+
+INSERT INTO competition_clubs(competition_id, clubs) VALUES (3, 'Real Betis Balompié');
+INSERT INTO competition_clubs(competition_id, clubs) VALUES (3, 'Sevilla Fútbol Club');
+INSERT INTO competition_clubs(competition_id, clubs) VALUES (3, 'Manchester City Football Club');
+INSERT INTO competition_clubs(competition_id, clubs) VALUES (3, 'Liverpool Football Club');
+INSERT INTO competition_clubs(competition_id, clubs) VALUES (3, 'Valencia Club de Fútbol');
+INSERT INTO competition_clubs(competition_id, clubs) VALUES (3, 'Fútbol Club Barcelona');
+INSERT INTO competition_clubs(competition_id, clubs) VALUES (3, 'Atlético de Madrid');
+INSERT INTO competition_clubs(competition_id, clubs) VALUES (3, 'Real Madrid Club de Fútbol');
+
+
+--Calendary
+
+INSERT INTO calendary(id, competition_id) VALUES (1, 2);
+
+--Jornadas
+
+INSERT INTO jornada(id, name, calendary_id) VALUES (1, 'Jornada 1', 1);
+INSERT INTO jornada(id, name, calendary_id) VALUES (2, 'Jornada 2', 1);
+INSERT INTO jornada(id, name, calendary_id) VALUES (3, 'Jornada 3', 1);
+INSERT INTO jornada(id, name, calendary_id) VALUES (4, 'Jornada 4', 1);
+INSERT INTO jornada(id, name, calendary_id) VALUES (5, 'Jornada 5', 1);
+INSERT INTO jornada(id, name, calendary_id) VALUES (6, 'Jornada 6', 1);
+
+--MatchesJornadas
+
+INSERT INTO matches(id, title, match_date, match_status, stadium, football_Club1, football_Club2, creator, jornada_id) VALUES(4, 'Jornada 1 de la Liga', '2020-08-11 20:30', 1, 'Ramón Sánchez-Pizjuan', 'Sevilla Fútbol Club', 'Real Betis Balompié', 'pedro', 1);
+-- Player Transfer Requests
+INSERT INTO player_transfer_request(id, offer, contract_time, status, player_id, contract_id, club_id) VALUES(0, 2000000, 1, 0, 1, 1, '2');
+INSERT INTO player_transfer_request(id, offer, contract_time, status, player_id, contract_id, club_id) VALUES(1, 2000000, 2, 0, 14, 18, '1');
+
+-- Coach Transfer Requests
+INSERT INTO coach_transfer_request(id, offer, status, my_coach, requested_coach) VALUES(0, 1000000, 0, 2, 7);
+
+--Rounds
+INSERT INTO round(id, name, competition_id) VALUES (1, 'Cuartos de final',3);
+INSERT INTO round(id,name) VALUES (2, 'prueba');
+
+--Matches for Round
+INSERT INTO matches(id, title, match_date, match_status, stadium, football_Club1, football_Club2, referee,round_id, creator) VALUES (5, 'Partido de Cuartos de final', '2023-05-11 20:30', 1, 'Ramón Sánchez-Pizjuan', 'Sevilla Fútbol Club', 'Real Betis Balompié', 'referee2',1, 'presidente1');
+INSERT INTO matches(id, title, match_date, match_status, stadium, football_Club1, football_Club2, referee,round_id, creator) VALUES (6, 'Partido de Cuartos de final', '2020-05-11 20:30', 1, 'Ramón Sánchez-Pizjuan', 'Valencia Club de Fútbol', 'Atlético de Madrid','referee1',1, 'presidente1');
+INSERT INTO matches(id, title, match_date, match_status, stadium, football_Club1, football_Club2, referee,round_id, creator) VALUES (7, 'Partido de Cuartos de final', '2020-05-11 20:30', 1, 'Camp Nou', 'Manchester City Football Club', 'Liverpool Football Club', 'referee1',1, 'presidente3');
+INSERT INTO matches(id, title, match_date, match_status, stadium, football_Club1, football_Club2, referee,round_id, creator) VALUES (8, 'Partido de Cuartos de final', '2021-05-11 20:30', 0, 'Ramón Sánchez-Pizjuan', 'Real Madrid Club de Fútbol', 'Fútbol Club Barcelona','referee1',1, 'presidente1');
+
+
+--Match Records for Round
+INSERT INTO match_record(id, title, status, season_end, season_start, result,winner, match) VALUES(2, 'title 1', 1, '2020', '2019', '1-0','Sevilla Fútbol Club', 5);
+INSERT INTO match_record(id, title, status, season_end, season_start, result,winner, match) VALUES(3, 'title 1', 1, '2020', '2019', '3-2','Valencia Club de Fútbol', 6);
+INSERT INTO match_record(id, title, status, season_end, season_start, result,winner, match) VALUES(4, 'title 1', 1, '2020', '2019', '3-4','Liverpool Football Club', 7);
+INSERT INTO match_record(id, title, status, season_end, season_start, result, winner,match) VALUES(5, 'title 1', 0, '2020', '2019', '0-2','Fútbol Club Barcelona', 8);
 

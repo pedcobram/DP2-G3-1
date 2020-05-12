@@ -37,9 +37,7 @@
     </table>
     
    <c:if test="${matchRecord.status eq 'NOT_PUBLISHED'}">
-   	 	<spring:url value="/matches/matchRecord/${matchRecord.match.id}/edit/" var="editMatchRecord">
-    		<!-- <spring:param name="matchId" value="${matchRecord.match.id}"/> -->
-   		</spring:url>	
+   	 	<spring:url value="/matches/matchRecord/${matchRecord.match.id}/edit" var="editMatchRecord">	</spring:url>	
     	<a href="${fn:escapeXml(editMatchRecord)}" class="btn btn-default"><fmt:message key="code.button.matchrecorddetail.edit"/></a>
   	</c:if>
   	<br/>

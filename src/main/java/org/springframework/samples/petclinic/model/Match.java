@@ -3,10 +3,10 @@ package org.springframework.samples.petclinic.model;
 
 import java.util.Date;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -42,22 +42,33 @@ public class Match extends BaseEntity {
 	@NotEmpty
 	private String			stadium;
 
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne(optional = true)
 	@JoinColumn(name = "footballClub1", referencedColumnName = "name")
 	private FootballClub	footballClub1;
 
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne(optional = true)
 	@JoinColumn(name = "footballClub2", referencedColumnName = "name")
 	private FootballClub	footballClub2;
 
-	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToOne(optional = true)
 	@JoinColumn(name = "referee", referencedColumnName = "username")
 	private Referee			referee;
 
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne(optional = true)
 	@JoinColumn(name = "matchRecord", referencedColumnName = "id")
 	private MatchRecord		matchRecord;
 
 	@Column(name = "creator")
 	private String			creator; //Será el username
+
+	//OPCIONAL - PARA LAS COMPETICIONES
+	@ManyToOne(optional = true)
+	@JoinColumn(name = "jornada_id")
+	private Jornada			jornada;
+
+	//OPCIONAL - PARA LAS COMPETICIONES
+	@ManyToOne(optional = true)
+	@JoinColumn(name = "round_id")
+	private Round			round;
+
 }

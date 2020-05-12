@@ -16,6 +16,7 @@ import org.springframework.samples.petclinic.model.Match;
 import org.springframework.samples.petclinic.model.MatchRecord;
 import org.springframework.samples.petclinic.model.Enum.MatchRecordStatus;
 import org.springframework.samples.petclinic.model.Enum.MatchStatus;
+import org.springframework.samples.petclinic.service.CompetitionService;
 import org.springframework.samples.petclinic.service.FootballPlayerMatchStatisticService;
 import org.springframework.samples.petclinic.service.FootballPlayerStatisticService;
 import org.springframework.samples.petclinic.service.MatchRecordService;
@@ -51,14 +52,17 @@ public class MatchRecordController {
 
 	private final FootballPlayerMatchStatisticService	footballPlayerMatchStatisticService;
 
+	private final CompetitionService					competitionService;
+
 
 	@Autowired
-	public MatchRecordController(final MatchRecordService matchRecordService, final MatchService matchService, final FootballPlayerMatchStatisticService footballPlayerMatchStatisticService,
+	public MatchRecordController(final CompetitionService competitionService, final MatchRecordService matchRecordService, final MatchService matchService, final FootballPlayerMatchStatisticService footballPlayerMatchStatisticService,
 		final FootballPlayerStatisticService footballPlayerStatisticService, final UserService userService) {
 		this.matchRecordService = matchRecordService;
 		this.matchService = matchService;
 		this.footballPlayerStatisticService = footballPlayerStatisticService;
 		this.footballPlayerMatchStatisticService = footballPlayerMatchStatisticService;
+		this.competitionService = competitionService;
 	}
 
 	@InitBinder
@@ -117,13 +121,32 @@ public class MatchRecordController {
 	@GetMapping(value = "/matches/matchRecord/{matchId}/edit")
 	public String initUpdateMatchRecordForm(@PathVariable("matchId") final int matchId, final Model model) throws CredentialException {
 
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
+
 		MatchRecord mr = this.matchRecordService.findMatchRecordByMatchId(matchId);
+		Match m = this.matchService.findMatchById(mr.getMatch().getId());
+
+		// Si intenta editarlo alguien que no sea su árbitroo
+		if (mr.getMatch().getReferee().getUser().getUsername().compareTo(currentPrincipalName) != 0) {
+			throw new CredentialException();
+		}
 
 		List<MatchRecordStatus> matchStatus = new ArrayList<MatchRecordStatus>();
 
 		matchStatus.add(MatchRecordStatus.NOT_PUBLISHED);
 		matchStatus.add(MatchRecordStatus.PUBLISHED);
 
+		//Ver el ganador del partido
+		List<String> winner = new ArrayList<String>();
+		if (m.getRound().equals(null)) {
+			winner.add("<fmt:message key=\"code.matchrecord.empate\"/>");
+			;
+		}
+		winner.add(m.getFootballClub1().getName());
+		winner.add(m.getFootballClub2().getName());
+
+		model.addAttribute("winner", winner);
 		model.addAttribute("matchStatus", matchStatus);
 		model.addAttribute("matchRecord", mr);
 
@@ -134,11 +157,22 @@ public class MatchRecordController {
 	public String processUpdateMatchRecordForm(@Valid final MatchRecord matchRecord, final BindingResult result, final ModelMap model, @PathVariable("matchId") final int matchId) throws IllegalDateException {
 
 		List<MatchRecordStatus> matchStatus = new ArrayList<MatchRecordStatus>();
+		Match m = this.matchService.findMatchById(matchId);
 
 		matchStatus.add(MatchRecordStatus.NOT_PUBLISHED);
 		matchStatus.add(MatchRecordStatus.PUBLISHED);
 
 		model.addAttribute("matchStatus", matchStatus);
+		//
+		List<String> winner = new ArrayList<String>();
+		if (m.getRound().equals(null)) {
+			winner.add("<fmt:message key=\"code.matchrecord.empate\"/>");
+			;
+		}
+		winner.add(m.getFootballClub1().getName());
+		winner.add(m.getFootballClub2().getName());
+
+		model.addAttribute("winner", winner);
 
 		if (result.hasErrors()) {
 			return MatchRecordController.VIEWS_CREATE_OR_UPDATE_MATCH_RECORD_FORM;
@@ -160,7 +194,7 @@ public class MatchRecordController {
 				if (mr.getStatus() == MatchRecordStatus.PUBLISHED) {
 
 					//Cambiamos el estado del partido a finalizado una vez se cierre el acta
-					Match m = this.matchService.findMatchById(matchId);
+
 					m.setMatchStatus(MatchStatus.FINISHED);
 
 					//Añadimos las estadísticas del partido a la personal de los jugadores
@@ -183,7 +217,9 @@ public class MatchRecordController {
 
 							this.footballPlayerStatisticService.saveFootballPlayerStatistic(fps);
 						}
+
 					}
+					this.competitionService.createRoundFinish(matchRecord);
 				}
 			} catch (IllegalDateException ide) {
 				result.rejectValue("season_start", "code.error.validator.IllegalStartEndDate", "Season end must be grater than season start");
@@ -200,11 +236,19 @@ public class MatchRecordController {
 	@RequestMapping(value = "/matches/matchRecord/{matchId}/view")
 	public String viewMatchRecord(@PathVariable("matchId") final int matchId, final Model model) throws CredentialException {
 
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String currentPrincipalName = authentication.getName();
+
 		MatchRecord mr = this.matchRecordService.findMatchRecordByMatchId(matchId);
+
+		// Si intenta editarlo alguien que no sea su árbitroo
+		if (mr.getMatch().getReferee().getUser().getUsername().compareTo(currentPrincipalName) != 0) {
+			throw new CredentialException();
+		}
 
 		// Si se intenta acceder a un match record que no existe, devuelve al inicio
 		if (this.matchRecordService.findMatchRecordByMatchId(matchId) == null) {
-			return "redirect:/";
+			throw new CredentialException();
 		}
 
 		FootballPlayerMatchStatistics fpms = new FootballPlayerMatchStatistics();
@@ -224,7 +268,7 @@ public class MatchRecordController {
 
 		FootballPlayerMatchStatistic fpms = this.footballPlayerMatchStatisticService.findFootballPlayerMatchStatisticByPlayerIdAndMatchRecordId(playerId, matchRecordId);
 
-		if (fpms.getMatchRecord().getMatch().getReferee().getUser().getUsername() != currentPrincipalName) {
+		if (!fpms.getMatchRecord().getMatch().getReferee().getUser().getUsername().equals(currentPrincipalName)) {
 			throw new CredentialException();
 		}
 
@@ -243,7 +287,7 @@ public class MatchRecordController {
 
 		FootballPlayerMatchStatistic fpms = this.footballPlayerMatchStatisticService.findFootballPlayerMatchStatisticByPlayerIdAndMatchRecordId(playerId, matchRecordId);
 
-		if (fpms.getMatchRecord().getMatch().getReferee().getUser().getUsername() != currentPrincipalName) {
+		if (!fpms.getMatchRecord().getMatch().getReferee().getUser().getUsername().equals(currentPrincipalName)) {
 			throw new CredentialException();
 		}
 
@@ -266,7 +310,7 @@ public class MatchRecordController {
 
 		FootballPlayerMatchStatistic fpms = this.footballPlayerMatchStatisticService.findFootballPlayerMatchStatisticByPlayerIdAndMatchRecordId(playerId, matchRecordId);
 
-		if (fpms.getMatchRecord().getMatch().getReferee().getUser().getUsername() != currentPrincipalName) {
+		if (!fpms.getMatchRecord().getMatch().getReferee().getUser().getUsername().equals(currentPrincipalName)) {
 			throw new CredentialException();
 		}
 
@@ -285,7 +329,7 @@ public class MatchRecordController {
 
 		FootballPlayerMatchStatistic fpms = this.footballPlayerMatchStatisticService.findFootballPlayerMatchStatisticByPlayerIdAndMatchRecordId(playerId, matchRecordId);
 
-		if (fpms.getMatchRecord().getMatch().getReferee().getUser().getUsername() != currentPrincipalName) {
+		if (!fpms.getMatchRecord().getMatch().getReferee().getUser().getUsername().equals(currentPrincipalName)) {
 			throw new CredentialException();
 		}
 
@@ -308,10 +352,9 @@ public class MatchRecordController {
 
 		FootballPlayerMatchStatistic fpms = this.footballPlayerMatchStatisticService.findFootballPlayerMatchStatisticByPlayerIdAndMatchRecordId(playerId, matchRecordId);
 
-		if (fpms.getMatchRecord().getMatch().getReferee().getUser().getUsername() != currentPrincipalName) {
+		if (!fpms.getMatchRecord().getMatch().getReferee().getUser().getUsername().equals(currentPrincipalName)) {
 			throw new CredentialException();
 		}
-
 		fpms.setRed_cards(fpms.getRed_cards() + 1);
 
 		this.footballPlayerMatchStatisticService.saveFootballPlayerStatistic(fpms);
@@ -327,7 +370,7 @@ public class MatchRecordController {
 
 		FootballPlayerMatchStatistic fpms = this.footballPlayerMatchStatisticService.findFootballPlayerMatchStatisticByPlayerIdAndMatchRecordId(playerId, matchRecordId);
 
-		if (fpms.getMatchRecord().getMatch().getReferee().getUser().getUsername() != currentPrincipalName) {
+		if (!fpms.getMatchRecord().getMatch().getReferee().getUser().getUsername().equals(currentPrincipalName)) {
 			throw new CredentialException();
 		}
 
@@ -350,15 +393,11 @@ public class MatchRecordController {
 
 		FootballPlayerMatchStatistic fpms = this.footballPlayerMatchStatisticService.findFootballPlayerMatchStatisticByPlayerIdAndMatchRecordId(playerId, matchRecordId);
 
-		if (fpms.getMatchRecord().getMatch().getReferee().getUser().getUsername() != currentPrincipalName) {
+		if (!fpms.getMatchRecord().getMatch().getReferee().getUser().getUsername().equals(currentPrincipalName)) {
 			throw new CredentialException();
 		}
 
 		fpms.setYellow_cards(fpms.getYellow_cards() + 1);
-
-		if (fpms.getMatchRecord().getMatch().getReferee().getUser().getUsername() != currentPrincipalName) {
-			throw new CredentialException();
-		}
 
 		this.footballPlayerMatchStatisticService.saveFootballPlayerStatistic(fpms);
 
@@ -373,7 +412,7 @@ public class MatchRecordController {
 
 		FootballPlayerMatchStatistic fpms = this.footballPlayerMatchStatisticService.findFootballPlayerMatchStatisticByPlayerIdAndMatchRecordId(playerId, matchRecordId);
 
-		if (fpms.getMatchRecord().getMatch().getReferee().getUser().getUsername() != currentPrincipalName) {
+		if (!fpms.getMatchRecord().getMatch().getReferee().getUser().getUsername().equals(currentPrincipalName)) {
 			throw new CredentialException();
 		}
 
@@ -396,7 +435,7 @@ public class MatchRecordController {
 
 		FootballPlayerMatchStatistic fpms = this.footballPlayerMatchStatisticService.findFootballPlayerMatchStatisticByPlayerIdAndMatchRecordId(playerId, matchRecordId);
 
-		if (fpms.getMatchRecord().getMatch().getReferee().getUser().getUsername() != currentPrincipalName) {
+		if (!fpms.getMatchRecord().getMatch().getReferee().getUser().getUsername().equals(currentPrincipalName)) {
 			throw new CredentialException();
 		}
 
@@ -415,7 +454,7 @@ public class MatchRecordController {
 
 		FootballPlayerMatchStatistic fpms = this.footballPlayerMatchStatisticService.findFootballPlayerMatchStatisticByPlayerIdAndMatchRecordId(playerId, matchRecordId);
 
-		if (fpms.getMatchRecord().getMatch().getReferee().getUser().getUsername() != currentPrincipalName) {
+		if (!fpms.getMatchRecord().getMatch().getReferee().getUser().getUsername().equals(currentPrincipalName)) {
 			throw new CredentialException();
 		}
 
