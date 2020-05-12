@@ -56,7 +56,7 @@ public class TransferE2ETests {
 	@Test //CASO POSITIVO - LISTA DE ENTRENADORES
 	void testShowCoachList() throws Exception {
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/transfers/coaches")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("coachs"))
-			.andExpect(MockMvcResultMatchers.model().attribute("coachs", Matchers.hasSize(8))).andExpect(MockMvcResultMatchers.view().name("transfers/coachList")).andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/transfers/coachList.jsp"));
+			.andExpect(MockMvcResultMatchers.model().attribute("coachs", Matchers.hasSize(9))).andExpect(MockMvcResultMatchers.view().name("transfers/coachList")).andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/transfers/coachList.jsp"));
 	}
 
 	@WithMockUser(username = "owner8", authorities = {
@@ -92,7 +92,7 @@ public class TransferE2ETests {
 	@Test //CASO POSITIVO - LISTA DE ENTRENADORES FA
 	void testShowFACoachList() throws Exception {
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/transfers/coaches/free-agents")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("coachs"))
-			.andExpect(MockMvcResultMatchers.model().attribute("coachs", Matchers.hasSize(3))).andExpect(MockMvcResultMatchers.view().name("coachs/coachList")).andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/coachs/coachList.jsp"));
+			.andExpect(MockMvcResultMatchers.model().attribute("coachs", Matchers.hasSize(4))).andExpect(MockMvcResultMatchers.view().name("coachs/coachList")).andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/coachs/coachList.jsp"));
 	}
 
 	@WithMockUser(username = "rafa", authorities = {
