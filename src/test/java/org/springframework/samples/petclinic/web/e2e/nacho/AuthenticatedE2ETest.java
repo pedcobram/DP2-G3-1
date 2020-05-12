@@ -108,13 +108,14 @@ public class AuthenticatedE2ETest {
 	//			.andExpect(MockMvcResultMatchers.view().name("authenticateds/findAuthenticateds")).andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/authenticateds/findAuthenticateds.jsp"));
 	//	}
 
-	@WithMockUser(username = "auth1", authorities = {
-		"authenticated"
-	})
-	@Test //CASO POSITIVO
-	void testFindFormSuccess() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/authenticateds").param("lastName", "Test")).andExpect(MockMvcResultMatchers.status().is3xxRedirection()).andExpect(MockMvcResultMatchers.view().name("redirect:/authenticateds/1"));
-	}
+	//	@WithMockUser(username = "auth1", authorities = {
+	//		"authenticated"
+	//	})
+	//	@Test //CASO POSITIVO
+	//	void testFindFormSuccess() throws Exception {
+	//		this.mockMvc.perform(MockMvcRequestBuilders.get("/authenticateds").param("lastName", "Test")).andExpect(MockMvcResultMatchers.status().is3xxRedirection()).andExpect(MockMvcResultMatchers.view().name("redirect:/authenticateds/1"));
+	//	}
+
 	@WithMockUser(username = "auth1", authorities = {
 		"authenticated"
 	})
@@ -123,6 +124,7 @@ public class AuthenticatedE2ETest {
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/authenticateds").param("lastName", "")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.view().name("authenticateds/authenticatedsList"))
 			.andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/authenticateds/authenticatedsList.jsp"));
 	}
+
 	@WithMockUser(username = "auth1", authorities = {
 		"authenticated"
 	})
@@ -141,6 +143,7 @@ public class AuthenticatedE2ETest {
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/myProfile/4/edit")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.view().name("authenticateds/createOrUpdateAuthenticatedForm"))
 			.andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/authenticateds/createOrUpdateAuthenticatedForm.jsp"));
 	}
+
 	@WithMockUser(username = "ignacio", authorities = {
 		"authenticated"
 	})
