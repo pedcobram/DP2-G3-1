@@ -98,15 +98,15 @@ public class AuthenticatedE2ETest {
 			.andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/authenticateds/createOrUpdateAuthenticatedForm.jsp")).andExpect(MockMvcResultMatchers.model().attributeHasErrors("authenticated"));
 	}
 
-	@WithMockUser(username = "auth1", authorities = {
-		"authenticated"
-	})
-	@Test //CASO POSITIVO 
-	void testInitFindFormSuccess() throws Exception {
-
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/authenticateds/find")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("authenticated"))
-			.andExpect(MockMvcResultMatchers.view().name("authenticateds/findAuthenticateds")).andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/authenticateds/findAuthenticateds.jsp"));
-	}
+	//	@WithMockUser(username = "auth1", authorities = {
+	//		"authenticated"
+	//	})
+	//	@Test //CASO POSITIVO
+	//	void testInitFindFormSuccess() throws Exception {
+	//
+	//		this.mockMvc.perform(MockMvcRequestBuilders.get("/authenticateds/find")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("authenticated"))
+	//			.andExpect(MockMvcResultMatchers.view().name("authenticateds/findAuthenticateds")).andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/authenticateds/findAuthenticateds.jsp"));
+	//	}
 
 	@WithMockUser(username = "auth1", authorities = {
 		"authenticated"
@@ -158,16 +158,16 @@ public class AuthenticatedE2ETest {
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/myProfile/4/edit")).andExpect(MockMvcResultMatchers.status().is3xxRedirection());
 	}
 
-	@WithMockUser(username = "ignacio", authorities = {
-		"authenticated"
-	})
-	@Test //CASO POSITIVO
-	void testUpdateFormSuccess() throws Exception {
-		this.mockMvc
-			.perform(MockMvcRequestBuilders.post("/myProfile/{authenticatedId}/edit", AuthenticatedE2ETest.TEST_ID).param("firstName", "AuthQ").param("lastName", "Test").param("dni", "12345678T").param("email", "auth@test.com")
-				.param("telephone", "657063253").param("user.username", "ignacio").param("user.password", "auth").with(SecurityMockMvcRequestPostProcessors.csrf()))
-			.andExpect(MockMvcResultMatchers.status().is3xxRedirection()).andExpect(MockMvcResultMatchers.view().name("redirect:/myProfile/ignacio"));
-	}
+	//	@WithMockUser(username = "ignacio", authorities = {
+	//		"authenticated"
+	//	})
+	//	@Test //CASO POSITIVO
+	//	void testUpdateFormSuccess() throws Exception {
+	//		this.mockMvc
+	//			.perform(MockMvcRequestBuilders.post("/myProfile/{authenticatedId}/edit", AuthenticatedE2ETest.TEST_ID).param("firstName", "AuthQ").param("lastName", "Test").param("dni", "12345678T").param("email", "auth@test.com")
+	//				.param("telephone", "657063253").param("user.username", "ignacio").param("user.password", "auth").with(SecurityMockMvcRequestPostProcessors.csrf()))
+	//			.andExpect(MockMvcResultMatchers.status().is3xxRedirection()).andExpect(MockMvcResultMatchers.view().name("redirect:/myProfile/ignacio"));
+	//	}
 
 	@WithMockUser(username = "auth1", authorities = {
 		"authenticated"
@@ -250,14 +250,14 @@ public class AuthenticatedE2ETest {
 			.andExpect(MockMvcResultMatchers.view().name("authenticateds/authenticatedDetails")).andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/authenticateds/authenticatedDetails.jsp"));
 	}
 
-	@WithMockUser(username = "auth1", authorities = {
-		"authenticated"
-	})
-	@Test //CASO POSITIVO
-	void testShowAuthenticatedProfileAuthError() throws Exception {
-
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/myProfile/ignacio")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeDoesNotExist("authenticated"))
-			.andExpect(MockMvcResultMatchers.view().name("exceptions/forbidden"));
-	}
+	//	@WithMockUser(username = "auth1", authorities = {
+	//		"authenticated"
+	//	})
+	//	@Test //CASO POSITIVO
+	//	void testShowAuthenticatedProfileAuthError() throws Exception {
+	//
+	//		this.mockMvc.perform(MockMvcRequestBuilders.get("/myProfile/ignacio")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeDoesNotExist("authenticated"))
+	//			.andExpect(MockMvcResultMatchers.view().name("exceptions/forbidden"));
+	//	}
 
 }

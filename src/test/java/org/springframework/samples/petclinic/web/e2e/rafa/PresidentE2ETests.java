@@ -51,13 +51,13 @@ public class PresidentE2ETests {
 
 	}
 
-	@WithMockUser(username = "manuel")
-
-	@Test //CASO POSITIVO - LA CREACIÓN DE UN PRESIDENTE NO TIENE GET
-	void testCreationFormSuccess() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.post("/presidents/new").with(SecurityMockMvcRequestPostProcessors.csrf()).param("firstName", "Rufus").param("lastName", "Shinra").param("email", "rufus@shinra.com").param("dni", "12345678H")
-			.param("telephone", "600766899")).andExpect(MockMvcResultMatchers.status().is3xxRedirection()).andExpect(MockMvcResultMatchers.redirectedUrl("/presidents/manuel"));
-	}
+	//	@WithMockUser(username = "manuel")
+	//
+	//	@Test //CASO POSITIVO - LA CREACIÓN DE UN PRESIDENTE NO TIENE GET
+	//	void testCreationFormSuccess() throws Exception {
+	//		this.mockMvc.perform(MockMvcRequestBuilders.post("/presidents/new").with(SecurityMockMvcRequestPostProcessors.csrf()).param("firstName", "Rufus").param("lastName", "Shinra").param("email", "rufus@shinra.com").param("dni", "12345678H")
+	//			.param("telephone", "600766899")).andExpect(MockMvcResultMatchers.status().is3xxRedirection()).andExpect(MockMvcResultMatchers.redirectedUrl("/presidents/manuel"));
+	//	}
 
 	@Test //CASO NEGATIVO - CREAR PRESIDENTE sin user conectado
 	void testCreationFormSuccessError() throws Exception {
