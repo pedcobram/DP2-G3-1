@@ -91,10 +91,15 @@
     	</c:if> 
     	<!-- Calendario Competición-->  
     	<c:if test="${competition.status == true && competition.type == 'LEAGUE'}">
-    	<spring:url value="/competitions/{competitionId}/calendary" var="calendaryUrl">
+    		<spring:url value="/competitions/{competitionId}/calendary" var="calendaryUrl">
 		   		<spring:param name="competitionId" value="${competition.id}"/>
     		</spring:url>
     		<a data-toggle="tooltip" title="${mousehover}" href="${fn:escapeXml(calendaryUrl)}" class="btn btn-default">Calendario</a>
+    		
+    		<spring:url value="/competitions/{competitionId}/statistics" var="statisticsUrl">
+		   		<spring:param name="competitionId" value="${competition.id}"/>
+    		</spring:url>
+    		<a data-toggle="tooltip" title="${mousehover}" href="${fn:escapeXml(statisticsUrl)}" class="btn btn-default">Estadísticas</a>
      	</c:if> 
      	<c:if test="${competition.status == true && competition.type =='PLAYOFFS'}">
     	<spring:url value="/competitions/{competitionId}/rounds" var="roundUrl">

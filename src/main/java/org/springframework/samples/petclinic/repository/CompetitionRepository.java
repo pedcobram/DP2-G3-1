@@ -6,6 +6,7 @@ import java.util.Collection;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Competition;
 import org.springframework.samples.petclinic.model.FootballClub;
+import org.springframework.samples.petclinic.model.FootballPlayerMatchStatistic;
 import org.springframework.samples.petclinic.model.Match;
 
 public interface CompetitionRepository {
@@ -27,5 +28,7 @@ public interface CompetitionRepository {
 	Collection<Match> findAllMatchByCompetitionId(Integer compId) throws DataAccessException;
 
 	Collection<Competition> findAllCompetition() throws DataAccessException;
+
+	Collection<FootballPlayerMatchStatistic> findFPMSByPlayerIdAndCompId(final Integer playerId, final Integer compId);
 
 }

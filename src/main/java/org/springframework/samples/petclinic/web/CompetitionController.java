@@ -560,4 +560,60 @@ public class CompetitionController {
 
 		return "redirect:/";
 	}
+
+	@GetMapping(value = "/competitions/{competitionId}/statistics") //LISTA DE MIS COMPETICIONES
+	public String showCompetitionStats(@PathVariable("competitionId") final int competitionId, final Map<String, Object> model) {
+
+		Competition comp = this.competitionService.findCompetitionById(competitionId);
+
+		List<FootballPlayer> players = new ArrayList<>();
+
+		List<Jornada> jornadas = new ArrayList<>();
+
+		jornadas.addAll(this.jornadaService.findAllJornadasFromCompetitionId(competitionId));
+
+		for (String a : comp.getClubs()) {
+
+			FootballClub c = this.footballClubService.findFootballClubByName(a);
+
+			players.addAll(this.footballPlayerService.findAllClubFootballPlayers(c.getId()));
+
+		}
+
+		//Lista de Goles
+
+		List<Integer> goles = new ArrayList<Integer>();
+
+		//Query de jugadorID y CompId
+
+		for (FootballPlayer a : players) {
+
+			Integer goals = 0;
+
+			for (FootballPlayerMatchStatistic f : this.competitionService.findFPMSByPlayerIdAndCompId(a.getId(), comp.getId())) {
+
+				goals = goals + f.getGoals();
+
+			}
+
+			goles.add(goals);
+
+		}
+
+		//Lista de Tarjetas AMARILLAS
+
+		//Lista de Tarjetas ROJAS
+
+		//LIsta de Asistencias
+
+		//Lista de Goles Recibidos
+
+		model.put("Players", players);
+		model.put("Goals", goles);
+
+		System.out.print(goles);
+
+		return "competitions/competitionStats";
+	}
+
 }

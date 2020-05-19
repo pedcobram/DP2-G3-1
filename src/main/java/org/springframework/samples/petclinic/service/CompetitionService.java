@@ -103,6 +103,11 @@ public class CompetitionService {
 	}
 
 	@Transactional
+	public Collection<FootballPlayerMatchStatistic> findFPMSByPlayerIdAndCompId(final Integer playerId, final Integer compId) {
+		return this.competitionRepository.findFPMSByPlayerIdAndCompId(playerId, compId);
+	}
+
+	@Transactional
 	public Collection<Competition> findMyCompetitions(final String username) throws DataAccessException {
 		return this.competitionRepository.findMyCompetitions(username);
 	}
