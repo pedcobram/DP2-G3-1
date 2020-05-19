@@ -110,8 +110,7 @@ public class RoundControllerTest {
 	@Test //CASO POSITIVO - SHOW ROUND
 	void testShowsRound() throws Exception {
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/competitions/{competitionId}/round/{roundId}", RoundControllerTest.TEST_COMPETITION_ID, 1)).andExpect(MockMvcResultMatchers.status().isOk())
-			.andExpect(MockMvcResultMatchers.model().attributeExists("round")).andExpect(MockMvcResultMatchers.model().attributeExists("rounds")).andExpect(MockMvcResultMatchers.view().name(RoundControllerTest.VIEWS_ROUND_DETAILS))
-			.andExpect(MockMvcResultMatchers.forwardedUrl(RoundControllerTest.VIEWS_URL_ROUND_DETAILS));
+			.andExpect(MockMvcResultMatchers.model().attributeExists("round")).andExpect(MockMvcResultMatchers.view().name(RoundControllerTest.VIEWS_ROUND_DETAILS)).andExpect(MockMvcResultMatchers.forwardedUrl(RoundControllerTest.VIEWS_URL_ROUND_DETAILS));
 		;
 
 	}

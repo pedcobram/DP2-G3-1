@@ -41,7 +41,7 @@
  				</tr>
         	</thead>
         	<tbody>
-    <c:forEach items="${round.matches}" var="match">
+    <c:forEach items="${roundMatches}" var="match">
             <tr>       
             	<td class="th-center">       		
              		<spring:url value="/competitions/{competitionId}/round/{roundId}/match/{matchId}" var="matchUrl">

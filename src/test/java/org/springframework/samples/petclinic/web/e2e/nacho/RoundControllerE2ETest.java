@@ -12,12 +12,14 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.transaction.annotation.Transactional;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
 //@DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)
 //@AutoConfigureTestDatabase(replace = Replace.NONE)
+@Transactional
 public class RoundControllerE2ETest {
 
 	@Autowired
@@ -56,7 +58,7 @@ public class RoundControllerE2ETest {
 	@Test //CASO POSITIVO - SHOW ROUND
 	void testShowsRound() throws Exception {
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/competitions/{competitionId}/round/{roundId}", RoundControllerE2ETest.TEST_COMPETITION_ID, 1)).andExpect(MockMvcResultMatchers.status().isOk())
-			.andExpect(MockMvcResultMatchers.model().attributeExists("round")).andExpect(MockMvcResultMatchers.model().attributeExists("rounds")).andExpect(MockMvcResultMatchers.view().name(RoundControllerE2ETest.VIEWS_ROUND_DETAILS))
+			.andExpect(MockMvcResultMatchers.model().attributeExists("round")).andExpect(MockMvcResultMatchers.view().name(RoundControllerE2ETest.VIEWS_ROUND_DETAILS))
 			.andExpect(MockMvcResultMatchers.forwardedUrl(RoundControllerE2ETest.VIEWS_URL_ROUND_DETAILS));
 		;
 
