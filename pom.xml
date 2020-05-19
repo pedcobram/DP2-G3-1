@@ -283,7 +283,17 @@
             <url>https://www.apache.org/licenses/LICENSE-2.0</url>
         </license>
     </licenses>
-
+<profiles>
+	<profile>
+		<id>mysql</id>
+		<activation>
+			<activeByDefault>false</activeByDefault>
+		</activation>
+		<properties>
+			<spring.profiles.active>mysql</spring.profiles.active>
+		</properties>
+	</profile>
+</profiles>
 
 
 </project>
