@@ -106,6 +106,11 @@
 		   		<spring:param name="competitionId" value="${competition.id}"/>
     		</spring:url>
     		<a data-toggle="tooltip" title="${mousehover}" href="${fn:escapeXml(roundUrl)}" class="btn btn-default">${showRound}</a>
+    		
+    		<spring:url value="/competitions/{competitionId}/statistics" var="statisticsUrl">
+		   		<spring:param name="competitionId" value="${competition.id}"/>
+    		</spring:url>
+    		<a data-toggle="tooltip" title="${mousehover}" href="${fn:escapeXml(statisticsUrl)}" class="btn btn-default">Estadísticas</a>
      	</c:if> 
      	
      	

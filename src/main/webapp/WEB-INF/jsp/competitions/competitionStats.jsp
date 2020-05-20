@@ -25,6 +25,10 @@
        			<tr>
            			<th><fmt:message key="code.label.matchrecorddetail.playername"/></th>
            			<th><fmt:message key="code.label.matchrecorddetail.goals"/></th>
+           			<th><fmt:message key="code.label.matchrecorddetail.assists"/></th>
+           			<th><fmt:message key="code.label.matchrecorddetail.yellowcards"/></th>
+           			<th><fmt:message key="code.label.matchrecorddetail.redcards"/></th>
+           			<th><fmt:message key="code.label.matchrecorddetail.receivedgoals"/></th>
  				</tr>
         	</thead>
         	<tbody>
@@ -39,9 +43,30 @@
                 <td>
                     <c:out value="${Goals[index]}"/>
                 </td>
-              <c:set var = "index" value = "${index + 1}"/>                             
+                <td>
+                    <c:out value="${assists[index]}"/>
+                </td>
+                <td>
+                    <c:out value="${yellowCards[index]}"/>
+                </td>
+                <td>
+                    <c:out value="${redCards[index]}"/>
+                </td>
+                <td>
+                
+                <c:choose>
+                	<c:when test="${player.position eq 'GOALKEEPER'}">
+                    	<c:out value="${goalsConceded[index]}"/>
+                    </c:when>
+                    <c:otherwise>
+                        <c:out value="-"/>
+                    </c:otherwise>
+                </c:choose>
+                
+                </td>
+                                         
             </tr>
-            
+            <c:set var = "index" value = "${index + 1}"/>  
         </c:forEach>
         </tbody>
      </table>
