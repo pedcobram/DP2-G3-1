@@ -9,7 +9,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -21,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 @AutoConfigureMockMvc
 //@DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)
 //@AutoConfigureTestDatabase(replace = Replace.NONE)
-@TestPropertySource(locations = "classpath:application-mysql.properties")
+//@TestPropertySource(locations = "classpath:application-mysql.properties")
 
 @Transactional
 public class FanE2ETest {
