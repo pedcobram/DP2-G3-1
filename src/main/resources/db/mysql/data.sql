@@ -1,15 +1,3 @@
-CREATE TABLE IF NOT EXISTS users(
-	username varchar(255) NOT NULL PRIMARY KEY,
-	password varchar(255) NOT NULL,
-	enabled BOOLEAN NOT NULL
-);
-
-CREATE TABLE IF NOT EXISTS authorities(
-	username varchar(50) NOT NULL,
-	authority varchar(50) NOT NULL
-);
-
-
 CREATE TABLE IF NOT EXISTS match_record(
        	id integer not null auto_increment,
         result varchar(255),
@@ -19,9 +7,9 @@ CREATE TABLE IF NOT EXISTS match_record(
         title varchar(255),
         winner varchar(255),
         match_id integer not null,
+        CONSTRAINT fk_match_record_match FOREIGN KEY (match_id) REFERENCES matches (id),
         primary key (id)
     );
-
 
 -- One admin user, named admin1 with passwor 4dm1n and authority admin
 INSERT IGNORE INTO users(username,password,enabled) VALUES ('admin1','admin1',TRUE) ON DUPLICATE KEY UPDATE username=username;
