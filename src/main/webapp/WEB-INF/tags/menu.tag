@@ -217,6 +217,9 @@
     		<spring:url value="/matches/list" var="matchesUrl"></spring:url>
     		<a   href="${fn:escapeXml(matchesUrl)}" class="btn btn-default3"><span class="glyphicon glyphicon-list-alt"></span> <fmt:message key="code.tag.menu.matchList"/></a>
     		
+    		<spring:url value="/matches/date-request/list" var="matchesDateChangeUrl"></spring:url>
+    		<a   href="${fn:escapeXml(matchesDateChangeUrl)}" class="btn btn-default3"><span class="glyphicon glyphicon-list-alt"></span> <fmt:message key="code.tag.menu.matchDateChangeRequestList"/></a>
+    		
     	</div> 
 	</nav>
 </sec:authorize>

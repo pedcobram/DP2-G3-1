@@ -437,3 +437,6 @@ INSERT INTO match_record(id, title, status, season_end, season_start, result,win
 INSERT INTO match_record(id, title, status, season_end, season_start, result,winner, match) VALUES(4, 'title 1', 1, '2020', '2019', '3-4','Liverpool Football Club', 7);
 INSERT INTO match_record(id, title, status, season_end, season_start, result, winner,match) VALUES(5, 'title 1', 0, '2020', '2019', '0-2','Fútbol Club Barcelona', 8);
 
+-- Match Date Change Request
+INSERT INTO match_date_change_requests(id, new_date, reason, request_creator, status, title, match_id) VALUES(1, '2023-08-11 20:30:00', 'qqq', 'presidente1', 0, 'Match title 0', 0);
+INSERT INTO match_date_change_requests(id, new_date, reason, request_creator, status, title, match_id) VALUES(2, '2021-12-11 20:30:00', 'aaa', 'presidente2', 0, 'Partido de Cuartos de final', 8);
