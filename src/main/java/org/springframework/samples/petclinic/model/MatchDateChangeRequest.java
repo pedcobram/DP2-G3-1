@@ -26,6 +26,7 @@ import lombok.EqualsAndHashCode;
 public class MatchDateChangeRequest extends BaseEntity {
 
 	@Column(name = "title")
+	@NotNull
 	private String			title;
 
 	@Column(name = "status")
@@ -42,6 +43,7 @@ public class MatchDateChangeRequest extends BaseEntity {
 	private String			reason;
 
 	@Column(name = "request_creator")
+	@NotNull
 	private String			request_creator;
 
 	//
