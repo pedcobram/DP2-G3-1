@@ -13,11 +13,15 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Authenticated;
 import org.springframework.samples.petclinic.model.CompAdminRequest;
 import org.springframework.samples.petclinic.model.CompetitionAdmin;
+import org.springframework.samples.petclinic.model.PresidentRequest;
+import org.springframework.samples.petclinic.model.RefereeRequest;
 import org.springframework.samples.petclinic.model.Enum.RequestStatus;
 import org.springframework.samples.petclinic.service.AuthenticatedService;
 import org.springframework.samples.petclinic.service.AuthoritiesService;
 import org.springframework.samples.petclinic.service.CompAdminRequestService;
 import org.springframework.samples.petclinic.service.CompetitionAdminService;
+import org.springframework.samples.petclinic.service.PresidentRequestService;
+import org.springframework.samples.petclinic.service.RefereeRequestService;
 import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.samples.petclinic.service.exceptions.PendingRequestException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -41,6 +45,10 @@ public class CompAdminRequestController {
 
 	private final CompAdminRequestService	compAdminRequestService;
 
+	private final RefereeRequestService		refereeRequestService;
+
+	private final PresidentRequestService	presidentRequestService;
+
 	private final CompetitionAdminService	competitionAdminService;
 
 	private final AuthenticatedService		authenticatedService;
@@ -49,9 +57,11 @@ public class CompAdminRequestController {
 
 
 	@Autowired
-	public CompAdminRequestController(final CompAdminRequestService compAdminRequestService, final AuthoritiesService authoritiesService, final CompetitionAdminService competitionAdminService, final UserService userService,
-		final AuthenticatedService authenticatedService) {
+	public CompAdminRequestController(final CompAdminRequestService compAdminRequestService, final RefereeRequestService refereeRequestService, final PresidentRequestService presidentRequestService, final AuthoritiesService authoritiesService,
+		final CompetitionAdminService competitionAdminService, final UserService userService, final AuthenticatedService authenticatedService) {
 		this.compAdminRequestService = compAdminRequestService;
+		this.refereeRequestService = refereeRequestService;
+		this.presidentRequestService = presidentRequestService;
 		this.authenticatedService = authenticatedService;
 		this.competitionAdminService = competitionAdminService;
 		this.authoritiesService = authoritiesService;
@@ -183,6 +193,10 @@ public class CompAdminRequestController {
 
 		//
 		CompAdminRequest preCompAdminRequest = this.compAdminRequestService.findCompAdminRequestByUsername(username);
+
+		PresidentRequest otherPresidentRequest = this.presidentRequestService.findPresidentRequestByUsername(username);
+		RefereeRequest otherRefereeRequest = this.refereeRequestService.findRefereeRequestByUsername(username);
+
 		Authenticated thisUser = this.authenticatedService.findAuthenticatedByUsername(username);
 		CompetitionAdmin newCA = new CompetitionAdmin();
 
@@ -195,6 +209,14 @@ public class CompAdminRequestController {
 
 		// Guardamos la request actualizada
 		this.compAdminRequestService.saveCompAdminRequest(compAdminRequest);
+
+		if (otherRefereeRequest != null) {
+			this.refereeRequestService.deleteRefereeRequest(otherRefereeRequest);
+		}
+
+		if (otherPresidentRequest != null) {
+			this.presidentRequestService.deletePresidentRequest(otherPresidentRequest);
+		}
 
 		// Añadimos los valores del usuario al nuevo Competition Admin
 		newCA.setFirstName(thisUser.getFirstName());
