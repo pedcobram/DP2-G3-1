@@ -11,13 +11,17 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Authenticated;
+import org.springframework.samples.petclinic.model.CompAdminRequest;
 import org.springframework.samples.petclinic.model.President;
 import org.springframework.samples.petclinic.model.PresidentRequest;
+import org.springframework.samples.petclinic.model.RefereeRequest;
 import org.springframework.samples.petclinic.model.Enum.RequestStatus;
 import org.springframework.samples.petclinic.service.AuthenticatedService;
 import org.springframework.samples.petclinic.service.AuthoritiesService;
+import org.springframework.samples.petclinic.service.CompAdminRequestService;
 import org.springframework.samples.petclinic.service.PresidentRequestService;
 import org.springframework.samples.petclinic.service.PresidentService;
+import org.springframework.samples.petclinic.service.RefereeRequestService;
 import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.samples.petclinic.service.exceptions.PendingRequestException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -41,6 +45,10 @@ public class PresidentRequestController {
 
 	private final PresidentRequestService	presidentRequestService;
 
+	private final CompAdminRequestService	compAdminRequestService;
+
+	private final RefereeRequestService		refereeRequestService;
+
 	private final PresidentService			presidentService;
 
 	private final AuthenticatedService		authenticatedService;
@@ -49,9 +57,11 @@ public class PresidentRequestController {
 
 
 	@Autowired
-	public PresidentRequestController(final PresidentRequestService presidentRequestService, final AuthoritiesService authoritiesService, final PresidentService presidentService, final UserService userService,
-		final AuthenticatedService authenticatedService) {
+	public PresidentRequestController(final PresidentRequestService presidentRequestService, final CompAdminRequestService compAdminRequestService, final RefereeRequestService refereeRequestService, final AuthoritiesService authoritiesService,
+		final PresidentService presidentService, final UserService userService, final AuthenticatedService authenticatedService) {
 		this.presidentRequestService = presidentRequestService;
+		this.compAdminRequestService = compAdminRequestService;
+		this.refereeRequestService = refereeRequestService;
 		this.authenticatedService = authenticatedService;
 		this.presidentService = presidentService;
 		this.authoritiesService = authoritiesService;
@@ -183,6 +193,10 @@ public class PresidentRequestController {
 
 		//
 		PresidentRequest prePresidentRequest = this.presidentRequestService.findPresidentRequestByUsername(username);
+
+		CompAdminRequest otherCompAdminRequest = this.compAdminRequestService.findCompAdminRequestByUsername(username);
+		RefereeRequest otherRefereeRequest = this.refereeRequestService.findRefereeRequestByUsername(username);
+
 		Authenticated thisUser = this.authenticatedService.findAuthenticatedByUsername(username);
 		President newP = new President();
 
@@ -195,6 +209,14 @@ public class PresidentRequestController {
 
 		// Guardamos la request actualizada
 		this.presidentRequestService.savePresidentRequest(presidentRequest);
+
+		if (otherRefereeRequest != null) {
+			this.refereeRequestService.deleteRefereeRequest(otherRefereeRequest);
+		}
+
+		if (otherCompAdminRequest != null) {
+			this.compAdminRequestService.deleteCompAdminRequest(otherCompAdminRequest);
+		}
 
 		// Añadimos los valores del usuario al nuevo Competition Admin
 		newP.setFirstName(thisUser.getFirstName());

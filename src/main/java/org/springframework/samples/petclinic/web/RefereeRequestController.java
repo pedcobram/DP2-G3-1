@@ -11,11 +11,15 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Authenticated;
+import org.springframework.samples.petclinic.model.CompAdminRequest;
+import org.springframework.samples.petclinic.model.PresidentRequest;
 import org.springframework.samples.petclinic.model.Referee;
 import org.springframework.samples.petclinic.model.RefereeRequest;
 import org.springframework.samples.petclinic.model.Enum.RequestStatus;
 import org.springframework.samples.petclinic.service.AuthenticatedService;
 import org.springframework.samples.petclinic.service.AuthoritiesService;
+import org.springframework.samples.petclinic.service.CompAdminRequestService;
+import org.springframework.samples.petclinic.service.PresidentRequestService;
 import org.springframework.samples.petclinic.service.RefereeRequestService;
 import org.springframework.samples.petclinic.service.RefereeService;
 import org.springframework.samples.petclinic.service.UserService;
@@ -37,20 +41,27 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class RefereeRequestController {
 
-	private static final String			VIEWS_REFEREE_REQUEST_CREATE_OR_UPDATE_FORM	= "refereeRequests/createOrUpdateRefereeRequestForm";
+	private static final String				VIEWS_REFEREE_REQUEST_CREATE_OR_UPDATE_FORM	= "refereeRequests/createOrUpdateRefereeRequestForm";
 
-	private final RefereeRequestService	refereeRequestService;
+	private final RefereeRequestService		refereeRequestService;
 
-	private final RefereeService		refereeService;
+	private final PresidentRequestService	presidentRequestService;
 
-	private final AuthenticatedService	authenticatedService;
+	private final CompAdminRequestService	compAdminRequestService;
 
-	private final AuthoritiesService	authoritiesService;
+	private final RefereeService			refereeService;
+
+	private final AuthenticatedService		authenticatedService;
+
+	private final AuthoritiesService		authoritiesService;
 
 
 	@Autowired
-	public RefereeRequestController(final RefereeRequestService refereeRequestService, final AuthoritiesService authoritiesService, final RefereeService refereeService, final UserService userService, final AuthenticatedService authenticatedService) {
+	public RefereeRequestController(final RefereeRequestService refereeRequestService, final PresidentRequestService presidentRequestService, final CompAdminRequestService compAdminRequestService, final AuthoritiesService authoritiesService,
+		final RefereeService refereeService, final UserService userService, final AuthenticatedService authenticatedService) {
 		this.refereeRequestService = refereeRequestService;
+		this.presidentRequestService = presidentRequestService;
+		this.compAdminRequestService = compAdminRequestService;
 		this.authenticatedService = authenticatedService;
 		this.refereeService = refereeService;
 		this.authoritiesService = authoritiesService;
@@ -182,6 +193,10 @@ public class RefereeRequestController {
 
 		//
 		RefereeRequest preRefereeRequest = this.refereeRequestService.findRefereeRequestByUsername(username);
+
+		PresidentRequest otherPresidentRequest = this.presidentRequestService.findPresidentRequestByUsername(username);
+		CompAdminRequest otherCompAdminRequest = this.compAdminRequestService.findCompAdminRequestByUsername(username);
+
 		Authenticated thisUser = this.authenticatedService.findAuthenticatedByUsername(username);
 		Referee newR = new Referee();
 
@@ -194,6 +209,14 @@ public class RefereeRequestController {
 
 		// Guardamos la request actualizada
 		this.refereeRequestService.saveRefereeRequest(refereeRequest);
+
+		if (otherCompAdminRequest != null) {
+			this.compAdminRequestService.deleteCompAdminRequest(otherCompAdminRequest);
+		}
+
+		if (otherPresidentRequest != null) {
+			this.presidentRequestService.deletePresidentRequest(otherPresidentRequest);
+		}
 
 		// Añadimos los valores del usuario al nuevo Competition Admin
 		newR.setFirstName(thisUser.getFirstName());
