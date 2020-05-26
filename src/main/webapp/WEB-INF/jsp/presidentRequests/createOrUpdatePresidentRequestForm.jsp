@@ -8,13 +8,13 @@
 <%@ taglib prefix="security" uri="http://www.springframework.org/security/tags" %>
 <%@ page contentType="text/html; charset=UTF-8" %> <!-- Para  tildes, ñ y caracteres especiales como el € %-->
 
-<petclinic:layout pageName="compAdminRequests">
+<petclinic:layout pageName="presidentRequests">
    	<h2>
-        <c:if test="${compAdminRequest['new']}"><fmt:message key="code.title.createorupdatecompadminrequestform.new"/> </c:if>
-        <c:if test="${!compAdminRequest['new']}"><fmt:message key="code.title.createorupdatecompadminrequestform.notnew"/> </c:if>
+        <c:if test="${presidentRequest['new']}"><fmt:message key="code.title.createorupdatepresidentrequestform.new"/> </c:if>
+        <c:if test="${!presidentRequest['new']}"><fmt:message key="code.title.createorupdatepresidentrequestform.notnew"/> </c:if>
     </h2>
     
-    <form:form modelAttribute="compAdminRequest" class="form-horizontal" id="add-competition-admin-request-form">
+    <form:form modelAttribute="presidentRequest" class="form-horizontal" id="add-president-request-form">
       
        		<div class="form-group has-feedback">
             <petclinic:inputField label="code.label.createorupdatecompadminrequestform.title" name="title"/>
@@ -23,7 +23,7 @@
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
                 <c:choose>
-                    <c:when test="${compAdminRequest['new']}">
+                    <c:when test="${presidentRequest['new']}">
                         <button class="btn btn-default" type="submit"><fmt:message key="code.button.createorupdatecompadminrequestform.submit"/></button>
                     </c:when>
                     <c:otherwise>
