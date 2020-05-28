@@ -51,6 +51,12 @@ INSERT INTO authorities VALUES ('referee2','referee');
 -- Competition Admin Requests 
 INSERT INTO comp_Admin_Requests(id, title, description, status, username) VALUES (1, 'Test title 01', 'Test description 01', 0, 'gonzalo');
 
+-- Referee Requests 
+INSERT INTO referee_Requests(id, title, description, status, username) VALUES (1, 'Test title 01', 'Test description 01', 0, 'gonzalo');
+
+-- President Requests 
+INSERT INTO president_Requests(id, title, description, status, username) VALUES (1, 'Test title 01', 'Test description 01', 0, 'gonzalo');
+
 -- Competition Admin
 INSERT INTO competition_Admins VALUES (1, 'Pedro Manuel', 'Cobos Ramos', '22222222A', 'pedcobram@alum.us.es', '600222333', 'pedro');
 
