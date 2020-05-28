@@ -32,7 +32,7 @@ public class CompAdminRequest extends BaseEntity {
 	private RequestStatus	status;
 
 	//
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne(cascade = CascadeType.MERGE)
 	@JoinColumn(name = "username", referencedColumnName = "username")
 	private User			user;
 	//

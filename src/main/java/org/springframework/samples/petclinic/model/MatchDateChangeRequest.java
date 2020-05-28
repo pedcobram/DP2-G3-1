@@ -22,7 +22,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Entity
-@Table(name = "match_date_change_requests")
+@Table(name = "MATCH_DATE_CHANGE_REQUESTS")
 public class MatchDateChangeRequest extends BaseEntity {
 
 	@Column(name = "title")

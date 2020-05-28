@@ -24,8 +24,8 @@ public class MatchDateChangeRequestE2ETests {
 	@Autowired
 	private MockMvc				mockMvc;
 
-	private static final int	TEST_MATCH_ID					= 1;
-	private static final int	TEST_MATCH_DATE_CHANGE_REQUEST	= 1;
+	private static final int	TEST_MATCH_ID					= 0;
+	private static final int	TEST_MATCH_DATE_CHANGE_REQUEST	= 0;
 
 
 	@WithMockUser(username = "presidente1", authorities = "president")
@@ -46,8 +46,8 @@ public class MatchDateChangeRequestE2ETests {
 	@Test //CASO POSITIVO
 	void testProcessCreationForm() throws Exception {
 		this.mockMvc
-			.perform(MockMvcRequestBuilders.post("/matches/edit/date/{matchId}", MatchDateChangeRequestE2ETests.TEST_MATCH_ID).with(SecurityMockMvcRequestPostProcessors.csrf()).param("title", "title").param("new_date", "2055/05/11 20:30")
-				.param("reason", "qqq").param("request_creator", "president1"))
+			.perform(
+				MockMvcRequestBuilders.post("/matches/edit/date/{matchId}", 10).with(SecurityMockMvcRequestPostProcessors.csrf()).param("title", "title").param("new_date", "2055/05/11 20:30").param("reason", "qqq").param("request_creator", "president1"))
 			.andExpect(MockMvcResultMatchers.status().is3xxRedirection()).andExpect(MockMvcResultMatchers.view().name("redirect:/matches/list")).andExpect(MockMvcResultMatchers.redirectedUrl("/matches/list"));
 	}
 
@@ -74,8 +74,8 @@ public class MatchDateChangeRequestE2ETests {
 	@WithMockUser(username = "presidente1", authorities = "president")
 	@Test //CASO POSITIVO
 	void testDeleteMatchDateChangeRequest() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/matches/date-request/delete/{matchId}", MatchDateChangeRequestE2ETests.TEST_MATCH_DATE_CHANGE_REQUEST)).andExpect(MockMvcResultMatchers.status().is3xxRedirection())
-			.andExpect(MockMvcResultMatchers.view().name("redirect:/matches/date-request/list")).andExpect(MockMvcResultMatchers.redirectedUrl("/matches/date-request/list"));
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/matches/date-request/delete/{matchId}", 1)).andExpect(MockMvcResultMatchers.status().is3xxRedirection()).andExpect(MockMvcResultMatchers.view().name("redirect:/matches/date-request/list"))
+			.andExpect(MockMvcResultMatchers.redirectedUrl("/matches/date-request/list"));
 	}
 
 	@WithAnonymousUser
