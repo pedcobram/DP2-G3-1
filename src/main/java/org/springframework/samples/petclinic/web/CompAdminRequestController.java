@@ -24,7 +24,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -63,7 +63,7 @@ public class CompAdminRequestController {
 	}
 
 	@GetMapping(value = "/competitionAdminRequest/list")
-	public String showCompetitionAdminRequestList(final Map<String, Object> model) {
+	public String showCompetitionAdminRequestList(final ModelMap model) {
 
 		List<CompAdminRequest> compAdminRequests = new ArrayList<>();
 
@@ -118,7 +118,7 @@ public class CompAdminRequestController {
 	}
 
 	@GetMapping(value = "/myCompetitionAdminRequest/edit")
-	public String initUpdateCompetitionAdminForm(final Model model) {
+	public String initUpdateCompetitionAdminForm(final ModelMap model) {
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String currentPrincipalName = authentication.getName();

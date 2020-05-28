@@ -16,6 +16,7 @@ import org.springframework.samples.petclinic.model.MatchRecord;
 import org.springframework.samples.petclinic.model.MatchRefereeRequest;
 import org.springframework.samples.petclinic.model.Referee;
 import org.springframework.samples.petclinic.model.Enum.MatchRecordStatus;
+import org.springframework.samples.petclinic.model.Enum.MatchStatus;
 import org.springframework.samples.petclinic.model.Enum.RequestStatus;
 import org.springframework.samples.petclinic.service.FootballPlayerMatchStatisticService;
 import org.springframework.samples.petclinic.service.FootballPlayerService;
@@ -24,6 +25,7 @@ import org.springframework.samples.petclinic.service.MatchRefereeRequestService;
 import org.springframework.samples.petclinic.service.MatchService;
 import org.springframework.samples.petclinic.service.RefereeService;
 import org.springframework.samples.petclinic.service.UserService;
+import org.springframework.samples.petclinic.service.exceptions.AlreadyOneExists;
 import org.springframework.samples.petclinic.service.exceptions.IllegalDateException;
 import org.springframework.samples.petclinic.service.exceptions.MatchRecordResultException;
 import org.springframework.security.core.Authentication;
@@ -182,7 +184,8 @@ public class MatchRefereeRequestController {
 	}
 
 	@GetMapping(value = "/matchRefereeRequest/list/accept/{matchId}")
-	public String acceptMatchRefereeRequest(@Valid final MatchRefereeRequest matchRefereeRequest, final BindingResult result, @PathVariable("matchId") final int matchId) throws DataAccessException, IllegalDateException, MatchRecordResultException {
+	public String acceptMatchRefereeRequest(@Valid final MatchRefereeRequest matchRefereeRequest, final BindingResult result, @PathVariable("matchId") final int matchId)
+		throws DataAccessException, IllegalDateException, MatchRecordResultException, AlreadyOneExists {
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String currentPrincipalName = authentication.getName();
@@ -190,6 +193,11 @@ public class MatchRefereeRequestController {
 		Referee ref = this.refereeService.findRefereeByUsername(currentPrincipalName);
 		Match match = this.matchService.findMatchById(matchId);
 		MatchRefereeRequest mrr = this.matchRefereeRequestService.findMatchRefereeRequestByUsernameAndMatchId(currentPrincipalName, matchId);
+		MatchRecord matchRecord = this.matchRecordService.findMatchRecordByMatchId(matchId);
+
+		if (match.getMatchStatus() == MatchStatus.FINISHED || matchRecord != null) {
+			throw new AlreadyOneExists();
+		}
 
 		matchRefereeRequest.setId(mrr.getId());
 		matchRefereeRequest.setTitle(mrr.getTitle());

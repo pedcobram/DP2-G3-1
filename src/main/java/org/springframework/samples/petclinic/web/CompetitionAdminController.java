@@ -22,7 +22,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -78,7 +78,7 @@ public class CompetitionAdminController {
 	}
 
 	@GetMapping(value = "/myCompetitionAdminProfile/edit")
-	public String initUpdatePresidentForm(final Model model) {
+	public String initUpdateCompetitionAdminForm(final ModelMap model) {
 
 		//Obtenemos el username actual conectado
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

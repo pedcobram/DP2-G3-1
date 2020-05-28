@@ -3,7 +3,6 @@ package org.springframework.samples.petclinic.web;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import javax.validation.Valid;
 
@@ -19,7 +18,6 @@ import org.springframework.samples.petclinic.service.exceptions.IllegalDateExcep
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
@@ -52,7 +50,7 @@ public class MatchDateChangeRequestController {
 	}
 
 	@GetMapping(value = "/matches/edit/date/{matchId}")
-	public String requestMatchDateChangeRequest(@PathVariable("matchId") final int matchId, final Model model) throws DataAccessException, IllegalAccessException {
+	public String requestMatchDateChangeRequest(@PathVariable("matchId") final int matchId, final ModelMap model) throws DataAccessException, IllegalAccessException {
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String currentPrincipalName = authentication.getName();
@@ -110,7 +108,7 @@ public class MatchDateChangeRequestController {
 	}
 
 	@GetMapping(value = "/matches/date-request/list")
-	public String showMatchDateChangeRequestList(final Map<String, Object> model) {
+	public String showMatchDateChangeRequestList(final ModelMap model) {
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String currentPrincipalName = authentication.getName();
@@ -123,7 +121,7 @@ public class MatchDateChangeRequestController {
 	}
 
 	@GetMapping(value = "/matches/date-request/delete/{matchId}")
-	public String deleteMatchDateChangeRequest(final Map<String, Object> model, @PathVariable("matchId") final int matchId) {
+	public String deleteMatchDateChangeRequest(final ModelMap model, @PathVariable("matchId") final int matchId) {
 
 		MatchDateChangeRequest mdcr = this.matchDateChangeRequestService.findMatchDateChangeRequestById(matchId);
 
