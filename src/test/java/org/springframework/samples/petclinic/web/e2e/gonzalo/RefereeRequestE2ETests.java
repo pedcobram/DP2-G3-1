@@ -144,7 +144,10 @@ public class RefereeRequestE2ETests {
 	})
 	@Test //CASO POSITIVO
 	void rejectRefereeRequest() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/refereeRequest/reject/gonzalo")).andExpect(MockMvcResultMatchers.status().isOk());
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/refereeRequest/reject/gonzalo"))
+			.andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+			.andExpect(MockMvcResultMatchers.view().name("redirect:/refereeRequest/list"))
+			.andExpect(MockMvcResultMatchers.redirectedUrl("/refereeRequest/list"));
 	}
 
 	@WithAnonymousUser
