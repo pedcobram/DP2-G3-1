@@ -41,7 +41,7 @@ public class MatchRefereeRequestServiceTests {
 	@Test
 	void shouldCount() {
 		int count = this.matchRefereeRequestService.count();
-		Assert.assertTrue(count == 2);
+		Assert.assertTrue(count == 3);
 	}
 
 	@Test //CASO POSITIVO
@@ -61,7 +61,7 @@ public class MatchRefereeRequestServiceTests {
 			}
 		}
 
-		Assertions.assertTrue(count == 2);
+		Assertions.assertTrue(count == 3);
 		Assertions.assertTrue(res == true);
 	}
 
@@ -82,7 +82,7 @@ public class MatchRefereeRequestServiceTests {
 			}
 		}
 
-		Assertions.assertTrue(count == 1);
+		Assertions.assertTrue(count == 2);
 		Assertions.assertTrue(res == true);
 
 	}
@@ -147,7 +147,7 @@ public class MatchRefereeRequestServiceTests {
 	void shouldSaveMatchRefereeRequest() {
 
 		int pre_save = this.matchRefereeRequestService.count();
-		Assertions.assertTrue(pre_save == 2);
+		Assertions.assertTrue(pre_save == 3);
 
 		MatchRefereeRequest newMRR = new MatchRefereeRequest();
 
@@ -163,14 +163,14 @@ public class MatchRefereeRequestServiceTests {
 		this.matchRefereeRequestService.saveMatchRefereeRequest(newMRR);
 
 		int post_save = this.matchRefereeRequestService.count();
-		Assertions.assertTrue(post_save == 3);
+		Assertions.assertTrue(post_save == 4);
 	}
 
 	@Test //CASO NEGATIVO
 	void shouldNotSaveMatchRefereeRequest() {
 
 		int pre_save = this.matchRefereeRequestService.count();
-		Assertions.assertTrue(pre_save == 2);
+		Assertions.assertTrue(pre_save == 3);
 
 		MatchRefereeRequest newMRR = new MatchRefereeRequest();
 
@@ -199,7 +199,7 @@ public class MatchRefereeRequestServiceTests {
 		this.matchRefereeRequestService.deleteMatchRefereeRequest(mrr);
 
 		int post_delete = this.matchRefereeRequestService.count();
-		Assertions.assertTrue(post_delete == 1);
+		Assertions.assertTrue(post_delete == 2);
 	}
 
 	@Test //CASO NEGATIVO

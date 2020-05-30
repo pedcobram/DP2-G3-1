@@ -42,7 +42,7 @@ public class MatchRecord extends BaseEntity {
 	private String				result;
 
 	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "match", referencedColumnName = "id")
+	@JoinColumn(name = "matchid", referencedColumnName = "id")
 	private Match				match;
 
 	private String				winner;

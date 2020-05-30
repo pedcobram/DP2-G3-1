@@ -47,7 +47,7 @@ public class MatchRequestServiceTests {
 
 		int count = mrs.size();
 
-		Assertions.assertTrue(count == 4);
+		Assertions.assertTrue(count == 6);
 	}
 
 	@Test //CASO POSITIVO
@@ -59,7 +59,7 @@ public class MatchRequestServiceTests {
 
 		int count = mrs.size();
 
-		Assertions.assertTrue(count == 2);
+		Assertions.assertTrue(count == 4);
 	}
 
 	@Test //CASO NEGATIVO
@@ -150,7 +150,7 @@ public class MatchRequestServiceTests {
 
 		int count = this.matchRequestService.count();
 
-		Assertions.assertTrue(count == 5);
+		Assertions.assertTrue(count == 7);
 	}
 
 	@Test //CASO NEGATIVO
@@ -215,7 +215,7 @@ public class MatchRequestServiceTests {
 
 		int post_count = this.matchRequestService.count();
 
-		Assertions.assertTrue(post_count == 3);
+		Assertions.assertTrue(post_count == 5);
 	}
 
 	@Test //CASO NEGATIVO

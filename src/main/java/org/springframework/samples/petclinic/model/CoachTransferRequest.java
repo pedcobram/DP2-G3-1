@@ -40,11 +40,11 @@ public class CoachTransferRequest extends BaseEntity implements Serializable {
 
 	//
 
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne(cascade = CascadeType.MERGE)
 	@JoinColumn(name = "requestedCoach", referencedColumnName = "id")
 	private Coach				requestedCoach;
 
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne(cascade = CascadeType.MERGE)
 	@JoinColumn(name = "myCoach", referencedColumnName = "id")
 	private Coach				myCoach;
 

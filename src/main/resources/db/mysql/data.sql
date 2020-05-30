@@ -6,8 +6,8 @@ CREATE TABLE IF NOT EXISTS match_record(
         status integer not null,
         title varchar(255),
         winner varchar(255),
-        match_id integer not null,
-        CONSTRAINT fk_match_record_match FOREIGN KEY (match_id) REFERENCES matches (id),
+        matchid integer not null,
+        CONSTRAINT fk_match_record_match FOREIGN KEY (matchid) REFERENCES matches (id),
         primary key (id)
     );
 
@@ -111,23 +111,42 @@ INSERT IGNORE INTO football_clubs(id,status,name,crest,foundation_date,stadium,c
 INSERT IGNORE INTO football_clubs(id,status,name,crest,foundation_date,stadium,city,fans,money,president_id) VALUES (10, false, 'Besaid Aurochs','https://www.gamerguides.com/assets/trophies/44/1831-teamwork.png', '2000-02-19', 'Besaid Island Stadium', 'Besaid Island', '40', '2000000', 11);
 INSERT IGNORE INTO football_clubs(id,status,name,crest,foundation_date,stadium,city,fans,money,president_id) VALUES (11, true, 'Luca Goers','https://cdn.staticneo.com/w/finalfantasy/f/f5/GoersSymbol.png', '2000-02-18', 'Luca Stadium', 'Luca', '40000', '200000000', 12); 
  
+<<<<<<< HEAD
 -- Match Requests
+=======
+-- Match Requests 
+>>>>>>> develop
 INSERT IGNORE INTO match_requests(id, title, match_date, stadium, status, football_Club1, football_Club2, creator) VALUES(1, 'Partido amistoso 1', '2020-05-11 20:30', 'Ramón Sánchez-Pizjuan', 0, 'Sevilla Fútbol Club', 'Real Betis Balompié', 'presidente1');
 INSERT IGNORE INTO match_requests(id, title, match_date, stadium, status, football_Club1, football_Club2, creator) VALUES(2, 'Partido amistoso 2', '2021-05-11 20:30', 'Ramón Sánchez-Pizjuan', 0, 'Sevilla Fútbol Club', 'Fútbol Club Barcelona', 'presidente1');
 INSERT IGNORE INTO match_requests(id, title, match_date, stadium, status, football_Club1, football_Club2, creator) VALUES(3, 'Partido amistoso 3', '2020-05-11 20:30', 'Benito Villamarín', 0, 'Real Betis Balompié', 'Sevilla Fútbol Club', 'presidente6');
 INSERT IGNORE INTO match_requests(id, title, match_date, stadium, status, football_Club1, football_Club2, creator) VALUES(4, 'Partido amistoso 4', '2021-05-11 20:30', 'Camp Nou', 0, 'Fútbol Club Barcelona', 'Sevilla Fútbol Club', 'presidente3');
+<<<<<<< HEAD
 
+=======
+INSERT IGNORE INTO match_requests(id, title, match_date, stadium, status, football_Club1, football_Club2, creator) VALUES(5, 'Partido amistoso 5', '2024-05-11 20:30', 'Mestalla', 0, 'Valencia Club de Fútbol', 'Sevilla Fútbol Club', 'owner2');
+INSERT IGNORE INTO match_requests(id, title, match_date, stadium, status, football_Club1, football_Club2, creator) VALUES(6, 'Partido amistoso 6', '2025-05-11 20:30', 'Anfield', 0, 'Liverpool Football Club', 'Sevilla Fútbol Club', 'owner5');
+ 
+>>>>>>> develop
 -- Matches
 INSERT IGNORE INTO matches(id, title, match_date, match_status, stadium, football_Club1, football_Club2, referee, creator) VALUES(0, 'Match title 0', '2023-05-11 20:30', 0, 'Ramón Sánchez-Pizjuan', 'Sevilla Fútbol Club', 'Real Betis Balompié', 'referee2', 'presidente1');
 INSERT IGNORE INTO matches(id, title, match_date, match_status, stadium, football_Club1, football_Club2, creator) VALUES(10, 'Match title 1', '2020-05-11 20:30', 0, 'Ramón Sánchez-Pizjuan', 'Sevilla Fútbol Club', 'Real Betis Balompié', 'presidente1');
 INSERT IGNORE INTO matches(id, title, match_date, match_status, stadium, football_Club1, football_Club2, referee, creator) VALUES(2, 'Match title 2', '2020-03-11 20:30', 1, 'Camp Nou', 'Fútbol Club Barcelona', 'Sevilla Fútbol Club', 'referee1', 'presidente3');
 INSERT IGNORE INTO matches(id, title, match_date, match_status, stadium, football_Club1, football_Club2, creator) VALUES(3, 'Match title 3', '2021-05-11 20:30', 0, 'Ramón Sánchez-Pizjuan', 'Sevilla Fútbol Club', 'Real Betis Balompié', 'presidente1');
+<<<<<<< HEAD
 
 
 -- Match Referee Requests
 INSERT IGNORE INTO match_referee_request(id, title, status, username, match_id) VALUES(1, 'Test title 1', 0, 'referee1', 3);
 INSERT IGNORE INTO match_referee_request(id, title, status, username, match_id) VALUES(2, 'Test title 2', 0, 'referee2', 3);    
 
+=======
+ 
+-- Match Referee Requests
+INSERT IGNORE INTO match_referee_request(id, title, status, username, matchid) VALUES(1, 'Test title 1', 0, 'referee1', 3);
+INSERT IGNORE INTO match_referee_request(id, title, status, username, matchid) VALUES(2, 'Test title 2', 0, 'referee2', 3);  
+INSERT IGNORE INTO match_referee_request(id, title, status, username, matchid) VALUES(3, 'Test title 3', 0, 'referee1', 10);
+        
+>>>>>>> develop
 -- Contract Commercial
 INSERT IGNORE INTO contract_commercial(id,end_contract_clause,end_date,start_date,money,publicity) VALUES (1, 2000000,'2023-01-01','2020-01-01',100000,'https://logosmarcas.com/wp-content/uploads/2018/03/Nike-logo.png');
 INSERT IGNORE INTO contract_commercial(id,end_contract_clause,end_date,start_date,money,publicity) VALUES (2, 2000000,'2024-01-01','2020-01-01',100000,'https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Adidas_Logo.svg/1200px-Adidas_Logo.svg.png');
@@ -135,7 +154,11 @@ INSERT IGNORE INTO contract_commercial(id,end_contract_clause,end_date,start_dat
 INSERT IGNORE INTO contract_commercial(id,end_contract_clause,end_date,start_date,money,publicity) VALUES (4, 120000,'2025-01-01','2020-01-01',60000,'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Burger_King_Logo.svg/1200px-Burger_King_Logo.svg.png');
 INSERT IGNORE INTO contract_commercial(id,end_contract_clause,end_date,start_date,money,publicity) VALUES (5, 1000000000,'2024-01-01','2020-01-01',90000,'https://logodownload.org/wp-content/uploads/2019/12/riot-games-logo.png');
 
+<<<<<<< HEAD
 -- Coachs
+=======
+-- Coachs 
+>>>>>>> develop
 INSERT IGNORE INTO coachs(id, first_name, last_name, football_Clubs_id, salary, clause, birth_date) VALUES (1, 'Julen', 'Lopetegui', 1, '3000000', '6000000', '1968-03-29' );
 INSERT IGNORE INTO coachs(id, first_name, last_name, football_Clubs_id, salary, clause, birth_date) VALUES (2, 'Zinedine', 'Zidane', 2, '6000000', '10000000', '1970-03-27' );
 INSERT IGNORE INTO coachs(id, first_name, last_name, football_Clubs_id, salary, clause, birth_date) VALUES (3, 'Quique', 'Setién', 3, '2500000', '5000000', '1960-07-21' );
@@ -382,8 +405,13 @@ INSERT IGNORE INTO football_player_statistic(id, assists, goals, yellow_cards, r
 INSERT IGNORE INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(64, 0, 0, 0, 0, 0, 2019, 2020, 64);
 
 -- Match Records
+<<<<<<< HEAD
 INSERT IGNORE INTO match_record(id, title, status, season_end, season_start, result, match_id) VALUES(0, 'title 0', 0, '2020', '2019', 'result', 0);
 INSERT IGNORE INTO match_record(id, title, status, season_end, season_start, result, match_id) VALUES(1, 'title 1', 0, '2020', '2019', 'result', 2);
+=======
+INSERT IGNORE INTO match_record(id, title, status, season_end, season_start, result, matchid) VALUES(0, 'title 0', 0, '2020', '2019', 'result', 0);
+INSERT IGNORE INTO match_record(id, title, status, season_end, season_start, result, matchid) VALUES(1, 'title 1', 0, '2020', '2019', 'result', 2);
+>>>>>>> develop
 
 -- Football Player Match Statistics
 INSERT IGNORE INTO football_player_match_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id, match_record) VALUES (1, 0, 0, 0, 0, null, 2019, 2020, 1, 1);
@@ -441,16 +469,32 @@ INSERT IGNORE INTO coach_transfer_request(id, offer, status, my_coach, requested
 --Rounds
 INSERT IGNORE INTO round(id, name, competition_id) VALUES (1, 'Cuartos de final',3);
 INSERT IGNORE INTO round(id,name) VALUES (2, 'prueba');
+<<<<<<< HEAD
 
+=======
+ 
+>>>>>>> develop
 --Matches for Round
 INSERT IGNORE INTO matches(id, title, match_date, match_status, stadium, football_Club1, football_Club2, referee,round_id, creator) VALUES (5, 'Partido de Cuartos de final', '2023-05-11 20:30', 1, 'Ramón Sánchez-Pizjuan', 'Sevilla Fútbol Club', 'Real Betis Balompié', 'referee2',1, 'presidente1');
 INSERT IGNORE INTO matches(id, title, match_date, match_status, stadium, football_Club1, football_Club2, referee,round_id, creator) VALUES (6, 'Partido de Cuartos de final', '2020-05-11 20:30', 1, 'Ramón Sánchez-Pizjuan', 'Valencia Club de Fútbol', 'Atlético de Madrid','referee1',1, 'presidente1');
 INSERT IGNORE INTO matches(id, title, match_date, match_status, stadium, football_Club1, football_Club2, referee,round_id, creator) VALUES (7, 'Partido de Cuartos de final', '2020-05-11 20:30', 1, 'Camp Nou', 'Manchester City Football Club', 'Liverpool Football Club', 'referee1',1, 'presidente3');
 INSERT IGNORE INTO matches(id, title, match_date, match_status, stadium, football_Club1, football_Club2, referee,round_id, creator) VALUES (8, 'Partido de Cuartos de final', '2021-05-11 20:30', 0, 'Ramón Sánchez-Pizjuan', 'Real Madrid Club de Fútbol', 'Fútbol Club Barcelona','referee1',1, 'presidente1');
 
+<<<<<<< HEAD
 
 --Match Records for Round
 INSERT IGNORE INTO match_record(id, title, status, season_end, season_start, result, winner, match_id) VALUES(2, 'title 1', 1, '2020', '2019', '1-0','Sevilla Fútbol Club', 5);
 INSERT IGNORE INTO match_record(id, title, status, season_end, season_start, result, winner, match_id) VALUES(3, 'title 1', 1, '2020', '2019', '3-2','Valencia Club de Fútbol', 6);
 INSERT IGNORE INTO match_record(id, title, status, season_end, season_start, result, winner, match_id) VALUES(4, 'title 1', 1, '2020', '2019', '3-4','Liverpool Football Club', 7);
 INSERT IGNORE INTO match_record(id, title, status, season_end, season_start, result, winner, match_id) VALUES(5, 'title 1', 0, '2020', '2019', '0-2','Fútbol Club Barcelona', 8);
+=======
+--Match Records for Round
+INSERT IGNORE INTO match_record(id, title, status, season_end, season_start, result, winner, matchid) VALUES(2, 'title 1', 1, '2020', '2019', '1-0','Sevilla Fútbol Club', 5);
+INSERT IGNORE INTO match_record(id, title, status, season_end, season_start, result, winner, matchid) VALUES(3, 'title 1', 1, '2020', '2019', '3-2','Valencia Club de Fútbol', 6);
+INSERT IGNORE INTO match_record(id, title, status, season_end, season_start, result, winner, matchid) VALUES(4, 'title 1', 1, '2020', '2019', '3-4','Liverpool Football Club', 7);
+INSERT IGNORE INTO match_record(id, title, status, season_end, season_start, result, winner, matchid) VALUES(5, 'title 1', 0, '2020', '2019', '0-2','Fútbol Club Barcelona', 8);
+
+-- Match Date Change Request
+INSERT IGNORE INTO MATCH_DATE_CHANGE_REQUESTS(id, new_date, reason, request_creator, status, title, match_id) VALUES(1, '2023-08-11 20:30:00', 'qqq', 'presidente1', 0, 'Match title 0', 0);
+INSERT IGNORE INTO MATCH_DATE_CHANGE_REQUESTS(id, new_date, reason, request_creator, status, title, match_id) VALUES(2, '2021-12-11 20:30:00', 'aaa', 'presidente2', 0, 'Partido de Cuartos de final', 8);
+>>>>>>> develop

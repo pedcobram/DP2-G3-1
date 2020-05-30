@@ -73,7 +73,12 @@
                 	<c:if test="${matches.referee != null}">
                     	<spring:url value="/matches/matchRecord/${matches.id}/view" var='viewMatchRecord'></spring:url>
                 		<a href="${fn:escapeXml(viewMatchRecord)}" class="btn btn-default"><fmt:message key="code.button.matchlist.matchrecord"/></a>   
-                	</c:if>              	         	
+                	</c:if>  
+                	   
+                	<c:if test="${matches.matchStatus eq 'TO_BE_PLAYED'}">
+                    	<spring:url value="/matches/edit/date/${matches.id}" var='editMatchDate'></spring:url>
+                		<a href="${fn:escapeXml(editMatchDate)}" class="btn btn-default"><fmt:message key="code.button.matchlist.editMatchDate"/></a>   
+                	</c:if>          	         	
                 </td>
             </tr>
         </c:forEach>

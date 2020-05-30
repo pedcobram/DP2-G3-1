@@ -17,7 +17,7 @@
       
        		<div class="form-group has-feedback">
             <petclinic:inputField label="code.label.matchupdateform.title" name="title" readonly="true"/>
-            <petclinic:inputField label="code.label.matchupdateform.matchdate" name="matchDate"/>
+            <petclinic:inputField label="code.label.matchupdateform.matchdate" name="matchDate" readonly="true"/>
            	<div class="control-group">
             	<petclinic:selectField label="code.label.matchupdateform.stadium" name="stadium" names="${stadiums}" size="2"/>
             </div>

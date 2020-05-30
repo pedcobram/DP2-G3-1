@@ -139,10 +139,10 @@ public class MatchRecordController {
 
 		//Ver el ganador del partido
 		List<String> winner = new ArrayList<String>();
-		if (m.getRound().equals(null)) {
-			winner.add("<fmt:message key=\"code.matchrecord.empate\"/>");
-			;
-		}
+		//				if (m.getRound().getId() == null) {
+		//					winner.add("<fmt:message key=\"code.matchrecord.empate\"/>");
+		//					;
+		//				}
 		winner.add(m.getFootballClub1().getName());
 		winner.add(m.getFootballClub2().getName());
 
@@ -165,10 +165,10 @@ public class MatchRecordController {
 		model.addAttribute("matchStatus", matchStatus);
 		//
 		List<String> winner = new ArrayList<String>();
-		if (m.getRound().equals(null)) {
-			winner.add("<fmt:message key=\"code.matchrecord.empate\"/>");
-			;
-		}
+		//		if (m.getRound().equals(null)) {
+		//			winner.add("<fmt:message key=\"code.matchrecord.empate\"/>");
+		//			;
+		//		}
 		winner.add(m.getFootballClub1().getName());
 		winner.add(m.getFootballClub2().getName());
 

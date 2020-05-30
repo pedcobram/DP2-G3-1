@@ -93,11 +93,11 @@
 						<ul class="dropdown-menu">
 						
 						<sec:authorize access="!hasAnyAuthority('president', 'competitionAdmin', 'admin', 'referee')">
-							<li><a href="<c:url value="/presidents/new" />"><fmt:message key="becPresident"/></a></li>
+							<li><a href="<c:url value="/presidentRequest/new" />"><fmt:message key="code.tag.menu.becPresident"/></a></li>
 						</sec:authorize>
 						
 						<sec:authorize access="!hasAnyAuthority('president', 'competitionAdmin', 'admin', 'referee')">
-							<li><a href="<c:url value="/createReferee" />"><fmt:message key="code.tag.menu.becReferee"/></a></li>
+							<li><a href="<c:url value="/refereeRequest/new" />"><fmt:message key="code.tag.menu.becReferee"/></a></li>
 						</sec:authorize>
 						
 						<sec:authorize access="!hasAnyAuthority('president', 'competitionAdmin', 'admin', 'referee')">
@@ -164,6 +164,16 @@
 												<span style="color:#ffc800" class="glyphicon glyphicon-bookmark" aria-hidden="true"></span>
 												<span><fmt:message key="code.tag.menu.compAdminRequestList"/></span>
 											</petclinic:menuItem>
+											<petclinic:menuItem active="${username eq 'referee'}" url="/refereeRequest/list"
+												title="club page">
+												<span style="color:#ffc800" class="glyphicon glyphicon-bookmark" aria-hidden="true"></span>
+												<span><fmt:message key="code.tag.menu.refereeRequestList"/></span>
+											</petclinic:menuItem>
+											<petclinic:menuItem active="${username eq 'president'}" url="/presidentRequest/list"
+												title="club page">
+												<span style="color:#ffc800" class="glyphicon glyphicon-bookmark" aria-hidden="true"></span>
+												<span><fmt:message key="code.tag.menu.presidentRequestList"/></span>
+											</petclinic:menuItem>
 										</sec:authorize>
 										
 										<sec:authorize access="hasAuthority('competitionAdmin')">	
@@ -216,6 +226,9 @@
     		
     		<spring:url value="/matches/list" var="matchesUrl"></spring:url>
     		<a   href="${fn:escapeXml(matchesUrl)}" class="btn btn-default3"><span class="glyphicon glyphicon-list-alt"></span> <fmt:message key="code.tag.menu.matchList"/></a>
+    		
+    		<spring:url value="/matches/date-request/list" var="matchesDateChangeUrl"></spring:url>
+    		<a   href="${fn:escapeXml(matchesDateChangeUrl)}" class="btn btn-default3"><span class="glyphicon glyphicon-list-alt"></span> <fmt:message key="code.tag.menu.matchDateChangeRequestList"/></a>
     		
     	</div> 
 	</nav>
