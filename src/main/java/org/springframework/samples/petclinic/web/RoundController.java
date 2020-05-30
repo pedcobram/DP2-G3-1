@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.security.auth.login.CredentialException;
-import javax.websocket.server.PathParam;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.model.Match;
@@ -65,23 +64,17 @@ public class RoundController {
 
 		Match match = this.matchService.findMatchById(matchId);
 
-		//Para modificar fecha y hora del partido
-		//		Calendar c = Calendar.getInstance();
-		//		c.setTime(match.getMatchDate());
-		//		String matchDay = c.get(Calendar.YEAR) + "/" + (c.get(Calendar.MONTH) + 1) + "/" + c.get(Calendar.DAY_OF_MONTH);
-		//		String matchHour = c.get(Calendar.HOUR_OF_DAY) + ":" + c.get(Calendar.MINUTE);
 		ModelAndView mav = new ModelAndView("competitions/matchDetails");
 
-		//		mav.addObject("matchDay", matchDay);
-		//		mav.addObject("matchHour", matchHour);
 		mav.addObject(match);
 
 		return mav;
 	}
 	@PostMapping("/competitions/{competitionId}/round/{roundId}/match/{matchId}") //VISTA DETALLADA DE PARTIDO
-	public ModelAndView editMatch(@PathVariable("matchId") final int matchId, @PathParam("match.matchDate") final String matchDate) throws CredentialException {
+	public ModelAndView editMatch(@PathVariable("matchId") final int matchId, final Match editMatch) throws CredentialException {
 
 		Match match = this.matchService.findMatchById(matchId);
+		match.setMatchDate(editMatch.getMatchDate());
 
 		ModelAndView mav = new ModelAndView("competitions/matchDetails");
 

@@ -31,10 +31,10 @@
 		    
        		<script>
            		$(document).ready(function () {
-            		$("#editDate-form").hide();
+            		$("#edit-match-form").hide();
            			 });
            		$('#fecha').on('click', function(){
-			        $('#editDate-form').fadeIn('slow');
+			        $('#edit-match-form').fadeIn('slow');
 			        $('#fecha').fadeOut('slow');
 			       
 			        return false;
@@ -42,20 +42,13 @@
            
            	</script>	
            	
-           <script>
-           
-           $(function () {
-               $("#matchDay").datetimepicker({
-            	   format:'Y/m/d H:i'
-            	 });
-           });
-          
-        </script>
+      
         <script>
-          // $(function () {
-            //  $("#matchDay").datepicker({dateFormat: 'yy/mm/dd'});
+           $(function () {
+              $("#matchDate").datepicker(
+            		  {dateFormat: 'yy/mm/dd'});
                
-          // });
+           });
           
         </script>
     </jsp:attribute>
@@ -101,33 +94,8 @@
   </div> 
 <div>
 
-<!--<form method="POST" class="form-horizontal"id = "editDate-form">
-     
-      <table class="form-group has-feedback">
-      
-        <tr style="padding: 10px"> 
-            <td>FECHA:</td>
-            <td><input id ="matchDay" name="matchDay" type="text" value="${matchDay}"/></td>
-        </tr>
-        <tr>
-            <td>Hora:</td>
-            <td><input id ="matchHour" name="matchHour" type="text" value="${match.matchDate}"/></td>
-        </tr>
-       <tr>
-       </tr>
-              
-        <tr class="col-sm-offset-2 col-sm-10" style="padding: 10px">
-        
-            <td colspan="2">
-              <input type="submit" class="btn btn-default"value="Save Changes" />
-            </td>
-           
-        </tr>
-        
-      </table>
-        
-  </form>-->
-   <form:form modelAttribute="match" class="form-horizontal" id="add-match-form">
+
+   <form:form modelAttribute="match" class="form-horizontal" id="edit-match-form">
       
        	<div class="form-group has-feedback">
 		 <petclinic:inputField label="code.label.matchupdateform.matchdate" name="matchDate"/>
