@@ -24,6 +24,7 @@ import org.springframework.samples.petclinic.model.Jornada;
 import org.springframework.samples.petclinic.model.Match;
 import org.springframework.samples.petclinic.model.MatchRecord;
 import org.springframework.samples.petclinic.model.Enum.CompetitionType;
+import org.springframework.samples.petclinic.model.Enum.FootballPlayerPosition;
 import org.springframework.samples.petclinic.model.Enum.MatchRecordStatus;
 import org.springframework.samples.petclinic.model.Enum.MatchStatus;
 import org.springframework.samples.petclinic.service.CalendaryService;
@@ -560,4 +561,69 @@ public class CompetitionController {
 
 		return "redirect:/";
 	}
+
+	@GetMapping(value = "/competitions/{competitionId}/statistics") //ESTADÍSTICAS DE LA COMPETICIÓN
+	public String showCompetitionStats(@PathVariable("competitionId") final int competitionId, final Map<String, Object> model) {
+
+		Competition comp = this.competitionService.findCompetitionById(competitionId);
+
+		List<FootballPlayer> players = new ArrayList<>();
+
+		List<Jornada> jornadas = new ArrayList<>();
+
+		jornadas.addAll(this.jornadaService.findAllJornadasFromCompetitionId(competitionId));
+
+		for (String a : comp.getClubs()) {
+
+			FootballClub c = this.footballClubService.findFootballClubByName(a);
+
+			players.addAll(this.footballPlayerService.findAllClubFootballPlayers(c.getId()));
+
+		}
+
+		List<Integer> goles = new ArrayList<Integer>();
+		List<Integer> yellowCards = new ArrayList<Integer>();
+		List<Integer> redCards = new ArrayList<Integer>();
+		List<Integer> assists = new ArrayList<Integer>();
+		List<Integer> goalsConceded = new ArrayList<Integer>();
+
+		for (FootballPlayer a : players) {
+
+			Integer goals = 0;
+			Integer yCards = 0;
+			Integer rCards = 0;
+			Integer assist = 0;
+			Integer goalsConc = 0;
+
+			for (FootballPlayerMatchStatistic f : this.competitionService.findFPMSByPlayerIdAndCompId(a.getId(), comp.getId())) {
+
+				goals = goals + f.getGoals();
+				yCards = yCards + f.getYellow_cards();
+				rCards = rCards + f.getRed_cards();
+				assist = assist + f.getAssists();
+
+				if (a.getPosition().equals(FootballPlayerPosition.GOALKEEPER)) {
+					goalsConc = goalsConc + f.getReceived_goals();
+				}
+
+			}
+
+			goles.add(goals);
+			yellowCards.add(yCards);
+			redCards.add(rCards);
+			assists.add(assist);
+			goalsConceded.add(goalsConc);
+
+		}
+
+		model.put("Players", players);
+		model.put("Goals", goles);
+		model.put("yellowCards", yellowCards);
+		model.put("redCards", redCards);
+		model.put("assists", assists);
+		model.put("goalsConceded", goalsConceded);
+
+		return "competitions/competitionStats";
+	}
+
 }

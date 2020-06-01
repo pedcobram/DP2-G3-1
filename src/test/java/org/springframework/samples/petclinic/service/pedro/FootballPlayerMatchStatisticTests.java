@@ -1,6 +1,8 @@
 
 package org.springframework.samples.petclinic.service.pedro;
 
+import java.util.Collection;
+
 import javax.validation.ConstraintViolationException;
 
 import org.junit.jupiter.api.Assertions;
@@ -42,7 +44,7 @@ public class FootballPlayerMatchStatisticTests {
 
 		int count = fpss.getFootballPlayerStatisticsList().size();
 
-		Assertions.assertTrue(count == 1);
+		Assertions.assertTrue(count == 5);
 	}
 
 	@Test //CASO POSITIVO
@@ -54,7 +56,7 @@ public class FootballPlayerMatchStatisticTests {
 
 		int count = fpss.getFootballPlayerStatisticsList().size();
 
-		Assertions.assertTrue(count == 1);
+		Assertions.assertTrue(count == 5);
 	}
 
 	@Test //CASO POSITIVO
@@ -102,7 +104,7 @@ public class FootballPlayerMatchStatisticTests {
 
 		Boolean res = true;
 
-		FootballPlayerMatchStatistic fps = this.footballPlayerMatchStatisticService.findFootballPlayerMatchStatisticByPlayerId(1);
+		Collection<FootballPlayerMatchStatistic> fps = this.footballPlayerMatchStatisticService.findFootballPlayerMatchStatisticByPlayerId(1);
 
 		if (fps == null) {
 			res = false;
@@ -116,9 +118,9 @@ public class FootballPlayerMatchStatisticTests {
 
 		Boolean res = true;
 
-		FootballPlayerMatchStatistic fps = this.footballPlayerMatchStatisticService.findFootballPlayerMatchStatisticByPlayerId(1000);
+		Collection<FootballPlayerMatchStatistic> fps = this.footballPlayerMatchStatisticService.findFootballPlayerMatchStatisticByPlayerId(1000);
 
-		if (fps == null) {
+		if (fps.isEmpty()) {
 			res = false;
 		}
 

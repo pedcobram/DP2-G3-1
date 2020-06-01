@@ -420,7 +420,12 @@ INSERT INTO jornada(id, name, calendary_id) VALUES (6, 'Jornada 6', 1);
 
 --MatchesJornadas
 
-INSERT INTO matches(id, title, match_date, match_status, stadium, football_Club1, football_Club2, creator, jornada_id) VALUES(4, 'Jornada 1 de la Liga', '2020-08-11 20:30', 1, 'Ramón Sánchez-Pizjuan', 'Sevilla Fútbol Club', 'Real Betis Balompié', 'pedro', 1);
+INSERT INTO matches(id, title, match_date, match_status, stadium, football_Club1, football_Club2, creator, referee, jornada_id) VALUES(4, 'Jornada 1 de la Liga', '2020-08-11 20:30', 1, 'Ramón Sánchez-Pizjuan', 'Sevilla Fútbol Club', 'Real Betis Balompié', 'pedro', 'referee1', 1);
+INSERT INTO match_record(id, title, status, season_end, season_start, result, match) VALUES(6, 'Partido de Liga', 0, '2020', '2019', '3-0', 4);
+INSERT INTO football_player_match_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id, match_record) VALUES (2, 1, 2, 1, 0, null, 2019, 2020, 4, 6);
+INSERT INTO football_player_match_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id, match_record) VALUES (3, 1, 1, 2, 1, null, 2019, 2020, 3, 6);
+INSERT INTO football_player_match_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id, match_record) VALUES (4, 0, 0, 1, 0, 0, 2019, 2020, 1, 6);
+INSERT INTO football_player_match_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id, match_record) VALUES (5, 0, 0, 0, 0, 3, 2019, 2020, 26, 6);
 -- Player Transfer Requests
 INSERT INTO player_transfer_request(id, offer, contract_time, status, player_id, contract_id, club_id) VALUES(0, 2000000, 1, 0, 1, 1, '2');
 INSERT INTO player_transfer_request(id, offer, contract_time, status, player_id, contract_id, club_id) VALUES(1, 2000000, 2, 0, 14, 18, '1');
