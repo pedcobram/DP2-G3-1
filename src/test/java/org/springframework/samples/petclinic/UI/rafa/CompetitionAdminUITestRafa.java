@@ -107,6 +107,15 @@ public class CompetitionAdminUITestRafa {
 		this.entoncesSeMostraraUnMensajeIndicandolo();
 	}
 
+	//R7 -------------------------------------------------------------------------------
+
+	@Test
+	public void R7Positivo_AdminCompVerEstadisticasCompeticion() throws Exception {
+		this.comoAdministradorDeCompetición("pedro");
+		this.cuandoAccedaALasEstadisticas();
+		this.loVisualizareCorrectamente();
+	}
+
 	//R17 ------------------------------------------------------------------------------
 
 	@Test
@@ -133,6 +142,18 @@ public class CompetitionAdminUITestRafa {
 		this.driver.findElement(By.id("password")).clear();
 		this.driver.findElement(By.id("password")).sendKeys(user);
 		this.driver.findElement(By.xpath("//button[@type='submit']")).click();
+	}
+
+	//R7
+
+	private void cuandoAccedaALasEstadisticas() {
+		this.driver.findElement(By.linkText("TORNEOS")).click();
+		this.driver.findElement(By.linkText("La Liga")).click();
+		this.driver.findElement(By.linkText("Estadísticas")).click();
+	}
+
+	private void loVisualizareCorrectamente() {
+		Assert.assertEquals("Estadísticas", this.driver.findElement(By.xpath("//h2")).getText());
 	}
 
 	//R17

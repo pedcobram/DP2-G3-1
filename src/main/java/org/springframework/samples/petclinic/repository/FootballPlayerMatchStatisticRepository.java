@@ -16,7 +16,7 @@ public interface FootballPlayerMatchStatisticRepository {
 
 	FootballPlayerMatchStatistic findFootballPlayerMatchStatisticById(int id) throws DataAccessException;
 
-	FootballPlayerMatchStatistic findFootballPlayerMatchStatisticByPlayerId(int player_id) throws DataAccessException;
+	Collection<FootballPlayerMatchStatistic> findFootballPlayerMatchStatisticByPlayerId(int player_id) throws DataAccessException;
 
 	FootballPlayerMatchStatistic findFootballPlayerMatchStatisticByPlayerIdAndMatchRecordId(int playerId, int matchRecordId) throws DataAccessException;
 

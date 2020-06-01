@@ -30,7 +30,7 @@ public interface SpringDataFootballPlayerMatchStatisticsRepository extends Footb
 
 	@Override
 	@Query("SELECT a FROM FootballPlayerMatchStatistic a WHERE a.player.id =:player_id")
-	FootballPlayerMatchStatistic findFootballPlayerMatchStatisticByPlayerId(@Param("player_id") int player_id) throws DataAccessException;
+	Collection<FootballPlayerMatchStatistic> findFootballPlayerMatchStatisticByPlayerId(@Param("player_id") int player_id) throws DataAccessException;
 
 	@Override
 	@Query("SELECT a FROM FootballPlayerMatchStatistic a WHERE a.player.id =:playerId AND a.matchRecord.id =:matchRecordId")
