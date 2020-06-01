@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.samples.petclinic.model.FootballPlayerStatistic;
 import org.springframework.samples.petclinic.service.FootballPlayerStatisticService;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,7 +30,7 @@ public class FootballPlayerStatisticController {
 	}
 
 	@RequestMapping(value = "/footballPlayerStatistic/detail/{playerId}")
-	public String viewFootballPlayerStatistic(@PathVariable("playerId") final int playerId, final Model model) {
+	public String viewFootballPlayerStatistic(@PathVariable("playerId") final int playerId, final ModelMap model) {
 
 		FootballPlayerStatistic fps = this.footballPlayerStatisticService.findFootballPlayerStatisticByPlayerId(playerId);
 

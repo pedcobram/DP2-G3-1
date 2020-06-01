@@ -23,7 +23,6 @@ import org.springframework.samples.petclinic.service.exceptions.SalaryException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
@@ -61,7 +60,7 @@ public class CoachTransferRequestController {
 	}
 
 	@GetMapping(value = "/transfers/coaches/request/{coachId}")
-	public String showRequestTransferCoach(@PathVariable("coachId") final int coachId, final Model model) throws DataAccessException {
+	public String showRequestTransferCoach(@PathVariable("coachId") final int coachId, final ModelMap model) throws DataAccessException {
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String currentPrincipalName = authentication.getName();
@@ -119,7 +118,7 @@ public class CoachTransferRequestController {
 	}
 
 	@GetMapping(value = "/transfers/coaches/requests/sent")
-	public String viewTransferCoachSentList(final Model model) throws DataAccessException {
+	public String viewTransferCoachSentList(final ModelMap model) throws DataAccessException {
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String currentPrincipalName = authentication.getName();
@@ -134,7 +133,7 @@ public class CoachTransferRequestController {
 	}
 
 	@GetMapping(value = "/transfers/coaches/requests/sent/delete/{requestId}")
-	public String deleteTransferCoachRequest(final Model model, @PathVariable("requestId") final int requestId) throws CredentialException {
+	public String deleteTransferCoachRequest(final ModelMap model, @PathVariable("requestId") final int requestId) throws CredentialException {
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String currentPrincipalName = authentication.getName();
@@ -151,7 +150,7 @@ public class CoachTransferRequestController {
 	}
 
 	@GetMapping(value = "/transfers/coaches/requests/received")
-	public String viewTransferPlayerReceivedList(final Model model) throws DataAccessException {
+	public String viewTransferPlayerReceivedList(final ModelMap model) throws DataAccessException {
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String currentPrincipalName = authentication.getName();
@@ -169,7 +168,7 @@ public class CoachTransferRequestController {
 	}
 
 	@GetMapping(value = "/transfers/coaches/requests/received/reject/{coachRequestId}")
-	public String rejectTransferPlayerRequest(final Model model, @PathVariable("coachRequestId") final int coachRequestId) throws Exception {
+	public String rejectTransferPlayerRequest(final ModelMap model, @PathVariable("coachRequestId") final int coachRequestId) throws Exception {
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String currentPrincipalName = authentication.getName();
@@ -192,7 +191,7 @@ public class CoachTransferRequestController {
 	}
 
 	@GetMapping(value = "/transfers/coaches/requests/received/accept/{coachRequestId}")
-	public String acceptTransferPlayerRequest(final Model model, @PathVariable("coachRequestId") final int coachRequestId) throws DataAccessException, CredentialException {
+	public String acceptTransferPlayerRequest(final ModelMap model, @PathVariable("coachRequestId") final int coachRequestId) throws DataAccessException, CredentialException {
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String currentPrincipalName = authentication.getName();
