@@ -42,7 +42,7 @@ public class MatchRefereeRequest extends BaseEntity implements Serializable {
 	private Referee				referee;
 
 	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "matchid", referencedColumnName = "id")
+	@JoinColumn(name = "match_id", referencedColumnName = "id")
 	private Match				match;
 
 }
