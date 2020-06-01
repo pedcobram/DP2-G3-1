@@ -43,14 +43,13 @@
            	</script>	
            	
       
-        <script>
+        <!--  <script>
            $(function () {
-              $("#matchDate").datepicker(
-            		  {dateFormat: 'yy/mm/dd'});
+              $("#matchDate").datepicker({dateFormat: 'yy/mm/dd'});
                
            });
           
-        </script>
+        </script>-->
     </jsp:attribute>
 <jsp:body>
     
@@ -89,23 +88,32 @@
         	<td><c:out value="${match.matchStatus}"/></td>        
         </tr> 
     </table>							 
-    <input type="button" class="btn btn-default" value="${back}" name="Back" onclick="history.back()" />  
+    <input type="button" class="btn btn-default" value="${back}" name="Back" onclick="history.back()" />
+    <c:if test="${match.matchStatus=='TO_BE_PLAYED'}"> 
     <input type="button" id ="fecha" class="btn btn-default" value="Actualizar fecha" name="editDate.button"  />
+    </c:if> 
   </div> 
-<div>
+  <br/>
+  <c:if test="${hasError}"> Error al introducir la fecha(patron correcto : aaaa/mm/dd HH:MM)</c:if>
+  
+<div id="edit-match-form">
 
-
-   <form:form modelAttribute="match" class="form-horizontal" id="edit-match-form">
+	
+    <form:form modelAttribute="match" class="form-horizontal" id="edit-match-form">
       
        	<div class="form-group has-feedback">
+       	<br/>
+       	Por favor cambie los digitos que necesite. Mantén el patron: aaaa/mm/dd HH:MM
+         	
 		 <petclinic:inputField label="code.label.matchupdateform.matchdate" name="matchDate"/>
+		 
   	</div>
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
 				<button class="btn btn-default" type="submit"><fmt:message key="code.button.matchdetails.submit"/></button>
             </div>
         </div>
-    </form:form>
+    </form:form> 
  
     </div>   
     </jsp:body>

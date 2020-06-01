@@ -25,6 +25,7 @@ import org.springframework.samples.petclinic.web.RoundController;
 import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -136,6 +137,24 @@ public class RoundControllerTest {
 	void testNotShowsMatch() throws Exception {
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/competitions/{competitionId}/round/{roundId}/match/{matchId}", RoundControllerTest.TEST_COMPETITION_ID, 1, 1)).andExpect(MockMvcResultMatchers.status().is4xxClientError());
 		;
+
+	}
+	@WithMockUser(username = "rufus", authorities = {
+		"CompetitionAdmin"
+	})
+	@Test //CASO POSITIVO - EDITMATCH
+	void testEditMatch() throws Exception {
+		this.mockMvc
+			.perform(MockMvcRequestBuilders.post("/competitions/{competitionId}/round/{roundId}/match/{matchId}", RoundControllerTest.TEST_COMPETITION_ID, 1, 1).param("matchDate", "2021/05/31 20:30").with(SecurityMockMvcRequestPostProcessors.csrf()))
+			.andExpect(MockMvcResultMatchers.model().attributeExists("match")).andExpect(MockMvcResultMatchers.model().attributeDoesNotExist("hasError")).andExpect(MockMvcResultMatchers.view().name("competitions/matchDetails"))
+			.andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/competitions/matchDetails.jsp"));
+
+	}
+	@WithAnonymousUser
+	@Test //CASO NEGATIVO - EDIT MATCH
+	void testNotEditMatch() throws Exception {
+		this.mockMvc.perform(MockMvcRequestBuilders.post("/competitions/{competitionId}/round/{roundId}/match/{matchId}", RoundControllerTest.TEST_COMPETITION_ID, 1, 1).param("matchDate", "2021/05/31").with(SecurityMockMvcRequestPostProcessors.csrf()))
+			.andExpect(MockMvcResultMatchers.status().is4xxClientError());
 
 	}
 

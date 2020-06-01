@@ -43,6 +43,7 @@ import org.springframework.samples.petclinic.service.exceptions.StatusException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.TransactionSystemException;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
@@ -162,6 +163,35 @@ public class CompetitionController {
 		mav.addObject(match);
 
 		return mav;
+	}
+	@PostMapping("/competitions/{competitionId}/calendary/jornada/{jornadaId}/match/{matchId}") //EDITAR FECHA PARTIDO DE PARTIDO
+	public ModelAndView editMatch(@PathVariable("matchId") final int matchId, final Match match, final BindingResult result) throws CredentialException {
+
+		Match m = this.matchService.findMatchById(matchId);
+
+		try {
+			m.setMatchDate(match.getMatchDate());
+			this.matchService.saveMatch(m);
+
+			ModelAndView mav = new ModelAndView("competitions/matchDetails");
+
+			mav.addObject("match", m);
+
+			return mav;
+
+		} catch (TransactionSystemException e) {
+
+			Boolean hasError = true;
+
+			ModelAndView mav = new ModelAndView("competitions/matchDetails");
+			Match m1 = this.matchService.findMatchById(matchId);
+			mav.addObject("match", m1);
+			mav.addObject("hasError", hasError);
+
+			return mav;
+
+		}
+
 	}
 
 	@GetMapping("/competitions/{competitionId}/calendary/jornada/{jornadaId}") //VISTA DETALLADA DE JORNADA
