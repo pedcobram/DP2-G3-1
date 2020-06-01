@@ -55,6 +55,8 @@ public class MatchRecordService {
 	public void deleteMatchRecord(final MatchRecord matchRecord) {
 		this.matchRecordRepository.delete(matchRecord);
 	}
+
+	@Transactional(readOnly = true)
 	public Collection<MatchRecord> findLastMatches(final int id) {
 
 		return this.matchRecordRepository.findLastMatches(id);

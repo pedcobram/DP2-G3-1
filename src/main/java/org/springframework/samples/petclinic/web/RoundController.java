@@ -13,8 +13,11 @@ import org.springframework.samples.petclinic.service.CompetitionService;
 import org.springframework.samples.petclinic.service.MatchService;
 import org.springframework.samples.petclinic.service.RoundService;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.TransactionSystemException;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -54,10 +57,8 @@ public class RoundController {
 
 		ModelAndView mav = new ModelAndView(RoundController.VIEWS_ROUND_DETAILS);
 
-		List<Round> rs = this.roundService.findByCompetitionId(competitionId);
-		Collections.reverse(rs);
-		mav.addObject("rounds", rs);
 		mav.addObject("round", this.roundService.findById(roundId));
+		mav.addObject("roundMatches", this.matchService.findMatchByRoundId(roundId));
 		return mav;
 	}
 	@GetMapping("/competitions/{competitionId}/round/{roundId}/match/{matchId}") //VISTA DETALLADA DE PARTIDO
@@ -71,4 +72,35 @@ public class RoundController {
 
 		return mav;
 	}
+
+	@PostMapping("/competitions/{competitionId}/round/{roundId}/match/{matchId}") //EDITAR FECHA PARTIDO DE PARTIDO
+	public ModelAndView editMatch(@PathVariable("matchId") final int matchId, final Match match, final BindingResult result) throws CredentialException {
+
+		Match m = this.matchService.findMatchById(matchId);
+
+		try {
+			m.setMatchDate(match.getMatchDate());
+			this.matchService.saveMatch(m);
+
+			ModelAndView mav = new ModelAndView("competitions/matchDetails");
+
+			mav.addObject("match", m);
+
+			return mav;
+
+		} catch (TransactionSystemException e) {
+
+			Boolean hasError = true;
+
+			ModelAndView mav = new ModelAndView("competitions/matchDetails");
+			Match m1 = this.matchService.findMatchById(matchId);
+			mav.addObject("match", m1);
+			mav.addObject("hasError", hasError);
+
+			return mav;
+
+		}
+
+	}
+
 }
