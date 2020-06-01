@@ -85,7 +85,7 @@ public class MatchServiceTests {
 
 		Boolean res = true;
 
-		Match m = this.matchService.findMatchById(1);
+		Match m = this.matchService.findMatchById(10);
 
 		if (m == null) {
 			res = false;
