@@ -131,7 +131,6 @@ public class FootballPlayerService {
 			throw new StatusException();
 		}
 
-		newContract.getClub().setMoney(newContract.getClub().getMoney() - newContract.getSalary());
 		this.footRepository.save(footballPlayer);
 		this.contractService.saveContractPlayer(newContract);
 
