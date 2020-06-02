@@ -1,6 +1,8 @@
 
 package org.springframework.samples.petclinic.service.pedro;
 
+import java.util.Collection;
+
 import javax.validation.ConstraintViolationException;
 
 import org.junit.jupiter.api.Assertions;
@@ -196,6 +198,19 @@ public class MatchRecordServiceTests {
 		Assertions.assertThrows(InvalidDataAccessApiUsageException.class, () -> {
 			this.matchRecordService.deleteMatchRecord(mr);
 		});
+	}
+	@Test //CASO POSITIVO
+	void shouldfindLastMatches() {
+
+		Boolean res = true;
+
+		Collection<MatchRecord> mr = this.matchRecordService.findLastMatches(1);
+
+		if (mr.isEmpty()) {
+			res = false;
+		}
+
+		Assertions.assertTrue(res);
 	}
 
 }

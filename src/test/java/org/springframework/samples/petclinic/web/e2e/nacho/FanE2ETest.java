@@ -13,12 +13,16 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.transaction.annotation.Transactional;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
 //@DirtiesContext(classMode = ClassMode.AFTER_EACH_TEST_METHOD)
 //@AutoConfigureTestDatabase(replace = Replace.NONE)
+//@TestPropertySource(locations = "classpath:application-mysql.properties")
+
+@Transactional
 public class FanE2ETest {
 
 	@Autowired
@@ -27,13 +31,13 @@ public class FanE2ETest {
 	public static final int	TEST_ID	= 1;
 
 
-	//	@WithMockUser(username = "ignacio", authorities = {
-	//		"authenticated"
-	//	})
-	//	@Test //CASO POSITIVO - LA CREACIÓN DE UN FAN NO VIP
-	//	void testInitCreationFormSuccess() throws Exception {
-	//		this.mockMvc.perform(MockMvcRequestBuilders.get("/fan/{clubId}/new", FanE2ETest.TEST_ID)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.view().name("footballClubs/footballClubDetails"));
-	//	}
+	@WithMockUser(username = "ignacio", authorities = {
+		"authenticated"
+	})
+	@Test //CASO POSITIVO - LA CREACIÓN DE UN FAN NO VIP
+	void testInitCreationFormSuccess() throws Exception {
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/fan/{clubId}/new", FanE2ETest.TEST_ID)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.view().name("footballClubs/footballClubDetails"));
+	}
 
 	@WithAnonymousUser
 	@Test //CASO NEGATIVO - LA CREACIÓN DE UN FAN NO VIP
@@ -41,14 +45,14 @@ public class FanE2ETest {
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/fan/{clubId}/new", FanE2ETest.TEST_ID)).andExpect(MockMvcResultMatchers.status().is3xxRedirection()).andExpect(MockMvcResultMatchers.redirectedUrl("http://localhost/login"));
 	}
 
-	//	@WithMockUser(username = "manuel", authorities = {
-	//		"authenticated"
-	//	})
-	//	@Test //CASO POSITIVO - LA CREACIÓN DE UN FAN VIP
-	//	void testCreationFormSuccess() throws Exception {
-	//		this.mockMvc.perform(MockMvcRequestBuilders.post("/fan/{clubId}/new", FanE2ETest.TEST_ID).param("creditCard.creditCardNumber", "7894561234568794").param("creditCard.expirationDate", "11/23").param("creditCard.cvv", "879")
-	//			.with(SecurityMockMvcRequestPostProcessors.csrf())).andExpect(MockMvcResultMatchers.status().is3xxRedirection()).andExpect(MockMvcResultMatchers.view().name("redirect:/"));
-	//	}
+	@WithMockUser(username = "manuel", authorities = {
+		"authenticated"
+	})
+	@Test //CASO POSITIVO - LA CREACIÓN DE UN FAN VIP
+	void testCreationFormSuccess() throws Exception {
+		this.mockMvc.perform(MockMvcRequestBuilders.post("/fan/{clubId}/new", FanE2ETest.TEST_ID).param("creditCard.creditCardNumber", "7894561234568794").param("creditCard.expirationDate", "11/23").param("creditCard.cvv", "879")
+			.with(SecurityMockMvcRequestPostProcessors.csrf())).andExpect(MockMvcResultMatchers.status().is3xxRedirection()).andExpect(MockMvcResultMatchers.view().name("redirect:/"));
+	}
 
 	@WithAnonymousUser
 	@Test //CASO NEGATIVO - LA CREACIÓN DE UN FAN VIP
@@ -90,14 +94,14 @@ public class FanE2ETest {
 			.andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/fan/createOrUpdateFanForm.jsp"));
 	}
 
-	//	@WithMockUser(username = "ignacio", authorities = {
-	//		"authenticated"
-	//	})
-	//	@Test //CASO POSITIVO - LA CREACION DE UN FAN VIP
-	//	void testInitUpdateFanFormSuccess() throws Exception {
-	//		this.mockMvc.perform(MockMvcRequestBuilders.get("/fan/noVip")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.view().name("fan/createOrUpdateFanForm"))
-	//			.andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/fan/createOrUpdateFanForm.jsp"));
-	//	}
+	@WithMockUser(username = "ignacio", authorities = {
+		"authenticated"
+	})
+	@Test //CASO POSITIVO - LA CREACION DE UN FAN VIP
+	void testInitUpdateFanFormSuccess() throws Exception {
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/fan/noVip")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.view().name("fan/createOrUpdateFanForm"))
+			.andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/fan/createOrUpdateFanForm.jsp"));
+	}
 
 	@WithAnonymousUser
 	@Test //CASO NEGATIVO - LA CREACION DE UN FAN VIP
@@ -153,13 +157,13 @@ public class FanE2ETest {
 			.andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/fan/createOrUpdateFanForm.jsp"));
 	}
 
-	//	@WithMockUser(username = "ignacio", authorities = {
-	//		"authenticated"
-	//	})
-	//	@Test //CASO POSITIVO - BORRAR FAN
-	//	void testDeleteFan() throws Exception {
-	//		this.mockMvc.perform(MockMvcRequestBuilders.get("/fan/delete")).andExpect(MockMvcResultMatchers.status().is3xxRedirection()).andExpect(MockMvcResultMatchers.view().name("redirect:/"));
-	//	}
+	@WithMockUser(username = "ignacio", authorities = {
+		"authenticated"
+	})
+	@Test //CASO POSITIVO - BORRAR FAN
+	void testDeleteFan() throws Exception {
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/fan/delete")).andExpect(MockMvcResultMatchers.status().is3xxRedirection()).andExpect(MockMvcResultMatchers.view().name("redirect:/"));
+	}
 
 	@WithAnonymousUser
 	@Test //CASO NEGATIVO - BORRAR FAN
