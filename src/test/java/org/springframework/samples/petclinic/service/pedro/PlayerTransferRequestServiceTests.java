@@ -37,7 +37,7 @@ public class PlayerTransferRequestServiceTests {
 			res = true;
 		}
 
-		Assertions.assertTrue(res);
+		Assertions.assertFalse(res);
 	}
 
 	@Test // CASO POSITIVO

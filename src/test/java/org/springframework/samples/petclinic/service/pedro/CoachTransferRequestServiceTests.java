@@ -174,7 +174,7 @@ public class CoachTransferRequestServiceTests {
 			res = true;
 		}
 
-		Assertions.assertTrue(res);
+		Assertions.assertFalse(res);
 	}
 
 	@Test // CASO NEGATIVO
@@ -245,7 +245,7 @@ public class CoachTransferRequestServiceTests {
 	@Test // CASO POSITIVO
 	void shouldSaveCoachTransferRequest() throws DataAccessException, CredentialException, CoachTransferRequestExistsException, AlreadyOneRequestOpenException {
 
-		CoachTransferRequest ptr = this.coachTransferRequestService.findCoachTransferRequestById(1);
+		CoachTransferRequest ptr = this.coachTransferRequestService.findCoachTransferRequestById(0);
 
 		ptr.setId(ptr.getId());
 		ptr.setStatus(RequestStatus.ACCEPT);
@@ -266,7 +266,7 @@ public class CoachTransferRequestServiceTests {
 	@Test // CASO NEGATIVO
 	void shouldNotSaveCoachTransferRequest() throws DataAccessException, CredentialException, CoachTransferRequestExistsException {
 
-		CoachTransferRequest ptr = this.coachTransferRequestService.findCoachTransferRequestById(1);
+		CoachTransferRequest ptr = this.coachTransferRequestService.findCoachTransferRequestById(0);
 
 		CoachTransferRequest ptr_mod = new CoachTransferRequest();
 
@@ -283,7 +283,7 @@ public class CoachTransferRequestServiceTests {
 
 	@Test // CASO POSITIVO
 	void shouldDeleteCoachTransferRequest() {
-		CoachTransferRequest ptr = this.coachTransferRequestService.findCoachTransferRequestById(1);
+		CoachTransferRequest ptr = this.coachTransferRequestService.findCoachTransferRequestById(0);
 
 		this.coachTransferRequestService.deleteCoachTransferRequest(ptr);
 
