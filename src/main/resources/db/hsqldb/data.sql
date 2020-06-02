@@ -111,9 +111,9 @@ INSERT INTO matches(id, title, match_date, match_status, stadium, football_Club1
 INSERT INTO matches(id, title, match_date, match_status, stadium, football_Club1, football_Club2, creator) VALUES(3, 'Match title 3', '2021-05-11 20:30', 0, 'Ramón Sánchez-Pizjuan', 'Sevilla Fútbol Club', 'Real Betis Balompié', 'presidente1');
 
 -- Match Referee Requests
-INSERT INTO match_referee_request(id, title, status, username, matchId) VALUES(1, 'Test title 1', 0, 'referee1', 3);
-INSERT INTO match_referee_request(id, title, status, username, matchId) VALUES(2, 'Test title 2', 0, 'referee2', 3); 
-INSERT INTO match_referee_request(id, title, status, username, matchid) VALUES(3, 'Test title 3', 0, 'referee1', 10);
+INSERT INTO match_referee_request(id, title, status, username, match_id) VALUES(1, 'Test title 1', 0, 'referee1', 3);
+INSERT INTO match_referee_request(id, title, status, username, match_id) VALUES(2, 'Test title 2', 0, 'referee2', 3); 
+INSERT INTO match_referee_request(id, title, status, username, match_id) VALUES(3, 'Test title 3', 0, 'referee1', 10);
 
 -- Contract Commercial
 INSERT INTO contract_Commercial(id,end_contract_clause,end_date,start_date,money,publicity) VALUES (1, 2000000,'2023-01-01','2020-01-01',100000,'https://logosmarcas.com/wp-content/uploads/2018/03/Nike-logo.png');
@@ -369,8 +369,8 @@ INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_card
 INSERT INTO football_player_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id) VALUES(64, 0, 0, 0, 0, 0, 2019, 2020, 64);
 
 -- Match Records
-INSERT INTO match_record(id, title, status, season_end, season_start, result, matchid) VALUES(0, 'title 0', 0, '2020', '2019', '', 0);
-INSERT INTO match_record(id, title, status, season_end, season_start, result, matchid) VALUES(1, 'title 1', 0, '2020', '2019', 'result', 2);
+INSERT INTO match_record(id, title, status, season_end, season_start, result, match_id) VALUES(0, 'title 0', 0, '2020', '2019', '', 0);
+INSERT INTO match_record(id, title, status, season_end, season_start, result, match_id) VALUES(1, 'title 1', 0, '2020', '2019', 'result', 2);
 
 
 -- Football Player Match Statistics
@@ -421,7 +421,7 @@ INSERT INTO jornada(id, name, calendary_id) VALUES (6, 'Jornada 6', 1);
 --MatchesJornadas
 
 INSERT INTO matches(id, title, match_date, match_status, stadium, football_Club1, football_Club2, creator, referee, jornada_id) VALUES(4, 'Jornada 1 de la Liga', '2020-08-11 20:30', 1, 'Ramón Sánchez-Pizjuan', 'Sevilla Fútbol Club', 'Real Betis Balompié', 'pedro', 'referee1', 1);
-INSERT INTO match_record(id, title, status, season_end, season_start, result, match) VALUES(6, 'Partido de Liga', 0, '2020', '2019', '3-0', 4);
+INSERT INTO match_record(id, title, status, season_end, season_start, result, match_id) VALUES(6, 'Partido de Liga', 0, '2020', '2019', '3-0', 4);
 INSERT INTO football_player_match_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id, match_record) VALUES (2, 1, 2, 1, 0, null, 2019, 2020, 4, 6);
 INSERT INTO football_player_match_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id, match_record) VALUES (3, 1, 1, 2, 1, null, 2019, 2020, 3, 6);
 INSERT INTO football_player_match_statistic(id, assists, goals, yellow_cards, red_cards, received_goals, season_start, season_end, football_player_id, match_record) VALUES (4, 0, 0, 1, 0, 0, 2019, 2020, 1, 6);
@@ -444,10 +444,10 @@ INSERT INTO matches(id, title, match_date, match_status, stadium, football_Club1
 INSERT INTO matches(id, title, match_date, match_status, stadium, football_Club1, football_Club2, referee,round_id, creator) VALUES (8, 'Partido de Cuartos de final', '2021-05-11 20:30', 0, 'Ramón Sánchez-Pizjuan', 'Real Madrid Club de Fútbol', 'Fútbol Club Barcelona','referee1',1, 'presidente1');
 
 --Match Records for Round
-INSERT INTO match_record(id, title, status, season_end, season_start, result,winner, matchid) VALUES(2, 'title 1', 1, '2020', '2019', '1-0','Sevilla Fútbol Club', 5);
-INSERT INTO match_record(id, title, status, season_end, season_start, result,winner, matchid) VALUES(3, 'title 1', 1, '2020', '2019', '3-2','Valencia Club de Fútbol', 6);
-INSERT INTO match_record(id, title, status, season_end, season_start, result,winner, matchid) VALUES(4, 'title 1', 1, '2020', '2019', '3-4','Liverpool Football Club', 7);
-INSERT INTO match_record(id, title, status, season_end, season_start, result, winner,matchid) VALUES(5, 'title 1', 0, '2020', '2019', '0-2','Fútbol Club Barcelona', 8);
+INSERT INTO match_record(id, title, status, season_end, season_start, result,winner, match_id) VALUES(2, 'title 1', 1, '2020', '2019', '1-0','Sevilla Fútbol Club', 5);
+INSERT INTO match_record(id, title, status, season_end, season_start, result,winner, match_id) VALUES(3, 'title 1', 1, '2020', '2019', '3-2','Valencia Club de Fútbol', 6);
+INSERT INTO match_record(id, title, status, season_end, season_start, result,winner, match_id) VALUES(4, 'title 1', 1, '2020', '2019', '3-4','Liverpool Football Club', 7);
+INSERT INTO match_record(id, title, status, season_end, season_start, result, winner,match_id) VALUES(5, 'title 1', 0, '2020', '2019', '0-2','Fútbol Club Barcelona', 8);
 
 -- Match Date Change Request
 INSERT INTO match_date_change_requests(id, new_date, reason, request_creator, status, title, match_id) VALUES(1, '2023-08-11 20:30:00', 'qqq', 'presidente1', 0, 'Match title 0', 0);
