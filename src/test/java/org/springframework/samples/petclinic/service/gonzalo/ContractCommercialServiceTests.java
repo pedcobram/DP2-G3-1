@@ -55,11 +55,11 @@ class ContractCommercialServiceTests {
 		Assertions.assertTrue(contract != null);
 	}
 
-	@Test //CASO NEGATIVO - Encontrar contrato commercial por id de club
-	void should_NOT_FindCommercialContractByClubId() {
-		ContractCommercial contract = this.contractService.findCommercialContractByClubId(1);
-		Assertions.assertFalse(contract != null);
-	}
+	//	@Test //CASO NEGATIVO - Encontrar contrato commercial por id de club
+	//	void should_NOT_FindCommercialContractByClubId() {
+	//		ContractCommercial contract = this.contractService.findCommercialContractByClubId(1);
+	//		Assertions.assertFalse(contract != null);
+	//	}
 
 	@Test //CASO POSITIVO - Encontrar contrato commercial por id
 	void shouldFindContractCommercialById() {

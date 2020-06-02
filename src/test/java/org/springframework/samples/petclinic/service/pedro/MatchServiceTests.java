@@ -68,7 +68,7 @@ public class MatchServiceTests {
 
 		int count = ms.size();
 
-		Assertions.assertTrue(count == 5);
+		Assertions.assertTrue(count == 4);
 	}
 
 	@Test //CASO NEGATIVO

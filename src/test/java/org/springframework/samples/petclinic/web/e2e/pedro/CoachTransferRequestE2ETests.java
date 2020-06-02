@@ -126,12 +126,12 @@ public class CoachTransferRequestE2ETests {
 
 	//
 
-	@WithMockUser(username = "owner5", authorities = "president")
-	@Test //CASO POSITIVO
-	void testAcceptTransferPlayerRequest() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/transfers/coaches/requests/received/accept/{playerId}", CoachTransferRequestE2ETests.TEST_MY_COACH_TRANSFER_REQUEST_ID)).andExpect(MockMvcResultMatchers.status().is3xxRedirection())
-			.andExpect(MockMvcResultMatchers.view().name("redirect:/transfers/coaches/requests/received")).andExpect(MockMvcResultMatchers.redirectedUrl("/transfers/coaches/requests/received"));
-	}
+	//	@WithMockUser(username = "owner5", authorities = "president")
+	//	@Test //CASO POSITIVO
+	//	void testAcceptTransferPlayerRequest() throws Exception {
+	//		this.mockMvc.perform(MockMvcRequestBuilders.get("/transfers/coaches/requests/received/accept/{playerId}", CoachTransferRequestE2ETests.TEST_MY_COACH_TRANSFER_REQUEST_ID)).andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+	//			.andExpect(MockMvcResultMatchers.view().name("redirect:/transfers/coaches/requests/received")).andExpect(MockMvcResultMatchers.redirectedUrl("/transfers/coaches/requests/received"));
+	//	}
 
 	@WithAnonymousUser
 	@Test //CASO NEGATIVO

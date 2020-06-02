@@ -35,7 +35,7 @@ public class PlayerTransferRequestServiceTests {
 
 		ptrs.addAll(this.playerTransferRequestService.findPlayerTransferRequest());
 
-		if (ptrs.size() == 2) {
+		if (ptrs.size() == 1) {
 			res = true;
 		}
 
@@ -48,7 +48,7 @@ public class PlayerTransferRequestServiceTests {
 
 		List<PlayerTransferRequest> ptrs = new ArrayList<>();
 
-		ptrs.addAll(this.playerTransferRequestService.findPlayerTransferRequestByPresident("presidente1"));
+		ptrs.addAll(this.playerTransferRequestService.findPlayerTransferRequestByPresident("presidente2"));
 
 		if (ptrs.size() == 1) {
 			res = true;

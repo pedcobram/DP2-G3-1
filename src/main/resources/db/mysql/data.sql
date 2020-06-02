@@ -59,6 +59,11 @@ INSERT IGNORE INTO authorities(username, authority) VALUES ('referee2','referee'
 
 -- Competition Admin Requests 
 INSERT IGNORE INTO comp_admin_requests(id, title, description, status, username) VALUES (1, 'Test title 01', 'Test description 01', 0, 'gonzalo');
+-- Referee Requests 
+INSERT IGNORE INTO referee_Requests(id, title, description, status, username) VALUES (1, 'Test title 01', 'Test description 01', 0, 'gonzalo');
+
+-- President Requests 
+INSERT IGNORE INTO president_Requests(id, title, description, status, username) VALUES (1, 'Test title 01', 'Test description 01', 0, 'gonzalo');
 
 -- Competition Admin
 INSERT IGNORE INTO competition_admins(id, first_name, last_name, telephone, email, dni, username) VALUES (1, 'Pedro Manuel', 'Cobos Ramos', '22222222A', 'pedcobram@alum.us.es', '600222333', 'pedro');

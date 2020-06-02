@@ -5,25 +5,23 @@ import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.samples.petclinic.model.Enum.FootballPlayerPosition;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.annotation.DirtiesContext.ClassMode;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.transaction.annotation.Transactional;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 @AutoConfigureMockMvc
-@DirtiesContext(classMode = ClassMode.BEFORE_CLASS)
-@AutoConfigureTestDatabase(replace = Replace.ANY)
+//@DirtiesContext(classMode = ClassMode.BEFORE_CLASS)
+//@AutoConfigureTestDatabase(replace = Replace.ANY)
+@Transactional
 public class FootballPlayerE2ETests {
 
 	@Autowired
@@ -37,7 +35,7 @@ public class FootballPlayerE2ETests {
 	@Test //CASO POSITIVO - LISTA DE JUGADORES
 	void testShowFootballPlayerList() throws Exception {
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/footballPlayers")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("footballPlayers"))
-			.andExpect(MockMvcResultMatchers.model().attribute("footballPlayers", Matchers.hasSize(69))).andExpect(MockMvcResultMatchers.view().name("footballPlayers/footballPlayerList"))
+			.andExpect(MockMvcResultMatchers.model().attribute("footballPlayers", Matchers.hasSize(68))).andExpect(MockMvcResultMatchers.view().name("footballPlayers/footballPlayerList"))
 			.andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/footballPlayers/footballPlayerList.jsp"));
 	}
 
@@ -53,7 +51,7 @@ public class FootballPlayerE2ETests {
 	@Test //CASO POSITIVO - LISTA DE JUGADORES FA
 	void testShowFootballPlayerFAList() throws Exception {
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/footballPlayers/freeAgent")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("footballPlayers"))
-			.andExpect(MockMvcResultMatchers.model().attribute("footballPlayers", Matchers.hasSize(5))).andExpect(MockMvcResultMatchers.view().name("footballPlayers/footballPlayerList"))
+			.andExpect(MockMvcResultMatchers.model().attribute("footballPlayers", Matchers.hasSize(4))).andExpect(MockMvcResultMatchers.view().name("footballPlayers/footballPlayerList"))
 			.andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/footballPlayers/footballPlayerList.jsp"));
 	}
 
@@ -69,7 +67,7 @@ public class FootballPlayerE2ETests {
 	@Test //CASO POSITIVO - LISTA DE JUGADORES DE UN EQUIPO
 	void testShowFootballPlayerClubList() throws Exception {
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/footballClubs/list/{footballClubId}/footballPlayers", 1)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("footballPlayers"))
-			.andExpect(MockMvcResultMatchers.model().attribute("footballPlayers", Matchers.hasSize(7))).andExpect(MockMvcResultMatchers.view().name("footballPlayers/footballPlayerList"))
+			.andExpect(MockMvcResultMatchers.model().attribute("footballPlayers", Matchers.hasSize(8))).andExpect(MockMvcResultMatchers.view().name("footballPlayers/footballPlayerList"))
 			.andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/footballPlayers/footballPlayerList.jsp"));
 	}
 
@@ -86,7 +84,7 @@ public class FootballPlayerE2ETests {
 	void testShowFootballPlayerMyClubList() throws Exception {
 		this.mockMvc.perform(MockMvcRequestBuilders.get("/footballClubs/myClub/footballPlayers")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeExists("footballPlayers"))
 			.andExpect(MockMvcResultMatchers.model().attributeExists("thisClubPresidentUsername")).andExpect(MockMvcResultMatchers.model().attributeExists("thisClubStatus"))
-			.andExpect(MockMvcResultMatchers.model().attribute("footballPlayers", Matchers.hasSize(7))).andExpect(MockMvcResultMatchers.view().name("footballPlayers/footballPlayerList"))
+			.andExpect(MockMvcResultMatchers.model().attribute("footballPlayers", Matchers.hasSize(8))).andExpect(MockMvcResultMatchers.view().name("footballPlayers/footballPlayerList"))
 			.andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/footballPlayers/footballPlayerList.jsp"));
 	}
 
