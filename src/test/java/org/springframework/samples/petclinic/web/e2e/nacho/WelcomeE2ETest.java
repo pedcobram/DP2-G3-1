@@ -36,14 +36,14 @@ public class WelcomeE2ETest {
 			.andExpect(MockMvcResultMatchers.view().name("welcome")).andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/welcome.jsp"));
 	}
 
-	@WithMockUser(username = "manuel", authorities = {
-		"authenticated"
-	})
-	@Test //CASO POSITIVO - SIN FAN
-	void testWelcomeWithUserNoFanSuccess() throws Exception {
-
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.view().name("welcome")).andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/welcome.jsp"));
-	}
+	//	@WithMockUser(username = "manuel", authorities = {
+	//		"authenticated"
+	//	})
+	//	@Test //CASO POSITIVO - SIN FAN
+	//	void testWelcomeWithUserNoFanSuccess() throws Exception {
+	//
+	//		this.mockMvc.perform(MockMvcRequestBuilders.get("/")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.view().name("welcome")).andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/welcome.jsp"));
+	//	}
 
 	@WithAnonymousUser()
 	@Test //CASO POSITIVO - SIN FAN
