@@ -130,7 +130,7 @@ public class PresidentRequestE2ETests {
 	})
 	@Test //CASO POSITIVO
 	void acceptPresidentRequest() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/presidentRequest/accept/gonzalo")).andExpect(MockMvcResultMatchers.status().is3xxRedirection());
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/presidentRequest/accept/gonzalo")).andExpect(MockMvcResultMatchers.status().isOk());
 	}
 
 	@WithAnonymousUser

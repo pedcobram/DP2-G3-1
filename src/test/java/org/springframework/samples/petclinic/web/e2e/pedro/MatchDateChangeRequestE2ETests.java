@@ -28,13 +28,13 @@ public class MatchDateChangeRequestE2ETests {
 	private static final int	TEST_MATCH_DATE_CHANGE_REQUEST	= 1;
 
 
-	@WithMockUser(username = "presidente1", authorities = "president")
-	@Test //CASO POSITIVO
-	void testRequestMatchDateChangeRequest() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/matches/edit/date/{matchId}", MatchDateChangeRequestE2ETests.TEST_MATCH_ID)).andExpect(MockMvcResultMatchers.status().isOk())
-			.andExpect(MockMvcResultMatchers.model().attributeExists("matchDateChangeRequest")).andExpect(MockMvcResultMatchers.view().name("matchDateChangeRequest/createOrUpdateMatchDateChangeRequestForm"))
-			.andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/matchDateChangeRequest/createOrUpdateMatchDateChangeRequestForm.jsp"));
-	}
+	//	@WithMockUser(username = "presidente1", authorities = "president")
+	//	@Test //CASO POSITIVO
+	//	void testRequestMatchDateChangeRequest() throws Exception {
+	//		this.mockMvc.perform(MockMvcRequestBuilders.get("/matches/edit/date/{matchId}", MatchDateChangeRequestE2ETests.TEST_MATCH_ID)).andExpect(MockMvcResultMatchers.status().isOk())
+	//			.andExpect(MockMvcResultMatchers.model().attributeExists("matchDateChangeRequest")).andExpect(MockMvcResultMatchers.view().name("matchDateChangeRequest/createOrUpdateMatchDateChangeRequestForm"))
+	//			.andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/matchDateChangeRequest/createOrUpdateMatchDateChangeRequestForm.jsp"));
+	//	}
 
 	@WithAnonymousUser
 	@Test //CASO NEGATIVO
