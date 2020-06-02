@@ -180,6 +180,7 @@
 					<excludes>
 						<exclude>**/*UITest.java</exclude>
 						<exclude>**/*APITest.java</exclude>
+						<exclude>**/*E2ETest.java</exclude>
 					</excludes>
 				</configuration>
 			</plugin>
