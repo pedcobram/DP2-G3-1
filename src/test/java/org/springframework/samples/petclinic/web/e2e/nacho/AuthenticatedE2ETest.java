@@ -255,14 +255,4 @@ public class AuthenticatedE2ETest {
 			.andExpect(MockMvcResultMatchers.view().name("authenticateds/authenticatedDetails")).andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/authenticateds/authenticatedDetails.jsp"));
 	}
 
-	@WithMockUser(username = "ignacio", authorities = {
-		"authenticated"
-	})
-	@Test //CASO POSITIVO
-	void testShowAuthenticatedProfileAuthError() throws Exception {
-
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/myProfile/manuel")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeDoesNotExist("authenticated"))
-			.andExpect(MockMvcResultMatchers.view().name("exceptions/forbidden"));
-	}
-
 }

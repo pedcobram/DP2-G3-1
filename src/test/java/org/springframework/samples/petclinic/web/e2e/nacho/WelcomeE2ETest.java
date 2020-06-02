@@ -42,9 +42,7 @@ public class WelcomeE2ETest {
 	@Test //CASO POSITIVO - SIN FAN
 	void testWelcomeWithUserNoFanSuccess() throws Exception {
 
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.model().attributeDoesNotExist("isVip")).andExpect(MockMvcResultMatchers.model().attributeDoesNotExist("isFan"))
-			.andExpect(MockMvcResultMatchers.model().attributeDoesNotExist("club")).andExpect(MockMvcResultMatchers.model().attributeDoesNotExist("lastMatches")).andExpect(MockMvcResultMatchers.view().name("welcome"))
-			.andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/welcome.jsp"));
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/")).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.view().name("welcome")).andExpect(MockMvcResultMatchers.forwardedUrl("/WEB-INF/jsp/welcome.jsp"));
 	}
 
 	@WithAnonymousUser()
