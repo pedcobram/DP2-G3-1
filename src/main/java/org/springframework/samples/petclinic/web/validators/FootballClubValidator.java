@@ -11,7 +11,8 @@ import org.springframework.validation.Validator;
 
 public class FootballClubValidator implements Validator {
 
-	private static final String REQUIRED = "required";
+	private static final String	REQUIRED				= "required";
+	private static final String	URL_VALIDATOR_LENGTH	= "code.error.validator.requiredAndLength350";
 
 
 	@Override
@@ -24,17 +25,17 @@ public class FootballClubValidator implements Validator {
 
 		// Name Validation
 		if (!StringUtils.hasLength(Name) || Name.length() > 50 || Name.length() < 3) {
-			errors.rejectValue("name", "code.error.validator.requiredAndLength350");
+			errors.rejectValue("name", FootballClubValidator.URL_VALIDATOR_LENGTH);
 		}
 
 		// City not Empty Validation
 		if (!StringUtils.hasLength(City) || City.length() > 50 || City.length() < 3) {
-			errors.rejectValue("city", "code.error.validator.requiredAndLength350");
+			errors.rejectValue("city", FootballClubValidator.URL_VALIDATOR_LENGTH);
 		}
 
 		// Stadium not Empty Validation
 		if (!StringUtils.hasLength(Stadium) || Stadium.length() > 50 || Stadium.length() < 3) {
-			errors.rejectValue("stadium", "code.error.validator.requiredAndLength350");
+			errors.rejectValue("stadium", FootballClubValidator.URL_VALIDATOR_LENGTH);
 		}
 
 		// Foundation Date Validation

@@ -117,7 +117,7 @@ public class FootballPlayerService {
 		Collection<FootballPlayer> cp = this.findAllClubFootballPlayers(footballPlayer.getClub().getId());
 
 		//RN: Solo se pueden registrar jugadores hasta que se tengan 7
-		if (cp.size() >= 7 && footballPlayer.getClub().getStatus() == false) {
+		if (cp.size() >= 7 && !footballPlayer.getClub().getStatus()) {
 			throw new NumberOfPlayersAndCoachException();
 		}
 
@@ -127,7 +127,7 @@ public class FootballPlayerService {
 		}
 
 		//RN: Si el club es público no puede registrar a un jugador
-		if (footballPlayer.getClub().getStatus() == true) {
+		if (footballPlayer.getClub().getStatus()) {
 			throw new StatusException();
 		}
 
@@ -176,7 +176,7 @@ public class FootballPlayerService {
 		Collection<FootballPlayer> cp = this.findAllClubFootballPlayers(footballPlayer.getClub().getId());
 
 		//RN: Solo se pueden registrar jugadores hasta que se tengan 7
-		if (cp.size() >= 7 && footballPlayer.getClub().getStatus() == false) {
+		if (cp.size() >= 7 && !footballPlayer.getClub().getStatus()) {
 			throw new NumberOfPlayersAndCoachException();
 		}
 

@@ -70,7 +70,7 @@ public class TransferController {
 			return "footballClubs/myClubEmpty";
 		}
 
-		if (footballClub.getStatus() == false) {
+		if (!footballClub.getStatus()) {
 			throw new CredentialException();
 		}
 
@@ -114,7 +114,7 @@ public class TransferController {
 			return "footballClubs/myClubEmpty";
 		}
 
-		if (footballClub.getStatus() == false) {
+		if (!footballClub.getStatus()) {
 			throw new CredentialException();
 		}
 

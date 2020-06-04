@@ -138,7 +138,7 @@ public class FootballClubService {
 			Collection<FootballPlayer> cp = this.footballPlayerService.findAllClubFootballPlayers(footballClub.getId());
 			Coach coach = this.coachService.findCoachByClubId(footballClub.getId());
 
-			if (cp.size() < 5 && footballClub.getStatus() == true || coach == null && footballClub.getStatus() == true) {
+			if (cp.size() < 5 && footballClub.getStatus() || coach == null && footballClub.getStatus()) {
 				throw new NumberOfPlayersAndCoachException();
 			}
 		}

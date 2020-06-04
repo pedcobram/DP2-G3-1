@@ -150,7 +150,7 @@ public class FootballPlayerController {
 		String currentPrincipalName = authentication.getName();
 		FootballClub footballClub = this.footballClubService.findFootballClubByPresident(currentPrincipalName);
 
-		if (footballClub.getStatus() == true) {
+		if (footballClub.getStatus()) {
 			throw new CredentialException("Forbidden Access"); //SEGURIDAD
 		}
 
