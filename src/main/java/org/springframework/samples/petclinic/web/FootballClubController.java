@@ -113,7 +113,7 @@ public class FootballClubController {
 		String currentPrincipalName = authentication.getName();
 		FootballClub footballClub1 = this.footballClubService.findFootballClubByPresident(currentPrincipalName);
 
-		if (footballClub1 == null || footballClub1.getStatus() == false) {
+		if (footballClub1 == null || !footballClub1.getStatus()) {
 			mav.addObject("notHasAPublishedTeam", true);
 		}
 
@@ -227,7 +227,7 @@ public class FootballClubController {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String currentPrincipalName = authentication.getName();
 
-		if (!currentPrincipalName.equals(principalUsername) || footballClub.getStatus() == true) { //SEGURIDAD
+		if (!currentPrincipalName.equals(principalUsername) || footballClub.getStatus()) { //SEGURIDAD
 			throw new CredentialException("Forbidden Access");
 		}
 
@@ -292,7 +292,7 @@ public class FootballClubController {
 
 		FootballClub thisFootballCLub = this.footballClubService.findFootballClubByPresident(principalUsername);
 
-		if (!thisFootballCLub.getPresident().getUser().getUsername().equals(currentPrincipalName) || thisFootballCLub.getStatus() == true) { //SEGURIDAD
+		if (!thisFootballCLub.getPresident().getUser().getUsername().equals(currentPrincipalName) || thisFootballCLub.getStatus()) { //SEGURIDAD
 			throw new CredentialException("Forbidden Access");
 		}
 

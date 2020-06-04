@@ -110,12 +110,12 @@ public class CoachService {
 		}
 
 		//RN: No se puede fichar a un entrenador de Otro equipo si no tenemos entrenador
-		if (myClub.getStatus() == true && coach.isNew()) {
+		if (myClub.getStatus() && coach.isNew()) {
 			throw new StatusRegisteringException();
 		}
 
 		//RN: No se puede registrar a un entrenador si el club es público
-		if (myClub.getStatus() == true && coach.getClub() != null) {
+		if (myClub.getStatus() && coach.getClub() != null) {
 			throw new StatusException();
 		}
 

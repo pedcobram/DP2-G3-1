@@ -21,14 +21,17 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 public class ExceptionHandlerConfiguration {
 
 	@Autowired
-	private BasicErrorController errorController;
+	private BasicErrorController	errorController;
 	// add any exceptions/validations/binding problems
+
+	private static final String		request_uri	= "javax.servlet.error.request_uri";
+	private static final String		status_code	= "javax.servlet.error.status_code";
 
 
 	@ExceptionHandler(Exception.class)
 	public String defaultErrorHandler(final HttpServletRequest request, final Exception ex) {
-		request.setAttribute("javax.servlet.error.request_uri", request.getPathInfo());
-		request.setAttribute("javax.servlet.error.status_code", 400);
+		request.setAttribute(ExceptionHandlerConfiguration.request_uri, request.getPathInfo());
+		request.setAttribute(ExceptionHandlerConfiguration.status_code, 400);
 		request.setAttribute("exeption", ex);
 		return "exceptions/exception";
 	}
@@ -36,16 +39,16 @@ public class ExceptionHandlerConfiguration {
 	@ExceptionHandler(NoHandlerFoundException.class)
 	@ResponseStatus(value = HttpStatus.NOT_FOUND)
 	public String notFoundErrorHandler(final HttpServletRequest request, final NoHandlerFoundException ex) {
-		request.setAttribute("javax.servlet.error.request_uri", request.getPathInfo());
-		request.setAttribute("javax.servlet.error.status_code", 404);
+		request.setAttribute(ExceptionHandlerConfiguration.request_uri, request.getPathInfo());
+		request.setAttribute(ExceptionHandlerConfiguration.status_code, 404);
 		request.setAttribute("exeption", ex);
 		return "exceptions/exception";
 	}
 
 	@ExceptionHandler(CredentialException.class)
 	public String forbiddenErrorHandler(final HttpServletRequest request, final CredentialException ex) {
-		request.setAttribute("javax.servlet.error.request_uri", request.getPathInfo());
-		request.setAttribute("javax.servlet.error.status_code", 401);
+		request.setAttribute(ExceptionHandlerConfiguration.request_uri, request.getPathInfo());
+		request.setAttribute(ExceptionHandlerConfiguration.status_code, 401);
 		request.setAttribute("exeption", ex);
 		return "exceptions/forbidden";
 	}

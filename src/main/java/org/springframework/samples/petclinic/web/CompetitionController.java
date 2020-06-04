@@ -137,7 +137,7 @@ public class CompetitionController {
 		mav.addObject("size", competition.getClubs().size());
 
 		//Si no está publicada y no eres el creador no puedes verla
-		if (competition.getStatus() == false && !competition.getCreator().equals(currentPrincipalName)) { //SEGURIDAD
+		if (!competition.getStatus() && !competition.getCreator().equals(currentPrincipalName)) { //SEGURIDAD
 			throw new CredentialException();
 		}
 
@@ -276,7 +276,7 @@ public class CompetitionController {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String currentPrincipalName = authentication.getName();
 
-		if (!currentPrincipalName.equals(comp.getCreator()) || comp.getStatus() == true) { //SEGURIDAD
+		if (!currentPrincipalName.equals(comp.getCreator()) || comp.getStatus()) { //SEGURIDAD
 			throw new CredentialException("Forbidden Access");
 		}
 
@@ -331,7 +331,7 @@ public class CompetitionController {
 		String currentPrincipalName = authentication.getName();
 
 		//Si no está publicada y no eres el creador no puedes verlo
-		if (thisComp.getStatus() == true || !thisComp.getCreator().equals(currentPrincipalName)) { //SEGURIDAD
+		if (thisComp.getStatus() || !thisComp.getCreator().equals(currentPrincipalName)) { //SEGURIDAD
 			throw new CredentialException();
 		}
 
@@ -379,7 +379,7 @@ public class CompetitionController {
 		String currentPrincipalName = authentication.getName();
 
 		//Si no está publicada y no eres el creador no puedes verlo
-		if (thisComp.getStatus() == false && !thisComp.getCreator().equals(currentPrincipalName)) { //SEGURIDAD
+		if (!thisComp.getStatus() && !thisComp.getCreator().equals(currentPrincipalName)) { //SEGURIDAD
 			throw new CredentialException();
 		}
 
@@ -426,7 +426,7 @@ public class CompetitionController {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String currentPrincipalName = authentication.getName();
 
-		if (!currentPrincipalName.equals(comp.getCreator()) || comp.getStatus() == true) { //SEGURIDAD
+		if (!currentPrincipalName.equals(comp.getCreator()) || comp.getStatus()) { //SEGURIDAD
 			throw new CredentialException("Forbidden Access");
 		}
 

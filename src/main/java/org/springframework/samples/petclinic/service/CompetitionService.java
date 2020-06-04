@@ -141,13 +141,13 @@ public class CompetitionService {
 		}
 
 		//RN: A la hora de publicar: Las ligas solo podrán ser de número Par y de 4 equipos en adelante (4, 6, 8, 10, etc...)
-		if (competition.getStatus() == true && competition.getType().equals(CompetitionType.LEAGUE)) {
+		if (competition.getStatus() && competition.getType().equals(CompetitionType.LEAGUE)) {
 			if (competition.getClubs().size() < 4 || competition.getClubs().size() % 2 != 0) {
 				competition.setStatus(false);
 				throw new StatusException();
 			}
 
-		} else if (competition.getStatus() == true && competition.getType().equals(CompetitionType.PLAYOFFS)) {
+		} else if (competition.getStatus() && competition.getType().equals(CompetitionType.PLAYOFFS)) {
 			if (Integer.bitCount(competition.getClubs().size()) != 1 || competition.getClubs().size() < 4) {
 				competition.setStatus(false);
 				throw new StatusException();
