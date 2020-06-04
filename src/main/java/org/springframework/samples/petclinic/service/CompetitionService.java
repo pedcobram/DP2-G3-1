@@ -80,6 +80,8 @@ public class CompetitionService {
 	@Autowired
 	private RoundService						roundService;
 
+	private Random								random	= new Random();
+
 
 	@Autowired
 	public CompetitionService(final CompetitionRepository competitionRepository) {
@@ -122,13 +124,13 @@ public class CompetitionService {
 		for (Competition o : this.competitionRepository.findAllCompetition()) {
 			String compName = o.getName();
 			compName = compName.toLowerCase();
-			if (compName.equals(name) && o.getId() != competition.getId()) {
+			if (compName.equals(name) && !o.getId().equals(competition.getId())) {
 				otherComp = o;
 			}
 		}
 
 		//RN: El nombre no puede ser el mismo
-		if (StringUtils.hasLength(competition.getName()) && otherComp != null && otherComp.getId() != competition.getId()) {
+		if (StringUtils.hasLength(competition.getName()) && otherComp != null && !otherComp.getId().equals(competition.getId())) {
 			throw new DuplicatedNameException();
 		}
 
@@ -161,7 +163,7 @@ public class CompetitionService {
 		List<Match> lm = this.matchService.findMatchByRoundId(mr.getMatch().getRound().getId());
 
 		//Comprobamos si es un partido de playoff y que no es una ronda final
-		if (!mr.getMatch().getRound().equals(null) && lm.size() != 1) {
+		if (mr.getMatch().getRound() != null && lm.size() != 1) {
 			Round r = mr.getMatch().getRound();
 			Boolean res = false;
 			List<String> winners = new ArrayList<>();
@@ -201,17 +203,17 @@ public class CompetitionService {
 		this.roundService.save(r1);
 		//creamos los partidos de la ronda
 		int totalE = equipos.size();
-		Random random = new Random();
+
 		for (int i = 0; i < totalE; i = i + 2) {
 			FootballClub fc1;
 			FootballClub fc2;
 			if (nw == true) {
 				//Obtenemos los dos equipos al azar
-				int randomIndex1 = random.nextInt(equipos.size());
+				int randomIndex1 = this.random.nextInt(equipos.size());
 				fc1 = this.footballClubService.findFootballClubByName(equipos.get(randomIndex1));
 				equipos.remove(randomIndex1);
 
-				int randomIndex2 = random.nextInt(equipos.size());
+				int randomIndex2 = this.random.nextInt(equipos.size());
 				fc2 = this.footballClubService.findFootballClubByName(equipos.get(randomIndex2));
 				equipos.remove(randomIndex2);
 			} else {

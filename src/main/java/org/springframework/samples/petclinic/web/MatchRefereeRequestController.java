@@ -91,8 +91,8 @@ public class MatchRefereeRequestController {
 
 		for (Referee ref : referees) {
 			for (MatchRefereeRequest mrr : matchRefereeRequests) {
-				if (mrr.getMatch().getId() == matchId) {
-					if (mrr.getReferee().getId() == ref.getId()) {
+				if (mrr.getMatch().getId().equals(matchId)) {
+					if (mrr.getReferee().getId().equals(ref.getId())) {
 						toDelete.add(ref);
 					}
 				}
@@ -153,8 +153,8 @@ public class MatchRefereeRequestController {
 
 		for (Referee ref : referees) {
 			for (MatchRefereeRequest mrr : matchRefereeRequests) {
-				if (mrr.getMatch().getId() == matchId) {
-					if (mrr.getReferee().getId() == ref.getId()) {
+				if (mrr.getMatch().getId().equals(matchId)) {
+					if (mrr.getReferee().getId().equals(ref.getId())) {
 						toDelete.add(ref);
 					}
 				}

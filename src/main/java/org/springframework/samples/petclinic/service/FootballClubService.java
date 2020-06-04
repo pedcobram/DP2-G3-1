@@ -115,13 +115,13 @@ public class FootballClubService {
 		for (FootballClub o : this.footRepository.findAll()) {
 			String compName = o.getName();
 			compName = compName.toLowerCase();
-			if (compName.equals(name) && o.getId() != footballClub.getId()) {
+			if (compName.equals(name) && !o.getId().equals(footballClub.getId())) {
 				otherFootClub = o;
 			}
 		}
 
 		//RN: El nombre no puede ser el mismo
-		if (StringUtils.hasLength(footballClub.getName()) && otherFootClub != null && otherFootClub.getId() != footballClub.getId()) {
+		if (StringUtils.hasLength(footballClub.getName()) && otherFootClub != null && !otherFootClub.getId().equals(footballClub.getId())) {
 			throw new DuplicatedNameException();
 		}
 
