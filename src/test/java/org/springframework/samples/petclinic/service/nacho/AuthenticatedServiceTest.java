@@ -118,6 +118,7 @@ public class AuthenticatedServiceTest {
 		au.setFirstName("Ignacio José");
 		au.setLastName("Muñoz");
 		au.setTelephone("954789568");
+		au.setId(500);
 
 		Assertions.assertThrows(DuplicatedNameException.class, () -> {
 			this.authenticathedService.saveAuthenticated(au);

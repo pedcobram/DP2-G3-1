@@ -2,7 +2,6 @@
 package org.springframework.samples.petclinic.service.nacho;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
 import javax.validation.ConstraintViolationException;
 
@@ -56,9 +55,7 @@ public class RoundServiceTest {
 	@Test //CASO NEGATIVO
 	void shouldNotfindById() {
 
-		Assertions.assertThrows(NoSuchElementException.class, () -> {
-			this.roundService.findById(3);
-		});
+		Assertions.assertTrue(this.roundService.findById(400) == null);
 	}
 	@Test //CASO POSITIVO
 	void shouldSave() {
@@ -87,9 +84,7 @@ public class RoundServiceTest {
 		Round id = this.roundService.findById(2);
 		this.roundService.delete(id);
 
-		Assertions.assertThrows(NoSuchElementException.class, () -> {
-			this.roundService.findById(2);
-		});
+		Assertions.assertTrue(this.roundService.findById(2) == null);
 
 	}
 	@Test //CASO NEGATIVO

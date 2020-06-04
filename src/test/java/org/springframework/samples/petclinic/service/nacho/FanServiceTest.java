@@ -106,7 +106,7 @@ public class FanServiceTest {
 		f.setClub(c);
 		f.setUser(au);
 		f.setVip(false);
-
+		f.setId(500);
 		Assertions.assertThrows(DuplicatedFanUserException.class, () -> {
 			this.fanService.saveFan(f);
 		});

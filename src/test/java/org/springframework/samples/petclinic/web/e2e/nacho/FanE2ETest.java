@@ -31,12 +31,12 @@ public class FanE2ETest {
 	public static final int	TEST_ID	= 1;
 
 
-	@WithMockUser(username = "ignacio", authorities = {
+	@WithMockUser(username = "gonzalo", authorities = {
 		"authenticated"
 	})
 	@Test //CASO POSITIVO - LA CREACIÓN DE UN FAN NO VIP
 	void testInitCreationFormSuccess() throws Exception {
-		this.mockMvc.perform(MockMvcRequestBuilders.get("/fan/{clubId}/new", FanE2ETest.TEST_ID)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.view().name("footballClubs/footballClubDetails"));
+		this.mockMvc.perform(MockMvcRequestBuilders.get("/fan/{clubId}/new", FanE2ETest.TEST_ID)).andExpect(MockMvcResultMatchers.status().isOk()).andExpect(MockMvcResultMatchers.view().name("fan/createOrUpdateFanForm"));
 	}
 
 	@WithAnonymousUser
