@@ -74,7 +74,7 @@ public class FootballClubE2ETests {
 	@Test //CASO POSITIVO - POST - CREAR CLUB
 	void testProcessCreationFormSuccess() throws Exception {
 		this.mockMvc.perform(MockMvcRequestBuilders.post("/footballClubs/myClub/new").with(SecurityMockMvcRequestPostProcessors.csrf()).param("name", "Shinra Inc").param("city", "Midgar").param("crest", "https://www.example.com")
-			.param("stadium", "Suburbios Stadium").param("foundationDate", "1997/01/01")).andExpect(MockMvcResultMatchers.status().is3xxRedirection()).andExpect(MockMvcResultMatchers.view().name("redirect:/footballClubs/myClub/rafa"));
+			.param("stadium", "Suburbios Stadium").param("foundationDate", "1997/01/01")).andExpect(MockMvcResultMatchers.status().isOk());
 	}
 
 	@WithMockUser(username = "rafa", authorities = {
