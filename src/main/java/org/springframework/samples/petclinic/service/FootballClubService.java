@@ -22,6 +22,7 @@ import java.util.Date;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Coach;
 import org.springframework.samples.petclinic.model.ContractCommercial;
@@ -68,7 +69,7 @@ public class FootballClubService {
 	}
 
 	//Buscar todos los equipos Publicados
-	@Transactional(readOnly = true)
+	//@Transactional(readOnly = true)
 	public Collection<FootballClub> findFootballClubs() throws DataAccessException {
 		return this.footRepository.findAllPublished();
 	}
@@ -93,6 +94,7 @@ public class FootballClubService {
 
 	//Buscar equipo por username
 	@Transactional(readOnly = true)
+	@Cacheable("footballClubByPresident")
 	public FootballClub findFootballClubByPresident(final String principalUsername) throws DataAccessException {
 		return this.footRepository.findFootballClubByPresident(principalUsername);
 	}
