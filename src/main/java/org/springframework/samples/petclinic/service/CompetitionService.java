@@ -224,7 +224,7 @@ public class CompetitionService {
 			partidos.add(newMatch);
 
 			//creamos el acta
-			MatchRecord newRecord = this.createRecord(newMatch, fc1, fc2, r1);
+			MatchRecord newRecord = this.createRecord(newMatch, r1);
 
 			// Añadimos los jugadores al acta
 			this.createStatistics(newRecord, newMatch);
@@ -232,6 +232,7 @@ public class CompetitionService {
 		}
 
 	}
+
 	private void drawMatch(final Boolean nw, FootballClub fc1, FootballClub fc2, final List<String> equipos, final int i) {
 		if (nw == true) {
 			//Obtenemos los dos equipos al azar
@@ -267,13 +268,13 @@ public class CompetitionService {
 		this.matchService.saveMatch(newMatch);
 		return newMatch;
 	}
-	private MatchRecord createRecord(final Match newMatch, final FootballClub fc1, final FootballClub fc2, final Round r1) throws IllegalDateException, MatchRecordResultException {
+	private MatchRecord createRecord(final Match newMatch, final Round r1) throws IllegalDateException, MatchRecordResultException {
 		MatchRecord newRecord = new MatchRecord();
 
 		newRecord.setMatch(newMatch);
 		newRecord.setSeason_start("2020");
 		newRecord.setSeason_end("2021");
-		newRecord.setTitle("Acta del partido: " + fc1.getName() + " - " + fc2.getName() + " de " + r1.getName() + "de " + r1.getCompetition().getName());
+		newRecord.setTitle("Acta del partido: " + newMatch.getFootballClub1().getName() + " - " + newMatch.getFootballClub2().getName() + " de " + r1.getName() + "de " + r1.getCompetition().getName());
 		newRecord.setStatus(MatchRecordStatus.NOT_PUBLISHED);
 
 		this.matchRecordService.saveMatchRecord(newRecord);
