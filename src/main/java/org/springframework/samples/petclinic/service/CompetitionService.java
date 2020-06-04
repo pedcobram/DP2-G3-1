@@ -191,50 +191,49 @@ public class CompetitionService {
 
 	}
 
-	public void createRounds(final Competition c, final boolean nw) throws IllegalDateException, MatchRecordResultException {
+	private Match drawMatch(final int i, final Boolean nw, FootballClub fc1, FootballClub fc2, final List<String> equipos, final Round r1) {
 
-		List<String> equipos = new ArrayList<String>(c.getClubs());
-		List<Match> partidos = new ArrayList<Match>();
-		//Creamos la primera ronda
-		Round r1 = new Round();
-		r1.nameRounds(equipos.size());
-		r1.setCompetition(c);
-		//guardamos ronda creada
-		this.roundService.save(r1);
-		//creamos los partidos de la ronda
+		if (nw == true) {
+			//Obtenemos los dos equipos al azar
+			int randomIndex1 = this.random.nextInt(equipos.size());
+			fc1 = this.footballClubService.findFootballClubByName(equipos.get(randomIndex1));
+			equipos.remove(randomIndex1);
+
+			int randomIndex2 = this.random.nextInt(equipos.size());
+			fc2 = this.footballClubService.findFootballClubByName(equipos.get(randomIndex2));
+			equipos.remove(randomIndex2);
+		} else {
+
+			// sino seguimos el orden de los index
+			fc1 = this.footballClubService.findFootballClubByName(equipos.get(i));
+			fc2 = this.footballClubService.findFootballClubByName(equipos.get(i + 1));
+
+		}
+		Match newMatch = new Match();
+		newMatch.setCreator(r1.getCompetition().getCreator());
+		newMatch.setFootballClub1(fc1);
+		newMatch.setFootballClub2(fc2);
+		newMatch.setMatchDate(new Date(System.currentTimeMillis()));
+		newMatch.setMatchStatus(MatchStatus.TO_BE_PLAYED);
+		newMatch.setStadium(fc1.getStadium());
+		newMatch.setTitle("Partido de " + r1.getName());
+		newMatch.setReferee(this.refereeService.findRefereeById(1));
+		newMatch.setRound(r1);
+
+		this.matchService.saveMatch(newMatch);
+		return newMatch;
+	}
+
+	private void createMatchsRounds(final List<String> equipos, final List<Match> partidos, final Round r1, final boolean nw) throws IllegalDateException, MatchRecordResultException {
+
 		int totalE = equipos.size();
 
 		for (int i = 0; i < totalE; i = i + 2) {
-			FootballClub fc1;
-			FootballClub fc2;
-			if (nw == true) {
-				//Obtenemos los dos equipos al azar
-				int randomIndex1 = this.random.nextInt(equipos.size());
-				fc1 = this.footballClubService.findFootballClubByName(equipos.get(randomIndex1));
-				equipos.remove(randomIndex1);
+			FootballClub fc1 = new FootballClub();
+			FootballClub fc2 = new FootballClub();
 
-				int randomIndex2 = this.random.nextInt(equipos.size());
-				fc2 = this.footballClubService.findFootballClubByName(equipos.get(randomIndex2));
-				equipos.remove(randomIndex2);
-			} else {
-
-				// sino seguimos el orden de los index
-				fc1 = this.footballClubService.findFootballClubByName(equipos.get(i));
-				fc2 = this.footballClubService.findFootballClubByName(equipos.get(i + 1));
-
-			}
-			Match newMatch = new Match();
-			newMatch.setCreator(c.getCreator());
-			newMatch.setFootballClub1(fc1);
-			newMatch.setFootballClub2(fc2);
-			newMatch.setMatchDate(new Date(System.currentTimeMillis()));
-			newMatch.setMatchStatus(MatchStatus.TO_BE_PLAYED);
-			newMatch.setStadium(fc1.getStadium());
-			newMatch.setTitle("Partido de " + r1.getName());
-			newMatch.setReferee(this.refereeService.findRefereeById(1));
-			newMatch.setRound(r1);
-
-			this.matchService.saveMatch(newMatch);
+			//sorteamos los partidos
+			Match newMatch = this.drawMatch(i, nw, fc1, fc2, equipos, r1);
 
 			partidos.add(newMatch);
 
@@ -243,7 +242,7 @@ public class CompetitionService {
 			newRecord.setMatch(newMatch);
 			newRecord.setSeason_start("2020");
 			newRecord.setSeason_end("2021");
-			newRecord.setTitle("Acta del partido: " + fc1.getName() + " - " + fc2.getName() + " de " + r1.getName() + "de " + c.getName());
+			newRecord.setTitle("Acta del partido: " + fc1.getName() + " - " + fc2.getName() + " de " + r1.getName() + "de " + r1.getCompetition().getName());
 			newRecord.setStatus(MatchRecordStatus.NOT_PUBLISHED);
 
 			this.matchRecordService.saveMatchRecord(newRecord);
@@ -271,8 +270,22 @@ public class CompetitionService {
 			}
 
 		}
+
+	}
+
+	public void createRounds(final Competition c, final boolean nw) throws IllegalDateException, MatchRecordResultException {
+
+		List<String> equipos = new ArrayList<String>(c.getClubs());
+		List<Match> partidos = new ArrayList<Match>();
+		//Creamos la primera ronda
+		Round r1 = new Round();
+		r1.nameRounds(equipos.size());
+		r1.setCompetition(c);
+
+		//creamos los partidos de la ronda
+		this.createMatchsRounds(equipos, partidos, r1, nw);
 		//guardamos ronda creada
-		//r1.setMatches(partidos);
+
 		this.roundService.save(r1);
 
 	}
