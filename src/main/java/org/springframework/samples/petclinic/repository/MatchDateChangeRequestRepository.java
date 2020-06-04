@@ -3,17 +3,16 @@ package org.springframework.samples.petclinic.repository;
 
 import java.util.Collection;
 
-import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.MatchDateChangeRequest;
 
 public interface MatchDateChangeRequestRepository {
 
-	Collection<MatchDateChangeRequest> findAllMatchDateChangeRequest(String presidentUsername) throws DataAccessException;
+	Collection<MatchDateChangeRequest> findAllMatchDateChangeRequest(String presidentUsername);
 
-	MatchDateChangeRequest findById(int id) throws DataAccessException;
+	MatchDateChangeRequest findById(int id);
 
-	void save(MatchDateChangeRequest matchDateChangeRequest) throws DataAccessException;
+	void save(MatchDateChangeRequest matchDateChangeRequest);
 
-	void delete(MatchDateChangeRequest matchDateChangeRequest) throws DataAccessException;
+	void delete(MatchDateChangeRequest matchDateChangeRequest);
 
 }

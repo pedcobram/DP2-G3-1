@@ -78,7 +78,7 @@ public class ContractCommercialService {
 		Collection<ContractCommercial> contracts = this.findAllCommercialContracts();
 
 		//Si se encuentra un contrato diferente con el mismo club(no null) .... Exception
-		if (!contracts.stream().filter(x -> x.getClub() != null && x.getId() != contractCommercial.getId() && x.getClub() == contractCommercial.getClub()).collect(Collectors.toList()).isEmpty()) {
+		if (!contracts.stream().filter(x -> x.getClub() != null && !x.getId().equals(contractCommercial.getId()) && x.getClub() == contractCommercial.getClub()).collect(Collectors.toList()).isEmpty()) {
 			throw new NoMultipleContractCommercialException();
 		}
 

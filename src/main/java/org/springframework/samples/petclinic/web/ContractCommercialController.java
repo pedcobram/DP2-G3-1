@@ -81,7 +81,7 @@ public class ContractCommercialController {
 		boolean presidentAlreadyHasContract = false;
 
 		for (ContractCommercial c : clist) {
-			if (c.getClub() != null && c.getClub().getPresident().getUser().getUsername() == currentPrincipalName) {
+			if (c.getClub() != null && c.getClub().getPresident().getUser().getUsername().equals(currentPrincipalName)) {
 				presidentAlreadyHasContract = true;
 				break;
 			}

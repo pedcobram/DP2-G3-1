@@ -80,6 +80,8 @@ public class CompetitionService {
 	@Autowired
 	private RoundService						roundService;
 
+	private Random								random	= new Random();
+
 
 	@Autowired
 	public CompetitionService(final CompetitionRepository competitionRepository) {
@@ -122,13 +124,13 @@ public class CompetitionService {
 		for (Competition o : this.competitionRepository.findAllCompetition()) {
 			String compName = o.getName();
 			compName = compName.toLowerCase();
-			if (compName.equals(name) && o.getId() != competition.getId()) {
+			if (compName.equals(name) && !o.getId().equals(competition.getId())) {
 				otherComp = o;
 			}
 		}
 
 		//RN: El nombre no puede ser el mismo
-		if (StringUtils.hasLength(competition.getName()) && otherComp != null && otherComp.getId() != competition.getId()) {
+		if (StringUtils.hasLength(competition.getName()) && otherComp != null && !otherComp.getId().equals(competition.getId())) {
 			throw new DuplicatedNameException();
 		}
 
@@ -161,7 +163,7 @@ public class CompetitionService {
 		List<Match> lm = this.matchService.findMatchByRoundId(mr.getMatch().getRound().getId());
 
 		//Comprobamos si es un partido de playoff y que no es una ronda final
-		if (!mr.getMatch().getRound().equals(null) && lm.size() != 1) {
+		if (mr.getMatch().getRound() != null && lm.size() != 1) {
 			Round r = mr.getMatch().getRound();
 			Boolean res = false;
 			List<String> winners = new ArrayList<>();
@@ -197,81 +199,107 @@ public class CompetitionService {
 		Round r1 = new Round();
 		r1.nameRounds(equipos.size());
 		r1.setCompetition(c);
-		//guardamos ronda creada
-		this.roundService.save(r1);
+
 		//creamos los partidos de la ronda
+		this.createMatchsRounds(equipos, partidos, r1, nw);
+		//guardamos ronda creada
+
+		this.roundService.save(r1);
+
+	}
+	private void createMatchsRounds(final List<String> equipos, final List<Match> partidos, final Round r1, final boolean nw) throws IllegalDateException, MatchRecordResultException {
+
 		int totalE = equipos.size();
-		Random random = new Random();
+
 		for (int i = 0; i < totalE; i = i + 2) {
-			FootballClub fc1;
-			FootballClub fc2;
-			if (nw == true) {
-				//Obtenemos los dos equipos al azar
-				int randomIndex1 = random.nextInt(equipos.size());
-				fc1 = this.footballClubService.findFootballClubByName(equipos.get(randomIndex1));
-				equipos.remove(randomIndex1);
+			FootballClub fc1 = new FootballClub();
+			FootballClub fc2 = new FootballClub();
 
-				int randomIndex2 = random.nextInt(equipos.size());
-				fc2 = this.footballClubService.findFootballClubByName(equipos.get(randomIndex2));
-				equipos.remove(randomIndex2);
-			} else {
+			//sorteamos los equipos del partido
+			this.drawMatch(nw, fc1, fc2, equipos, i);
 
-				// sino seguimos el orden de los index
-				fc1 = this.footballClubService.findFootballClubByName(equipos.get(i));
-				fc2 = this.footballClubService.findFootballClubByName(equipos.get(i + 1));
-
-			}
-			Match newMatch = new Match();
-			newMatch.setCreator(c.getCreator());
-			newMatch.setFootballClub1(fc1);
-			newMatch.setFootballClub2(fc2);
-			newMatch.setMatchDate(new Date(System.currentTimeMillis()));
-			newMatch.setMatchStatus(MatchStatus.TO_BE_PLAYED);
-			newMatch.setStadium(fc1.getStadium());
-			newMatch.setTitle("Partido de " + r1.getName());
-			newMatch.setReferee(this.refereeService.findRefereeById(1));
-			newMatch.setRound(r1);
-
-			this.matchService.saveMatch(newMatch);
+			//creamos el partido
+			Match newMatch = this.createMatch(fc1, fc2, r1);
 
 			partidos.add(newMatch);
 
-			MatchRecord newRecord = new MatchRecord();
-
-			newRecord.setMatch(newMatch);
-			newRecord.setSeason_start("2020");
-			newRecord.setSeason_end("2021");
-			newRecord.setTitle("Acta del partido: " + fc1.getName() + " - " + fc2.getName() + " de " + r1.getName() + "de " + c.getName());
-			newRecord.setStatus(MatchRecordStatus.NOT_PUBLISHED);
-
-			this.matchRecordService.saveMatchRecord(newRecord);
+			//creamos el acta
+			MatchRecord newRecord = this.createRecord(newMatch, r1);
 
 			// Añadimos los jugadores al acta
-
-			List<FootballPlayer> fps = new ArrayList<>();
-
-			fps.addAll(this.footballPlayerService.findAllClubFootballPlayers(newMatch.getFootballClub1().getId()));
-			fps.addAll(this.footballPlayerService.findAllClubFootballPlayers(newMatch.getFootballClub2().getId()));
-
-			for (FootballPlayer fp : fps) {
-				FootballPlayerMatchStatistic fpms = new FootballPlayerMatchStatistic();
-
-				fpms.setAssists(0);
-				fpms.setGoals(0);
-				fpms.setReceived_goals(0);
-				fpms.setRed_cards(0);
-				fpms.setYellow_cards(0);
-
-				fpms.setMatchRecord(newRecord);
-				fpms.setPlayer(fp);
-
-				this.footballPlayerMatchStatisticService.saveFootballPlayerStatistic(fpms);
-			}
+			this.createStatistics(newRecord, newMatch);
 
 		}
-		//guardamos ronda creada
-		//r1.setMatches(partidos);
-		this.roundService.save(r1);
+
+	}
+
+	private void drawMatch(final Boolean nw, FootballClub fc1, FootballClub fc2, final List<String> equipos, final int i) {
+		if (nw == true) {
+			//Obtenemos los dos equipos al azar
+			int randomIndex1 = this.random.nextInt(equipos.size());
+			fc1 = this.footballClubService.findFootballClubByName(equipos.get(randomIndex1));
+			equipos.remove(randomIndex1);
+
+			int randomIndex2 = this.random.nextInt(equipos.size());
+			fc2 = this.footballClubService.findFootballClubByName(equipos.get(randomIndex2));
+			equipos.remove(randomIndex2);
+		} else {
+
+			// sino seguimos el orden de los index
+			fc1 = this.footballClubService.findFootballClubByName(equipos.get(i));
+			fc2 = this.footballClubService.findFootballClubByName(equipos.get(i + 1));
+
+		}
+
+	}
+	private Match createMatch(final FootballClub fc1, final FootballClub fc2, final Round r1) {
+
+		Match newMatch = new Match();
+		newMatch.setCreator(r1.getCompetition().getCreator());
+		newMatch.setFootballClub1(fc1);
+		newMatch.setFootballClub2(fc2);
+		newMatch.setMatchDate(new Date(System.currentTimeMillis()));
+		newMatch.setMatchStatus(MatchStatus.TO_BE_PLAYED);
+		newMatch.setStadium(fc1.getStadium());
+		newMatch.setTitle("Partido de " + r1.getName());
+		newMatch.setReferee(this.refereeService.findRefereeById(1));
+		newMatch.setRound(r1);
+
+		this.matchService.saveMatch(newMatch);
+		return newMatch;
+	}
+	private MatchRecord createRecord(final Match newMatch, final Round r1) throws IllegalDateException, MatchRecordResultException {
+		MatchRecord newRecord = new MatchRecord();
+
+		newRecord.setMatch(newMatch);
+		newRecord.setSeason_start("2020");
+		newRecord.setSeason_end("2021");
+		newRecord.setTitle("Acta del partido: " + newMatch.getFootballClub1().getName() + " - " + newMatch.getFootballClub2().getName() + " de " + r1.getName() + "de " + r1.getCompetition().getName());
+		newRecord.setStatus(MatchRecordStatus.NOT_PUBLISHED);
+
+		this.matchRecordService.saveMatchRecord(newRecord);
+		return newRecord;
+	}
+	private void createStatistics(final MatchRecord newRecord, final Match newMatch) {
+		List<FootballPlayer> fps = new ArrayList<>();
+
+		fps.addAll(this.footballPlayerService.findAllClubFootballPlayers(newMatch.getFootballClub1().getId()));
+		fps.addAll(this.footballPlayerService.findAllClubFootballPlayers(newMatch.getFootballClub2().getId()));
+
+		for (FootballPlayer fp : fps) {
+			FootballPlayerMatchStatistic fpms = new FootballPlayerMatchStatistic();
+
+			fpms.setAssists(0);
+			fpms.setGoals(0);
+			fpms.setReceived_goals(0);
+			fpms.setRed_cards(0);
+			fpms.setYellow_cards(0);
+
+			fpms.setMatchRecord(newRecord);
+			fpms.setPlayer(fp);
+
+			this.footballPlayerMatchStatisticService.saveFootballPlayerStatistic(fpms);
+		}
 
 	}
 

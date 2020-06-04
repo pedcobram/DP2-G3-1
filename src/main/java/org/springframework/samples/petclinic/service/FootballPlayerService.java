@@ -93,13 +93,13 @@ public class FootballPlayerService {
 			String olast = o.getLastName().toLowerCase();
 			ofirst = ofirst.toLowerCase();
 			olast = olast.toLowerCase();
-			if (ofirst.equals(firstname) && olast.equals(lastname) && o.getId() != footballPlayer.getId()) {
+			if (ofirst.equals(firstname) && olast.equals(lastname) && !o.getId().equals(footballPlayer.getId())) {
 				otherPlayer = o;
 			}
 		}
 
 		//RN: Nombre Duplicado
-		if (StringUtils.hasLength(footballPlayer.getFirstName()) && StringUtils.hasLength(footballPlayer.getLastName()) && otherPlayer != null && otherPlayer.getId() != footballPlayer.getId()) {
+		if (StringUtils.hasLength(footballPlayer.getFirstName()) && StringUtils.hasLength(footballPlayer.getLastName()) && otherPlayer != null && !otherPlayer.getId().equals(footballPlayer.getId())) {
 			throw new DuplicatedNameException();
 		}
 
@@ -152,13 +152,13 @@ public class FootballPlayerService {
 			String olast = o.getLastName().toLowerCase();
 			ofirst = ofirst.toLowerCase();
 			olast = olast.toLowerCase();
-			if (ofirst.equals(firstname) && olast.equals(lastname) && o.getId() != footballPlayer.getId()) {
+			if (ofirst.equals(firstname) && olast.equals(lastname) && !o.getId().equals(footballPlayer.getId())) {
 				otherPlayer = o;
 			}
 		}
 
 		//RN: Nombre Duplicado
-		if (StringUtils.hasLength(footballPlayer.getFirstName()) && StringUtils.hasLength(footballPlayer.getLastName()) && otherPlayer != null && otherPlayer.getId() != footballPlayer.getId()) {
+		if (StringUtils.hasLength(footballPlayer.getFirstName()) && StringUtils.hasLength(footballPlayer.getLastName()) && otherPlayer != null && !otherPlayer.getId().equals(footballPlayer.getId())) {
 			throw new DuplicatedNameException();
 		}
 

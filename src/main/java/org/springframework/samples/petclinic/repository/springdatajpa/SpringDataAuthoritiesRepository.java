@@ -1,7 +1,6 @@
 
 package org.springframework.samples.petclinic.repository.springdatajpa;
 
-import org.springframework.dao.DataAccessException;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 import org.springframework.data.repository.query.Param;
@@ -12,5 +11,5 @@ public interface SpringDataAuthoritiesRepository extends AuthoritiesRepository, 
 
 	@Override
 	@Query("SELECT a FROM Authorities a WHERE a.username =:username")
-	Authorities findAuthoritiesByUsername(@Param("username") String username) throws DataAccessException;
+	Authorities findAuthoritiesByUsername(@Param("username") String username);
 }

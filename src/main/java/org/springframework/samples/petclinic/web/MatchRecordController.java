@@ -203,7 +203,7 @@ public class MatchRecordController {
 
 					for (FootballPlayerMatchStatistic fpms : fpmss.getFootballPlayerStatisticsList()) {
 						FootballPlayerStatistic fps = this.footballPlayerStatisticService.findFootballPlayerStatisticByPlayerId(fpms.getPlayer().getId());
-						if (fpms.getPlayer().getId() == fps.getId()) {
+						if (fpms.getPlayer().getId().equals(fps.getId())) {
 
 							fps.setId(fps.getId());
 							fps.setReceived_goals(fpms.getReceived_goals() + fps.getReceived_goals());

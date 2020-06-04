@@ -18,7 +18,6 @@ package org.springframework.samples.petclinic.repository.springdatajpa;
 
 import java.util.Collection;
 
-import org.springframework.dao.DataAccessException;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 import org.springframework.samples.petclinic.model.FootballPlayer;
@@ -34,17 +33,17 @@ public interface SpringDataFootballPlayerRepository extends FootballPlayerReposi
 
 	@Override
 	@Query("select fp from FootballPlayer fp")
-	Collection<FootballPlayer> findAll() throws DataAccessException;
+	Collection<FootballPlayer> findAll();
 
 	@Override
 	@Query("select fp from FootballPlayer fp where fp.club = null")
-	Collection<FootballPlayer> findAllFreeAgents() throws DataAccessException;
+	Collection<FootballPlayer> findAllFreeAgents();
 
 	@Override
 	@Query("select fp from FootballPlayer fp where fp.club.id = ?1")
-	Collection<FootballPlayer> findPlayersByClubId(int id) throws DataAccessException;
+	Collection<FootballPlayer> findPlayersByClubId(int id);
 
 	@Override
 	@Query("select fp from FootballPlayer fp where fp.id = ?1")
-	FootballPlayer findById(int id) throws DataAccessException;
+	FootballPlayer findById(int id);
 }

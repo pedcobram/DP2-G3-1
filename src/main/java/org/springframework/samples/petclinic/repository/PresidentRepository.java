@@ -16,17 +16,16 @@
 
 package org.springframework.samples.petclinic.repository;
 
-import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.President;
 
 public interface PresidentRepository {
 
-	President findById(int id) throws DataAccessException;
+	President findById(int id);
 
-	President findByUsername(String userName) throws DataAccessException;
+	President findByUsername(String userName);
 
-	void save(President authenticated) throws DataAccessException;
+	void save(President authenticated);
 
-	void delete(President president) throws DataAccessException;
+	void delete(President president);
 
 }

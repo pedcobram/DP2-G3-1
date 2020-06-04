@@ -3,7 +3,6 @@ package org.springframework.samples.petclinic.repository.springdatajpa;
 
 import java.util.Collection;
 
-import org.springframework.dao.DataAccessException;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 import org.springframework.data.repository.query.Param;
@@ -14,21 +13,21 @@ public interface SpringDataCompAdminRequestRepository extends CompAdminRequestRe
 
 	@Override
 	@Query("SELECT a FROM CompAdminRequest a WHERE a.id =:id")
-	CompAdminRequest findById(@Param("id") int id) throws DataAccessException;
+	CompAdminRequest findById(@Param("id") int id);
 
 	@Override
 	@Query("SELECT a FROM CompAdminRequest a WHERE a.user.username =:username AND a.status = 0")
-	CompAdminRequest findByUsername(@Param("username") String username) throws DataAccessException;
+	CompAdminRequest findByUsername(@Param("username") String username);
 
 	@Override
 	@Query("SELECT COUNT(a) FROM CompAdminRequest a WHERE a.user.username =:username AND a.status = 0")
-	int countByUsername(@Param("username") String username) throws DataAccessException;
+	int countByUsername(@Param("username") String username);
 
 	@Override
 	@Query("select f from CompAdminRequest f WHERE f.status = 0")
-	Collection<CompAdminRequest> findAll() throws DataAccessException;
+	Collection<CompAdminRequest> findAll();
 
 	@Override
 	@Query("SELECT COUNT(a) FROM CompAdminRequest a")
-	int count() throws DataAccessException;
+	int count();
 }

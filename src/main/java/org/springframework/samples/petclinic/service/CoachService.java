@@ -71,13 +71,13 @@ public class CoachService {
 			String olast = o.getLastName().toLowerCase();
 			ofirst = ofirst.toLowerCase();
 			olast = olast.toLowerCase();
-			if (ofirst.equals(firstname) && olast.equals(lastname) && o.getId() != coach.getId()) {
+			if (ofirst.equals(firstname) && olast.equals(lastname) && !o.getId().equals(coach.getId())) {
 				otherCoach = o;
 			}
 		}
 
 		//RN: Nombre Duplicado
-		if (StringUtils.hasLength(coach.getFirstName()) && StringUtils.hasLength(coach.getLastName()) && otherCoach != null && otherCoach.getId() != coach.getId()) {
+		if (StringUtils.hasLength(coach.getFirstName()) && StringUtils.hasLength(coach.getLastName()) && otherCoach != null && !otherCoach.getId().equals(coach.getId())) {
 			throw new DuplicatedNameException();
 		}
 
