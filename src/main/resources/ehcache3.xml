@@ -28,7 +28,7 @@
             </resources>
         </cache-template> 
         
-	    <cache alias="contractById" uses-template="default">
+	   <!--  <cache alias="contractById" uses-template="default">
 	        <key-type>java.lang.Integer</key-type>
 	        <value-type>org.springframework.samples.petclinic.model.ContractCommercial</value-type>
 	    </cache> 
@@ -36,5 +36,5 @@
 	   <cache alias="footballClubByPresident" uses-template="default">
 	        <key-type>java.lang.String</key-type>
 	        <value-type>org.springframework.samples.petclinic.model.FootballClub</value-type>
-	   </cache>         
+	   </cache>    -->      
     </config>
