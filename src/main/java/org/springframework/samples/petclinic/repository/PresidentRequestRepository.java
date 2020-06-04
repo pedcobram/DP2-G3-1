@@ -3,22 +3,21 @@ package org.springframework.samples.petclinic.repository;
 
 import java.util.Collection;
 
-import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.PresidentRequest;
 
 public interface PresidentRequestRepository {
 
-	Collection<PresidentRequest> findAll() throws DataAccessException;
+	Collection<PresidentRequest> findAll();
 
-	PresidentRequest findById(int id) throws DataAccessException;
+	PresidentRequest findById(int id);
 
-	PresidentRequest findByUsername(String userName) throws DataAccessException;
+	PresidentRequest findByUsername(String userName);
 
-	void save(PresidentRequest compAdminRequest) throws DataAccessException;
+	void save(PresidentRequest compAdminRequest);
 
-	void delete(PresidentRequest compAdminRequest) throws DataAccessException;
+	void delete(PresidentRequest compAdminRequest);
 
-	int countByUsername(String username) throws DataAccessException;
+	int countByUsername(String username);
 
-	int count() throws DataAccessException;
+	int count();
 }

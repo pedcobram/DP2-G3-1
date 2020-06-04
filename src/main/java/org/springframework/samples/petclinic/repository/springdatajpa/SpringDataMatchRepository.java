@@ -4,7 +4,6 @@ package org.springframework.samples.petclinic.repository.springdatajpa;
 import java.util.Collection;
 import java.util.List;
 
-import org.springframework.dao.DataAccessException;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 import org.springframework.data.repository.query.Param;
@@ -23,7 +22,7 @@ public interface SpringDataMatchRepository extends MatchRepository, Repository<M
 
 	@Override
 	@Query("SELECT a FROM Match a WHERE a.id =:id")
-	Match findMatchById(@Param("id") int id) throws DataAccessException;
+	Match findMatchById(@Param("id") int id);
 
 	@Override
 	@Query("select m from Match m where m.footballClub1.president.user.username = ?1 or m.footballClub2.president.user.username = ?1")
@@ -31,10 +30,10 @@ public interface SpringDataMatchRepository extends MatchRepository, Repository<M
 
 	@Override
 	@Query("SELECT COUNT(a) FROM Match a")
-	int count() throws DataAccessException;
+	int count();
 
 	@Override
 	@Query("SELECT m FROM Match m WHERE m.round.id = ?1 order by m.id")
-	List<Match> findMatchByRoundId(int id) throws DataAccessException;
+	List<Match> findMatchByRoundId(int id);
 
 }

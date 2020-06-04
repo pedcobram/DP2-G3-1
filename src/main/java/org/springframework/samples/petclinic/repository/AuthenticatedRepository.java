@@ -18,19 +18,18 @@ package org.springframework.samples.petclinic.repository;
 
 import java.util.Collection;
 
-import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Authenticated;
 
 public interface AuthenticatedRepository {
 
-	Collection<Authenticated> findByLastName(String lastName) throws DataAccessException;
+	Collection<Authenticated> findByLastName(String lastName);
 
-	Authenticated findById(int id) throws DataAccessException;
+	Authenticated findById(int id);
 
-	Authenticated findByUsername(String userName) throws DataAccessException;
+	Authenticated findByUsername(String userName);
 
-	void save(Authenticated authenticated) throws DataAccessException;
+	void save(Authenticated authenticated);
 
-	void delete(Authenticated authenticated) throws DataAccessException;
+	void delete(Authenticated authenticated);
 
 }

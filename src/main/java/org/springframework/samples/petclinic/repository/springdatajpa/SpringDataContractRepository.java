@@ -18,7 +18,6 @@ package org.springframework.samples.petclinic.repository.springdatajpa;
 
 import java.util.Collection;
 
-import org.springframework.dao.DataAccessException;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 import org.springframework.samples.petclinic.model.Contract;
@@ -30,30 +29,30 @@ public interface SpringDataContractRepository extends ContractRepository, Reposi
 
 	@Override
 	@Query("Select c from ContractCommercial c")
-	Collection<ContractCommercial> findAllCommercialContracts() throws DataAccessException;
+	Collection<ContractCommercial> findAllCommercialContracts();
 
 	@Override
 	@Query("Select c from ContractCommercial c where c.id = ?1")
-	ContractCommercial findContractCommercialById(int id) throws DataAccessException;
+	ContractCommercial findContractCommercialById(int id);
 
 	@Override
 	@Query("Select c from ContractCommercial c where c.club.id = ?1")
-	ContractCommercial findCommercialContractByClubId(int id) throws DataAccessException;
+	ContractCommercial findCommercialContractByClubId(int id);
 
 	@Override
 	@Query("Select c from ContractPlayer c")
-	Collection<ContractPlayer> findAllPlayerContracts() throws DataAccessException;
+	Collection<ContractPlayer> findAllPlayerContracts();
 
 	@Override
 	@Query("Select c from ContractPlayer c where c.id = ?1")
-	ContractPlayer findContractPlayerById(int id) throws DataAccessException;
+	ContractPlayer findContractPlayerById(int id);
 
 	@Override
 	@Query("Select c from ContractPlayer c where c.player.id = ?1")
-	ContractPlayer findContractPlayerByPlayerId(int playerId) throws DataAccessException;
+	ContractPlayer findContractPlayerByPlayerId(int playerId);
 
 	@Override
 	@Query("Select c from ContractPlayer c where c.club.id = ?1")
-	Collection<ContractPlayer> findAllPlayerContractsByClubId(int clubId) throws DataAccessException;
+	Collection<ContractPlayer> findAllPlayerContractsByClubId(int clubId);
 
 }
