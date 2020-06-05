@@ -75,7 +75,7 @@ public class MatchRequestController {
 		List<MatchRequest> matchRequests = new ArrayList<>();
 
 		//Si el club no existe o no es público la lista estará vacía por razones obvias
-		if (footballClub1 != null && footballClub1.getStatus() == true) {
+		if (footballClub1 != null && footballClub1.getStatus()) {
 			matchRequests.addAll(this.matchRequestService.findAllMatchRequestsSent(footballClub1.getName()));
 		}
 
@@ -97,7 +97,7 @@ public class MatchRequestController {
 		List<MatchRequest> matchRequests = new ArrayList<>();
 
 		//Si el club no existe o no es público la lista estará vacía por razones obvias
-		if (footballClub1 != null && footballClub1.getStatus() == true) {
+		if (footballClub1 != null && footballClub1.getStatus()) {
 			matchRequests.addAll(this.matchRequestService.findAllMatchRequestsReceived(footballClub1.getName()));
 		}
 
@@ -117,7 +117,7 @@ public class MatchRequestController {
 		FootballClub footballClub1 = this.footballClubService.findFootballClubByPresident(currentPrincipalName);
 
 		//Validación: Si no tiene equipo o no está público no puede hacer peticiones de partidos
-		if (footballClub1 == null || footballClub1.getStatus() == false) {
+		if (footballClub1 == null || !footballClub1.getStatus()) {
 			//		return "redirect:/exception/forbidden"; ---> también se puede usar esta opción para ir a la pag de error forbidden
 			throw new CredentialException("Forbidden Access");
 		}

@@ -3,7 +3,6 @@ package org.springframework.samples.petclinic.web;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import javax.security.auth.login.CredentialException;
 import javax.validation.Valid;
@@ -18,7 +17,7 @@ import org.springframework.samples.petclinic.service.UserService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -52,7 +51,7 @@ public class MatchController {
 	}
 
 	@GetMapping(value = "/matches/list")
-	public String showMatchList(final Map<String, Object> model) {
+	public String showMatchList(final ModelMap model) {
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -98,7 +97,7 @@ public class MatchController {
 	}
 
 	@GetMapping(value = "/matches/edit/{matchId}")
-	public String initUpdateMatchForm(@PathVariable("matchId") final int matchId, final Model model) throws CredentialException {
+	public String initUpdateMatchForm(@PathVariable("matchId") final int matchId, final ModelMap model) throws CredentialException {
 		Match match = this.matchService.findMatchById(matchId);
 
 		//Obtenemos el username actual conectado
@@ -121,7 +120,7 @@ public class MatchController {
 	}
 
 	@PostMapping(value = "/matches/edit/{matchId}")
-	public String processUpdateMatchForm(@Valid final Match match, @PathVariable("matchId") final int matchId, final BindingResult result, final Model model) {
+	public String processUpdateMatchForm(@Valid final Match match, @PathVariable("matchId") final int matchId, final BindingResult result, final ModelMap model) {
 
 		if (result.hasErrors()) {
 			return MatchController.VIEWS_UPDATE_MATCH_FORM;
@@ -144,7 +143,7 @@ public class MatchController {
 	}
 
 	@GetMapping(value = "/matches/referee/list")
-	public String showReceivedMatchRequestList(final Map<String, Object> model) {
+	public String showReceivedMatchRequestList(final ModelMap model) {
 
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String currentPrincipalName = authentication.getName();

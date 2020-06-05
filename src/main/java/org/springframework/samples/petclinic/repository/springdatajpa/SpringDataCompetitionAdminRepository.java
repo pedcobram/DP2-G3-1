@@ -1,7 +1,6 @@
 
 package org.springframework.samples.petclinic.repository.springdatajpa;
 
-import org.springframework.dao.DataAccessException;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 import org.springframework.data.repository.query.Param;
@@ -13,17 +12,17 @@ public interface SpringDataCompetitionAdminRepository extends CompetitionAdminRe
 
 	@Override
 	@Query("SELECT a FROM CompetitionAdmin a WHERE a.id =:id")
-	CompetitionAdmin findById(@Param("id") int id) throws DataAccessException;
+	CompetitionAdmin findById(@Param("id") int id);
 
 	@Override
 	@Query("SELECT a FROM CompetitionAdmin a WHERE a.user.username =:username")
-	CompetitionAdmin findByUsername(@Param("username") String username) throws DataAccessException;
+	CompetitionAdmin findByUsername(@Param("username") String username);
 
 	@Override
 	@Query("SELECT a FROM Authenticated a WHERE a.user.username =:username")
-	Authenticated findAuthenticatedByUsername(@Param("username") String username) throws DataAccessException;
+	Authenticated findAuthenticatedByUsername(@Param("username") String username);
 
 	@Override
 	@Query("SELECT COUNT(a) FROM CompetitionAdmin a")
-	int count() throws DataAccessException;
+	int count();
 }

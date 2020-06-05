@@ -52,12 +52,14 @@ public class ContractCommercialService {
 
 	//Buscar todos los contratos de comerciales
 	@Transactional(readOnly = true)
+	//	@Cacheable("CacheContracts")
 	public Collection<ContractCommercial> findAllCommercialContracts() throws DataAccessException {
 		return this.contractRepository.findAllCommercialContracts();
 	}
 
 	//Buscar contrato de comercial por id
 	@Transactional(readOnly = true)
+	//@Cacheable("contractById")
 	public ContractCommercial findContractCommercialById(final int id) throws DataAccessException {
 		return this.contractRepository.findContractCommercialById(id);
 	}
@@ -70,13 +72,15 @@ public class ContractCommercialService {
 	@Transactional(rollbackFor = {
 		NoMultipleContractCommercialException.class, NoStealContractCommercialException.class, NotEnoughMoneyException.class
 	})
+	//	@CacheEvict(cacheNames = "CacheContracts", allEntries = true)
+	//@CacheEvict(value = "contractById", allEntries = true)
 	public void saveContractCommercial(final ContractCommercial contractCommercial)
 		throws DataAccessException, NoMultipleContractCommercialException, NoStealContractCommercialException, NotEnoughMoneyException, DuplicatedNameException, NumberOfPlayersAndCoachException, DateException {
 		//Existe contrato commercial con este club
 		Collection<ContractCommercial> contracts = this.findAllCommercialContracts();
 
 		//Si se encuentra un contrato diferente con el mismo club(no null) .... Exception
-		if (!contracts.stream().filter(x -> x.getClub() != null && x.getId() != contractCommercial.getId() && x.getClub() == contractCommercial.getClub()).collect(Collectors.toList()).isEmpty()) {
+		if (!contracts.stream().filter(x -> x.getClub() != null && !x.getId().equals(contractCommercial.getId()) && x.getClub() == contractCommercial.getClub()).collect(Collectors.toList()).isEmpty()) {
 			throw new NoMultipleContractCommercialException();
 		}
 

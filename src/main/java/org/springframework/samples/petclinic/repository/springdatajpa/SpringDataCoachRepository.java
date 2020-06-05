@@ -3,7 +3,6 @@ package org.springframework.samples.petclinic.repository.springdatajpa;
 
 import java.util.Collection;
 
-import org.springframework.dao.DataAccessException;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 import org.springframework.samples.petclinic.model.Coach;
@@ -13,18 +12,18 @@ public interface SpringDataCoachRepository extends CoachRepository, Repository<C
 
 	@Override
 	@Query("select c from Coach c")
-	Collection<Coach> findAll() throws DataAccessException;
+	Collection<Coach> findAll();
 
 	@Override
 	@Query("select c from Coach c where c.club = null")
-	Collection<Coach> findAllFreeAgents() throws DataAccessException;
+	Collection<Coach> findAllFreeAgents();
 
 	@Override
 	@Query("select c from Coach c where c.club.id = ?1")
-	Coach findCoachByClubId(int clubId) throws DataAccessException;
+	Coach findCoachByClubId(int clubId);
 
 	@Override
 	@Query("select c from Coach c where c.id = ?1")
-	Coach findById(int id) throws DataAccessException;
+	Coach findById(int id);
 
 }

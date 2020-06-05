@@ -50,20 +50,16 @@ public class ContractCommercialController {
 		dataBinder.setDisallowedFields("id");
 	}
 
-	//Vista de la lista de jugadores
+	//Vista de la lista
 	@GetMapping(value = "/contractsCommercial")
 	public String showContractCommercialList(final Map<String, Object> model) {
 
-		//Creamos una colección de jugadores
 		List<ContractCommercial> contracts = new ArrayList<>();
 
-		//La llenamos con todos los equipos de la db
 		contracts.addAll(this.contractService.findAllCommercialContracts());
 
-		//Ponemos en el modelo la colección de equipos
 		model.put("contractsCommercial", contracts);
 
-		//Mandamos a la vista de listado de equipos
 		return "contracts/contractCommercialList";
 	}
 
@@ -81,7 +77,7 @@ public class ContractCommercialController {
 		boolean presidentAlreadyHasContract = false;
 
 		for (ContractCommercial c : clist) {
-			if (c.getClub() != null && c.getClub().getPresident().getUser().getUsername() == currentPrincipalName) {
+			if (c.getClub() != null && c.getClub().getPresident().getUser().getUsername().equals(currentPrincipalName)) {
 				presidentAlreadyHasContract = true;
 				break;
 			}

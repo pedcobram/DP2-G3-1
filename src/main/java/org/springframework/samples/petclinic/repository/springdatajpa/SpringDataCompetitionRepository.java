@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 import org.springframework.samples.petclinic.model.Competition;
 import org.springframework.samples.petclinic.model.FootballClub;
+import org.springframework.samples.petclinic.model.FootballPlayerMatchStatistic;
 import org.springframework.samples.petclinic.model.Match;
 import org.springframework.samples.petclinic.repository.CompetitionRepository;
 
@@ -40,5 +41,9 @@ public interface SpringDataCompetitionRepository extends CompetitionRepository, 
 	@Override
 	@Query("select m from Match m where m.jornada.calendary.competition.id = ?1")
 	Collection<Match> findAllMatchByCompetitionId(final Integer compId);
+
+	@Override
+	@Query("select f from FootballPlayerMatchStatistic f where f.player.id = ?1 and f.matchRecord.match.jornada.calendary.competition.id = ?2")
+	Collection<FootballPlayerMatchStatistic> findFPMSByPlayerIdAndCompId(final Integer playerId, final Integer compId);
 
 }

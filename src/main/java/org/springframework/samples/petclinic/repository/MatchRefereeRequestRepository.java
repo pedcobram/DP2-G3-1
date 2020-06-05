@@ -3,27 +3,26 @@ package org.springframework.samples.petclinic.repository;
 
 import java.util.Collection;
 
-import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Authenticated;
 import org.springframework.samples.petclinic.model.MatchRefereeRequest;
 
 public interface MatchRefereeRequestRepository {
 
-	Collection<MatchRefereeRequest> findAllMatchRefereeRequests() throws DataAccessException;
+	Collection<MatchRefereeRequest> findAllMatchRefereeRequests();
 
-	Collection<MatchRefereeRequest> findAllOnHoldMatchRefereeRequests() throws DataAccessException;
+	Collection<MatchRefereeRequest> findAllOnHoldMatchRefereeRequests();
 
-	Collection<MatchRefereeRequest> findOnHoldMatchRefereeRequests(String refereeName) throws DataAccessException;
+	Collection<MatchRefereeRequest> findOnHoldMatchRefereeRequests(String refereeName);
 
-	MatchRefereeRequest findById(int id) throws DataAccessException;
+	MatchRefereeRequest findById(int id);
 
-	MatchRefereeRequest findByUsernameAndMatchId(String userName, int matchId) throws DataAccessException;
+	MatchRefereeRequest findByUsernameAndMatchId(String userName, int matchId);
 
-	void save(MatchRefereeRequest matchRefereeRequest) throws DataAccessException;
+	void save(MatchRefereeRequest matchRefereeRequest);
 
-	Authenticated findAuthenticatedByUsername(String username) throws DataAccessException;
+	Authenticated findAuthenticatedByUsername(String username);
 
-	void delete(MatchRefereeRequest matchRefereeRequest) throws DataAccessException;
+	void delete(MatchRefereeRequest matchRefereeRequest);
 
-	int count() throws DataAccessException;
+	int count();
 }

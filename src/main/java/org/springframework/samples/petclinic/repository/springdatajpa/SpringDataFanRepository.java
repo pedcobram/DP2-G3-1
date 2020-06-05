@@ -16,7 +16,6 @@
 
 package org.springframework.samples.petclinic.repository.springdatajpa;
 
-import org.springframework.dao.DataAccessException;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 import org.springframework.data.repository.query.Param;
@@ -33,10 +32,10 @@ public interface SpringDataFanRepository extends FanRepository, Repository<Fan, 
 
 	@Override
 	@Query("SELECT CASE WHEN count(f)>0 THEN true ELSE false END FROM Fan f WHERE f.user.id =: auId")
-	boolean existsByUserId(@Param("auId") int auId) throws DataAccessException;
+	boolean existsByUserId(@Param("auId") int auId);
 
 	@Override
 	@Query("SELECT f FROM Fan f WHERE f.user.id =: auId")
-	Fan findByUserId(@Param("auId") int id) throws DataAccessException;
+	Fan findByUserId(@Param("auId") int id);
 
 }

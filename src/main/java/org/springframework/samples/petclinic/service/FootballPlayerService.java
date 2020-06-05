@@ -60,6 +60,7 @@ public class FootballPlayerService {
 
 	//Buscar todos los jugadores libres
 	@Transactional(readOnly = true)
+	//	@Cacheable("CacheFAPlayerList")
 	public Collection<FootballPlayer> findAllFootballPlayersFA() throws DataAccessException {
 		return this.footRepository.findAllFreeAgents();
 	}
@@ -93,13 +94,13 @@ public class FootballPlayerService {
 			String olast = o.getLastName().toLowerCase();
 			ofirst = ofirst.toLowerCase();
 			olast = olast.toLowerCase();
-			if (ofirst.equals(firstname) && olast.equals(lastname) && o.getId() != footballPlayer.getId()) {
+			if (ofirst.equals(firstname) && olast.equals(lastname) && !o.getId().equals(footballPlayer.getId())) {
 				otherPlayer = o;
 			}
 		}
 
 		//RN: Nombre Duplicado
-		if (StringUtils.hasLength(footballPlayer.getFirstName()) && StringUtils.hasLength(footballPlayer.getLastName()) && otherPlayer != null && otherPlayer.getId() != footballPlayer.getId()) {
+		if (StringUtils.hasLength(footballPlayer.getFirstName()) && StringUtils.hasLength(footballPlayer.getLastName()) && otherPlayer != null && !otherPlayer.getId().equals(footballPlayer.getId())) {
 			throw new DuplicatedNameException();
 		}
 
@@ -117,7 +118,7 @@ public class FootballPlayerService {
 		Collection<FootballPlayer> cp = this.findAllClubFootballPlayers(footballPlayer.getClub().getId());
 
 		//RN: Solo se pueden registrar jugadores hasta que se tengan 7
-		if (cp.size() >= 7 && footballPlayer.getClub().getStatus() == false) {
+		if (cp.size() >= 7 && !footballPlayer.getClub().getStatus()) {
 			throw new NumberOfPlayersAndCoachException();
 		}
 
@@ -127,11 +128,10 @@ public class FootballPlayerService {
 		}
 
 		//RN: Si el club es público no puede registrar a un jugador
-		if (footballPlayer.getClub().getStatus() == true) {
+		if (footballPlayer.getClub().getStatus()) {
 			throw new StatusException();
 		}
 
-		newContract.getClub().setMoney(newContract.getClub().getMoney() - newContract.getSalary());
 		this.footRepository.save(footballPlayer);
 		this.contractService.saveContractPlayer(newContract);
 
@@ -153,13 +153,13 @@ public class FootballPlayerService {
 			String olast = o.getLastName().toLowerCase();
 			ofirst = ofirst.toLowerCase();
 			olast = olast.toLowerCase();
-			if (ofirst.equals(firstname) && olast.equals(lastname) && o.getId() != footballPlayer.getId()) {
+			if (ofirst.equals(firstname) && olast.equals(lastname) && !o.getId().equals(footballPlayer.getId())) {
 				otherPlayer = o;
 			}
 		}
 
 		//RN: Nombre Duplicado
-		if (StringUtils.hasLength(footballPlayer.getFirstName()) && StringUtils.hasLength(footballPlayer.getLastName()) && otherPlayer != null && otherPlayer.getId() != footballPlayer.getId()) {
+		if (StringUtils.hasLength(footballPlayer.getFirstName()) && StringUtils.hasLength(footballPlayer.getLastName()) && otherPlayer != null && !otherPlayer.getId().equals(footballPlayer.getId())) {
 			throw new DuplicatedNameException();
 		}
 
@@ -177,7 +177,7 @@ public class FootballPlayerService {
 		Collection<FootballPlayer> cp = this.findAllClubFootballPlayers(footballPlayer.getClub().getId());
 
 		//RN: Solo se pueden registrar jugadores hasta que se tengan 7
-		if (cp.size() >= 7 && footballPlayer.getClub().getStatus() == false) {
+		if (cp.size() >= 7 && !footballPlayer.getClub().getStatus()) {
 			throw new NumberOfPlayersAndCoachException();
 		}
 

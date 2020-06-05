@@ -10,8 +10,8 @@
 
 <petclinic:layout pageName="compAdminRequests">
    	<h2>
-        <c:if test="${compAdminRequests['new']}"><fmt:message key="code.title.createorupdatecompadminrequestform.new"/> </c:if>
-        <c:if test="${!compAdminRequests['new']}"><fmt:message key="code.title.createorupdatecompadminrequestform.notnew"/> </c:if>
+        <c:if test="${compAdminRequest['new']}"><fmt:message key="code.title.createorupdatecompadminrequestform.new"/> </c:if>
+        <c:if test="${!compAdminRequest['new']}"><fmt:message key="code.title.createorupdatecompadminrequestform.notnew"/> </c:if>
     </h2>
     
     <form:form modelAttribute="compAdminRequest" class="form-horizontal" id="add-competition-admin-request-form">
@@ -23,7 +23,7 @@
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
                 <c:choose>
-                    <c:when test="${compAdminRequests['new']}">
+                    <c:when test="${compAdminRequest['new']}">
                         <button class="btn btn-default" type="submit"><fmt:message key="code.button.createorupdatecompadminrequestform.submit"/></button>
                     </c:when>
                     <c:otherwise>

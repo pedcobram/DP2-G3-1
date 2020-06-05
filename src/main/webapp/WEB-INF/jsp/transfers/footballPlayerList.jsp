@@ -16,6 +16,7 @@
 	<fmt:message key="code.column.birthDate" var="BirthDate"/> 
 	<fmt:message key="code.crud.registerPlayer" var="RegisterPlayer"/> 
 	<fmt:message key="code.crud.signFreeAgent" var="SignPlayer"/> 
+	<fmt:message key="code.crud.sign" var="Fichar"/> 
 
 <petclinic:layout pageName="footballPlayers">
 
@@ -61,10 +62,21 @@
                     <c:out value="${footballPlayer.birthDate}"/>
                 </td>
                 <td>
-                	<spring:url value="/transfers/players/request/{playerId}" var="editUrl">		
-                		<spring:param name="playerId" value="${footballPlayer.id}"/>
-                	</spring:url>
-    				<a href="${fn:escapeXml(editUrl)}" class="btn btn-default2" style="color:white"><b><fmt:message key="code.label.footballplayerlist.transferPlayer"/></b></a>
+                	<c:choose>
+                    	<c:when test="${footballPlayer.club == null}">
+                        	<spring:url value="/contractPlayer/{footballPlayerId}/new" var="newContractUrl">
+    							<spring:param name="footballPlayerId" value="${footballPlayer.id}"/>
+    						</spring:url>	
+    						<a data-toggle="tooltip" title="${mousehover}" href="${fn:escapeXml(newContractUrl)}" class="btn btn-default2">${Fichar}</a>
+                    	</c:when>
+                    	<c:otherwise>
+                        	<spring:url value="/transfers/players/request/{playerId}" var="editUrl">		
+                				<spring:param name="playerId" value="${footballPlayer.id}"/>
+                			</spring:url>
+    						<a href="${fn:escapeXml(editUrl)}" class="btn btn-default2" style="color:white"><b><fmt:message key="code.label.footballplayerlist.transferPlayer"/></b></a>
+                    	</c:otherwise>
+                	</c:choose>  
+                	
                 </td>
                 
               	

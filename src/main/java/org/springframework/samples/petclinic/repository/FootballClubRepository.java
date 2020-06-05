@@ -3,26 +3,25 @@ package org.springframework.samples.petclinic.repository;
 
 import java.util.Collection;
 
-import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.FootballClub;
 import org.springframework.samples.petclinic.model.President;
 
 public interface FootballClubRepository {
 
-	Collection<FootballClub> findAll() throws DataAccessException;
+	Collection<FootballClub> findAll();
 
-	Collection<FootballClub> findAllPublished() throws DataAccessException;
+	Collection<FootballClub> findAllPublished();
 
-	FootballClub findById(int id) throws DataAccessException;
+	FootballClub findById(int id);
 
-	FootballClub findFootballClubByPresident(String principalUsername) throws DataAccessException;
+	FootballClub findFootballClubByPresident(String principalUsername);
 
-	President findPresidentByUsername(String currentPrincipalName) throws DataAccessException;
+	President findPresidentByUsername(String currentPrincipalName);
 
-	void save(FootballClub footballClub) throws DataAccessException;
+	void save(FootballClub footballClub);
 
-	void delete(FootballClub footballClub) throws DataAccessException;
+	void delete(FootballClub footballClub);
 
-	FootballClub findFootballClubByName(String name) throws DataAccessException;
+	FootballClub findFootballClubByName(String name);
 
 }

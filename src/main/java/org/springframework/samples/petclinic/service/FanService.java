@@ -30,7 +30,7 @@ public class FanService {
 		Fan otherf = this.findByUserId(f.getUser().getId());
 		FootballClub c = f.getClub();
 		if (otherf != null) {
-			if (this.existFan(f.getUser().getId()) && f.getId() != otherf.getId()) {
+			if (this.existFan(f.getUser().getId()) && !f.getId().equals(otherf.getId())) {
 				throw new DuplicatedFanUserException();
 			} else {
 				if (f.isVip()) {

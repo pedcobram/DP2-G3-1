@@ -3,7 +3,6 @@ package org.springframework.samples.petclinic.repository;
 
 import java.util.Collection;
 
-import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Authenticated;
 import org.springframework.samples.petclinic.model.Referee;
 
@@ -11,16 +10,16 @@ public interface RefereeRepository {
 
 	Collection<Referee> findAllReferees();
 
-	Referee findRefereeById(int id) throws DataAccessException;
+	Referee findRefereeById(int id);
 
-	Referee findRefereeByUsername(String userName) throws DataAccessException;
+	Referee findRefereeByUsername(String userName);
 
-	Authenticated findAuthenticatedByUsername(String userName) throws DataAccessException;
+	Authenticated findAuthenticatedByUsername(String userName);
 
-	void save(Referee referee) throws DataAccessException;
+	void save(Referee referee);
 
-	void delete(Referee referee) throws DataAccessException;
+	void delete(Referee referee);
 
-	int count() throws DataAccessException;
+	int count();
 
 }

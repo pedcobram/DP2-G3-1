@@ -3,29 +3,31 @@ package org.springframework.samples.petclinic.repository;
 
 import java.util.Collection;
 
-import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Competition;
 import org.springframework.samples.petclinic.model.FootballClub;
+import org.springframework.samples.petclinic.model.FootballPlayerMatchStatistic;
 import org.springframework.samples.petclinic.model.Match;
 
 public interface CompetitionRepository {
 
-	Competition findById(int id) throws DataAccessException;
+	Competition findById(int id);
 
-	Collection<Competition> findAllPublishedCompetitions() throws DataAccessException;
+	Collection<Competition> findAllPublishedCompetitions();
 
-	Collection<Competition> findMyCompetitions(final String username) throws DataAccessException;
+	Collection<Competition> findMyCompetitions(final String username);
 
-	void save(Competition competition) throws DataAccessException;
+	void save(Competition competition);
 
-	void delete(Competition competition) throws DataAccessException;
+	void delete(Competition competition);
 
 	Collection<FootballClub> findAllPublishedClubs();
 
-	Collection<Match> findAllMatchByJornadaId(final Integer jornadaId) throws DataAccessException;
+	Collection<Match> findAllMatchByJornadaId(final Integer jornadaId);
 
-	Collection<Match> findAllMatchByCompetitionId(Integer compId) throws DataAccessException;
+	Collection<Match> findAllMatchByCompetitionId(Integer compId);
 
-	Collection<Competition> findAllCompetition() throws DataAccessException;
+	Collection<Competition> findAllCompetition();
+
+	Collection<FootballPlayerMatchStatistic> findFPMSByPlayerIdAndCompId(final Integer playerId, final Integer compId);
 
 }

@@ -66,6 +66,7 @@ public class ContractPlayerService {
 
 	//Buscar contratos por club
 	@Transactional(readOnly = true)
+	//	@Cacheable("CacheContractPlayerList")
 	public Collection<ContractPlayer> findAllPlayerContractsByClubId(final int clubId) throws DataAccessException {
 		return this.contractRepository.findAllPlayerContractsByClubId(clubId);
 	}
@@ -74,12 +75,13 @@ public class ContractPlayerService {
 	@Transactional(rollbackFor = {
 		NumberOfPlayersAndCoachException.class, DateException.class, SalaryException.class, MoneyClubException.class
 	})
+	//	@CacheEvict(cacheNames = "CacheFAPlayerList", allEntries = true)
 	public void saveContractPlayer(final ContractPlayer contractPlayer) throws DataAccessException, MoneyClubException, NumberOfPlayersAndCoachException, SalaryException, DateException {
 
 		Collection<FootballPlayer> players = this.footballPlayerService.findAllClubFootballPlayers(contractPlayer.getClub().getId());
 
 		//RN: Si el club no es público, solo puede tener a 7 jugadores como máximo
-		if (players.size() >= 7 && contractPlayer.getClub().getStatus() == false) {
+		if (players.size() >= 7 && !contractPlayer.getClub().getStatus()) {
 			throw new NumberOfPlayersAndCoachException();
 		}
 
@@ -116,6 +118,7 @@ public class ContractPlayerService {
 
 	//Despedir Jugador
 	@Transactional
+	//	@CacheEvict(cacheNames = "CacheContractPlayerList", allEntries = true)
 	public void deleteContract(final Contract contract) throws DataAccessException, MoneyClubException {
 
 		ContractPlayer thisContract = this.findContractPlayerById(contract.getId());

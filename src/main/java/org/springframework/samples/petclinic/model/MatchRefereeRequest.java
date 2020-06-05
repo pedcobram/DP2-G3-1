@@ -1,6 +1,8 @@
 
 package org.springframework.samples.petclinic.model;
 
+import java.io.Serializable;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -19,23 +21,28 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = false)
 @Entity
 @Table(name = "match_referee_request")
-public class MatchRefereeRequest extends BaseEntity {
+public class MatchRefereeRequest extends BaseEntity implements Serializable {
+
+	/**
+	 *
+	 */
+	private static final long	serialVersionUID	= 1L;
 
 	@Column(name = "title")
 	@NotEmpty
-	private String			title;
+	private String				title;
 
 	@Column(name = "status")
 	@NotNull
-	private RequestStatus	status;
+	private RequestStatus		status;
 
 	//
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "username", referencedColumnName = "username")
-	private Referee			referee;
+	private Referee				referee;
 
 	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "matchId", referencedColumnName = "id")
-	private Match			match;
+	@JoinColumn(name = "match_id", referencedColumnName = "id")
+	private Match				match;
 
 }

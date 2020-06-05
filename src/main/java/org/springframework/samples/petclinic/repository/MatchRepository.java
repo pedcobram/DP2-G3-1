@@ -4,7 +4,6 @@ package org.springframework.samples.petclinic.repository;
 import java.util.Collection;
 import java.util.List;
 
-import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Match;
 
 public interface MatchRepository {
@@ -15,13 +14,13 @@ public interface MatchRepository {
 
 	Collection<Match> findAllMatchesByReferee(String currentPrincipalName);
 
-	Match findMatchById(int id) throws DataAccessException;
+	Match findMatchById(int id);
 
-	void save(Match match) throws DataAccessException;
+	void save(Match match);
 
-	void delete(Match match) throws DataAccessException;
+	void delete(Match match);
 
-	int count() throws DataAccessException;
+	int count();
 
 	List<Match> findMatchByRoundId(int id);
 

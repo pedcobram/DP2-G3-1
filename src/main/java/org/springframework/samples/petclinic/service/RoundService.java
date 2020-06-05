@@ -3,6 +3,7 @@ package org.springframework.samples.petclinic.service;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -43,7 +44,30 @@ public class RoundService {
 	}
 	@Transactional(readOnly = true)
 	public Round findById(final int id) {
-		return this.roundRepository.findById(id).get();
+		Optional<Round> round = this.roundRepository.findById(id);
+		if (round.isPresent()) {
+			return round.get();
+		} else {
+			return null;
+		}
+	}
+
+	private void deleteAllMatch(final List<Match> lm) {
+		for (Match a : lm) {
+
+			Integer id = this.matchRecordService.findMatchRecordByMatchId(a.getId()).getId();
+
+			Collection<FootballPlayerMatchStatistic> al = this.playerMatchStatisticService.findFootballPlayerMatchStatisticByMatchRecordId(id);
+
+			for (FootballPlayerMatchStatistic sd : al) {
+				this.playerMatchStatisticService.deleteFootballPlayerStatistic(sd);
+			}
+
+			this.matchRecordService.deleteMatchRecord(this.matchRecordService.findMatchRecordByMatchId(a.getId()));
+
+			this.matchService.deleteMatch(a);
+		}
+
 	}
 
 	@Transactional()
@@ -59,24 +83,12 @@ public class RoundService {
 				}
 			}
 			//Antes borramos los partidos con sus MatchRecords,y MatchStatistic
-			for (Match a : lm) {
-
-				Integer id = this.matchRecordService.findMatchRecordByMatchId(a.getId()).getId();
-
-				Collection<FootballPlayerMatchStatistic> al = this.playerMatchStatisticService.findFootballPlayerMatchStatisticByMatchRecordId(id);
-
-				for (FootballPlayerMatchStatistic sd : al) {
-					this.playerMatchStatisticService.deleteFootballPlayerStatistic(sd);
-				}
-
-				this.matchRecordService.deleteMatchRecord(this.matchRecordService.findMatchRecordByMatchId(a.getId()));
-
-				this.matchService.deleteMatch(a);
-			}
+			this.deleteAllMatch(lm);
 		}
 		this.roundRepository.deleteById(r.getId());
 
 	}
+
 	@Transactional()
 	public void deleteAll(final int compId) throws DataAccessException, StatusException {
 

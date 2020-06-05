@@ -24,6 +24,7 @@ import org.springframework.samples.petclinic.model.Jornada;
 import org.springframework.samples.petclinic.model.Match;
 import org.springframework.samples.petclinic.model.MatchRecord;
 import org.springframework.samples.petclinic.model.Enum.CompetitionType;
+import org.springframework.samples.petclinic.model.Enum.FootballPlayerPosition;
 import org.springframework.samples.petclinic.model.Enum.MatchRecordStatus;
 import org.springframework.samples.petclinic.model.Enum.MatchStatus;
 import org.springframework.samples.petclinic.service.CalendaryService;
@@ -43,6 +44,7 @@ import org.springframework.samples.petclinic.service.exceptions.StatusException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.TransactionSystemException;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
@@ -135,7 +137,7 @@ public class CompetitionController {
 		mav.addObject("size", competition.getClubs().size());
 
 		//Si no está publicada y no eres el creador no puedes verla
-		if (competition.getStatus() == false && !competition.getCreator().equals(currentPrincipalName)) { //SEGURIDAD
+		if (!competition.getStatus() && !competition.getCreator().equals(currentPrincipalName)) { //SEGURIDAD
 			throw new CredentialException();
 		}
 
@@ -162,6 +164,35 @@ public class CompetitionController {
 		mav.addObject(match);
 
 		return mav;
+	}
+	@PostMapping("/competitions/{competitionId}/calendary/jornada/{jornadaId}/match/{matchId}") //EDITAR FECHA PARTIDO DE PARTIDO
+	public ModelAndView editMatch(@PathVariable("matchId") final int matchId, final Match match, final BindingResult result) throws CredentialException {
+
+		Match m = this.matchService.findMatchById(matchId);
+
+		try {
+			m.setMatchDate(match.getMatchDate());
+			this.matchService.saveMatch(m);
+
+			ModelAndView mav = new ModelAndView("competitions/matchDetails");
+
+			mav.addObject("match", m);
+
+			return mav;
+
+		} catch (TransactionSystemException e) {
+
+			Boolean hasError = true;
+
+			ModelAndView mav = new ModelAndView("competitions/matchDetails");
+			Match m1 = this.matchService.findMatchById(matchId);
+			mav.addObject("match", m1);
+			mav.addObject("hasError", hasError);
+
+			return mav;
+
+		}
+
 	}
 
 	@GetMapping("/competitions/{competitionId}/calendary/jornada/{jornadaId}") //VISTA DETALLADA DE JORNADA
@@ -245,7 +276,7 @@ public class CompetitionController {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String currentPrincipalName = authentication.getName();
 
-		if (!currentPrincipalName.equals(comp.getCreator()) || comp.getStatus() == true) { //SEGURIDAD
+		if (!currentPrincipalName.equals(comp.getCreator()) || comp.getStatus()) { //SEGURIDAD
 			throw new CredentialException("Forbidden Access");
 		}
 
@@ -300,7 +331,7 @@ public class CompetitionController {
 		String currentPrincipalName = authentication.getName();
 
 		//Si no está publicada y no eres el creador no puedes verlo
-		if (thisComp.getStatus() == true || !thisComp.getCreator().equals(currentPrincipalName)) { //SEGURIDAD
+		if (thisComp.getStatus() || !thisComp.getCreator().equals(currentPrincipalName)) { //SEGURIDAD
 			throw new CredentialException();
 		}
 
@@ -348,7 +379,7 @@ public class CompetitionController {
 		String currentPrincipalName = authentication.getName();
 
 		//Si no está publicada y no eres el creador no puedes verlo
-		if (thisComp.getStatus() == false && !thisComp.getCreator().equals(currentPrincipalName)) { //SEGURIDAD
+		if (!thisComp.getStatus() && !thisComp.getCreator().equals(currentPrincipalName)) { //SEGURIDAD
 			throw new CredentialException();
 		}
 
@@ -395,7 +426,7 @@ public class CompetitionController {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String currentPrincipalName = authentication.getName();
 
-		if (!currentPrincipalName.equals(comp.getCreator()) || comp.getStatus() == true) { //SEGURIDAD
+		if (!currentPrincipalName.equals(comp.getCreator()) || comp.getStatus()) { //SEGURIDAD
 			throw new CredentialException("Forbidden Access");
 		}
 
@@ -560,4 +591,69 @@ public class CompetitionController {
 
 		return "redirect:/";
 	}
+
+	@GetMapping(value = "/competitions/{competitionId}/statistics") //ESTADÍSTICAS DE LA COMPETICIÓN
+	public String showCompetitionStats(@PathVariable("competitionId") final int competitionId, final Map<String, Object> model) {
+
+		Competition comp = this.competitionService.findCompetitionById(competitionId);
+
+		List<FootballPlayer> players = new ArrayList<>();
+
+		List<Jornada> jornadas = new ArrayList<>();
+
+		jornadas.addAll(this.jornadaService.findAllJornadasFromCompetitionId(competitionId));
+
+		for (String a : comp.getClubs()) {
+
+			FootballClub c = this.footballClubService.findFootballClubByName(a);
+
+			players.addAll(this.footballPlayerService.findAllClubFootballPlayers(c.getId()));
+
+		}
+
+		List<Integer> goles = new ArrayList<Integer>();
+		List<Integer> yellowCards = new ArrayList<Integer>();
+		List<Integer> redCards = new ArrayList<Integer>();
+		List<Integer> assists = new ArrayList<Integer>();
+		List<Integer> goalsConceded = new ArrayList<Integer>();
+
+		for (FootballPlayer a : players) {
+
+			Integer goals = 0;
+			Integer yCards = 0;
+			Integer rCards = 0;
+			Integer assist = 0;
+			Integer goalsConc = 0;
+
+			for (FootballPlayerMatchStatistic f : this.competitionService.findFPMSByPlayerIdAndCompId(a.getId(), comp.getId())) {
+
+				goals = goals + f.getGoals();
+				yCards = yCards + f.getYellow_cards();
+				rCards = rCards + f.getRed_cards();
+				assist = assist + f.getAssists();
+
+				if (a.getPosition().equals(FootballPlayerPosition.GOALKEEPER)) {
+					goalsConc = goalsConc + f.getReceived_goals();
+				}
+
+			}
+
+			goles.add(goals);
+			yellowCards.add(yCards);
+			redCards.add(rCards);
+			assists.add(assist);
+			goalsConceded.add(goalsConc);
+
+		}
+
+		model.put("Players", players);
+		model.put("Goals", goles);
+		model.put("yellowCards", yellowCards);
+		model.put("redCards", redCards);
+		model.put("assists", assists);
+		model.put("goalsConceded", goalsConceded);
+
+		return "competitions/competitionStats";
+	}
+
 }
