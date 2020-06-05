@@ -22,6 +22,8 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.ContractCommercial;
 import org.springframework.samples.petclinic.model.FootballClub;
@@ -52,6 +54,7 @@ public class ContractCommercialService {
 
 	//Buscar todos los contratos de comerciales
 	@Transactional(readOnly = true)
+	@Cacheable("CacheContracts")
 	public Collection<ContractCommercial> findAllCommercialContracts() throws DataAccessException {
 		return this.contractRepository.findAllCommercialContracts();
 	}
@@ -70,6 +73,7 @@ public class ContractCommercialService {
 	@Transactional(rollbackFor = {
 		NoMultipleContractCommercialException.class, NoStealContractCommercialException.class, NotEnoughMoneyException.class
 	})
+	@CacheEvict(cacheNames = "CacheContracts", allEntries = true)
 	public void saveContractCommercial(final ContractCommercial contractCommercial)
 		throws DataAccessException, NoMultipleContractCommercialException, NoStealContractCommercialException, NotEnoughMoneyException, DuplicatedNameException, NumberOfPlayersAndCoachException, DateException {
 		//Existe contrato commercial con este club
