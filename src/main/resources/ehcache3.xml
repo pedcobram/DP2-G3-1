@@ -29,7 +29,7 @@
           
         </cache-template>
         
-	    <cache alias="CacheFAPlayerList" uses-template="default">
+	   <!--  <cache alias="CacheFAPlayerList" uses-template="default">
 	        <key-type>org.springframework.cache.interceptor.SimpleKey</key-type>
 	        <value-type>java.util.Collection</value-type>
 	    </cache>     
@@ -43,7 +43,7 @@
 	    </cache>   
         </cache-template> 
         
-	   <!--  <cache alias="contractById" uses-template="default">
+	    <cache alias="contractById" uses-template="default">
 	        <key-type>java.lang.Integer</key-type>
 	        <value-type>org.springframework.samples.petclinic.model.ContractCommercial</value-type>
 	    </cache> 

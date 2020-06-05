@@ -21,8 +21,6 @@ import java.util.Collection;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Contract;
 import org.springframework.samples.petclinic.model.ContractPlayer;
@@ -68,7 +66,7 @@ public class ContractPlayerService {
 
 	//Buscar contratos por club
 	@Transactional(readOnly = true)
-	@Cacheable("CacheContractPlayerList")
+	//	@Cacheable("CacheContractPlayerList")
 	public Collection<ContractPlayer> findAllPlayerContractsByClubId(final int clubId) throws DataAccessException {
 		return this.contractRepository.findAllPlayerContractsByClubId(clubId);
 	}
@@ -77,7 +75,7 @@ public class ContractPlayerService {
 	@Transactional(rollbackFor = {
 		NumberOfPlayersAndCoachException.class, DateException.class, SalaryException.class, MoneyClubException.class
 	})
-	@CacheEvict(cacheNames = "CacheFAPlayerList", allEntries = true)
+	//	@CacheEvict(cacheNames = "CacheFAPlayerList", allEntries = true)
 	public void saveContractPlayer(final ContractPlayer contractPlayer) throws DataAccessException, MoneyClubException, NumberOfPlayersAndCoachException, SalaryException, DateException {
 
 		Collection<FootballPlayer> players = this.footballPlayerService.findAllClubFootballPlayers(contractPlayer.getClub().getId());
@@ -120,7 +118,7 @@ public class ContractPlayerService {
 
 	//Despedir Jugador
 	@Transactional
-	@CacheEvict(cacheNames = "CacheContractPlayerList", allEntries = true)
+	//	@CacheEvict(cacheNames = "CacheContractPlayerList", allEntries = true)
 	public void deleteContract(final Contract contract) throws DataAccessException, MoneyClubException {
 
 		ContractPlayer thisContract = this.findContractPlayerById(contract.getId());

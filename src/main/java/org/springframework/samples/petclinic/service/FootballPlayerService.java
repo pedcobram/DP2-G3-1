@@ -23,7 +23,6 @@ import java.util.Date;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.ContractPlayer;
 import org.springframework.samples.petclinic.model.FootballPlayer;
@@ -61,7 +60,7 @@ public class FootballPlayerService {
 
 	//Buscar todos los jugadores libres
 	@Transactional(readOnly = true)
-	@Cacheable("CacheFAPlayerList")
+	//	@Cacheable("CacheFAPlayerList")
 	public Collection<FootballPlayer> findAllFootballPlayersFA() throws DataAccessException {
 		return this.footRepository.findAllFreeAgents();
 	}
