@@ -26,6 +26,21 @@
             <resources>
                 <heap>1000</heap>
             </resources>
+          
+        </cache-template>
+        
+	    <cache alias="CacheFAPlayerList" uses-template="default">
+	        <key-type>org.springframework.cache.interceptor.SimpleKey</key-type>
+	        <value-type>java.util.Collection</value-type>
+	    </cache>     
+	    <cache alias="CacheContractPlayerList" uses-template="default">
+	        <key-type>org.springframework.cache.interceptor.SimpleKey</key-type>
+	        <value-type>java.util.Collection</value-type>
+	    </cache>    
+	    <cache alias="CacheContracts" uses-template="default">
+	        <key-type>org.springframework.cache.interceptor.SimpleKey</key-type>
+	        <value-type>java.util.Collection</value-type>
+	    </cache>   
         </cache-template> 
         
 	   <!--  <cache alias="contractById" uses-template="default">

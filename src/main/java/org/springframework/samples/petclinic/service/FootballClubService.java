@@ -97,7 +97,6 @@ public class FootballClubService {
 	public FootballClub findFootballClubByPresident(final String principalUsername) throws DataAccessException {
 		return this.footRepository.findFootballClubByPresident(principalUsername);
 	}
-
 	@Transactional(readOnly = true)
 	public FootballClub findFootballClubByName(final String name) throws DataAccessException {
 		return this.footRepository.findFootballClubByName(name);
