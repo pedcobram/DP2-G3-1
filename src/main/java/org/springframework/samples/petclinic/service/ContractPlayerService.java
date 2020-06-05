@@ -83,7 +83,7 @@ public class ContractPlayerService {
 		Collection<FootballPlayer> players = this.footballPlayerService.findAllClubFootballPlayers(contractPlayer.getClub().getId());
 
 		//RN: Si el club no es público, solo puede tener a 7 jugadores como máximo
-		if (players.size() >= 7 && contractPlayer.getClub().getStatus() == false) {
+		if (players.size() >= 7 && !contractPlayer.getClub().getStatus()) {
 			throw new NumberOfPlayersAndCoachException();
 		}
 

@@ -39,6 +39,13 @@ public class CoachController {
 
 	private static final String			VIEWS_COACH_CREATE_OR_UPDATE_FORM	= "coachs/createOrUpdateCoachForm";
 
+	private static final String			url_error_18Years					= "code.error.validator.18Years";
+	private static final String			url_error_salaryMinAndMaxCoach		= "code.error.validator.salaryMinAndMaxCoach";
+	private static final String			url_error_salary					= "code.error.validator.salary";
+	private static final String			url_error_justOneCoach				= "code.error.validator.justOneCoach";
+	private static final String			url_error_signTransaction			= "code.error.validator.signTransaction";
+	private static final String			url_error_signWithoutCoach			= "code.error.validator.signWithoutCoach";
+
 	@Autowired
 	private final CoachService			coachService;
 
@@ -96,7 +103,7 @@ public class CoachController {
 			return "footballClubs/myClubEmpty";
 		}
 
-		if (myClub.getStatus() == true) { //SEGURIDAD si tenemos equipo publico no se puede registrar
+		if (myClub.getStatus()) { //SEGURIDAD si tenemos equipo publico no se puede registrar
 			throw new CredentialException();
 		}
 
@@ -125,16 +132,16 @@ public class CoachController {
 				result.rejectValue("lastName", "duplicate", "already exists");
 				return CoachController.VIEWS_COACH_CREATE_OR_UPDATE_FORM;
 			} catch (DateException ex) {
-				result.rejectValue("birthDate", "code.error.validator.18Years", "18 years");
+				result.rejectValue("birthDate", CoachController.url_error_18Years, "18 years");
 				return CoachController.VIEWS_COACH_CREATE_OR_UPDATE_FORM;
 			} catch (SalaryException ex) {
-				result.rejectValue("salary", "code.error.validator.salaryMinAndMaxCoach", "wrong money!");
+				result.rejectValue("salary", CoachController.url_error_salaryMinAndMaxCoach, "wrong money!");
 				return CoachController.VIEWS_COACH_CREATE_OR_UPDATE_FORM;
 			} catch (MoneyClubException ex) {
-				result.rejectValue("salary", "code.error.validator.salary", "Not enough money!");
+				result.rejectValue("salary", CoachController.url_error_salary, "Not enough money!");
 				return CoachController.VIEWS_COACH_CREATE_OR_UPDATE_FORM;
 			} catch (NumberOfPlayersAndCoachException ex) {
-				result.rejectValue("firstName", "code.error.validator.justOneCoach", "just one coach");
+				result.rejectValue("firstName", CoachController.url_error_justOneCoach, "just one coach");
 				return CoachController.VIEWS_COACH_CREATE_OR_UPDATE_FORM;
 			} catch (StatusException ex) {
 				return "redirect:exceptions/forbidden";
@@ -159,7 +166,7 @@ public class CoachController {
 		Coach myCoach = this.coachService.findCoachByClubId(myClub.getId());
 		Coach coach = this.coachService.findCoachById(coachId);
 
-		if (myClub.getStatus() == false && coach.getClub() != null) { //SEGURIDAD
+		if (!myClub.getStatus() && coach.getClub() != null) { //SEGURIDAD
 			throw new CredentialException();
 		}
 
@@ -238,10 +245,10 @@ public class CoachController {
 						coachToUpdate.setClause(coachToUpdate.getSalary() * 3);
 						this.coachService.signCoach(coachToUpdate, myClub, clausulaApagar);
 					} catch (SalaryException ex) {
-						result.rejectValue("salary", "code.error.validator.salaryMinAndMaxCoach", "wrong money!");
+						result.rejectValue("salary", CoachController.url_error_salaryMinAndMaxCoach, "wrong money!");
 						return CoachController.VIEWS_COACH_CREATE_OR_UPDATE_FORM;
 					} catch (MoneyClubException e) {
-						result.rejectValue("salary", "code.error.validator.signTransaction", "Not enough money!");
+						result.rejectValue("salary", CoachController.url_error_signTransaction, "Not enough money!");
 						return CoachController.VIEWS_COACH_CREATE_OR_UPDATE_FORM;
 					}
 
@@ -251,10 +258,10 @@ public class CoachController {
 						coachToUpdate.setClause(coachToUpdate.getSalary() * 3);
 						this.coachService.signCoach(coachToUpdate, myClub, clausulaApagar);
 					} catch (SalaryException ex) {
-						result.rejectValue("salary", "code.error.validator.salaryMinAndMaxCoach", "wrong money!");
+						result.rejectValue("salary", CoachController.url_error_salaryMinAndMaxCoach, "wrong money!");
 						return CoachController.VIEWS_COACH_CREATE_OR_UPDATE_FORM;
 					} catch (MoneyClubException e) {
-						result.rejectValue("salary", "code.error.validator.signTransaction", "Not enough money!");
+						result.rejectValue("salary", CoachController.url_error_signTransaction, "Not enough money!");
 						return CoachController.VIEWS_COACH_CREATE_OR_UPDATE_FORM;
 					}
 				}
@@ -268,19 +275,19 @@ public class CoachController {
 					result.rejectValue("lastName", "duplicate", "already exists");
 					return CoachController.VIEWS_COACH_CREATE_OR_UPDATE_FORM;
 				} catch (DateException ex) {
-					result.rejectValue("birthDate", "code.error.validator.18Years", "18 years");
+					result.rejectValue("birthDate", CoachController.url_error_18Years, "18 years");
 					return CoachController.VIEWS_COACH_CREATE_OR_UPDATE_FORM;
 				} catch (NumberOfPlayersAndCoachException e) {
-					result.rejectValue("firstName", "code.error.validator.justOneCoach", "just one coach");
+					result.rejectValue("firstName", CoachController.url_error_justOneCoach, "just one coach");
 					return CoachController.VIEWS_COACH_CREATE_OR_UPDATE_FORM;
 				} catch (SalaryException ex) {
-					result.rejectValue("salary", "code.error.validator.salaryMinAndMaxCoach", "wrong money!");
+					result.rejectValue("salary", CoachController.url_error_salaryMinAndMaxCoach, "wrong money!");
 					return CoachController.VIEWS_COACH_CREATE_OR_UPDATE_FORM;
 				} catch (MoneyClubException e) {
-					result.rejectValue("salary", "code.error.validator.salary", "Not enough money!");
+					result.rejectValue("salary", CoachController.url_error_salary, "Not enough money!");
 					return CoachController.VIEWS_COACH_CREATE_OR_UPDATE_FORM;
 				} catch (StatusException ex) {
-					result.rejectValue("salary", "code.error.validator.signWithoutCoach", "No tienes entrenador, no puedes fichar otro");
+					result.rejectValue("salary", CoachController.url_error_signWithoutCoach, "No tienes entrenador, no puedes fichar otro");
 					return CoachController.VIEWS_COACH_CREATE_OR_UPDATE_FORM;
 				}
 			}

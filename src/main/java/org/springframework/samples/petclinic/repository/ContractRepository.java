@@ -18,34 +18,33 @@ package org.springframework.samples.petclinic.repository;
 
 import java.util.Collection;
 
-import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.Contract;
 import org.springframework.samples.petclinic.model.ContractCommercial;
 import org.springframework.samples.petclinic.model.ContractPlayer;
 
 public interface ContractRepository {
 
-	Collection<Contract> findAll() throws DataAccessException;
+	Collection<Contract> findAll();
 
-	Contract findById(int id) throws DataAccessException;
+	Contract findById(int id);
 
-	void save(ContractCommercial contractCommercial) throws DataAccessException;
+	void save(ContractCommercial contractCommercial);
 
-	void delete(Contract contract) throws DataAccessException;
+	void delete(Contract contract);
 
-	Collection<ContractCommercial> findAllCommercialContracts() throws DataAccessException;
+	Collection<ContractCommercial> findAllCommercialContracts();
 
-	ContractCommercial findCommercialContractByClubId(int id) throws DataAccessException;
+	ContractCommercial findCommercialContractByClubId(int id);
 
-	ContractCommercial findContractCommercialById(int id) throws DataAccessException;
+	ContractCommercial findContractCommercialById(int id);
 
-	void save(ContractPlayer contractPlayer) throws DataAccessException;
+	void save(ContractPlayer contractPlayer);
 
-	Collection<ContractPlayer> findAllPlayerContracts() throws DataAccessException;
+	Collection<ContractPlayer> findAllPlayerContracts();
 
-	ContractPlayer findContractPlayerById(int id) throws DataAccessException;
+	ContractPlayer findContractPlayerById(int id);
 
-	ContractPlayer findContractPlayerByPlayerId(int playerId) throws DataAccessException;
+	ContractPlayer findContractPlayerByPlayerId(int playerId);
 
-	Collection<ContractPlayer> findAllPlayerContractsByClubId(int clubId) throws DataAccessException;
+	Collection<ContractPlayer> findAllPlayerContractsByClubId(int clubId);
 }

@@ -71,13 +71,13 @@ public class CoachService {
 			String olast = o.getLastName().toLowerCase();
 			ofirst = ofirst.toLowerCase();
 			olast = olast.toLowerCase();
-			if (ofirst.equals(firstname) && olast.equals(lastname) && o.getId() != coach.getId()) {
+			if (ofirst.equals(firstname) && olast.equals(lastname) && !o.getId().equals(coach.getId())) {
 				otherCoach = o;
 			}
 		}
 
 		//RN: Nombre Duplicado
-		if (StringUtils.hasLength(coach.getFirstName()) && StringUtils.hasLength(coach.getLastName()) && otherCoach != null && otherCoach.getId() != coach.getId()) {
+		if (StringUtils.hasLength(coach.getFirstName()) && StringUtils.hasLength(coach.getLastName()) && otherCoach != null && !otherCoach.getId().equals(coach.getId())) {
 			throw new DuplicatedNameException();
 		}
 
@@ -110,12 +110,12 @@ public class CoachService {
 		}
 
 		//RN: No se puede fichar a un entrenador de Otro equipo si no tenemos entrenador
-		if (myClub.getStatus() == true && coach.isNew()) {
+		if (myClub.getStatus() && coach.isNew()) {
 			throw new StatusRegisteringException();
 		}
 
 		//RN: No se puede registrar a un entrenador si el club es público
-		if (myClub.getStatus() == true && coach.getClub() != null) {
+		if (myClub.getStatus() && coach.getClub() != null) {
 			throw new StatusException();
 		}
 

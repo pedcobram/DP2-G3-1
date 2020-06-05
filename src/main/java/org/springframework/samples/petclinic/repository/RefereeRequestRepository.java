@@ -3,22 +3,21 @@ package org.springframework.samples.petclinic.repository;
 
 import java.util.Collection;
 
-import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.RefereeRequest;
 
 public interface RefereeRequestRepository {
 
-	Collection<RefereeRequest> findAll() throws DataAccessException;
+	Collection<RefereeRequest> findAll();
 
-	RefereeRequest findById(int id) throws DataAccessException;
+	RefereeRequest findById(int id);
 
-	RefereeRequest findByUsername(String userName) throws DataAccessException;
+	RefereeRequest findByUsername(String userName);
 
-	void save(RefereeRequest compAdminRequest) throws DataAccessException;
+	void save(RefereeRequest compAdminRequest);
 
-	void delete(RefereeRequest compAdminRequest) throws DataAccessException;
+	void delete(RefereeRequest compAdminRequest);
 
-	int countByUsername(String username) throws DataAccessException;
+	int countByUsername(String username);
 
-	int count() throws DataAccessException;
+	int count();
 }

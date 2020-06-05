@@ -26,6 +26,7 @@
             <resources>
                 <heap>1000</heap>
             </resources>
+          
         </cache-template>
         
 	    <cache alias="CacheFAPlayerList" uses-template="default">
@@ -40,4 +41,15 @@
 	        <key-type>org.springframework.cache.interceptor.SimpleKey</key-type>
 	        <value-type>java.util.Collection</value-type>
 	    </cache>   
+        </cache-template> 
+        
+	   <!--  <cache alias="contractById" uses-template="default">
+	        <key-type>java.lang.Integer</key-type>
+	        <value-type>org.springframework.samples.petclinic.model.ContractCommercial</value-type>
+	    </cache> 
+	    
+	   <cache alias="footballClubByPresident" uses-template="default">
+	        <key-type>java.lang.String</key-type>
+	        <value-type>org.springframework.samples.petclinic.model.FootballClub</value-type>
+	   </cache>    -->      
     </config>

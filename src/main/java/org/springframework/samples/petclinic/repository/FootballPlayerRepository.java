@@ -18,26 +18,25 @@ package org.springframework.samples.petclinic.repository;
 
 import java.util.Collection;
 
-import org.springframework.dao.DataAccessException;
 import org.springframework.samples.petclinic.model.FootballPlayer;
 
 public interface FootballPlayerRepository {
 
 	//Lista de todos los jugadores
-	Collection<FootballPlayer> findAll() throws DataAccessException;
+	Collection<FootballPlayer> findAll();
 
 	//Lista de todos los jugadores que son Agentes Libres
-	Collection<FootballPlayer> findAllFreeAgents() throws DataAccessException;
+	Collection<FootballPlayer> findAllFreeAgents();
 
 	//Lista de todos los jugadores de un equipo
-	Collection<FootballPlayer> findPlayersByClubId(int id) throws DataAccessException;
+	Collection<FootballPlayer> findPlayersByClubId(int id);
 
 	//Búsqueda de jugador por Id
-	FootballPlayer findById(int id) throws DataAccessException;
+	FootballPlayer findById(int id);
 
 	//Guardar jugador
-	void save(FootballPlayer footballPlayer) throws DataAccessException;
+	void save(FootballPlayer footballPlayer);
 
 	//Borrar jugador
-	void delete(FootballPlayer footballPlayer) throws DataAccessException;
+	void delete(FootballPlayer footballPlayer);
 }

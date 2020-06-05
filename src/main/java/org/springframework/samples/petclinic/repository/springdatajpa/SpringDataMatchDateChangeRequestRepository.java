@@ -3,7 +3,6 @@ package org.springframework.samples.petclinic.repository.springdatajpa;
 
 import java.util.Collection;
 
-import org.springframework.dao.DataAccessException;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 import org.springframework.data.repository.query.Param;
@@ -14,10 +13,10 @@ public interface SpringDataMatchDateChangeRequestRepository extends MatchDateCha
 
 	@Override
 	@Query("SELECT m FROM MatchDateChangeRequest m WHERE m.id =:id")
-	MatchDateChangeRequest findById(@Param("id") int id) throws DataAccessException;
+	MatchDateChangeRequest findById(@Param("id") int id);
 
 	@Override
 	@Query("SELECT m FROM MatchDateChangeRequest m WHERE m.request_creator =:presidentUsername")
-	Collection<MatchDateChangeRequest> findAllMatchDateChangeRequest(@Param("presidentUsername") String presidentUsername) throws DataAccessException;
+	Collection<MatchDateChangeRequest> findAllMatchDateChangeRequest(@Param("presidentUsername") String presidentUsername);
 
 }

@@ -70,7 +70,7 @@ public class AuthenticatedService {
 			this.authenticatedRepository.save(authenticated);
 			//creating authorities
 			this.authoritiesService.saveAuthorities(authenticated.getUser().getUsername(), "authenticated");
-		} else if (authenticated.getId() != au.getId() && user.getUsername() == au.getUser().getUsername()) {
+		} else if (!authenticated.getId().equals(au.getId()) && user.getUsername().equals(au.getUser().getUsername())) {
 			throw new DuplicatedNameException();
 		} else {
 			user.setEnabled(true);

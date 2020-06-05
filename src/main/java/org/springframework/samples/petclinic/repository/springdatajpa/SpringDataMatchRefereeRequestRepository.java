@@ -3,7 +3,6 @@ package org.springframework.samples.petclinic.repository.springdatajpa;
 
 import java.util.Collection;
 
-import org.springframework.dao.DataAccessException;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.Repository;
 import org.springframework.data.repository.query.Param;
@@ -15,30 +14,30 @@ public interface SpringDataMatchRefereeRequestRepository extends MatchRefereeReq
 
 	@Override
 	@Query("SELECT a FROM MatchRefereeRequest a")
-	Collection<MatchRefereeRequest> findAllMatchRefereeRequests() throws DataAccessException;
+	Collection<MatchRefereeRequest> findAllMatchRefereeRequests();
 
 	@Override
 	@Query("SELECT a FROM MatchRefereeRequest a WHERE a.status = 0")
-	Collection<MatchRefereeRequest> findAllOnHoldMatchRefereeRequests() throws DataAccessException;
+	Collection<MatchRefereeRequest> findAllOnHoldMatchRefereeRequests();
 
 	@Override
 	@Query("SELECT a FROM MatchRefereeRequest a WHERE a.referee.user.username =:refereeName AND a.status = 0")
-	Collection<MatchRefereeRequest> findOnHoldMatchRefereeRequests(@Param("refereeName") String refereeName) throws DataAccessException;
+	Collection<MatchRefereeRequest> findOnHoldMatchRefereeRequests(@Param("refereeName") String refereeName);
 
 	@Override
 	@Query("SELECT a FROM MatchRefereeRequest a WHERE a.id =:id")
-	MatchRefereeRequest findById(@Param("id") int id) throws DataAccessException;
+	MatchRefereeRequest findById(@Param("id") int id);
 
 	@Override
 	@Query("SELECT a FROM MatchRefereeRequest a WHERE a.referee.user.username =:username AND a.match.id =:matchId")
-	MatchRefereeRequest findByUsernameAndMatchId(@Param("username") String username, @Param("matchId") int matchId) throws DataAccessException;
+	MatchRefereeRequest findByUsernameAndMatchId(@Param("username") String username, @Param("matchId") int matchId);
 
 	@Override
 	@Query("SELECT a FROM Authenticated a WHERE a.user.username =:username")
-	Authenticated findAuthenticatedByUsername(@Param("username") String username) throws DataAccessException;
+	Authenticated findAuthenticatedByUsername(@Param("username") String username);
 
 	@Override
 	@Query("SELECT COUNT(a) FROM MatchRefereeRequest a")
-	int count() throws DataAccessException;
+	int count();
 
 }
